@@ -1,0 +1,44 @@
+{
+  "name": "solar-vertical",
+  "version": "1.3.2",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "remotion studio src/index.ts",
+    "preview": "remotion preview src/index.ts",
+    "render": "npm run render:all",
+    "render:all": "npm run render:en && npm run render:zh && npm run render:ja && npm run render:ko",
+    "render:en": "remotion render src/index.ts SolarSystemEN out/solar-system-en-vertical.mp4",
+    "render:zh": "remotion render src/index.ts SolarSystemZH out/solar-system-zh-vertical.mp4",
+    "render:ja": "remotion render src/index.ts SolarSystemJA out/solar-system-ja-vertical.mp4",
+    "render:ko": "remotion render src/index.ts SolarSystemKO out/solar-system-ko-vertical.mp4",
+    "render:smoke": "remotion render src/index.ts SolarSystemEN out/smoke-test.mp4 --frames=0-90",
+    "typecheck": "tsc --noEmit",
+    "voiceover": "python scripts/generate_voiceover.py",
+    "voiceover:edge": "python scripts/generate_voiceover.py --provider edge-tts",
+    "voiceover:gcp": "python scripts/generate_voiceover.py --provider gcp",
+    "sync": "python scripts/sync_audio.py",
+    "sync:edge": "python scripts/sync_audio.py --method edge-tts",
+    "sync:silence": "python scripts/sync_audio.py --method silence",
+    "sync:en": "python scripts/sync_audio.py --language en",
+    "sync:zh": "python scripts/sync_audio.py --language zh",
+    "sync:ja": "python scripts/sync_audio.py --language ja",
+    "sync:ko": "python scripts/sync_audio.py --language ko",
+    "validate": "npm run typecheck && npx remotion compositions src/index.ts",
+    "workflow": "npm run voiceover && npm run sync && npm run validate"
+  },
+  "dependencies": {
+    "@remotion/cli": "latest",
+    "@remotion/renderer": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "remotion": "latest",
+    "three": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@types/three": "latest",
+    "typescript": "latest"
+  }
+}
