@@ -26,7 +26,9 @@ console.log(`Downloading audio: ${audioUrl}`);
 let response;
 for (let attempt = 1; attempt <= 3; attempt++) {
   try {
-    response = await fetch(audioUrl);
+    response = await fetch(audioUrl, {
+      headers: { 'User-Agent': 'top500-video-builder/1.0' },
+    });
     break;
   } catch (error) {
     if (attempt === 3) {
