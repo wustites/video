@@ -41,7 +41,7 @@ jobs:
         working-directory: top500
 
       - name: Cache network audio
-        run: mkdir -p public/audio && curl -L -o public/audio/network-audio.mp3 "https://archive.org/download/PachelbelCanonInDMajor/Pachelbel_%20Canon%20-%20In%20D%20Major.mp3"
+        run: mkdir -p public/audio && curl -L -o public/audio/network-audio.mp3 "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Canon%20in%20D%20Major.mp3"
         working-directory: top500
 
       - name: Render poster
