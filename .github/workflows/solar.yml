@@ -1,0 +1,76 @@
+name: solar - Build and release video
+
+on:
+  push:
+    tags:
+      - "v*-solar"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: solar-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build solar video
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: solar/package-lock.json
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-noto-cjk fonts-noto-color-emoji
+          fc-cache -f -v
+
+      - name: Install Node dependencies
+        run: npm ci
+        working-directory: solar
+
+      - name: Install Python dependencies
+        run: python -m pip install edge-tts
+
+      - name: Generate voiceover
+        run: npm run voiceover
+        working-directory: solar
+        env:
+          GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
+
+      - name: Typecheck
+        run: npm run typecheck
+        working-directory: solar
+
+      - name: Render video
+        run: npm run render
+        working-directory: solar
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: solar-system-${{ github.ref_name }}
+          path: solar/out/*.mp4
+          if-no-files-found: error
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: solar/out/*.mp4
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
