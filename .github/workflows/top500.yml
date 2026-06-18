@@ -26,11 +26,8 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Install Chinese fonts
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji ffmpeg
-          fc-cache -fv
+      - name: Install system packages
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
       - name: Render video
         run: npx --yes hyperframes@0.6.112 render -o out/top500-vertical.mp4
