@@ -45,11 +45,11 @@ jobs:
         working-directory: top500
 
       - name: Render poster
-        run: npm run render:still
+        run: npx remotion still src/index.ts Top500Video out/poster-vertical.png --frame=90 --log=verbose
         working-directory: top500
 
       - name: Render video
-        run: npm run render
+        run: npx remotion render src/index.ts Top500Video out/top500-vertical.mp4 --props=./render-props.json --log=verbose
         working-directory: top500
 
       - name: Upload artifact
