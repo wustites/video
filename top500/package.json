@@ -1,26 +1,10 @@
 {
   "name": "top500-remotion-video",
-  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "remotion studio",
-    "preview": "remotion preview src/index.ts",
-    "cache:audio": "node scripts/cache-audio.mjs",
-    "typecheck": "tsc --noEmit",
-    "render": "npm run cache:audio && remotion render src/index.ts Top500Video out/top500-vertical.mp4 --props=./render-props.json",
-    "render:audio": "npm run render",
-    "render:still": "remotion still src/index.ts Top500Video out/poster-vertical.png --frame=90"
-  },
-  "dependencies": {
-    "@remotion/cli": "4.0.456",
-    "remotion": "4.0.456",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
-  },
-  "devDependencies": {
-    "@types/react": "18.3.18",
-    "@types/react-dom": "18.3.5",
-    "typescript": "5.8.3"
+    "dev": "npx --yes hyperframes@0.6.112 preview",
+    "check": "npx --yes hyperframes@0.6.112 lint",
+    "render": "npx --yes hyperframes@0.6.112 render -o out/top500-vertical.mp4"
   }
 }

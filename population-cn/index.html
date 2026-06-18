@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; }
+      body {
+        background: linear-gradient(180deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        font-family: "Noto Sans CJK SC", "Microsoft YaHei", "SimHei", sans-serif;
+      }
+      #root {
+        width: 1080px; height: 1920px;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        padding: 60px 40px;
+      }
+      .title { color: #fff; font-size: 48px; font-weight: bold; text-align: center; margin-bottom: 10px; }
+      .year-wrap { display: flex; align-items: baseline; gap: 10px; margin-bottom: 50px; }
+      .year-num { color: #e6194b; font-size: 96px; font-weight: bold; min-width: 200px; text-align: center; font-family: Arial, sans-serif; }
+      .year-unit { color: #aaa; font-size: 36px; }
+      .chart-area { width: 900px; height: 1200px; position: relative; }
+      .bar-row {
+        position: absolute; left: 0; width: 900px; height: 76px;
+        display: flex; align-items: center;
+      }
+      .bar-label {
+        width: 140px; text-align: right; padding-right: 10px;
+        color: #fff; font-size: 26px; font-weight: bold;
+      }
+      .bar-rect {
+        height: 48px; border-radius: 8px;
+        transition: width 0.05s linear;
+      }
+      .bar-value {
+        margin-left: 14px; color: #fff; font-size: 22px;
+      }
+      .footer { margin-top: 40px; color: #666; font-size: 22px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="population-cn" data-start="0" data-duration="40" data-width="1080" data-height="1920">
+      <div class="title">中国各省出生人口变化</div>
+      <div class="year-wrap">
+        <span class="year-num" id="yearDisplay">2000</span>
+        <span class="year-unit">年</span>
+      </div>
+      <div class="chart-area" id="chart"></div>
+      <div class="footer">单位：万人 | 数据来源：国家统计局</div>
+    </div>
+
+    <script>
+      const populationData = [
+        { year: 2000, data: [
+          {p:"广东",b:108},{p:"河南",b:113},{p:"山东",b:110},{p:"四川",b:85},{p:"河北",b:78},
+          {p:"湖南",b:74},{p:"安徽",b:72},{p:"江苏",b:68},{p:"湖北",b:65},{p:"广西",b:62},
+          {p:"浙江",b:52},{p:"云南",b:55},{p:"贵州",b:50},{p:"江西",b:58},{p:"福建",b:42},
+          {p:"陕西",b:40},{p:"重庆",b:32},{p:"辽宁",b:38},{p:"黑龙江",b:35},{p:"山西",b:36},
+          {p:"甘肃",b:30},{p:"吉林",b:28},{p:"内蒙古",b:24},{p:"新疆",b:28},{p:"上海",b:9},
+          {p:"北京",b:8},{p:"天津",b:8},{p:"海南",b:10},{p:"宁夏",b:9},{p:"青海",b:8},{p:"西藏",b:5}
+        ]},
+        { year: 2005, data: [
+          {p:"广东",b:112},{p:"河南",b:105},{p:"山东",b:108},{p:"四川",b:78},{p:"河北",b:75},
+          {p:"湖南",b:70},{p:"安徽",b:68},{p:"江苏",b:72},{p:"湖北",b:58},{p:"广西",b:60},
+          {p:"浙江",b:55},{p:"云南",b:52},{p:"贵州",b:48},{p:"江西",b:55},{p:"福建",b:45},
+          {p:"陕西",b:38},{p:"重庆",b:28},{p:"辽宁",b:32},{p:"黑龙江",b:30},{p:"山西",b:35},
+          {p:"甘肃",b:28},{p:"吉林",b:25},{p:"内蒙古",b:22},{p:"新疆",b:30},{p:"上海",b:10},
+          {p:"北京",b:12},{p:"天津",b:8},{p:"海南",b:10},{p:"宁夏",b:9},{p:"青海",b:7},{p:"西藏",b:5}
+        ]},
+        { year: 2010, data: [
+          {p:"广东",b:118},{p:"河南",b:100},{p:"山东",b:112},{p:"四川",b:72},{p:"河北",b:82},
+          {p:"湖南",b:68},{p:"安徽",b:70},{p:"江苏",b:78},{p:"湖北",b:55},{p:"广西",b:58},
+          {p:"浙江",b:58},{p:"云南",b:50},{p:"贵州",b:45},{p:"江西",b:52},{p:"福建",b:48},
+          {p:"陕西",b:36},{p:"重庆",b:26},{p:"辽宁",b:28},{p:"黑龙江",b:25},{p:"山西",b:38},
+          {p:"甘肃",b:26},{p:"吉林",b:22},{p:"内蒙古",b:20},{p:"新疆",b:32},{p:"上海",b:16},
+          {p:"北京",b:18},{p:"天津",b:10},{p:"海南",b:11},{p:"宁夏",b:10},{p:"青海",b:7},{p:"西藏",b:5}
+        ]},
+        { year: 2015, data: [
+          {p:"广东",b:145},{p:"河南",b:135},{p:"山东",b:125},{p:"四川",b:82},{p:"河北",b:88},
+          {p:"湖南",b:78},{p:"安徽",b:80},{p:"江苏",b:82},{p:"湖北",b:68},{p:"广西",b:65},
+          {p:"浙江",b:62},{p:"云南",b:58},{p:"贵州",b:52},{p:"江西",b:60},{p:"福建",b:52},
+          {p:"陕西",b:42},{p:"重庆",b:32},{p:"辽宁",b:30},{p:"黑龙江",b:28},{p:"山西",b:42},
+          {p:"甘肃",b:30},{p:"吉林",b:22},{p:"内蒙古",b:22},{p:"新疆",b:35},{p:"上海",b:20},
+          {p:"北京",b:22},{p:"天津",b:12},{p:"海南",b:14},{p:"宁夏",b:12},{p:"青海",b:8},{p:"西藏",b:6}
+        ]},
+        { year: 2020, data: [
+          {p:"广东",b:132},{p:"河南",b:82},{p:"山东",b:72},{p:"四川",b:60},{p:"河北",b:58},
+          {p:"湖南",b:52},{p:"安徽",b:52},{p:"江苏",b:58},{p:"湖北",b:42},{p:"广西",b:48},
+          {p:"浙江",b:48},{p:"云南",b:45},{p:"贵州",b:42},{p:"江西",b:42},{p:"福建",b:38},
+          {p:"陕西",b:32},{p:"重庆",b:25},{p:"辽宁",b:22},{p:"黑龙江",b:18},{p:"山西",b:28},
+          {p:"甘肃",b:22},{p:"吉林",b:15},{p:"内蒙古",b:16},{p:"新疆",b:28},{p:"上海",b:15},
+          {p:"北京",b:14},{p:"天津",b:8},{p:"海南",b:10},{p:"宁夏",b:8},{p:"青海",b:6},{p:"西藏",b:5}
+        ]},
+        { year: 2023, data: [
+          {p:"广东",b:103},{p:"河南",b:62},{p:"山东",b:55},{p:"四川",b:48},{p:"河北",b:42},
+          {p:"湖南",b:38},{p:"安徽",b:38},{p:"江苏",b:45},{p:"湖北",b:32},{p:"广西",b:38},
+          {p:"浙江",b:42},{p:"云南",b:38},{p:"贵州",b:35},{p:"江西",b:32},{p:"福建",b:32},
+          {p:"陕西",b:25},{p:"重庆",b:20},{p:"辽宁",b:18},{p:"黑龙江",b:12},{p:"山西",b:22},
+          {p:"甘肃",b:18},{p:"吉林",b:10},{p:"内蒙古",b:12},{p:"新疆",b:22},{p:"上海",b:12},
+          {p:"北京",b:12},{p:"天津",b:6},{p:"海南",b:8},{p:"宁夏",b:6},{p:"青海",b:5},{p:"西藏",b:4}
+        ]},
+        { year: 2025, data: [
+          {p:"广东",b:85},{p:"河南",b:45},{p:"山东",b:40},{p:"四川",b:35},{p:"河北",b:30},
+          {p:"湖南",b:25},{p:"安徽",b:25},{p:"江苏",b:32},{p:"湖北",b:22},{p:"广西",b:28},
+          {p:"浙江",b:30},{p:"云南",b:28},{p:"贵州",b:24},{p:"江西",b:22},{p:"福建",b:22},
+          {p:"陕西",b:17},{p:"重庆",b:14},{p:"辽宁",b:12},{p:"黑龙江",b:8},{p:"山西",b:15},
+          {p:"甘肃",b:12},{p:"吉林",b:7},{p:"内蒙古",b:8},{p:"新疆",b:15},{p:"上海",b:9},
+          {p:"北京",b:9},{p:"天津",b:4},{p:"海南",b:5},{p:"宁夏",b:4},{p:"青海",b:3},{p:"西藏",b:3}
+        ]}
+      ];
+
+      const regionColors = {
+        "广东":"#e6194b","河南":"#3cb44b","山东":"#4363d8","四川":"#f58231","河北":"#911eb4",
+        "湖南":"#42d4f4","安徽":"#f032e6","江苏":"#bfef45","湖北":"#fabed4","广西":"#469990",
+        "浙江":"#dcbeff","云南":"#9A6324","贵州":"#fffac8","江西":"#800000","福建":"#aaffc3",
+        "陕西":"#808000","重庆":"#ffd8b1","辽宁":"#000075","黑龙江":"#a9a9a9","山西":"#e6beff",
+        "甘肃":"#aa6e28","吉林":"#808080","内蒙古":"#ffe119","新疆":"#000000","上海":"#ffffff",
+        "北京":"#fabebe","天津":"#000000","海南":"#000000","宁夏":"#000000","青海":"#000000","西藏":"#000000"
+      };
+
+      const TOP_N = 15;
+      const START_YEAR = 2000;
+      const END_YEAR = 2025;
+      const DURATION = 40;
+
+      function interpolateData(currentYear) {
+        const years = populationData.map(d => d.year).sort((a, b) => a - b);
+        if (currentYear <= years[0]) return populationData.find(d => d.year === years[0]).data;
+        if (currentYear >= years[years.length - 1]) return populationData.find(d => d.year === years[years.length - 1]).data;
+        let prevYear = years[0], nextYear = years[1];
+        for (let i = 0; i < years.length - 1; i++) {
+          if (currentYear >= years[i] && currentYear <= years[i + 1]) {
+            prevYear = years[i]; nextYear = years[i + 1]; break;
+          }
+        }
+        const prevData = populationData.find(d => d.year === prevYear).data;
+        const nextData = populationData.find(d => d.year === nextYear).data;
+        const t = (currentYear - prevYear) / (nextYear - prevYear);
+        const provinces = [...new Set([...prevData.map(d => d.p), ...nextData.map(d => d.p)])];
+        return provinces.map(province => {
+          const prevVal = prevData.find(d => d.p === province)?.b ?? 0;
+          const nextVal = nextData.find(d => d.p === province)?.b ?? 0;
+          return { p: province, b: Math.round(prevVal + (nextVal - prevVal) * t) };
+        }).sort((a, b) => b.b - a.b).slice(0, TOP_N);
+      }
+
+      const chart = document.getElementById("chart");
+      const yearDisplay = document.getElementById("yearDisplay");
+      const provinces = [...new Set(populationData.flatMap(d => d.data.map(x => x.p)))];
+
+      provinces.forEach(province => {
+        const row = document.createElement("div");
+        row.className = "bar-row";
+        row.id = "row-" + province;
+        row.innerHTML = `<div class="bar-label">${province}</div><div class="bar-rect" id="bar-${province}" style="background:${regionColors[province] || '#888'};width:0"></div><div class="bar-value" id="val-${province}"></div>`;
+        chart.appendChild(row);
+      });
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.to({ year: START_YEAR }, {
+        year: END_YEAR,
+        duration: DURATION,
+        ease: "none",
+        onUpdate: function() {
+          const currentYear = this.targets()[0].year;
+          const topData = interpolateData(currentYear);
+          const maxBirths = topData[0]?.b ?? 100;
+
+          yearDisplay.textContent = Math.floor(currentYear);
+
+          topData.forEach((item, index) => {
+            const row = document.getElementById("row-" + item.p);
+            const bar = document.getElementById("bar-" + item.p);
+            const val = document.getElementById("val-" + item.p);
+            if (row && bar && val) {
+              gsap.to(row, { top: index * 76, duration: 0.3, ease: "power2.out", overwrite: true });
+              bar.style.width = ((item.b / maxBirths) * 550) + "px";
+              val.textContent = item.b + " 万";
+            }
+          });
+
+          provinces.forEach(p => {
+            const found = topData.find(x => x.p === p);
+            if (!found) {
+              const row = document.getElementById("row-" + p);
+              if (row) gsap.to(row, { opacity: 0, duration: 0.2, overwrite: true });
+            } else {
+              const row = document.getElementById("row-" + p);
+              if (row) gsap.to(row, { opacity: 1, duration: 0.2, overwrite: true });
+            }
+          });
+        }
+      }, 0);
+
+      window.__timelines["population-cn"] = tl;
+    </script>
+  </body>
+</html>

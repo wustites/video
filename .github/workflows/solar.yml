@@ -24,12 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+          node-version: "22"
 
       - name: Install system packages
         run: |
@@ -37,25 +32,21 @@ jobs:
           sudo apt-get install -y ffmpeg fonts-noto-cjk fonts-noto-color-emoji
           fc-cache -f -v
 
-      - name: Install Node dependencies
-        run: npm ci
-        working-directory: solar
-
-      - name: Install Python dependencies
-        run: python -m pip install edge-tts
-
       - name: Generate voiceover
-        run: npm run voiceover
+        run: |
+          pip install edge-tts
+          edge-tts --voice en-US-AriaNeural --text "$(cat public/voiceover/narration.en.txt)" --write-media public/voiceover/solar-system-en.mp3
+          edge-tts --voice zh-CN-XiaoxiaoNeural --text "$(cat public/voiceover/narration.zh.txt)" --write-media public/voiceover/solar-system-zh.mp3
+          edge-tts --voice ja-JP-NanamiNeural --text "$(cat public/voiceover/narration.ja.txt)" --write-media public/voiceover/solar-system-ja.mp3
+          edge-tts --voice ko-KR-SunHiNeural --text "$(cat public/voiceover/narration.ko.txt)" --write-media public/voiceover/solar-system-ko.mp3
         working-directory: solar
-        env:
-          GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
 
-      - name: Typecheck
-        run: npm run typecheck
-        working-directory: solar
-
-      - name: Render video
-        run: npm run render
+      - name: Render videos
+        run: |
+          npx --yes hyperframes@0.6.112 render -c compositions/en.html -o out/solar-system-en-vertical.mp4
+          npx --yes hyperframes@0.6.112 render -c compositions/zh.html -o out/solar-system-zh-vertical.mp4
+          npx --yes hyperframes@0.6.112 render -c compositions/ja.html -o out/solar-system-ja-vertical.mp4
+          npx --yes hyperframes@0.6.112 render -c compositions/ko.html -o out/solar-system-ko-vertical.mp4
         working-directory: solar
 
       - name: Upload artifact

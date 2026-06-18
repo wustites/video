@@ -24,24 +24,16 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Install system packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji
+          sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji ffmpeg
           fc-cache -f -v
 
-      - name: Download BGM
-        run: curl -L -o public/bgm.mp3 "https://archive.org/download/Classical-Bach-1/Bach%2002-%20Overture%20No.%203%20In%20D%20Major.mp3"
-        working-directory: population-cn
-
-      - name: Install dependencies
-        run: npm ci
-        working-directory: population-cn
-
       - name: Render video
-        run: npm run build
+        run: npx --yes hyperframes@0.6.112 render -o out/video.mp4
         working-directory: population-cn
 
       - name: Upload artifact
