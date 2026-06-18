@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; }
+      body {
+        background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a1a 100%);
+        font-family: "Noto Sans CJK SC", "Microsoft YaHei", "SimHei", sans-serif;
+      }
+      #root {
+        width: 1080px; height: 1920px;
+        position: relative; overflow: hidden;
+      }
+      .stars {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: radial-gradient(2px 2px at 20% 30%, #fff 50%, transparent 100%),
+                    radial-gradient(1px 1px at 40% 70%, #fff 50%, transparent 100%),
+                    radial-gradient(2px 2px at 60% 20%, #fff 50%, transparent 100%),
+                    radial-gradient(1px 1px at 80% 60%, #fff 50%, transparent 100%),
+                    radial-gradient(2px 2px at 10% 80%, #fff 50%, transparent 100%),
+                    radial-gradient(1px 1px at 90% 40%, #fff 50%, transparent 100%),
+                    radial-gradient(2px 2px at 30% 50%, #fff 50%, transparent 100%),
+                    radial-gradient(1px 1px at 70% 90%, #fff 50%, transparent 100%);
+        opacity: 0.6;
+      }
+      .planet-container {
+        position: absolute; top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 800px; height: 800px;
+      }
+      .planet {
+        position: absolute; border-radius: 50%;
+        transform: translate(-50%, -50%);
+        left: 50%; top: 50%;
+      }
+      .sun {
+        width: 120px; height: 120px;
+        background: radial-gradient(circle at 30% 30%, #fff7ae, #ffcc00, #ff6600);
+        box-shadow: 0 0 60px #ff9900, 0 0 120px #ff660080;
+      }
+      .mercury {
+        width: 20px; height: 20px;
+        background: radial-gradient(circle at 30% 30%, #e8e8e8, #b5b5b5, #8a8a8a);
+        top: 50%; left: 50%;
+      }
+      .venus {
+        width: 30px; height: 30px;
+        background: radial-gradient(circle at 30% 30%, #ffe4b5, #daa520, #cd853f);
+        top: 50%; left: 50%;
+      }
+      .earth {
+        width: 32px; height: 32px;
+        background: radial-gradient(circle at 30% 30%, #87ceeb, #4169e1, #000080);
+        top: 50%; left: 50%;
+      }
+      .mars {
+        width: 24px; height: 24px;
+        background: radial-gradient(circle at 30% 30%, #ff7f50, #cd5c5c, #8b0000);
+        top: 50%; left: 50%;
+      }
+      .jupiter {
+        width: 60px; height: 60px;
+        background: radial-gradient(circle at 30% 30%, #deb887, #d2691e, #8b4513);
+        top: 50%; left: 50%;
+      }
+      .saturn {
+        width: 50px; height: 50px;
+        background: radial-gradient(circle at 30% 30%, #f5deb3, #daa520, #b8860b);
+        top: 50%; left: 50%;
+      }
+      .saturn-ring {
+        position: absolute; top: 50%; left: 50%;
+        transform: translate(-50%, -50%) rotateX(70deg);
+        width: 90px; height: 90px;
+        border: 4px solid rgba(210, 180, 140, 0.6);
+        border-radius: 50%;
+      }
+      .uranus {
+        width: 40px; height: 40px;
+        background: radial-gradient(circle at 30% 30%, #afeeee, #5f9ea0, #2f4f4f);
+        top: 50%; left: 50%;
+      }
+      .neptune {
+        width: 38px; height: 38px;
+        background: radial-gradient(circle at 30% 30%, #6495ed, #1e90ff, #000080);
+        top: 50%; left: 50%;
+      }
+      .orbit {
+        position: absolute; top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+      }
+      .text-overlay {
+        position: absolute; bottom: 200px; left: 50%;
+        transform: translateX(-50%);
+        width: 900px; text-align: center;
+        color: #fff; font-size: 32px; line-height: 1.5;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        opacity: 0;
+      }
+      .planet-name {
+        position: absolute; top: 40px; left: 50%;
+        transform: translateX(-50%);
+        color: #ffcc00; font-size: 48px; font-weight: bold;
+        text-shadow: 0 2px 15px rgba(255,204,0,0.5);
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="solar-en" data-start="0" data-duration="90" data-width="1080" data-height="1920">
+      <div class="stars"></div>
+      <div class="planet-name" id="planetName"></div>
+      <div class="planet-container">
+        <div class="orbit" id="orbit1" style="width:200px;height:200px"></div>
+        <div class="orbit" id="orbit2" style="width:280px;height:280px"></div>
+        <div class="orbit" id="orbit3" style="width:360px;height:360px"></div>
+        <div class="orbit" id="orbit4" style="width:440px;height:440px"></div>
+        <div class="orbit" id="orbit5" style="width:540px;height:540px"></div>
+        <div class="orbit" id="orbit6" style="width:640px;height:640px"></div>
+        <div class="orbit" id="orbit7" style="width:720px;height:720px"></div>
+        <div class="orbit" id="orbit8" style="width:800px;height:800px"></div>
+        <div class="planet sun" id="sun"></div>
+        <div class="planet mercury" id="mercury"></div>
+        <div class="planet venus" id="venus"></div>
+        <div class="planet earth" id="earth"></div>
+        <div class="planet mars" id="mars"></div>
+        <div class="planet jupiter" id="jupiter"></div>
+        <div class="planet saturn" id="saturn"><div class="saturn-ring"></div></div>
+        <div class="planet uranus" id="uranus"></div>
+        <div class="planet neptune" id="neptune"></div>
+      </div>
+      <div class="text-overlay" id="narrationText"></div>
+      <audio id="voiceover" src="../public/voiceover/solar-system-en.mp3" preload="auto"></audio>
+    </div>
+
+    <script>
+      const narrations = [
+        { time: 0, text: "From the Sun, we begin our tour of the solar system.", planet: "sun", name: "The Sun" },
+        { time: 8, text: "The Sun is our star: a glowing sphere of hot plasma whose gravity holds every planet in orbit.", planet: "sun", name: "The Sun" },
+        { time: 18, text: "Closest to the Sun is Mercury, the smallest planet, moving quickly through intense heat and long cold nights.", planet: "mercury", name: "Mercury" },
+        { time: 28, text: "Next is Venus, bright in our sky, wrapped in thick clouds and a powerful greenhouse atmosphere.", planet: "venus", name: "Venus" },
+        { time: 38, text: "Then comes Earth, our blue home, with liquid water, living systems, and one steady Moon.", planet: "earth", name: "Earth" },
+        { time: 48, text: "Beyond Earth is Mars, the red planet, with dust storms, ancient river valleys, and the tallest volcano in the solar system.", planet: "mars", name: "Mars" },
+        { time: 58, text: "Farther out is Jupiter, the largest planet, a giant world with storms, bands of clouds, and many moons.", planet: "jupiter", name: "Jupiter" },
+        { time: 68, text: "Then Saturn appears, famous for its wide icy rings and soft golden color.", planet: "saturn", name: "Saturn" },
+        { time: 76, text: "Next is Uranus, a cold blue-green ice giant, tilted so far that it seems to roll around the Sun.", planet: "uranus", name: "Uranus" },
+        { time: 84, text: "At the edge of the major planets is Neptune, deep blue and windy, circling in the distant dark.", planet: "neptune", name: "Neptune" }
+      ];
+
+      const orbitRadii = { mercury: 100, venus: 140, earth: 180, mars: 220, jupiter: 270, saturn: 320, uranus: 360, neptune: 400 };
+      const planets = ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune"];
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.to("#sun", { scale: 1, opacity: 1, duration: 0.5 }, 0);
+
+      planets.forEach(p => {
+        const el = document.getElementById(p);
+        const radius = orbitRadii[p];
+        const angle = Math.random() * Math.PI * 2;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+        el.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+      });
+
+      narrations.forEach((n, i) => {
+        const startTime = n.time;
+        const endTime = narrations[i + 1]?.time || 90;
+
+        tl.to("#narrationText", {
+          opacity: 1, duration: 0.5,
+          onStart: () => { document.getElementById("narrationText").textContent = n.text; }
+        }, startTime);
+
+        tl.to("#narrationText", { opacity: 0, duration: 0.5 }, endTime - 0.5);
+
+        if (n.planet !== "sun") {
+          const el = document.getElementById(n.planet);
+          tl.to(el, { scale: 1.5, opacity: 1, duration: 0.5 }, startTime);
+          tl.to(el, { scale: 1, duration: 0.5 }, startTime + 0.5);
+        }
+
+        tl.to("#planetName", {
+          opacity: 1, duration: 0.5,
+          onStart: () => { document.getElementById("planetName").textContent = n.name; }
+        }, startTime);
+        tl.to("#planetName", { opacity: 0, duration: 0.5 }, endTime - 0.5);
+      });
+
+      planets.forEach(p => {
+        const el = document.getElementById(p);
+        const radius = orbitRadii[p];
+        const duration = 20 + Math.random() * 30;
+        tl.to(el, {
+          rotation: 360, duration: duration, ease: "none",
+          transformOrigin: `${-radius}px 0px`,
+          repeat: -1
+        }, 0);
+      });
+
+      window.__timelines["solar-en"] = tl;
+    </script>
+  </body>
+</html>

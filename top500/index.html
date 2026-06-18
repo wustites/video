@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="zh" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; }
+      body {
+        background: #F8FAFC;
+        font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+        color: #0F172A;
+      }
+      #root {
+        width: 1080px; height: 1920px; position: relative; overflow: hidden;
+      }
+      .bg-grid {
+        position: absolute; inset: 0; opacity: 0.36;
+        background-image: linear-gradient(rgba(15,23,42,.08) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(15,23,42,.08) 1px, transparent 1px);
+        background-size: 72px 72px;
+        mask-image: linear-gradient(to bottom, transparent, black 10%, black 88%, transparent);
+      }
+      .scene {
+        position: absolute; inset: 0; padding: 72px 64px 112px;
+        display: flex; flex-direction: column;
+      }
+      .kicker {
+        display: inline-flex; align-items: center; gap: 12px;
+        padding: 12px 18px; border: 1px solid rgba(15,23,42,.12); border-radius: 8px;
+        background: rgba(255,255,255,.76); color: #64748B; font-size: 28px; font-weight: 800;
+      }
+      .kicker-dot { width: 10px; height: 10px; border-radius: 20px; background: #10B981; }
+      .metric {
+        border-top: 8px solid var(--accent); padding: 24px 28px;
+        background: rgba(255,255,255,.82); box-shadow: 0 22px 70px rgba(15,23,42,.10);
+      }
+      .metric-label { font-size: 28px; color: #64748B; font-weight: 800; }
+      .metric-value { font-size: 60px; font-weight: 950; margin-top: 8px; }
+      .bar-row {
+        display: grid; grid-template-columns: 62px 1fr 132px; gap: 18px; align-items: center;
+      }
+      .bar-rank {
+        width: 54px; height: 54px; display: grid; place-items: center;
+        color: white; font-size: 27px; font-weight: 950;
+      }
+      .bar-track { height: 35px; background: rgba(15,23,42,.08); margin-top: 9px; overflow: hidden; }
+      .bar-fill { height: 100%; }
+      .bar-name { font-size: 31px; font-weight: 950; }
+      .bar-country { font-size: 26px; color: #64748B; font-weight: 850; }
+      .bar-revenue { font-size: 28px; font-weight: 950; text-align: right; }
+      .country-bar { height: 30px; background: rgba(15,23,42,.08); margin-top: 10px; }
+      .country-fill { height: 100%; }
+      .country-row-label { font-size: 32px; font-weight: 950; }
+      .country-row-value { font-size: 36px; font-weight: 950; }
+      .industry-row-name { font-size: 36px; font-weight: 950; }
+      .industry-row-label { font-size: 27px; color: #64748B; font-weight: 850; }
+      .industry-track { height: 34px; background: rgba(15,23,42,.08); margin-top: 14px; overflow: hidden; }
+      .industry-fill { height: 100%; }
+      .profit-card {
+        min-height: 255px; padding: 24px;
+        background: rgba(255,255,255,.84);
+        box-shadow: 0 20px 64px rgba(15,23,42,.10);
+      }
+      .profit-rank { font-size: 28px; color: #64748B; font-weight: 850; }
+      .profit-name { font-size: 40px; font-weight: 950; margin-top: 22px; }
+      .profit-value { font-size: 48px; font-weight: 950; margin-top: 30px; }
+      .timeline-bar {
+        position: absolute; left: 64px; right: 64px; bottom: 48px;
+        height: 7px; background: rgba(15,23,42,.12);
+      }
+      .timeline-fill { height: 100%; background: #0F172A; }
+      .gradient-line {
+        height: 12px;
+        background: linear-gradient(90deg, #2563EB, #10B981, #F59E0B);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="Top500Video" data-start="0" data-duration="29" data-width="1080" data-height="1920">
+      <div class="bg-grid"></div>
+
+      <div id="scene-intro" class="scene" style="padding-top:82px;opacity:0">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="kicker"><span class="kicker-dot"></span>2025 财富世界500强</div>
+        </div>
+        <div style="margin-top:146px" id="intro-title">
+          <div style="font-size:116px;line-height:1.02;font-weight:950">谁在驱动全球<br/><span style="color:#2563EB">41.7 万亿美元</span></div>
+          <div style="margin-top:42px;width:820px;font-size:40px;line-height:1.48;color:#64748B;font-weight:700">从收入冠军到国家版图，快速看懂世界最大企业的权力结构。</div>
+        </div>
+        <div style="margin-top:auto;display:grid;gap:24px" id="intro-metrics">
+          <div class="metric" style="--accent:#2563EB"><div class="metric-label">总收入</div><div class="metric-value">41.7万亿$</div></div>
+          <div class="metric" style="--accent:#10B981"><div class="metric-label">覆盖员工</div><div class="metric-value">7千万百万</div></div>
+          <div class="metric" style="--accent:#EC4899"><div class="metric-label">女性CEO</div><div class="metric-value">32位</div></div>
+        </div>
+      </div>
+
+      <div id="scene-topbars" class="scene" style="opacity:0">
+        <div class="kicker"><span class="kicker-dot"></span>收入排行 Top 10</div>
+        <div style="font-size:72px;line-height:1.08;font-weight:950;margin-top:30px">沃尔玛继续领跑，<br/>科技与能源贴身追赶</div>
+        <div style="font-size:24px;color:#64748B;font-weight:800;margin-top:18px">单位：百万美元</div>
+        <div id="bars-container" style="margin-top:52px;display:grid;gap:20px"></div>
+      </div>
+
+      <div id="scene-country" class="scene" style="padding-top:58px;opacity:0">
+        <div class="kicker"><span class="kicker-dot"></span>国家与地区分布</div>
+        <div style="font-size:72px;line-height:1.08;font-weight:950;margin-top:30px">美国 138 家，<br/>中国 130 家。</div>
+        <div style="font-size:28px;line-height:1.42;color:#64748B;margin-top:22px">两个最大经济体合计占据榜单过半席位，收入结构也开始呈现更分散的多极格局。</div>
+        <div id="country-stacked" style="height:68px;display:flex;overflow:hidden;margin-top:38px"></div>
+        <div id="country-list" style="display:grid;gap:22px;margin-top:44px"></div>
+      </div>
+
+      <div id="scene-industry" class="scene" style="opacity:0">
+        <div class="kicker"><span class="kicker-dot"></span>行业结构</div>
+        <div style="font-size:70px;line-height:1.12;font-weight:950;margin-top:34px">资本密集型产业仍是底盘，科技贡献最高利润弹性</div>
+        <div id="industry-dots" style="margin-top:62px;display:grid;grid-template-columns:repeat(10,1fr);gap:13px"></div>
+        <div id="industry-list" style="display:grid;gap:30px;margin-top:72px"></div>
+      </div>
+
+      <div id="scene-profit" class="scene" style="opacity:0">
+        <div class="kicker"><span class="kicker-dot"></span>利润视角</div>
+        <div style="font-size:82px;line-height:1.08;font-weight:950;margin-top:42px">收入第一，<br/>不一定利润第一。</div>
+        <div style="font-size:32px;line-height:1.48;color:#64748B;margin-top:32px">资源、硬件生态、资本配置与平台规模，构成了完全不同的盈利模型。</div>
+        <div id="profit-cards" style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:66px"></div>
+      </div>
+
+      <div id="scene-outro" class="scene" style="padding-top:82px;opacity:0">
+        <div style="margin-top:130px" id="outro-content">
+          <div class="kicker"><span class="kicker-dot"></span>可视化结论</div>
+          <div style="font-size:90px;line-height:1.1;font-weight:950;margin-top:58px">世界500强，<br/>是全球供应链、<br/>能源、金融与科技的年度体检。</div>
+          <div class="gradient-line" id="outro-line" style="margin-top:58px;width:0%"></div>
+          <div style="margin-top:58px;display:grid;gap:20px;font-size:38px;color:#64748B;font-weight:850">
+            <span>500 家公司</span><span>291 家国有企业</span><span>41.7 万亿美元收入</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-bar"><div class="timeline-fill" id="timeline-fill"></div></div>
+
+      <audio src="../public/audio/network-audio.mp3" volume="0.28"></audio>
+    </div>
+
+    <script>
+      const companies = [
+        {rank:1,nameEn:'Walmart',nameZh:'沃尔玛',revenue:648125,profit:15511,color:'#2563EB',country:'美国'},
+        {rank:2,nameEn:'Amazon',nameZh:'亚马逊',revenue:574785,profit:30425,color:'#FF9900',country:'美国'},
+        {rank:3,nameEn:'State Grid',nameZh:'国家电网',revenue:545948,profit:8832,color:'#10B981',country:'中国'},
+        {rank:4,nameEn:'Saudi Aramco',nameZh:'沙特阿美',revenue:493726,profit:120903,color:'#EAB308',country:'沙特'},
+        {rank:5,nameEn:'China Petrochemical',nameZh:'中国石化',revenue:483019,profit:8346,color:'#EF4444',country:'中国'},
+        {rank:6,nameEn:'Apple',nameZh:'苹果',revenue:383285,profit:93736,color:'#64748B',country:'美国'},
+        {rank:7,nameEn:'CNPC',nameZh:'中国石油',revenue:475213,profit:20158,color:'#F97316',country:'中国'},
+        {rank:8,nameEn:'UnitedHealth',nameZh:'联合健康',revenue:371622,profit:14407,color:'#8B5CF6',country:'美国'},
+        {rank:9,nameEn:'Berkshire Hathaway',nameZh:'伯克希尔',revenue:364482,profit:96223,color:'#D97706',country:'美国'},
+        {rank:10,nameEn:'CVS Health',nameZh:'CVS健康',revenue:357774,profit:4613,color:'#EC4899',country:'美国'}
+      ];
+
+      const countryCounts = [
+        {country:'美国',count:138,color:'#2563EB'},
+        {country:'中国',count:130,color:'#EF4444'},
+        {country:'日本',count:41,color:'#F97316'},
+        {country:'德国',count:29,color:'#10B981'},
+        {country:'法国',count:24,color:'#8B5CF6'},
+        {country:'英国',count:18,color:'#EC4899'},
+        {country:'韩国',count:16,color:'#EAB308'},
+        {country:'其他',count:104,color:'#64748B'}
+      ];
+
+      const industryMix = [
+        {name:'银行',value:58,label:'58家 · 金融核心',color:'#2563EB'},
+        {name:'汽车',value:34,label:'34家 · 电动转型',color:'#10B981'},
+        {name:'能源',value:32,label:'32家 · 传统底盘',color:'#F97316'},
+        {name:'保险',value:28,label:'28家 · 风险定价',color:'#8B5CF6'},
+        {name:'科技',value:24,label:'24家 · 最高利润弹性',color:'#EC4899'},
+        {name:'零售',value:22,label:'22家 · 消费终端',color:'#EAB308'},
+        {name:'电信',value:16,label:'16家 · 基础设施',color:'#14B8A6'},
+        {name:'其他',value:286,label:'286家 · 多元产业',color:'#64748B'}
+      ];
+
+      const profitLeaders = [
+        {nameEn:'Saudi Aramco',nameZh:'沙特阿美',profit:120903,color:'#EAB308'},
+        {nameEn:'Apple',nameZh:'苹果',profit:93736,color:'#64748B'},
+        {nameEn:'Berkshire Hathaway',nameZh:'伯克希尔',profit:96223,color:'#D97706'},
+        {nameEn:'Alphabet',nameZh:'谷歌母公司',profit:73795,color:'#2563EB'}
+      ];
+
+      function formatRevenue(v) { return (v/1000).toFixed(0) + 'B'; }
+      function formatProfit(v) { return (v/1000).toFixed(1) + 'B$'; }
+
+      const DURATION = 870;
+      const scenes = [
+        {id:'scene-intro',start:0,end:150},
+        {id:'scene-topbars',start:120,end:330},
+        {id:'scene-country',start:300,end:500},
+        {id:'scene-industry',start:470,end:650},
+        {id:'scene-profit',start:620,end:780},
+        {id:'scene-outro',start:748,end:DURATION}
+      ];
+
+      function sceneOpacity(frame, start, end) {
+        const fadeIn = gsap.utils.clamp(0, 1, (frame - start) / 18);
+        const fadeOut = gsap.utils.clamp(0, 1, (end - frame) / 18);
+        return Math.min(fadeIn, fadeOut);
+      }
+
+      function buildBars() {
+        const container = document.getElementById('bars-container');
+        const max = companies[0].revenue;
+        companies.forEach((item, i) => {
+          const row = document.createElement('div');
+          row.className = 'bar-row';
+          row.id = 'bar-' + i;
+          row.innerHTML = `
+            <div class="bar-rank" style="background:${item.color}">${item.rank}</div>
+            <div>
+              <div style="display:flex;justify-content:space-between;gap:20px">
+                <div class="bar-name">${item.nameZh}</div>
+                <div class="bar-country">${item.country}</div>
+              </div>
+              <div class="bar-track"><div class="bar-fill" style="width:0%;background:linear-gradient(90deg,${item.color},${item.color}B8)"></div></div>
+            </div>
+            <div class="bar-revenue">${formatRevenue(item.revenue)}</div>`;
+          container.appendChild(row);
+        });
+      }
+
+      function buildCountry() {
+        const total = countryCounts.reduce((s, c) => s + c.count, 0);
+        const stacked = document.getElementById('country-stacked');
+        const list = document.getElementById('country-list');
+        countryCounts.forEach((item, i) => {
+          const seg = document.createElement('div');
+          seg.id = 'cstack-' + i;
+          seg.style.cssText = `width:0%;background:${item.color};height:100%`;
+          stacked.appendChild(seg);
+
+          const row = document.createElement('div');
+          row.id = 'crow-' + i;
+          row.innerHTML = `
+            <div style="display:flex;justify-content:space-between">
+              <div class="country-row-label">${item.country}</div>
+              <div class="country-row-value" id="cval-${i}">0</div>
+            </div>
+            <div class="country-bar"><div class="country-fill" style="width:0%;background:${item.color}"></div></div>`;
+          list.appendChild(row);
+        });
+      }
+
+      function buildIndustry() {
+        const max = Math.max(...industryMix.map(i => i.value));
+        const dots = document.getElementById('industry-dots');
+        for (let d = 0; d < 70; d++) {
+          const bucket = industryMix[d % industryMix.length];
+          const dot = document.createElement('div');
+          dot.id = 'idot-' + d;
+          dot.style.cssText = `aspect-ratio:1/1;background:${bucket.color};opacity:0.18`;
+          dots.appendChild(dot);
+        }
+        const list = document.getElementById('industry-list');
+        industryMix.forEach((item, i) => {
+          const row = document.createElement('div');
+          row.id = 'irow-' + i;
+          row.innerHTML = `
+            <div style="display:flex;justify-content:space-between">
+              <div class="industry-row-name">${item.name}</div>
+              <div class="industry-row-label">${item.label}</div>
+            </div>
+            <div class="industry-track"><div class="industry-fill" style="width:0%;background:${item.color}"></div></div>`;
+          list.appendChild(row);
+        });
+      }
+
+      function buildProfit() {
+        const container = document.getElementById('profit-cards');
+        profitLeaders.forEach((item, i) => {
+          const card = document.createElement('div');
+          card.id = 'pcard-' + i;
+          card.className = 'profit-card';
+          card.style.cssText = `border-top:8px solid ${item.color};opacity:0;transform:translateY(44px)`;
+          card.innerHTML = `
+            <div class="profit-rank">#${i+1} 利润</div>
+            <div class="profit-name">${item.nameZh}</div>
+            <div class="profit-value">${formatProfit(item.profit)}</div>`;
+          container.appendChild(card);
+        });
+      }
+
+      buildBars();
+      buildCountry();
+      buildIndustry();
+      buildProfit();
+
+      const maxCountry = Math.max(...countryCounts.map(c => c.count));
+      const maxIndustry = Math.max(...industryMix.map(i => i.value));
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.to({frame: 0}, {
+        frame: DURATION,
+        duration: DURATION / 30,
+        ease: "none",
+        onUpdate: function() {
+          const frame = this.targets()[0].frame;
+          const progress = frame / DURATION;
+
+          scenes.forEach(s => {
+            const el = document.getElementById(s.id);
+            el.style.opacity = sceneOpacity(frame, s.start, s.end);
+          });
+
+          const titleEnter = gsap.utils.clamp(0, 1, frame / 36);
+          const introTitle = document.getElementById('intro-title');
+          introTitle.style.opacity = titleEnter;
+          introTitle.style.transform = `translateY(${(1-titleEnter)*76}px)`;
+
+          const local = frame - 130;
+          companies.forEach((item, i) => {
+            const enter = gsap.utils.clamp(0, 1, (local - i * 4) / 30);
+            const row = document.getElementById('bar-' + i);
+            if (row) {
+              row.style.opacity = enter;
+              row.style.transform = `translateX(${(1-enter)*-60}px)`;
+              const fill = row.querySelector('.bar-fill');
+              if (fill) fill.style.width = (enter * (item.revenue / companies[0].revenue) * 100) + '%';
+            }
+          });
+
+          const clocal = frame - 290;
+          const total = countryCounts.reduce((s, c) => s + c.count, 0);
+          countryCounts.forEach((item, i) => {
+            const enter = gsap.utils.clamp(0, 1, (clocal - i * 8) / 30);
+            const seg = document.getElementById('cstack-' + i);
+            if (seg) seg.style.width = (enter * (item.count / total) * 100) + '%';
+            const row = document.getElementById('crow-' + i);
+            if (row) {
+              row.style.opacity = enter;
+              row.style.transform = `translateY(${(1-enter)*36}px)`;
+              const val = document.getElementById('cval-' + i);
+              if (val) val.textContent = Math.round(item.count * enter);
+              const fill = row.querySelector('.country-fill');
+              if (fill) fill.style.width = (enter * (item.count / maxCountry) * 100) + '%';
+            }
+          });
+
+          const ilocal = frame - 470;
+          for (let d = 0; d < 70; d++) {
+            const enter = gsap.utils.clamp(0, 1, (ilocal - d * 0.6) / 30);
+            const dot = document.getElementById('idot-' + d);
+            if (dot) {
+              dot.style.opacity = 0.18 + enter * 0.72;
+              dot.style.transform = `scale(${0.28 + enter * 0.72})`;
+            }
+          }
+          industryMix.forEach((item, i) => {
+            const enter = gsap.utils.clamp(0, 1, (ilocal - i * 9) / 30);
+            const row = document.getElementById('irow-' + i);
+            if (row) {
+              row.style.opacity = enter;
+              row.style.transform = `translateY(${(1-enter)*36}px)`;
+              const fill = row.querySelector('.industry-fill');
+              if (fill) fill.style.width = (enter * (item.value / maxIndustry) * 100) + '%';
+            }
+          });
+
+          const plocal = frame - 640;
+          profitLeaders.forEach((item, i) => {
+            const enter = gsap.utils.clamp(0, 1, (plocal - i * 12) / 30);
+            const card = document.getElementById('pcard-' + i);
+            if (card) {
+              card.style.opacity = enter;
+              card.style.transform = `translateY(${(1-enter)*44}px)`;
+            }
+          });
+
+          const olocal = frame - 760;
+          const reveal = gsap.utils.clamp(0, 1, olocal / 24);
+          const outroContent = document.getElementById('outro-content');
+          outroContent.style.opacity = reveal;
+          outroContent.style.transform = `translateY(${(1-reveal)*54}px)`;
+          const lineW = gsap.utils.clamp(0, 100, (olocal - 12) / 22 * 100);
+          document.getElementById('outro-line').style.width = lineW + '%';
+
+          document.getElementById('timeline-fill').style.width = (progress * 100) + '%';
+        }
+      }, 0);
+
+      window.__timelines["Top500Video"] = tl;
+    </script>
+  </body>
+</html>
