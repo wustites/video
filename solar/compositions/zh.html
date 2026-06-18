@@ -129,10 +129,11 @@
 
       tl.to("#sun", { scale: 1, opacity: 1, duration: 0.5 }, 0);
 
+      const seedAngles = {mercury:0.8,venus:2.1,earth:3.5,mars:1.2,jupiter:4.8,saturn:0.3,uranus:2.7,neptune:5.0};
       planets.forEach(p => {
         const el = document.getElementById(p);
         const radius = orbitRadii[p];
-        const angle = Math.random() * Math.PI * 2;
+        const angle = seedAngles[p];
         el.style.transform = `translate(calc(-50% + ${Math.cos(angle) * radius}px), calc(-50% + ${Math.sin(angle) * radius}px))`;
       });
 
@@ -148,10 +149,13 @@
         tl.to("#planetName", { opacity: 0, duration: 0.5 }, endTime - 0.5);
       });
 
+      const orbitDurations = {mercury:25,venus:30,earth:35,mars:28,jupiter:42,saturn:38,uranus:33,neptune:45};
       planets.forEach(p => {
         const el = document.getElementById(p);
         const radius = orbitRadii[p];
-        tl.to(el, { rotation: 360, duration: 20 + Math.random() * 30, ease: "none", transformOrigin: `${-radius}px 0px`, repeat: -1 }, 0);
+        const duration = orbitDurations[p];
+        const repeatCount = Math.floor(90 / duration) - 1;
+        tl.to(el, { rotation: 360, duration: duration, ease: "none", transformOrigin: `${-radius}px 0px`, repeat: repeatCount }, 0);
       });
 
       window.__timelines["solar-zh"] = tl;
