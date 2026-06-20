@@ -1,0 +1,49 @@
+name: qs-universities - Build and release video
+
+on:
+  push:
+    tags:
+      - "v*-qs-universities"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: qs-universities-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build qs-universities video
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install system packages
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Render video
+        run: npx --yes hyperframes render -o out/video.mp4
+        working-directory: qs-universities
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qs-universities-video
+          path: qs-universities/out/video.mp4
+          if-no-files-found: error
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: qs-universities/out/video.mp4
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
