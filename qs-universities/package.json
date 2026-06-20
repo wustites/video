@@ -1,0 +1,13 @@
+{
+  "name": "qs-universities",
+  "version": "1.0.0",
+  "description": "QS世界大学排名前100动画视频",
+  "main": "index.html",
+  "scripts": {
+    "render": "npx hyperframes render -o out/video.mp4",
+    "preview": "npx hyperframes preview"
+  },
+  "keywords": ["qs", "university", "ranking", "hyperframes", "animation"],
+  "author": "",
+  "license": "MIT"
+}
