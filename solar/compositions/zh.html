@@ -4,65 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="../public/solar-scene.js"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; }
       body {
-        background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a1a 100%);
+        background: #02040b;
         font-family: "Noto Sans SC", "Microsoft YaHei", "SimHei", sans-serif;
       }
       #root {
         width: 1080px; height: 1920px;
         position: relative; overflow: hidden;
       }
-      .stars {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: radial-gradient(2px 2px at 20% 30%, #fff 50%, transparent 100%),
-                    radial-gradient(1px 1px at 40% 70%, #fff 50%, transparent 100%),
-                    radial-gradient(2px 2px at 60% 20%, #fff 50%, transparent 100%),
-                    radial-gradient(1px 1px at 80% 60%, #fff 50%, transparent 100%),
-                    radial-gradient(2px 2px at 10% 80%, #fff 50%, transparent 100%),
-                    radial-gradient(1px 1px at 90% 40%, #fff 50%, transparent 100%),
-                    radial-gradient(2px 2px at 30% 50%, #fff 50%, transparent 100%),
-                    radial-gradient(1px 1px at 70% 90%, #fff 50%, transparent 100%);
-        opacity: 0.6;
-      }
-      .planet-container {
-        position: absolute; top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        width: 800px; height: 800px;
-      }
-      .planet {
-        position: absolute; border-radius: 50%;
-        transform: translate(-50%, -50%);
-        left: 50%; top: 50%;
-      }
-      .sun {
-        width: 120px; height: 120px;
-        background: radial-gradient(circle at 30% 30%, #fff7ae, #ffcc00, #ff6600);
-        box-shadow: 0 0 60px #ff9900, 0 0 120px #ff660080;
-      }
-      .mercury { width: 20px; height: 20px; background: radial-gradient(circle at 30% 30%, #e8e8e8, #b5b5b5, #8a8a8a); }
-      .venus { width: 30px; height: 30px; background: radial-gradient(circle at 30% 30%, #ffe4b5, #daa520, #cd853f); }
-      .earth { width: 32px; height: 32px; background: radial-gradient(circle at 30% 30%, #87ceeb, #4169e1, #000080); }
-      .mars { width: 24px; height: 24px; background: radial-gradient(circle at 30% 30%, #ff7f50, #cd5c5c, #8b0000); }
-      .jupiter { width: 60px; height: 60px; background: radial-gradient(circle at 30% 30%, #deb887, #d2691e, #8b4513); }
-      .saturn { width: 50px; height: 50px; background: radial-gradient(circle at 30% 30%, #f5deb3, #daa520, #b8860b); }
-      .saturn-ring {
-        position: absolute; top: 50%; left: 50%;
-        transform: translate(-50%, -50%) rotateX(70deg);
-        width: 90px; height: 90px;
-        border: 4px solid rgba(210, 180, 140, 0.6);
-        border-radius: 50%;
-      }
-      .uranus { width: 40px; height: 40px; background: radial-gradient(circle at 30% 30%, #afeeee, #5f9ea0, #2f4f4f); }
-      .neptune { width: 38px; height: 38px; background: radial-gradient(circle at 30% 30%, #6495ed, #1e90ff, #000080); }
-      .orbit {
-        position: absolute; top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 50%;
+      #solar-canvas {
+        position: absolute; top: 0; left: 0;
+        width: 100%; height: 100%;
       }
       .text-overlay {
         position: absolute; bottom: 200px; left: 50%;
@@ -71,6 +29,7 @@
         color: #fff; font-size: 32px; line-height: 1.5;
         text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         opacity: 0;
+        z-index: 10;
       }
       .planet-name {
         position: absolute; top: 40px; left: 50%;
@@ -78,34 +37,16 @@
         color: #ffcc00; font-size: 48px; font-weight: bold;
         text-shadow: 0 2px 15px rgba(255,204,0,0.5);
         opacity: 0;
+        z-index: 10;
       }
     </style>
   </head>
   <body>
     <div id="root" data-composition-id="solar-zh" data-start="0" data-duration="90" data-width="1080" data-height="1920">
-      <div class="stars"></div>
+      <canvas id="solar-canvas"></canvas>
       <div class="planet-name" id="planetName"></div>
-      <div class="planet-container">
-        <div class="orbit" style="width:200px;height:200px"></div>
-        <div class="orbit" style="width:280px;height:280px"></div>
-        <div class="orbit" style="width:360px;height:360px"></div>
-        <div class="orbit" style="width:440px;height:440px"></div>
-        <div class="orbit" style="width:540px;height:540px"></div>
-        <div class="orbit" style="width:640px;height:640px"></div>
-        <div class="orbit" style="width:720px;height:720px"></div>
-        <div class="orbit" style="width:800px;height:800px"></div>
-        <div class="planet sun" id="sun"></div>
-        <div class="planet mercury" id="mercury"></div>
-        <div class="planet venus" id="venus"></div>
-        <div class="planet earth" id="earth"></div>
-        <div class="planet mars" id="mars"></div>
-        <div class="planet jupiter" id="jupiter"></div>
-        <div class="planet saturn" id="saturn"><div class="saturn-ring"></div></div>
-        <div class="planet uranus" id="uranus"></div>
-        <div class="planet neptune" id="neptune"></div>
-      </div>
       <div class="text-overlay" id="narrationText"></div>
-      <audio id="voiceover" src="../public/voiceover/solar-system-zh.mp3" preload="auto"></audio>
+      <audio id="voiceover" src="../public/voiceover/solar-system-zh.mp3" preload="auto" data-start="0" data-duration="90"></audio>
     </div>
 
     <script>
@@ -122,44 +63,41 @@
         { time: 84, text: "在主要行星的边缘，是海王星。它深蓝而多风，在遥远的黑暗中环绕太阳运行。", planet: "neptune", name: "海王星" }
       ];
 
-      const orbitRadii = { mercury: 100, venus: 140, earth: 180, mars: 220, jupiter: 270, saturn: 320, uranus: 360, neptune: 400 };
-      const planets = ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune"];
+      const canvas = document.getElementById('solar-canvas');
+      const scene = SolarScene.init(canvas, 1080, 1920);
+
+      const segments = narrations.map((n, i) => ({
+        name: n.planet === 'sun' ? 'Sun' : n.planet.charAt(0).toUpperCase() + n.planet.slice(1),
+        start: n.time * 30,
+        end: (narrations[i + 1]?.time || 90) * 30
+      }));
+
+      const totalFrames = 90 * 30;
 
       window.__timelines = window.__timelines || {};
-      const tl = gsap.timeline({ paused: true });
+      window.__timelines["solar-zh"] = gsap.timeline({ paused: true, onUpdate: function() {
+        const frame = Math.floor(this.time() * 30);
+        scene.update(frame, totalFrames, segments);
+      }});
 
-      tl.to("#sun", { scale: 1, opacity: 1, duration: 0.5 }, 0);
-
-      const seedAngles = {mercury:0.8,venus:2.1,earth:3.5,mars:1.2,jupiter:4.8,saturn:0.3,uranus:2.7,neptune:5.0};
-      planets.forEach(p => {
-        const el = document.getElementById(p);
-        const radius = orbitRadii[p];
-        const angle = seedAngles[p];
-        el.style.transform = `translate(calc(-50% + ${Math.cos(angle) * radius}px), calc(-50% + ${Math.sin(angle) * radius}px))`;
-      });
-
+      const tl = window.__timelines["solar-zh"];
       narrations.forEach((n, i) => {
+        const startTime = n.time;
         const endTime = narrations[i + 1]?.time || 90;
-        tl.to("#narrationText", { opacity: 1, duration: 0.5, onStart: () => { document.getElementById("narrationText").textContent = n.text; } }, n.time);
+
+        tl.to("#narrationText", {
+          opacity: 1, duration: 0.5,
+          onStart: () => { document.getElementById("narrationText").textContent = n.text; }
+        }, startTime);
+
         tl.to("#narrationText", { opacity: 0, duration: 0.5 }, endTime - 0.5);
-        if (n.planet !== "sun") {
-          tl.to("#" + n.planet, { scale: 1.5, opacity: 1, duration: 0.5 }, n.time);
-          tl.to("#" + n.planet, { scale: 1, duration: 0.5 }, n.time + 0.5);
-        }
-        tl.to("#planetName", { opacity: 1, duration: 0.5, onStart: () => { document.getElementById("planetName").textContent = n.name; } }, n.time);
+
+        tl.to("#planetName", {
+          opacity: 1, duration: 0.5,
+          onStart: () => { document.getElementById("planetName").textContent = n.name; }
+        }, startTime);
         tl.to("#planetName", { opacity: 0, duration: 0.5 }, endTime - 0.5);
       });
-
-      const orbitDurations = {mercury:25,venus:30,earth:35,mars:28,jupiter:42,saturn:38,uranus:33,neptune:45};
-      planets.forEach(p => {
-        const el = document.getElementById(p);
-        const radius = orbitRadii[p];
-        const duration = orbitDurations[p];
-        const repeatCount = Math.floor(90 / duration) - 1;
-        tl.to(el, { rotation: 360, duration: duration, ease: "none", transformOrigin: `${-radius}px 0px`, repeat: repeatCount }, 0);
-      });
-
-      window.__timelines["solar-zh"] = tl;
     </script>
   </body>
 </html>
