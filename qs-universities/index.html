@@ -155,7 +155,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="qs-universities" data-start="0" data-duration="50" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="qs-universities" data-start="0" data-duration="52" data-width="1080" data-height="1920">
       <div class="header">
         <div class="title">QS<span class="title-accent">世界大学</span>排名</div>
         <div class="subtitle">2027 Top 100</div>
@@ -319,6 +319,8 @@
         tl.fromTo(`#page-${p} .university-item`, { x: 80, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.12, duration: 0.5, ease: "power3.out" }, "<0.15");
         tl.set(`#page-${prev}`, { visibility: "hidden" });
       }
+
+      tl.to({}, { duration: 2 });
 
       window.__timelines["qs-universities"] = tl;
     </script>
