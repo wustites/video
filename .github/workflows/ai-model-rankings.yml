@@ -1,0 +1,52 @@
+name: ai-model-rankings - Build and release video
+
+on:
+  push:
+    tags:
+      - "v*-ai-model-rankings"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ai-model-rankings-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    name: Render ai-model-rankings video
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install system packages
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Render videos
+        run: |
+          npx --yes hyperframes@0.6.112 render -c compositions/en.html -o out/ai-model-rankings-en-vertical.mp4
+          npx --yes hyperframes@0.6.112 render -c compositions/zh.html -o out/ai-model-rankings-zh-vertical.mp4
+        working-directory: ai-model-rankings
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-model-rankings-${{ github.ref_name }}
+          path: ai-model-rankings/out/*.mp4
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ai-model-rankings/out/*.mp4
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
