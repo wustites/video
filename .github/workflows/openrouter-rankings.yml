@@ -1,0 +1,52 @@
+name: openrouter-rankings - Build and release video
+
+on:
+  push:
+    tags:
+      - "v*-openrouter-rankings"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: openrouter-rankings-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    name: Render openrouter-rankings video
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install system packages
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Render videos
+        run: |
+          npx --yes hyperframes@0.6.112 render -c compositions/en.html -o out/openrouter-rankings-en-vertical.mp4
+          npx --yes hyperframes@0.6.112 render -c compositions/zh.html -o out/openrouter-rankings-zh-vertical.mp4
+        working-directory: openrouter-rankings
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openrouter-rankings-${{ github.ref_name }}
+          path: openrouter-rankings/out/*.mp4
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: openrouter-rankings/out/*.mp4
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

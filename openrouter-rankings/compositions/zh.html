@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="zh" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; }
+      body {
+        background: #0a0a0a;
+        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        color: #f5f5f5;
+      }
+      #root {
+        width: 1080px; height: 1920px; position: relative; overflow: hidden;
+      }
+      .bg-gradient {
+        position: absolute; inset: 0;
+        background: radial-gradient(ellipse at 30% 20%, rgba(59,130,246,.15) 0%, transparent 60%),
+                    radial-gradient(ellipse at 70% 80%, rgba(168,85,247,.1) 0%, transparent 60%);
+      }
+      .scene {
+        position: absolute; inset: 0; padding: 72px 64px 112px;
+        display: flex; flex-direction: column;
+      }
+      .kicker {
+        display: inline-flex; align-items: center; gap: 12px;
+        padding: 12px 18px; border: 1px solid rgba(245,245,245,.15); border-radius: 8px;
+        background: rgba(245,245,245,.06); color: #a0a0a0; font-size: 28px; font-weight: 700;
+      }
+      .kicker-dot { width: 10px; height: 10px; border-radius: 20px; background: #3B82F6; }
+      .metric {
+        border-top: 8px solid var(--accent); padding: 24px 28px;
+        background: rgba(245,245,245,.06); box-shadow: 0 22px 70px rgba(0,0,0,.4);
+      }
+      .metric-label { font-size: 28px; color: #a0a0a0; font-weight: 700; }
+      .metric-value { font-size: 60px; font-weight: 900; margin-top: 8px; }
+      .bar-row {
+        display: grid; grid-template-columns: 62px 1fr 160px; gap: 18px; align-items: center;
+      }
+      .bar-rank {
+        width: 54px; height: 54px; display: grid; place-items: center;
+        color: white; font-size: 27px; font-weight: 900;
+      }
+      .bar-track { height: 35px; background: rgba(245,245,245,.08); margin-top: 9px; overflow: hidden; }
+      .bar-fill { height: 100%; }
+      .bar-name { font-size: 26px; font-weight: 800; }
+      .bar-provider { font-size: 20px; color: #a0a0a0; font-weight: 600; }
+      .bar-tokens { font-size: 26px; font-weight: 800; text-align: right; }
+      .growth-badge {
+        display: inline-flex; align-items: center; gap: 4px;
+        padding: 4px 10px; border-radius: 12px; font-size: 18px; font-weight: 700;
+      }
+      .growth-up { background: rgba(34,197,94,.2); color: #22c55e; }
+      .growth-down { background: rgba(239,68,68,.2); color: #ef4444; }
+      .provider-bar { height: 30px; background: rgba(245,245,245,.08); margin-top: 10px; }
+      .provider-fill { height: 100%; }
+      .provider-row-label { font-size: 32px; font-weight: 800; }
+      .provider-row-value { font-size: 36px; font-weight: 800; }
+      .timeline-bar {
+        position: absolute; left: 64px; right: 64px; bottom: 48px;
+        height: 7px; background: rgba(245,245,245,.12);
+      }
+      .timeline-fill { height: 100%; background: #3B82F6; }
+      .gradient-line {
+        height: 12px;
+        background: linear-gradient(90deg, #3B82F6, #a855f7, #ec4899);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="openrouter-rankings-zh" data-start="0" data-duration="45" data-width="1080" data-height="1920">
+      <div class="bg-gradient"></div>
+
+      <div id="scene-intro" class="scene" style="padding-top:82px;opacity:0">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="kicker"><span class="kicker-dot"></span>OpenRouter 本周排名</div>
+        </div>
+        <div style="margin-top:146px" id="intro-title">
+          <div style="font-size:100px;line-height:1.02;font-weight:900">本周<br/><span style="color:#3B82F6">热门 AI 模型</span></div>
+          <div style="margin-top:42px;width:820px;font-size:38px;line-height:1.48;color:#a0a0a0;font-weight:600">来自数百万用户通过 OpenRouter 访问模型的真实使用数据。</div>
+        </div>
+        <div style="margin-top:auto;display:grid;gap:24px" id="intro-metrics">
+          <div class="metric" style="--accent:#3B82F6"><div class="metric-label">总 Token 数</div><div class="metric-value">30+ 万亿</div></div>
+          <div class="metric" style="--accent:#a855f7"><div class="metric-label">最热门模型</div><div class="metric-value">DeepSeek V4 Flash</div></div>
+          <div class="metric" style="--accent:#ec4899"><div class="metric-label">增长最快</div><div class="metric-value">GLM 5.2 (+123%)</div></div>
+        </div>
+      </div>
+
+      <div id="scene-ranking" class="scene" style="opacity:0">
+        <div class="kicker"><span class="kicker-dot"></span>Token 使用量 Top 10</div>
+        <div style="font-size:68px;line-height:1.08;font-weight:900;margin-top:30px">DeepSeek V4 Flash<br/>以 4.83T 领跑</div>
+        <div style="font-size:24px;color:#a0a0a0;font-weight:700;margin-top:18px">OpenRouter 本周 Token 使用量</div>
+        <div id="bars-container" style="margin-top:42px;display:grid;gap:16px"></div>
+      </div>
+
+      <div id="scene-providers" class="scene" style="padding-top:58px;opacity:0">
+        <div class="kicker"><span class="kicker-dot"></span>供应商分布</div>
+        <div style="font-size:72px;line-height:1.08;font-weight:900;margin-top:30px">DeepSeek 和 Anthropic<br/>主导使用量</div>
+        <div style="font-size:28px;line-height:1.42;color:#a0a0a0;margin-top:22px">Top 10 中各供应商的 Token 份额</div>
+        <div id="provider-list" style="display:grid;gap:22px;margin-top:44px"></div>
+      </div>
+
+      <div id="scene-growth" class="scene" style="opacity:0">
+        <div class="kicker"><span class="kicker-dot"></span>增长趋势</div>
+        <div style="font-size:68px;line-height:1.08;font-weight:900;margin-top:30px">中国模型<br/>强势崛起</div>
+        <div style="font-size:24px;color:#a0a0a0;font-weight:700;margin-top:18px">Top 10 中的周环比增长</div>
+        <div id="growth-container" style="margin-top:42px;display:grid;gap:20px"></div>
+      </div>
+
+      <div id="scene-outro" class="scene" style="padding-top:82px;opacity:0">
+        <div style="margin-top:130px" id="outro-content">
+          <div class="kicker"><span class="kicker-dot"></span>核心发现</div>
+          <div style="font-size:86px;line-height:1.1;font-weight:900;margin-top:58px">AI 格局<br/>正在快速变化。</div>
+          <div class="gradient-line" id="outro-line" style="margin-top:58px;width:0%"></div>
+          <div style="margin-top:58px;display:grid;gap:20px;font-size:36px;color:#a0a0a0;font-weight:700">
+            <span>处理 30+ 万亿 Token</span>
+            <span>中国模型快速增长</span>
+            <span>数据来源 OpenRouter Rankings</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-bar"><div class="timeline-fill" id="timeline-fill"></div></div>
+    </div>
+
+    <script>
+      const models = [
+        { rank: 1, name: "DeepSeek V4 Flash", provider: "DeepSeek", tokens: "4.83T", tokensNum: 4.83, growth: 3, color: "#3B82F6" },
+        { rank: 2, name: "MiMo-V2.5", provider: "小米", tokens: "4.49T", tokensNum: 4.49, growth: 17, color: "#ef4444" },
+        { rank: 3, name: "MiniMax M3", provider: "MiniMax", tokens: "3.83T", tokensNum: 3.83, growth: 7, color: "#f97316" },
+        { rank: 4, name: "Owl Alpha", provider: "OpenRouter", tokens: "3.29T", tokensNum: 3.29, growth: 38, color: "#a855f7" },
+        { rank: 5, name: "Hy3 Preview", provider: "腾讯", tokens: "3.28T", tokensNum: 3.28, growth: 6, color: "#22c55e" },
+        { rank: 6, name: "Claude Opus 4.7", provider: "Anthropic", tokens: "2.34T", tokensNum: 2.34, growth: 20, color: "#ec4899" },
+        { rank: 7, name: "DeepSeek V4 Pro", provider: "DeepSeek", tokens: "2.07T", tokensNum: 2.07, growth: 17, color: "#3B82F6" },
+        { rank: 8, name: "Claude Opus 4.8", provider: "Anthropic", tokens: "2.06T", tokensNum: 2.06, growth: 47, color: "#ec4899" },
+        { rank: 9, name: "GLM 5.2", provider: "智谱 AI", tokens: "1.92T", tokensNum: 1.92, growth: 123, color: "#eab308" },
+        { rank: 10, name: "Claude Sonnet 4.6", provider: "Anthropic", tokens: "1.49T", tokensNum: 1.49, growth: 4, color: "#ec4899" }
+      ];
+
+      const providers = [
+        { name: "DeepSeek", tokens: 6.9, color: "#3B82F6" },
+        { name: "Anthropic", tokens: 5.89, color: "#ec4899" },
+        { name: "小米", tokens: 4.49, color: "#ef4444" },
+        { name: "MiniMax", tokens: 3.83, color: "#f97316" },
+        { name: "OpenRouter", tokens: 3.29, color: "#a855f7" },
+        { name: "腾讯", tokens: 3.28, color: "#22c55e" },
+        { name: "智谱 AI", tokens: 1.92, color: "#eab308" }
+      ];
+
+      const growthModels = [
+        { name: "GLM 5.2", provider: "智谱 AI", growth: 123, color: "#eab308" },
+        { name: "Claude Opus 4.8", provider: "Anthropic", growth: 47, color: "#ec4899" },
+        { name: "Owl Alpha", provider: "OpenRouter", growth: 38, color: "#a855f7" },
+        { name: "Claude Opus 4.7", provider: "Anthropic", growth: 20, color: "#ec4899" },
+        { name: "MiMo-V2.5", provider: "小米", growth: 17, color: "#ef4444" },
+        { name: "DeepSeek V4 Pro", provider: "DeepSeek", growth: 17, color: "#3B82F6" }
+      ];
+
+      function buildBars() {
+        const container = document.getElementById('bars-container');
+        const max = models[0].tokensNum;
+        models.forEach((item, i) => {
+          const row = document.createElement('div');
+          row.className = 'bar-row';
+          row.id = 'bar-' + i;
+          const growthClass = item.growth >= 0 ? 'growth-up' : 'growth-down';
+          const growthSign = item.growth >= 0 ? '+' : '';
+          row.innerHTML = `
+            <div class="bar-rank" style="background:${item.color}">${item.rank}</div>
+            <div>
+              <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+                <div>
+                  <div class="bar-name">${item.name}</div>
+                  <div class="bar-provider">${item.provider}</div>
+                </div>
+                <div class="growth-badge ${growthClass}">${growthSign}${item.growth}%</div>
+              </div>
+              <div class="bar-track"><div class="bar-fill" style="width:0%;background:linear-gradient(90deg,${item.color},${item.color}B8)"></div></div>
+            </div>
+            <div class="bar-tokens">${item.tokens}</div>`;
+          container.appendChild(row);
+        });
+      }
+
+      function buildProviders() {
+        const container = document.getElementById('provider-list');
+        const max = providers[0].tokens;
+        providers.forEach((item, i) => {
+          const row = document.createElement('div');
+          row.id = 'prow-' + i;
+          row.innerHTML = `
+            <div style="display:flex;justify-content:space-between">
+              <div class="provider-row-label">${item.name}</div>
+              <div class="provider-row-value" id="pval-${i}">${item.tokens}T</div>
+            </div>
+            <div class="provider-bar"><div class="provider-fill" style="width:0%;background:${item.color}"></div></div>`;
+          container.appendChild(row);
+        });
+      }
+
+      function buildGrowth() {
+        const container = document.getElementById('growth-container');
+        const max = growthModels[0].growth;
+        growthModels.forEach((item, i) => {
+          const row = document.createElement('div');
+          row.id = 'grow-' + i;
+          row.innerHTML = `
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-size:28px;font-weight:800">${item.name}</div>
+                <div style="font-size:20px;color:#a0a0a0;font-weight:600">${item.provider}</div>
+              </div>
+              <div class="growth-badge growth-up" style="font-size:24px;padding:8px 16px">+${item.growth}%</div>
+            </div>
+            <div style="height:24px;background:rgba(245,245,245,.08);margin-top:10px;border-radius:12px;overflow:hidden">
+              <div id="grow-fill-${i}" style="height:100%;width:0%;background:linear-gradient(90deg,${item.color},${item.color}B8);border-radius:12px"></div>
+            </div>`;
+          container.appendChild(row);
+        });
+      }
+
+      buildBars();
+      buildProviders();
+      buildGrowth();
+
+      const DURATION = 1350;
+      const scenes = [
+        { id: 'scene-intro', start: 0, end: 240 },
+        { id: 'scene-ranking', start: 210, end: 540 },
+        { id: 'scene-providers', start: 510, end: 780 },
+        { id: 'scene-growth', start: 750, end: 1080 },
+        { id: 'scene-outro', start: 1050, end: DURATION }
+      ];
+
+      function sceneOpacity(frame, start, end) {
+        const fadeIn = gsap.utils.clamp(0, 1, (frame - start) / 18);
+        const fadeOut = gsap.utils.clamp(0, 1, (end - frame) / 18);
+        return Math.min(fadeIn, fadeOut);
+      }
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.to({ frame: 0 }, {
+        frame: DURATION,
+        duration: DURATION / 30,
+        ease: "none",
+        onUpdate: function () {
+          const frame = this.targets()[0].frame;
+          const progress = frame / DURATION;
+
+          scenes.forEach(s => {
+            const el = document.getElementById(s.id);
+            el.style.opacity = sceneOpacity(frame, s.start, s.end);
+          });
+
+          const titleEnter = gsap.utils.clamp(0, 1, frame / 36);
+          const introTitle = document.getElementById('intro-title');
+          introTitle.style.opacity = titleEnter;
+          introTitle.style.transform = `translateY(${(1 - titleEnter) * 76}px)`;
+
+          const introMetrics = document.getElementById('intro-metrics');
+          introMetrics.style.opacity = gsap.utils.clamp(0, 1, (frame - 24) / 24);
+
+          const local = frame - 220;
+          models.forEach((item, i) => {
+            const enter = gsap.utils.clamp(0, 1, (local - i * 5) / 30);
+            const row = document.getElementById('bar-' + i);
+            if (row) {
+              row.style.opacity = enter;
+              row.style.transform = `translateX(${(1 - enter) * -60}px)`;
+              const fill = row.querySelector('.bar-fill');
+              if (fill) fill.style.width = (enter * (item.tokensNum / models[0].tokensNum) * 100) + '%';
+            }
+          });
+
+          const plocal = frame - 520;
+          providers.forEach((item, i) => {
+            const enter = gsap.utils.clamp(0, 1, (plocal - i * 8) / 30);
+            const row = document.getElementById('prow-' + i);
+            if (row) {
+              row.style.opacity = enter;
+              row.style.transform = `translateY(${(1 - enter) * 36}px)`;
+              const fill = row.querySelector('.provider-fill');
+              if (fill) fill.style.width = (enter * (item.tokens / providers[0].tokens) * 100) + '%';
+            }
+          });
+
+          const glocal = frame - 760;
+          growthModels.forEach((item, i) => {
+            const enter = gsap.utils.clamp(0, 1, (glocal - i * 8) / 30);
+            const row = document.getElementById('grow-' + i);
+            if (row) {
+              row.style.opacity = enter;
+              row.style.transform = `translateY(${(1 - enter) * 36}px)`;
+              const fill = document.getElementById('grow-fill-' + i);
+              if (fill) fill.style.width = (enter * (item.growth / growthModels[0].growth) * 100) + '%';
+            }
+          });
+
+          const olocal = frame - 1060;
+          const reveal = gsap.utils.clamp(0, 1, olocal / 24);
+          const outroContent = document.getElementById('outro-content');
+          outroContent.style.opacity = reveal;
+          outroContent.style.transform = `translateY(${(1 - reveal) * 54}px)`;
+          const lineW = gsap.utils.clamp(0, 100, (olocal - 12) / 22 * 100);
+          document.getElementById('outro-line').style.width = lineW + '%';
+
+          document.getElementById('timeline-fill').style.width = (progress * 100) + '%';
+        }
+      }, 0);
+
+      window.__timelines["openrouter-rankings-zh"] = tl;
+    </script>
+  </body>
+</html>
