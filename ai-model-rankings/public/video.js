@@ -1,5 +1,6 @@
 (function () {
-  const localeKey = window.AI_MODEL_LOCALE || "en";
+  const root = document.getElementById("root");
+  const localeKey = root.dataset.locale || document.documentElement.lang || "en";
   const config = window.AI_MODEL_RANKINGS_I18N;
   const locale = config.locales[localeKey] || config.locales.en;
   const shared = config.shared;
@@ -14,7 +15,6 @@
   const providers = shared.providerCounts.map(item => ({ ...item, name: providerName(item.providerKey) }));
   const efficiencyCards = locale.scenes.efficiency.cards;
   const tiers = locale.scenes.tiers.rows;
-  const root = document.getElementById("root");
   const compositionId = root.dataset.compositionId;
   const DURATION = 1800;
 
