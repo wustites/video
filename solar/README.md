@@ -21,10 +21,14 @@ merges each language into its final MP3, writes cue JS/JSON from measured segmen
 durations, and updates composition durations. `npm run check` validates the sync
 data and runs HyperFrames lint.
 
-On tags matching `v*-solar`, `.github/workflows/solar.yml` runs the same pipeline,
-renders all four videos, uploads video and sync-diagnostic artifacts, and attaches
-the MP4 files to a GitHub Release. The workflow can also be started manually; a
-manual run does not create a Release.
+On tags matching `v*-solar-<lang>`, `.github/workflows/solar.yml` extracts `en`,
+`zh`, `ja`, or `ko` and generates, validates, renders, and releases only that
+language. For example, `v1.0.0-solar-zh` outputs only
+`solar-system-zh-vertical.mp4`. Legacy `v*-solar` tags still render all four
+languages.
+
+The workflow can also be started manually with an `all/en/zh/ja/ko` selector; a
+manual run uploads artifacts but does not create a Release.
 
 The current CI voices are:
 

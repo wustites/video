@@ -396,7 +396,7 @@ Solar 已采用自然段级音频主时钟：
 | 日语 | 11 | 113.136 秒 | 113.636 秒 |
 | 韩语 | 11 | 107.568 秒 | 108.068 秒 |
 
-GitHub Actions 支持 tag 和手动触发，生成后先执行同步校验与 HyperFrames lint，再渲染。视频和同步诊断使用不同 artifact；只有 tag 构建创建 Release。
+GitHub Actions 支持 tag 和手动触发。单语言 tag（例如 `v1.0.0-solar-zh`）解析出 `zh`，只生成、校验和渲染中文；`v*-solar` 保留全部语言构建。视频和同步诊断使用不同 artifact，只有 tag 构建创建 Release。
 
 当前精度为自然段级。若未来需要逐词高亮或口型同步，应在现有 cue 之上增加词级转写数据，而不是替换段落级场景时间轴。
 

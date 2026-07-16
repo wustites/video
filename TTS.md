@@ -6,7 +6,7 @@
 
 仓库目前有两种 TTS 使用方式：
 
-1. **Solar 的正式发布链路**：GitHub Actions 使用 Microsoft Edge TTS 生成四种语言的 MP3，再由 HyperFrames 渲染视频。
+1. **Solar 的正式发布链路**：GitHub Actions 从 tag 提取目标语言，使用 Microsoft Edge TTS 生成对应 MP3，再由 HyperFrames 渲染视频；旧式 tag 仍可一次生成全部语言。
 2. **新项目和本地制作的推荐方式**：使用 HyperFrames CLI 生成本地 WAV，再接入 composition。
 
 Solar 的 GitHub Actions 是当前唯一已经接入自动发布流程的 TTS 实现。HyperFrames CLI 方案是新项目约定，尚未替换 Solar 的发布工作流。
@@ -56,14 +56,24 @@ public/voiceover/
 
 ## Solar GitHub Actions 方案
 
-工作流文件为 `.github/workflows/solar.yml`，在推送匹配 `v*-solar` 的 tag 时运行。例如：
+工作流文件为 `.github/workflows/solar.yml`。支持以下 tag：
+
+| Tag | 输出 |
+| --- | --- |
+| `v*-solar` | 英、中、日、韩全部语言 |
+| `v*-solar-en` | 仅英语 |
+| `v*-solar-zh` | 仅中文 |
+| `v*-solar-ja` | 仅日语 |
+| `v*-solar-ko` | 仅韩语 |
+
+发布中文：
 
 ```bash
-git tag v1.0.0-solar
-git push origin v1.0.0-solar
+git tag v1.0.0-solar-zh
+git push origin v1.0.0-solar-zh
 ```
 
-工作流依次 checkout 仓库，安装 Node.js 22、FFmpeg 和固定版本的 `edge-tts`，逐段生成四个 MP3 与 cue，执行同步校验和 HyperFrames lint，渲染四个视频，最后上传 Actions artifact；tag 构建还会创建 GitHub Release。也可以通过 `workflow_dispatch` 手动验证完整流程而不发布 Release。
+工作流从 `github.ref_name` 提取 `en/zh/ja/ko`；没有语言代码的旧式 tag 使用 `all`。随后安装 Node.js 22、FFmpeg 和固定版本的 `edge-tts`，只生成、校验和渲染目标语言。tag 构建会创建 GitHub Release。通过 `workflow_dispatch` 手动运行时，可以从下拉框选择单语言或全部语言，并且不会创建 Release。
 
 | 语言 | 文本 | 声音 | 输出音频 |
 | --- | --- | --- | --- |
@@ -72,7 +82,7 @@ git push origin v1.0.0-solar
 | 日语 | `narration.ja.txt` | `ja-JP-NanamiNeural` | `solar-system-ja.mp3` |
 | 韩语 | `narration.ko.txt` | `ko-KR-SunHiNeural` | `solar-system-ko.mp3` |
 
-视频 artifact 名称为 `solar-system-${ref}`。另有保留 14 天的 `solar-sync-${ref}` 诊断 artifact，包含最终 MP3 和 `cues.*.json`，便于复核本次实际同步数据。
+视频 artifact 名称包含目标语言和 ref，例如 `solar-system-zh-v1.0.0-solar-zh`。另有保留 14 天的同步诊断 artifact；单语言构建只包含对应 MP3 和 cue JSON。
 
 ### 本地复现 Solar TTS
 

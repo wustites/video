@@ -2,9 +2,25 @@ name: solar - Build and release video
 
 on:
   workflow_dispatch:
+    inputs:
+      language:
+        description: Language to build
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - en
+          - zh
+          - ja
+          - ko
   push:
     tags:
       - "v*-solar"
+      - "v*-solar-en"
+      - "v*-solar-zh"
+      - "v*-solar-ja"
+      - "v*-solar-ko"
 
 permissions:
   contents: write
@@ -30,38 +46,91 @@ jobs:
       - name: Install system packages
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
+      - name: Resolve target language
+        id: target
+        shell: bash
+        env:
+          DISPATCH_LANGUAGE: ${{ inputs.language }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          language="${DISPATCH_LANGUAGE:-all}"
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            if [[ "$REF_NAME" =~ -solar-(en|zh|ja|ko)$ ]]; then
+              language="${BASH_REMATCH[1]}"
+            else
+              language="all"
+            fi
+          fi
+
+          case "$language" in
+            en|zh|ja|ko)
+              echo "language=$language" >> "$GITHUB_OUTPUT"
+              echo "video_path=solar/out/solar-system-$language-vertical.mp4" >> "$GITHUB_OUTPUT"
+              echo "audio_path=solar/public/voiceover/solar-system-$language.mp3" >> "$GITHUB_OUTPUT"
+              echo "cue_path=solar/public/voiceover/cues.$language.json" >> "$GITHUB_OUTPUT"
+              ;;
+            all)
+              echo "language=all" >> "$GITHUB_OUTPUT"
+              echo "video_path=solar/out/*.mp4" >> "$GITHUB_OUTPUT"
+              echo "audio_path=solar/public/voiceover/*.mp3" >> "$GITHUB_OUTPUT"
+              echo "cue_path=solar/public/voiceover/cues.*.json" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "Unsupported language: $language" >&2
+              exit 1
+              ;;
+          esac
+          echo "Selected language: $language"
+
       - name: Generate voiceover
+        env:
+          LANGUAGE: ${{ steps.target.outputs.language }}
         run: |
           python -m pip install edge-tts==7.2.7
-          npm run voiceover
+          if [ "$LANGUAGE" = "all" ]; then
+            npm run voiceover
+          else
+            npm run voiceover -- --language "$LANGUAGE"
+          fi
         working-directory: solar
 
       - name: Validate audio sync and compositions
-        run: npm run check
+        env:
+          LANGUAGE: ${{ steps.target.outputs.language }}
+        run: |
+          if [ "$LANGUAGE" = "all" ]; then
+            npm run sync:validate
+          else
+            npm run sync:validate -- --language "$LANGUAGE"
+          fi
+          npx --yes hyperframes@0.6.112 lint
         working-directory: solar
 
       - name: Render videos
+        env:
+          LANGUAGE: ${{ steps.target.outputs.language }}
         run: |
-          npx --yes hyperframes@0.6.112 render -c compositions/en.html -o out/solar-system-en-vertical.mp4
-          npx --yes hyperframes@0.6.112 render -c compositions/zh.html -o out/solar-system-zh-vertical.mp4
-          npx --yes hyperframes@0.6.112 render -c compositions/ja.html -o out/solar-system-ja-vertical.mp4
-          npx --yes hyperframes@0.6.112 render -c compositions/ko.html -o out/solar-system-ko-vertical.mp4
+          if [ "$LANGUAGE" = "all" ]; then
+            npm run render
+          else
+            npm run "render:$LANGUAGE"
+          fi
         working-directory: solar
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: solar-system-${{ github.ref_name }}
-          path: solar/out/*.mp4
+          name: solar-system-${{ steps.target.outputs.language }}-${{ github.ref_name }}
+          path: ${{ steps.target.outputs.video_path }}
           if-no-files-found: error
 
       - name: Upload sync diagnostics
         uses: actions/upload-artifact@v4
         with:
-          name: solar-sync-${{ github.ref_name }}
+          name: solar-sync-${{ steps.target.outputs.language }}-${{ github.ref_name }}
           path: |
-            solar/public/voiceover/*.mp3
-            solar/public/voiceover/cues.*.json
+            ${{ steps.target.outputs.audio_path }}
+            ${{ steps.target.outputs.cue_path }}
           if-no-files-found: error
           retention-days: 14
 
@@ -69,7 +138,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: solar/out/*.mp4
+          files: ${{ steps.target.outputs.video_path }}
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

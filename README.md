@@ -73,7 +73,7 @@ npm run render
 | OpenRouter Rankings | `v*-openrouter-rankings` | `openrouter-rankings.yml` |
 | Population CN | `v*-population-cn` | `population-cn.yml` |
 | QS Universities | `v*-qs-universities` | `qs-universities.yml` |
-| Solar System | `v*-solar` | `solar.yml` |
+| Solar System | `v*-solar`（全部）或 `v*-solar-<lang>`（单语言） | `solar.yml` |
 | Top 500 | `v*-top500` | `top500.yml` |
 
 例如发布 Solar：
@@ -83,7 +83,14 @@ git tag v1.0.0-solar
 git push origin v1.0.0-solar
 ```
 
-Solar 工作流会额外使用 Edge TTS 分段生成英、中、日、韩四种旁白和真实 cue，在同步校验与 lint 通过后渲染。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./TTS.md)，同步实现与实际时长见 [音画同步方案](./AUDIO_VIDEO_SYNC.md)。
+该 tag 生成全部语言。只发布中文时，将语言代码放在项目名之前：
+
+```bash
+git tag v1.0.0-solar-zh
+git push origin v1.0.0-solar-zh
+```
+
+可用语言代码为 `en`、`zh`、`ja`、`ko`。Solar 工作流只生成 tag 指定语言的旁白和真实 cue，在同步校验与 lint 通过后渲染对应 MP4。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./TTS.md)，同步实现与实际时长见 [音画同步方案](./AUDIO_VIDEO_SYNC.md)。
 
 ## 仓库约定
 
