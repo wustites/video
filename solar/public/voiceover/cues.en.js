@@ -1,0 +1,96 @@
+window.SOLAR_VOICEOVER = {
+  "language": "en",
+  "voice": "en-US-AriaNeural",
+  "audioDuration": 74.544,
+  "compositionDuration": 75.044,
+  "cues": [
+    {
+      "id": "intro",
+      "start": 0.0,
+      "end": 3.912,
+      "text": "From the Sun, we begin our tour of the solar system.",
+      "scene": "Sun",
+      "name": "The Sun"
+    },
+    {
+      "id": "sun",
+      "start": 3.912,
+      "end": 10.464,
+      "text": "The Sun is our star: a glowing sphere of hot plasma whose gravity holds every planet in orbit.",
+      "scene": "Sun",
+      "name": "The Sun"
+    },
+    {
+      "id": "mercury",
+      "start": 10.464,
+      "end": 17.616,
+      "text": "Closest to the Sun is Mercury, the smallest planet, moving quickly through intense heat and long cold nights.",
+      "scene": "Mercury",
+      "name": "Mercury"
+    },
+    {
+      "id": "venus",
+      "start": 17.616,
+      "end": 24.24,
+      "text": "Next is Venus, bright in our sky, wrapped in thick clouds and a powerful greenhouse atmosphere.",
+      "scene": "Venus",
+      "name": "Venus"
+    },
+    {
+      "id": "earth",
+      "start": 24.24,
+      "end": 30.456,
+      "text": "Then comes Earth, our blue home, with liquid water, living systems, and one steady Moon.",
+      "scene": "Earth",
+      "name": "Earth"
+    },
+    {
+      "id": "mars",
+      "start": 30.456,
+      "end": 38.712,
+      "text": "Beyond Earth is Mars, the red planet, with dust storms, ancient river valleys, and the tallest volcano in the solar system.",
+      "scene": "Mars",
+      "name": "Mars"
+    },
+    {
+      "id": "jupiter",
+      "start": 38.712,
+      "end": 46.104,
+      "text": "Farther out is Jupiter, the largest planet, a giant world with storms, bands of clouds, and many moons.",
+      "scene": "Jupiter",
+      "name": "Jupiter"
+    },
+    {
+      "id": "saturn",
+      "start": 46.104,
+      "end": 51.888,
+      "text": "Then Saturn appears, famous for its wide icy rings and soft golden color.",
+      "scene": "Saturn",
+      "name": "Saturn"
+    },
+    {
+      "id": "uranus",
+      "start": 51.888,
+      "end": 58.776,
+      "text": "Next is Uranus, a cold blue-green ice giant, tilted so far that it seems to roll around the Sun.",
+      "scene": "Uranus",
+      "name": "Uranus"
+    },
+    {
+      "id": "neptune",
+      "start": 58.776,
+      "end": 65.208,
+      "text": "At the edge of the major planets is Neptune, deep blue and windy, circling in the distant dark.",
+      "scene": "Neptune",
+      "name": "Neptune"
+    },
+    {
+      "id": "finale",
+      "start": 65.208,
+      "end": 74.496,
+      "text": "Together they form our solar system: one star, eight planets, moons, rings, asteroids, comets, and the quiet rhythm of orbit.",
+      "scene": "Finale",
+      "name": "Solar System"
+    }
+  ]
+};

@@ -6,12 +6,14 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <script src="../public/solar-scene.js"></script>
+    <script src="../public/voiceover/cues.en.js"></script>
+    <script src="../public/solar-composition.js"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; }
       body {
         background: #02040b;
-        font-family: "Noto Sans CJK SC", "Microsoft YaHei", "SimHei", sans-serif;
+        font-family: sans-serif;
       }
       #root {
         width: 1080px; height: 1920px;
@@ -21,13 +23,16 @@
         position: absolute; top: 0; left: 0;
         width: 100%; height: 100%;
       }
+      #cueOverlays, .cue-group {
+        position: absolute; inset: 0;
+      }
+      .cue-group { opacity: 0; visibility: hidden; z-index: 10; }
       .text-overlay {
         position: absolute; bottom: 200px; left: 50%;
         transform: translateX(-50%);
         width: 900px; text-align: center;
         color: #fff; font-size: 32px; line-height: 1.5;
         text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-        opacity: 0;
         z-index: 10;
       }
       .planet-name {
@@ -35,68 +40,19 @@
         transform: translateX(-50%);
         color: #ffcc00; font-size: 48px; font-weight: bold;
         text-shadow: 0 2px 15px rgba(255,204,0,0.5);
-        opacity: 0;
         z-index: 10;
       }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="solar-en" data-start="0" data-duration="90" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="solar-en" data-start="0" data-duration="75.044" data-width="1080" data-height="1920">
       <canvas id="solar-canvas"></canvas>
-      <div class="planet-name" id="planetName"></div>
-      <div class="text-overlay" id="narrationText"></div>
-      <audio id="voiceover" src="../public/voiceover/solar-system-en.mp3" preload="auto" data-start="0" data-duration="90"></audio>
+      <div id="cueOverlays"></div>
+      <audio id="voiceover" src="../public/voiceover/solar-system-en.mp3" preload="auto" data-start="0" data-duration="74.544" data-track-index="2" data-volume="1"></audio>
     </div>
 
     <script>
-      const narrations = [
-        { time: 0, text: "From the Sun, we begin our tour of the solar system.", planet: "sun", name: "The Sun" },
-        { time: 8, text: "The Sun is our star: a glowing sphere of hot plasma whose gravity holds every planet in orbit.", planet: "sun", name: "The Sun" },
-        { time: 18, text: "Closest to the Sun is Mercury, the smallest planet, moving quickly through intense heat and long cold nights.", planet: "mercury", name: "Mercury" },
-        { time: 28, text: "Next is Venus, bright in our sky, wrapped in thick clouds and a powerful greenhouse atmosphere.", planet: "venus", name: "Venus" },
-        { time: 38, text: "Then comes Earth, our blue home, with liquid water, living systems, and one steady Moon.", planet: "earth", name: "Earth" },
-        { time: 48, text: "Beyond Earth is Mars, the red planet, with dust storms, ancient river valleys, and the tallest volcano in the solar system.", planet: "mars", name: "Mars" },
-        { time: 58, text: "Farther out is Jupiter, the largest planet, a giant world with storms, bands of clouds, and many moons.", planet: "jupiter", name: "Jupiter" },
-        { time: 68, text: "Then Saturn appears, famous for its wide icy rings and soft golden color.", planet: "saturn", name: "Saturn" },
-        { time: 76, text: "Next is Uranus, a cold blue-green ice giant, tilted so far that it seems to roll around the Sun.", planet: "uranus", name: "Uranus" },
-        { time: 84, text: "At the edge of the major planets is Neptune, deep blue and windy, circling in the distant dark.", planet: "neptune", name: "Neptune" }
-      ];
-
-      const canvas = document.getElementById('solar-canvas');
-      const scene = SolarScene.init(canvas, 1080, 1920);
-
-      const segments = narrations.map((n, i) => ({
-        name: n.planet === 'sun' ? 'Sun' : n.planet.charAt(0).toUpperCase() + n.planet.slice(1),
-        start: n.time * 30,
-        end: (narrations[i + 1]?.time || 90) * 30
-      }));
-
-      const totalFrames = 90 * 30;
-
-      window.__timelines = window.__timelines || {};
-      window.__timelines["solar-en"] = gsap.timeline({ paused: true, onUpdate: function() {
-        const frame = Math.floor(this.time() * 30);
-        scene.update(frame, totalFrames, segments);
-      }});
-
-      const tl = window.__timelines["solar-en"];
-      narrations.forEach((n, i) => {
-        const startTime = n.time;
-        const endTime = narrations[i + 1]?.time || 90;
-
-        tl.to("#narrationText", {
-          opacity: 1, duration: 0.5,
-          onStart: () => { document.getElementById("narrationText").textContent = n.text; }
-        }, startTime);
-
-        tl.to("#narrationText", { opacity: 0, duration: 0.5 }, endTime - 0.5);
-
-        tl.to("#planetName", {
-          opacity: 1, duration: 0.5,
-          onStart: () => { document.getElementById("planetName").textContent = n.name; }
-        }, startTime);
-        tl.to("#planetName", { opacity: 0, duration: 0.5 }, endTime - 0.5);
-      });
+      SolarComposition.init({ compositionId: "solar-en" });
     </script>
   </body>
 </html>
