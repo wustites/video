@@ -37,6 +37,17 @@ The current CI voices are:
 - Japanese: `ja-JP-NanamiNeural`
 - Korean: `ko-KR-SunHiNeural`
 
+Typography is loaded from the Google Noto repository through jsDelivr at preview
+and render time:
+
+- English: `Noto Sans`
+- Chinese: `Noto Sans SC`
+- Japanese: `Noto Sans JP`
+- Korean: `Noto Sans KR`
+
+Network access to `cdn.jsdelivr.net` is required. Font binaries are not stored in
+this repository.
+
 Install the pinned generator before running the local pipeline:
 
 ```bash
