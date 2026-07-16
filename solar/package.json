@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "npx --yes hyperframes@0.6.112 preview",
-    "check": "npx --yes hyperframes@0.6.112 lint",
+    "voiceover": "python scripts/generate_voiceover.py",
+    "sync:validate": "python scripts/validate_sync.py",
+    "check": "npm run sync:validate && npx --yes hyperframes@0.6.112 lint",
     "render": "npm run render:en && npm run render:zh && npm run render:ja && npm run render:ko",
     "render:en": "npx --yes hyperframes@0.6.112 render -c compositions/en.html -o out/solar-system-en-vertical.mp4",
     "render:zh": "npx --yes hyperframes@0.6.112 render -c compositions/zh.html -o out/solar-system-zh-vertical.mp4",

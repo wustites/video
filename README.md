@@ -1,1 +1,145 @@
-# video
+# Video Projects
+
+本仓库收录基于 HyperFrames 制作的数据可视化、榜单与科普类视频项目。
+
+## 项目一览
+
+| 项目 | 内容 | 语言 | 时长 | 默认输出 |
+| --- | --- | --- | ---: | --- |
+| [AI Model Rankings](./ai-model-rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | `out/ai-model-rankings-*-vertical.mp4` |
+| [OpenRouter Rankings](./openrouter-rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | `out/openrouter-rankings-*-vertical.mp4` |
+| [Population CN](./population-cn/) | 中国各省出生人口变化 | 中 | 40 秒 | `out/video.mp4` |
+| [QS Universities](./qs-universities/) | QS 世界大学排名 | 中 | 52 秒 | `out/video.mp4` |
+| [Solar System](./solar/) | 太阳系科普动画 | 英、中、日、韩 | 90 秒 | `out/solar-system-*-vertical.mp4` |
+| [Top 500](./top500/) | 2025 年《财富》世界 500 强 | 中 | 29 秒 | `out/top500-vertical.mp4` |
+
+所有项目均采用 `1080 × 1920` 竖屏画布。具体数据来源、内容结构和资源要求见各项目目录内的 README。
+
+## 环境要求
+
+- Node.js 22 或更高版本
+- FFmpeg
+- Chrome 或 Chromium
+- npm
+
+首次使用时可检查本机环境：
+
+```bash
+npx --yes hyperframes@0.6.112 doctor
+```
+
+## 快速开始
+
+进入任意项目目录后执行：
+
+```bash
+cd ai-model-rankings
+
+# 检查 composition 结构和时间轴
+npm run check
+
+# 启动本地预览
+npm run dev
+
+# 渲染项目配置的全部语言版本
+npm run render
+```
+
+预览服务启动后，终端会输出 Studio 地址。修改 HTML、CSS 或 JavaScript 后，页面会自动刷新。
+
+> 各项目脚本不完全相同。执行命令前请先查看对应的 `package.json`；例如 `qs-universities` 使用 `npm run preview`，其余主要项目使用 `npm run dev`。
+
+## 推荐工作流
+
+1. 阅读项目 README，确认主题、数据口径、语言和输出文件。
+2. 先完成每个场景最完整状态下的静态布局。
+3. 运行 `npm run check`，修复 composition、轨道和时间轴问题。
+4. 使用 `npx --yes hyperframes@0.6.112 inspect` 检查文字溢出和画布越界。
+5. 启动预览，检查关键帧、转场、字幕和音画同步。
+6. 使用 draft 质量快速试渲染，确认无误后再进行最终渲染。
+
+```bash
+npx --yes hyperframes@0.6.112 render --quality draft --output out/preview.mp4
+npm run render
+```
+
+## GitHub Actions 发布
+
+每个项目在 `.github/workflows/` 下有独立发布工作流。工作流由项目专属 tag 触发，统一使用 Node.js 22 和 FFmpeg，在 GitHub runner 中渲染 MP4，并上传 artifact 和 GitHub Release。
+
+| 项目 | Tag 格式 | 工作流 |
+| --- | --- | --- |
+| AI Model Rankings | `v*-ai-model-rankings` | `ai-model-rankings.yml` |
+| OpenRouter Rankings | `v*-openrouter-rankings` | `openrouter-rankings.yml` |
+| Population CN | `v*-population-cn` | `population-cn.yml` |
+| QS Universities | `v*-qs-universities` | `qs-universities.yml` |
+| Solar System | `v*-solar` | `solar.yml` |
+| Top 500 | `v*-top500` | `top500.yml` |
+
+例如发布 Solar：
+
+```bash
+git tag v1.0.0-solar
+git push origin v1.0.0-solar
+```
+
+Solar 工作流会额外使用 Edge TTS 分段生成英、中、日、韩四种旁白和真实 cue，在同步校验与 lint 通过后渲染。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./TTS.md)，同步实现与实际时长见 [音画同步方案](./AUDIO_VIDEO_SYNC.md)。
+
+## 仓库约定
+
+- 一个视频项目对应一个顶层目录。
+- `index.html` 是默认 composition 入口。
+- 多语言版本放在 `compositions/`，共享资源放在 `public/`。
+- 渲染产物统一写入 `out/`，不要提交临时预览文件。
+- 数据、单位、统计年份和来源必须在项目 README 中说明。
+- 新增项目时应提供 `meta.json`、`package.json`、README 和可执行的检查、预览、渲染脚本。
+
+## 常见问题
+
+### 渲染失败或浏览器无法启动
+
+先运行环境诊断：
+
+```bash
+npx --yes hyperframes@0.6.112 doctor
+```
+
+重点检查 Node.js 版本、FFmpeg、Chrome 和可用内存。
+
+### 文字被裁切或超出画布
+
+运行布局检查，并增加采样密度：
+
+```bash
+npx --yes hyperframes@0.6.112 inspect --samples 15
+```
+
+如果溢出是刻意设计的装饰或入场状态，可按需使用 `data-layout-ignore` 或 `data-layout-allow-overflow`，不要用它们掩盖真实布局问题。
+
+### 多语言版本排版不一致
+
+分别打开对应的 `compositions/<lang>.html`，检查标题换行、字号、行高和长词溢出。不同语言可以共享数据与节奏，但应允许独立排版。
+
+### 渲染速度过慢
+
+迭代阶段使用 `--quality draft`，减少高成本滤镜、模糊和粒子效果。仍有问题时可运行：
+
+```bash
+npx --yes hyperframes@0.6.112 benchmark .
+```
+
+## 文档
+
+- [HyperFrames 视频制作最佳实践](./HYPERFRAMES_BEST_PRACTICES.md)：工程结构、视觉规范、时间轴、数据、音频、多语言与交付检查。
+- [TTS 旁白方案](./TTS.md)：旁白生成、文件约定、composition 接入、字幕同步、验证流程与 Solar 历史方案。
+- [音画同步方案](./AUDIO_VIDEO_SYNC.md)：音频主时钟、cue 数据结构、字幕与场景对齐、同步验证和漂移排查。
+
+## 新增项目
+
+推荐使用 HyperFrames 初始化命令创建基础结构：
+
+```bash
+npx --yes hyperframes@0.6.112 init project-name
+```
+
+完成后将目录放在仓库根目录，补充项目 README，并在上方“项目一览”中登记。提交前至少完成 lint、布局检查和一次完整渲染。

@@ -1,6 +1,7 @@
 name: solar - Build and release video
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - "v*-solar"
@@ -31,11 +32,12 @@ jobs:
 
       - name: Generate voiceover
         run: |
-          pip install edge-tts
-          edge-tts --voice en-US-AriaNeural --text "$(cat public/voiceover/narration.en.txt)" --write-media public/voiceover/solar-system-en.mp3
-          edge-tts --voice zh-CN-XiaoxiaoNeural --text "$(cat public/voiceover/narration.zh.txt)" --write-media public/voiceover/solar-system-zh.mp3
-          edge-tts --voice ja-JP-NanamiNeural --text "$(cat public/voiceover/narration.ja.txt)" --write-media public/voiceover/solar-system-ja.mp3
-          edge-tts --voice ko-KR-SunHiNeural --text "$(cat public/voiceover/narration.ko.txt)" --write-media public/voiceover/solar-system-ko.mp3
+          python -m pip install edge-tts==7.2.7
+          npm run voiceover
+        working-directory: solar
+
+      - name: Validate audio sync and compositions
+        run: npm run check
         working-directory: solar
 
       - name: Render videos
@@ -53,7 +55,18 @@ jobs:
           path: solar/out/*.mp4
           if-no-files-found: error
 
+      - name: Upload sync diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: solar-sync-${{ github.ref_name }}
+          path: |
+            solar/public/voiceover/*.mp3
+            solar/public/voiceover/cues.*.json
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: solar/out/*.mp4
