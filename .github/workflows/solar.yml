@@ -100,10 +100,17 @@ jobs:
         run: |
           if [ "$LANGUAGE" = "all" ]; then
             npm run sync:validate
+            npx --yes hyperframes@0.6.112 lint
           else
             npm run sync:validate -- --language "$LANGUAGE"
+            lint_dir="$RUNNER_TEMP/solar-lint-$LANGUAGE"
+            rm -rf "$lint_dir"
+            mkdir -p "$lint_dir/compositions"
+            cp "compositions/$LANGUAGE.html" "$lint_dir/compositions/$LANGUAGE.html"
+            sed "s#compositions/en.html#compositions/$LANGUAGE.html#" index.html > "$lint_dir/index.html"
+            ln -s "$GITHUB_WORKSPACE/solar/public" "$lint_dir/public"
+            npx --yes hyperframes@0.6.112 lint "$lint_dir"
           fi
-          npx --yes hyperframes@0.6.112 lint
         working-directory: solar
 
       - name: Render videos
