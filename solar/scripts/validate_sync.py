@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import subprocess
@@ -69,5 +70,8 @@ def validate(language: str) -> None:
 
 
 if __name__ == "__main__":
-    for lang in LANGUAGES:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--language", action="append", choices=LANGUAGES)
+    args = parser.parse_args()
+    for lang in args.language or LANGUAGES:
         validate(lang)
