@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>挂谷猜想：一根针能藏进多小的地方？</title>
+</head>
+<body>
+  <div id="kakeya" data-composition-id="kakeya" data-width="1920" data-height="1080" data-start="0" data-duration="42" data-track-index="0">
+    <div class="ambient" data-layout-ignore>
+      <div class="grid"></div>
+      <div class="glow glow-a"></div>
+      <div class="glow glow-b"></div>
+    </div>
+
+    <section class="scene scene-1" id="scene-1">
+      <div class="scene-content split">
+        <div class="copy">
+          <div class="eyebrow s1-in">KAKEYA CONJECTURE · 01</div>
+          <h1 class="s1-in">一根针，<span>能藏进多小</span>的地方？</h1>
+          <p class="lead s1-in">允许一根长度为 1 的线段，在平面内转遍所有方向。</p>
+          <div class="question s1-in"><span>最小面积</span>是多少？</div>
+        </div>
+        <div class="diagram s1-in">
+          <svg viewBox="0 0 720 720" aria-label="单位线段在圆盘中旋转">
+            <circle class="orbit" cx="360" cy="360" r="230" />
+            <circle class="orbit faint" cx="360" cy="360" r="115" />
+            <g id="needle-rotor">
+              <line class="needle glow-line" x1="130" y1="360" x2="590" y2="360" />
+              <circle class="pivot" cx="360" cy="360" r="10" />
+            </g>
+            <path class="angle" d="M445 360 A85 85 0 0 1 420 420" />
+            <text class="math-label" x="430" y="430">θ</text>
+            <text class="math-label unit" x="326" y="330">|ℓ| = 1</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene-2" id="scene-2">
+      <div class="scene-content">
+        <div class="topline s2-in"><span>02</span><span>先别急着画圆</span></div>
+        <div class="stage-two">
+          <div class="disk-wrap s2-in">
+            <svg viewBox="0 0 720 720">
+              <circle class="disk" cx="360" cy="360" r="232" />
+              <g id="fan-lines">
+                <line x1="130" y1="360" x2="590" y2="360" />
+                <line x1="161" y1="245" x2="559" y2="475" />
+                <line x1="245" y1="161" x2="475" y2="559" />
+                <line x1="360" y1="130" x2="360" y2="590" />
+                <line x1="475" y1="161" x2="245" y2="559" />
+                <line x1="559" y1="245" x2="161" y2="475" />
+              </g>
+            </svg>
+            <div class="caption">绕中点旋转</div>
+          </div>
+          <div class="logic s2-in">
+            <div class="formula">A = π · (½)² = <b>π/4</b></div>
+            <p>圆盘当然可行。</p>
+            <p class="but">但它远远不是最省的。</p>
+            <div class="thin-rule"></div>
+            <p class="aside">关键不是“针绕哪个点转”，而是：<em>每个方向</em>都能在集合中找到一根单位线段。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene-3" id="scene-3">
+      <div class="scene-content">
+        <div class="topline s3-in"><span>03</span><span>贝西科维奇的反直觉</span></div>
+        <div class="besicovitch">
+          <div class="needle-cloud s3-in" id="needle-cloud">
+            <svg viewBox="0 0 1000 620">
+              <polygon class="tri t1" points="80,520 420,80 560,520" />
+              <polygon class="tri t2" points="280,540 550,100 720,520" />
+              <polygon class="tri t3" points="500,520 690,110 910,510" />
+              <g class="many-lines">
+                <line x1="105" y1="510" x2="535" y2="95" /><line x1="150" y1="520" x2="575" y2="105" />
+                <line x1="230" y1="530" x2="650" y2="112" /><line x1="300" y1="520" x2="710" y2="120" />
+                <line x1="395" y1="520" x2="790" y2="125" /><line x1="485" y1="520" x2="860" y2="145" />
+                <line x1="110" y1="420" x2="885" y2="335" /><line x1="100" y1="350" x2="900" y2="420" />
+                <line x1="145" y1="260" x2="870" y2="520" /><line x1="210" y1="165" x2="800" y2="540" />
+              </g>
+            </svg>
+          </div>
+          <div class="result s3-in">
+            <div class="shock">面积可以<br><strong>任意小</strong></div>
+            <div class="limit">area(K) → <span>0</span></div>
+            <p>线段彼此大量重叠；方向一个不少，面积却几乎消失。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene-4" id="scene-4">
+      <div class="scene-content theorem-layout">
+        <div class="topline s4-in"><span>04</span><span>面积失灵，就问“维数”</span></div>
+        <div class="theorem s4-in">
+          <div class="small">若 K ⊂ ℝⁿ 包含每个方向的一根单位线段</div>
+          <div class="big-formula">dim<span class="sub">H</span>(K) = <b>n</b></div>
+          <div class="brace">⏟</div>
+          <div class="meaning">它可以没有体积，却不能“降维”</div>
+        </div>
+        <div class="dimension-viz s4-in">
+          <svg viewBox="0 0 900 420">
+            <g class="axis"><line x1="80" y1="350" x2="830" y2="350"/><line x1="130" y1="390" x2="130" y2="55"/></g>
+            <g class="tubes">
+              <line x1="170" y1="320" x2="750" y2="95"/><line x1="160" y1="260" x2="785" y2="175"/>
+              <line x1="190" y1="125" x2="770" y2="315"/><line x1="300" y1="65" x2="660" y2="355"/>
+              <line x1="420" y1="55" x2="475" y2="360"/><line x1="205" y1="345" x2="720" y2="70"/>
+            </g>
+            <text x="760" y="392">方向</text><text x="35" y="65">尺度</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene-5" id="scene-5">
+      <div class="scene-content final-layout">
+        <div class="eyebrow s5-in">KAKEYA · THE BIG IDEA</div>
+        <h2 class="s5-in">“小”不只有一种。</h2>
+        <div class="summary s5-in">
+          <div><span>面积</span><b>可以趋近于 0</b></div>
+          <div class="arrow">→</div>
+          <div><span>维数</span><b>仍必须充满空间</b></div>
+        </div>
+        <p class="closing s5-in">挂谷猜想把一个转针小游戏，变成了调和分析、几何测度论与偏微分方程交汇处的核心问题。</p>
+        <div class="final-needle s5-in"><span></span><i>每一个方向，都留下痕迹。</i></div>
+      </div>
+    </section>
+
+    <div class="iris" id="iris" data-layout-ignore></div>
+
+    <style>
+      @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:300;src:url("https://fonts.gstatic.com/s/notosanssc/v40/k3kCo84MPvpLmixcA63oeAL7Iqp5IZJF9bmaG4HFnYw.ttf") format("truetype")}
+      @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:400;src:url("https://fonts.gstatic.com/s/notosanssc/v40/k3kCo84MPvpLmixcA63oeAL7Iqp5IZJF9bmaG9_FnYw.ttf") format("truetype")}
+      @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:700;src:url("https://fonts.gstatic.com/s/notosanssc/v40/k3kCo84MPvpLmixcA63oeAL7Iqp5IZJF9bmaGzjCnYw.ttf") format("truetype")}
+      @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:900;src:url("https://fonts.gstatic.com/s/notosanssc/v40/k3kCo84MPvpLmixcA63oeAL7Iqp5IZJF9bmaG3bCnYw.ttf") format("truetype")}
+      @font-face{font-family:"Noto Serif SC";font-style:normal;font-weight:400;src:url("https://fonts.gstatic.com/s/notoserifsc/v35/H4cyBXePl9DZ0Xe7gG9cyOj7uK2-n-D2rd4FY7SCqyWv.ttf") format("truetype")}
+      @font-face{font-family:"Noto Serif SC";font-style:normal;font-weight:700;src:url("https://fonts.gstatic.com/s/notoserifsc/v35/H4cyBXePl9DZ0Xe7gG9cyOj7uK2-n-D2rd4FY7RlrCWv.ttf") format("truetype")}
+      *{box-sizing:border-box} html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#0d1220}
+      #kakeya{position:relative;width:1920px;height:1080px;overflow:hidden;background:#0d1220;color:#e7e8d1;font-family:"Noto Sans SC",sans-serif}
+      .ambient,.scene{position:absolute;inset:0}.ambient{z-index:0;overflow:hidden}.scene{z-index:2;background-color:#0d1220;opacity:0}
+      .scene-1{opacity:1}.scene-content{width:100%;height:100%;padding:88px 120px;display:flex;flex-direction:column;gap:34px;position:relative}
+      .grid{position:absolute;inset:-10%;background-image:linear-gradient(rgba(88,196,163,.055) 1px,rgba(88,196,163,0) 1px),linear-gradient(90deg,rgba(88,196,163,.055) 1px,rgba(88,196,163,0) 1px);background-size:70px 70px;transform:rotate(-4deg)}
+      .glow{position:absolute;width:720px;height:720px;border-radius:50%;filter:blur(90px);opacity:.13}.glow-a{background:#58c4a3;left:-300px;top:-320px}.glow-b{background:#f4d35e;right:-420px;bottom:-420px}
+      .split{flex-direction:row;align-items:center;justify-content:space-between}.copy{width:54%;display:flex;flex-direction:column;align-items:flex-start;gap:28px}.eyebrow,.topline{font-size:24px;letter-spacing:.18em;color:#58c4a3;font-weight:700}.copy h1{font-size:104px;line-height:1.08;letter-spacing:-.035em;margin:0;max-width:980px}.copy h1 span{color:#f4d35e}.lead{font-size:34px;line-height:1.55;margin:0;max-width:850px;color:#c8cbbd;font-weight:350}.question{font-family:"Noto Serif SC",serif;font-size:46px;border-top:2px solid #58c4a3;padding-top:24px}.question span{color:#fc6255}.diagram{width:43%;height:760px}.diagram svg{width:100%;height:100%;overflow:visible}.orbit{fill:none;stroke:#58c4a3;stroke-width:4;opacity:.65}.orbit.faint{stroke-width:2;opacity:.22}.needle{stroke:#f4d35e;stroke-width:13;stroke-linecap:round}.glow-line{filter:drop-shadow(0 0 12px rgba(244,211,94,.55))}.pivot{fill:#fc6255}.angle{fill:none;stroke:#e7e8d1;stroke-width:3;stroke-dasharray:8 8}.math-label{fill:#e7e8d1;font:italic 40px "Noto Serif SC",serif}.math-label.unit{font-size:28px;fill:#f4d35e}
+      .topline{display:flex;justify-content:space-between;border-bottom:2px solid rgba(88,196,163,.45);padding-bottom:20px}.topline span:first-child{font-family:"Noto Serif SC",serif;color:#f4d35e;font-size:32px}.stage-two{flex:1;display:flex;align-items:center;gap:110px}.disk-wrap{width:50%;height:760px;position:relative}.disk-wrap svg{width:100%;height:100%}.disk{fill:rgba(88,196,163,.08);stroke:#58c4a3;stroke-width:5}.disk-wrap line{stroke:#f4d35e;stroke-width:5;stroke-linecap:round;opacity:.78}.caption{position:absolute;left:50%;bottom:25px;transform:translateX(-50%);font-size:25px;color:#9fbaaF}.logic{width:43%;display:flex;flex-direction:column;gap:26px}.formula{font:60px "Noto Serif SC",serif}.formula b{color:#f4d35e}.logic p{margin:0;font-size:42px}.logic .but{color:#fc6255;font-weight:700;font-size:58px}.thin-rule{width:160px;height:3px;background:#58c4a3}.logic .aside{font-size:29px;line-height:1.6;color:#c8cbbd;max-width:690px}.logic em{color:#f4d35e;font-style:normal}
+      .besicovitch{display:flex;align-items:center;flex:1;gap:70px}.needle-cloud{width:65%;height:710px}.needle-cloud svg{width:100%;height:100%}.tri{fill:rgba(88,196,163,.07);stroke:#58c4a3;stroke-width:3}.many-lines line{stroke:#f4d35e;stroke-width:5;stroke-linecap:round;opacity:.7}.result{width:32%;display:flex;flex-direction:column;gap:36px}.shock{font-size:60px;line-height:1.2}.shock strong{font-size:112px;color:#fc6255;letter-spacing:-.05em}.limit{font:62px "Noto Serif SC",serif;border:2px solid rgba(252,98,85,.55);padding:24px 32px}.limit span{color:#fc6255;font-size:86px}.result p{font-size:29px;line-height:1.65;color:#c8cbbd;margin:0}
+      .theorem-layout{align-items:center}.theorem{text-align:center;margin-top:20px}.theorem .small{font-size:32px;color:#c8cbbd}.big-formula{font:112px "Noto Serif SC",serif;margin-top:20px}.big-formula b{color:#58c4a3}.big-formula .sub{font-size:.42em;vertical-align:-.28em}.brace{font-size:68px;color:#f4d35e;height:55px;line-height:.7}.meaning{font-size:36px;color:#f4d35e}.dimension-viz{width:1120px;height:480px;margin-top:-15px}.dimension-viz svg{width:100%;height:100%;overflow:visible}.axis line{stroke:#e7e8d1;stroke-width:3;opacity:.4}.tubes line{stroke:#58c4a3;stroke-width:18;stroke-linecap:round;opacity:.38}.tubes line:nth-child(2n){stroke:#f4d35e;opacity:.34}.dimension-viz text{fill:#c8cbbd;font:24px "Noto Sans SC",sans-serif}
+      .final-layout{align-items:center;justify-content:center;text-align:center;padding-left:190px;padding-right:190px}.final-layout h2{font-size:112px;letter-spacing:-.04em;margin:8px 0 15px}.summary{width:100%;display:flex;align-items:center;justify-content:center;gap:55px}.summary>div:not(.arrow){width:520px;padding:30px;border-top:3px solid #58c4a3}.summary span{display:block;font-size:24px;letter-spacing:.2em;color:#9fbAAF;margin-bottom:12px}.summary b{font-size:43px}.summary>div:first-child b{color:#fc6255}.summary>div:last-child b{color:#58c4a3}.arrow{font-size:72px;color:#f4d35e}.closing{max-width:1220px;font-size:31px;line-height:1.65;color:#c8cbbd;margin:8px 0}.final-needle{display:flex;align-items:center;gap:25px;color:#f4d35e;font:italic 29px "Noto Serif SC",serif}.final-needle span{display:block;width:320px;height:8px;border-radius:8px;background:#f4d35e;box-shadow:0 0 18px rgba(244,211,94,.45)}
+      .iris{position:absolute;z-index:20;inset:0;background:#58c4a3;clip-path:circle(0% at 50% 50%);pointer-events:none}
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused:true });
+
+      tl.from('.grid',{opacity:0,rotation:-8,duration:1.3,ease:'sine.out'},.15)
+        .from('.glow-a',{scale:.65,opacity:0,duration:1.6,ease:'power1.out'},.2)
+        .from('.glow-b',{scale:.7,opacity:0,duration:1.9,ease:'circ.out'},.3)
+        .from('.s1-in',{opacity:0,y:(i)=>[0,45,30,15][i]||25,x:(i)=>i===3?-25:0,scale:(i)=>i===3?.96:1,duration:.75,stagger:.13,ease:'power3.out'},.35)
+        .from('.orbit',{strokeDasharray:1500,strokeDashoffset:1500,duration:1.5,stagger:.12,ease:'sine.inOut'},.55)
+        .from('.needle',{scaleX:0,transformOrigin:'50% 50%',duration:.8,ease:'expo.out'},.75)
+        .from('.pivot',{scale:0,transformOrigin:'50% 50%',duration:.35,ease:'back.out(1.7)'},1.05)
+        .from('.angle',{opacity:0,strokeDashoffset:60,duration:.65,ease:'power2.out'},1.25)
+        .from('.math-label',{opacity:0,y:10,duration:.45,stagger:.12,ease:'circ.out'},1.35)
+        .to('#needle-rotor',{rotation:325,transformOrigin:'50% 50%',duration:6.2,ease:'sine.inOut'},1.6);
+
+      function crossfade(outId,inId,t){
+        tl.to(outId,{opacity:0,scale:.985,filter:'blur(10px)',duration:.65,ease:'sine.inOut'},t)
+          .fromTo(inId,{opacity:0,scale:1.015,filter:'blur(10px)'},{opacity:1,scale:1,filter:'blur(0px)',duration:.65,ease:'sine.inOut'},t);
+      }
+      crossfade('#scene-1','#scene-2',8.1);
+      tl.from('.s2-in',{opacity:0,y:(i)=>i===1?35:0,x:(i)=>i===2?45:0,scale:(i)=>i===1?.94:1,duration:.7,stagger:.16,ease:'power3.out'},8.35)
+        .from('.disk',{strokeDasharray:1500,strokeDashoffset:1500,duration:1.2,ease:'circ.out'},8.55)
+        .from('#fan-lines line',{scaleX:0,transformOrigin:'50% 50%',duration:.65,stagger:.09,ease:'expo.out'},8.8)
+        .from('.formula',{opacity:0,x:45,duration:.55,ease:'back.out(1.3)'},9.15)
+        .from('.logic p,.thin-rule',{opacity:0,y:24,scaleX:.9,transformOrigin:'left center',duration:.48,stagger:.15,ease:'power2.out'},9.45)
+        .to('#fan-lines',{rotation:18,transformOrigin:'50% 50%',duration:5.6,ease:'sine.inOut'},10.1);
+
+      crossfade('#scene-2','#scene-3',16.2);
+      tl.from('.s3-in',{opacity:0,x:(i)=>i===1?-50:45,y:(i)=>i===0?-18:0,scale:(i)=>i===1?.96:1,duration:.72,stagger:.14,ease:'power4.out'},16.45)
+        .from('.tri',{opacity:0,scaleY:.35,transformOrigin:'50% 100%',duration:.8,stagger:.12,ease:'circ.out'},16.7)
+        .from('.many-lines line',{strokeDasharray:700,strokeDashoffset:700,duration:.7,stagger:.055,ease:'sine.inOut'},16.95)
+        .from('.result>*',{opacity:0,x:35,y:(i)=>i*4,duration:.5,stagger:.17,ease:'expo.out'},17.45)
+        .to('.tri',{scaleX:.68,transformOrigin:'50% 50%',duration:4.8,ease:'power1.inOut'},18.2)
+        .to('.many-lines',{scaleX:.72,transformOrigin:'50% 50%',duration:4.8,ease:'power1.inOut'},18.2);
+
+      tl.to('#iris',{clipPath:'circle(75% at 50% 50%)',duration:.55,ease:'power3.in'},24.0)
+        .set('#scene-3',{opacity:0},24.55)
+        .set('#scene-4',{opacity:1},24.55)
+        .to('#iris',{clipPath:'circle(0% at 50% 50%)',duration:.6,ease:'power3.out'},24.55)
+        .from('.s4-in',{opacity:0,y:(i)=>i===1?42:0,x:(i)=>i===2?-35:0,scale:(i)=>i===1?.95:1,duration:.75,stagger:.17,ease:'power3.out'},24.7)
+        .from('.theorem .small',{opacity:0,x:-28,duration:.7,ease:'sine.out'},25.0)
+        .from('.big-formula',{opacity:0,scale:.82,duration:.75,ease:'back.out(1.25)'},25.25)
+        .from('.brace,.meaning',{opacity:0,y:-18,duration:.5,stagger:.16,ease:'circ.out'},25.65)
+        .from('.axis line',{scaleX:0,scaleY:0,transformOrigin:'left bottom',duration:.65,stagger:.1,ease:'expo.out'},26.05)
+        .from('.tubes line',{strokeDasharray:700,strokeDashoffset:700,duration:.7,stagger:.08,ease:'power2.out'},26.25)
+        .to('.tubes',{rotation:4,transformOrigin:'50% 50%',duration:5.0,ease:'sine.inOut'},27.0);
+
+      crossfade('#scene-4','#scene-5',33.2);
+      tl.from('.s5-in',{opacity:0,y:(i)=>[0,42,28,20,0][i]||20,x:(i)=>i===4?-30:0,scale:(i)=>i===2?.94:1,duration:.72,stagger:.16,ease:'power3.out'},33.45)
+        .from('.summary>div',{opacity:0,scale:.9,y:22,duration:.5,stagger:.16,ease:'back.out(1.4)'},34.05)
+        .from('.final-needle span',{scaleX:0,transformOrigin:'left center',duration:.85,ease:'expo.out'},34.65)
+        .to('.final-needle span',{rotation:12,duration:3.8,ease:'sine.inOut'},35.3)
+        .to('#scene-5',{opacity:0,duration:1.0,ease:'power1.in'},40.65)
+        .to('.ambient',{opacity:0,duration:.8,ease:'sine.in'},40.9);
+
+      window.__timelines['kakeya'] = tl;
+    </script>
+  </div>
+</body>
+</html>
