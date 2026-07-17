@@ -1,0 +1,84 @@
+name: kakeya-conjecture - Validate, build and release
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "kakeya-conjecture/**"
+      - ".github/workflows/kakeya-conjecture.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "kakeya-conjecture/**"
+      - ".github/workflows/kakeya-conjecture.yml"
+    tags:
+      - "v*-kakeya-conjecture"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kakeya-conjecture-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate composition
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install system packages
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Lint
+        run: npx --yes hyperframes@0.7.60 lint .
+        working-directory: kakeya-conjecture
+
+      - name: Inspect layout
+        run: npx --yes hyperframes@0.7.60 inspect . --samples 12 --json
+        working-directory: kakeya-conjecture
+
+  build:
+    name: Render release video
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install system packages
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Render high-quality MP4
+        run: npx --yes hyperframes@0.7.60 render . --output out/kakeya-conjecture.mp4 --quality high --workers auto --strict
+        working-directory: kakeya-conjecture
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kakeya-conjecture-${{ github.sha }}
+          path: kakeya-conjecture/out/kakeya-conjecture.mp4
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: kakeya-conjecture/out/kakeya-conjecture.mp4
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
