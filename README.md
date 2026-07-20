@@ -138,6 +138,8 @@ npx --yes hyperframes@0.6.112 benchmark .
 ## 文档
 
 - [HyperFrames 视频制作最佳实践](./HYPERFRAMES_BEST_PRACTICES.md)：工程结构、视觉规范、时间轴、数据、音频、多语言与交付检查。
+- [Remotion vs HyperFrames](./REMOTION_VS_HYPERFRAMES.md)：编程模型、工作流、渲染部署、选型标准与本仓库建议。
+- [使用 Blender Python 生成视频](./BLENDER_PYTHON_VIDEO.md)：脚本化建模与动画、后台渲染、帧序列、FFmpeg 编码及 HyperFrames 混合工作流。
 - [TTS 旁白方案](./TTS.md)：旁白生成、文件约定、composition 接入、字幕同步、验证流程与 Solar 历史方案。
 - [音画同步方案](./AUDIO_VIDEO_SYNC.md)：音频主时钟、cue 数据结构、字幕与场景对齐、同步验证和漂移排查。
 
