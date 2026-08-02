@@ -1,11 +1,13 @@
 # Video Projects
 
-本仓库收录基于 HyperFrames 制作的数据可视化、榜单与科普类视频项目。
+本仓库收录数据可视化、榜单与科普类视频项目，基于 **HyperFrames** 或 **Remotion** 制作。
 
 ## 项目一览
 
 | 项目 | 内容 | 语言 | 时长 | 默认输出 |
 | --- | --- | --- | ---: | --- |
+| [Apple 苹果](./apple/) | Apple 风格的水果苹果产品介绍(创意向) | 中 | 54 秒 | `out/video.mp4` |
+| [Metro de Lima](./metro-lima/) | 秘鲁利马地铁系统介绍（Remotion） | 西 | 56 秒 | `out/video.mp4` |
 | [AI Model Rankings](./ai-model-rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | `out/ai-model-rankings-*-vertical.mp4` |
 | [OpenRouter Rankings](./openrouter-rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | `out/openrouter-rankings-*-vertical.mp4` |
 | [Population CN](./population-cn/) | 中国各省出生人口变化 | 中 | 40 秒 | `out/video.mp4` |
@@ -69,6 +71,7 @@ npm run render
 
 | 项目 | Tag 格式 | 工作流 |
 | --- | --- | --- |
+| Apple 苹果 | `v*-apple` | `apple.yml` |
 | AI Model Rankings | `v*-ai-model-rankings` | `ai-model-rankings.yml` |
 | OpenRouter Rankings | `v*-openrouter-rankings` | `openrouter-rankings.yml` |
 | Population CN | `v*-population-cn` | `population-cn.yml` |
