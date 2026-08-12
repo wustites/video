@@ -42,6 +42,10 @@ jobs:
         run: npx --yes hyperframes@0.7.60 lint .
         working-directory: kakeya-conjecture
 
+      - name: Validate runtime and contrast
+        run: npx --yes hyperframes@0.7.60 validate .
+        working-directory: kakeya-conjecture
+
       - name: Inspect layout
         run: npx --yes hyperframes@0.7.60 inspect . --samples 12 --json
         working-directory: kakeya-conjecture

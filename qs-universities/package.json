@@ -5,7 +5,10 @@
   "main": "index.html",
   "scripts": {
     "dev": "npx --yes hyperframes@0.6.112 preview",
-    "check": "npx --yes hyperframes@0.6.112 lint",
+    "lint": "npx --yes hyperframes@0.6.112 lint",
+    "validate": "npx --yes hyperframes@0.6.112 validate",
+    "inspect": "npx --yes hyperframes@0.6.112 inspect --samples 10",
+    "check": "npm run lint && npm run validate && npm run inspect",
     "render": "npx --yes hyperframes@0.6.112 render -o out/video.mp4"
   },
   "keywords": ["qs", "university", "ranking", "hyperframes", "animation"],
