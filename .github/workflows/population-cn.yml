@@ -29,8 +29,12 @@ jobs:
       - name: Install system packages
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
+      - name: Validate composition
+        run: npm run check
+        working-directory: population-cn
+
       - name: Render video
-        run: npx --yes hyperframes@0.6.112 render -o out/video.mp4
+        run: npm run render
         working-directory: population-cn
 
       - name: Upload artifact

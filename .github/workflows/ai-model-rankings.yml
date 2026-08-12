@@ -29,6 +29,10 @@ jobs:
       - name: Install system packages
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
+      - name: Validate composition
+        run: npm run check
+        working-directory: ai-model-rankings
+
       - name: Render videos
         run: npm run render
         working-directory: ai-model-rankings

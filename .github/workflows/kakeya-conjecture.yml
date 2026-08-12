@@ -48,6 +48,7 @@ jobs:
 
   build:
     name: Render release video
+    if: startsWith(github.ref, 'refs/tags/')
     needs: validate
     runs-on: ubuntu-latest
     steps:
