@@ -59,7 +59,7 @@ window.AI_MODEL_RANKINGS_I18N = {
   },
   locales: {
     en: {
-      fontFamily: '"Inter", "Noto Sans SC", "Segoe UI", Arial, sans-serif',
+      fontFamily: '"Segoe UI", Arial, sans-serif',
       providers: {
         anthropic: "Anthropic",
         openai: "OpenAI",
@@ -138,7 +138,7 @@ window.AI_MODEL_RANKINGS_I18N = {
       }
     },
     zh: {
-      fontFamily: '"Noto Sans SC", "Inter", "Microsoft YaHei", Arial, sans-serif',
+      fontFamily: '"Segoe UI", Arial, sans-serif',
       providers: {
         anthropic: "Anthropic",
         openai: "OpenAI",
@@ -217,7 +217,7 @@ window.AI_MODEL_RANKINGS_I18N = {
       }
     },
     ja: {
-      fontFamily: '"Noto Sans JP", "Inter", "Noto Sans SC", Arial, sans-serif',
+      fontFamily: '"Segoe UI", Arial, sans-serif',
       providers: {
         anthropic: "Anthropic",
         openai: "OpenAI",

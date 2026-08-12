@@ -30,7 +30,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
       - name: Render video
-        run: npx --yes hyperframes render -o out/video.mp4
+        run: npx --yes hyperframes@0.6.112 render -o out/video.mp4
         working-directory: qs-universities
 
       - name: Upload artifact

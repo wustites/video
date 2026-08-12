@@ -3,14 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; }
       body {
         background: #F8FAFC;
-        font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+        font-family: "Segoe UI", Arial, sans-serif;
         color: #0F172A;
       }
       #root {
@@ -44,7 +43,8 @@
       }
       .bar-rank {
         width: 54px; height: 54px; display: grid; place-items: center;
-        color: white; font-size: 27px; font-weight: 950;
+        color: #0F172A; font-size: 27px; font-weight: 950;
+        background: #E2E8F0; border-left: 8px solid currentColor;
       }
       .bar-track { height: 35px; background: rgba(15,23,42,.08); margin-top: 9px; overflow: hidden; }
       .bar-fill { height: 100%; }
@@ -55,9 +55,9 @@
       .country-fill { height: 100%; }
       .country-row-label { font-size: 32px; font-weight: 950; }
       .country-row-value { font-size: 36px; font-weight: 950; }
-      .industry-row-name { font-size: 36px; font-weight: 950; }
-      .industry-row-label { font-size: 27px; color: #64748B; font-weight: 850; }
-      .industry-track { height: 34px; background: rgba(15,23,42,.08); margin-top: 14px; overflow: hidden; }
+      .industry-row-name { font-size: 30px; font-weight: 950; }
+      .industry-row-label { font-size: 23px; color: #64748B; font-weight: 850; }
+      .industry-track { height: 24px; background: rgba(15,23,42,.08); margin-top: 8px; overflow: hidden; }
       .industry-fill { height: 100%; }
       .profit-card {
         min-height: 255px; padding: 24px;
@@ -82,7 +82,7 @@
     <div id="root" data-composition-id="Top500Video" data-start="0" data-duration="29" data-width="1080" data-height="1920">
       <div class="bg-grid"></div>
 
-      <div id="scene-intro" class="scene" style="padding-top:82px;opacity:0">
+      <div id="scene-intro" class="scene" data-layout-allow-overlap style="padding-top:82px;opacity:0">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div class="kicker"><span class="kicker-dot"></span>2025 财富世界500强</div>
         </div>
@@ -91,20 +91,20 @@
           <div style="margin-top:42px;width:820px;font-size:40px;line-height:1.48;color:#64748B;font-weight:700">从收入冠军到国家版图，快速看懂世界最大企业的权力结构。</div>
         </div>
         <div style="margin-top:auto;display:grid;gap:24px" id="intro-metrics">
-          <div class="metric" style="--accent:#2563EB"><div class="metric-label">总收入</div><div class="metric-value">41.7万亿$</div></div>
-          <div class="metric" style="--accent:#10B981"><div class="metric-label">覆盖员工</div><div class="metric-value">7千万百万</div></div>
+          <div class="metric" style="--accent:#2563EB"><div class="metric-label">总收入</div><div class="metric-value">$41.7万亿</div></div>
+          <div class="metric" style="--accent:#10B981"><div class="metric-label">覆盖员工</div><div class="metric-value">约7,000万</div></div>
           <div class="metric" style="--accent:#EC4899"><div class="metric-label">女性CEO</div><div class="metric-value">32位</div></div>
         </div>
       </div>
 
-      <div id="scene-topbars" class="scene" style="opacity:0">
+      <div id="scene-topbars" class="scene" data-layout-allow-overlap style="opacity:0">
         <div class="kicker"><span class="kicker-dot"></span>收入排行 Top 10</div>
         <div style="font-size:72px;line-height:1.08;font-weight:950;margin-top:30px">沃尔玛继续领跑，<br/>科技与能源贴身追赶</div>
         <div style="font-size:24px;color:#64748B;font-weight:800;margin-top:18px">单位：百万美元</div>
         <div id="bars-container" style="margin-top:52px;display:grid;gap:20px"></div>
       </div>
 
-      <div id="scene-country" class="scene" style="padding-top:58px;opacity:0">
+      <div id="scene-country" class="scene" data-layout-allow-overlap style="padding-top:58px;opacity:0">
         <div class="kicker"><span class="kicker-dot"></span>国家与地区分布</div>
         <div style="font-size:72px;line-height:1.08;font-weight:950;margin-top:30px">美国 138 家，<br/>中国 130 家。</div>
         <div style="font-size:28px;line-height:1.42;color:#64748B;margin-top:22px">两个最大经济体合计占据榜单过半席位，收入结构也开始呈现更分散的多极格局。</div>
@@ -112,21 +112,21 @@
         <div id="country-list" style="display:grid;gap:22px;margin-top:44px"></div>
       </div>
 
-      <div id="scene-industry" class="scene" style="opacity:0">
+      <div id="scene-industry" class="scene" data-layout-allow-overlap style="opacity:0">
         <div class="kicker"><span class="kicker-dot"></span>行业结构</div>
         <div style="font-size:70px;line-height:1.12;font-weight:950;margin-top:34px">资本密集型产业仍是底盘，科技贡献最高利润弹性</div>
-        <div id="industry-dots" style="margin-top:62px;display:grid;grid-template-columns:repeat(10,1fr);gap:13px"></div>
-        <div id="industry-list" style="display:grid;gap:30px;margin-top:72px"></div>
+        <div id="industry-dots" style="margin-top:36px;display:grid;grid-template-columns:repeat(10,1fr);gap:10px"></div>
+        <div id="industry-list" style="display:grid;gap:18px;margin-top:36px"></div>
       </div>
 
-      <div id="scene-profit" class="scene" style="opacity:0">
+      <div id="scene-profit" class="scene" data-layout-allow-overlap style="opacity:0">
         <div class="kicker"><span class="kicker-dot"></span>利润视角</div>
         <div style="font-size:82px;line-height:1.08;font-weight:950;margin-top:42px">收入第一，<br/>不一定利润第一。</div>
         <div style="font-size:32px;line-height:1.48;color:#64748B;margin-top:32px">资源、硬件生态、资本配置与平台规模，构成了完全不同的盈利模型。</div>
         <div id="profit-cards" style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:66px"></div>
       </div>
 
-      <div id="scene-outro" class="scene" style="padding-top:82px;opacity:0">
+      <div id="scene-outro" class="scene" data-layout-allow-overlap style="padding-top:82px;opacity:0">
         <div style="margin-top:130px" id="outro-content">
           <div class="kicker"><span class="kicker-dot"></span>可视化结论</div>
           <div style="font-size:90px;line-height:1.1;font-weight:950;margin-top:58px">世界500强，<br/>是全球供应链、<br/>能源、金融与科技的年度体检。</div>
@@ -139,7 +139,6 @@
 
       <div class="timeline-bar"><div class="timeline-fill" id="timeline-fill"></div></div>
 
-      <audio src="../public/audio/network-audio.mp3" volume="0.28"></audio>
     </div>
 
     <script>
@@ -212,7 +211,7 @@
           row.className = 'bar-row';
           row.id = 'bar-' + i;
           row.innerHTML = `
-            <div class="bar-rank" style="background:${item.color}">${item.rank}</div>
+            <div class="bar-rank" style="border-left-color:${item.color}">${item.rank}</div>
             <div>
               <div style="display:flex;justify-content:space-between;gap:20px">
                 <div class="bar-name">${item.nameZh}</div>
@@ -250,7 +249,7 @@
       function buildIndustry() {
         const max = Math.max(...industryMix.map(i => i.value));
         const dots = document.getElementById('industry-dots');
-        for (let d = 0; d < 70; d++) {
+        for (let d = 0; d < 50; d++) {
           const bucket = industryMix[d % industryMix.length];
           const dot = document.createElement('div');
           dot.id = 'idot-' + d;
@@ -345,7 +344,7 @@
           });
 
           const ilocal = frame - 470;
-          for (let d = 0; d < 70; d++) {
+          for (let d = 0; d < 50; d++) {
             const enter = gsap.utils.clamp(0, 1, (ilocal - d * 0.6) / 30);
             const dot = document.getElementById('idot-' + d);
             if (dot) {

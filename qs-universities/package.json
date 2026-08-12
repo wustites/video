@@ -4,8 +4,9 @@
   "description": "QS世界大学排名前100动画视频",
   "main": "index.html",
   "scripts": {
-    "render": "npx hyperframes render -o out/video.mp4",
-    "preview": "npx hyperframes preview"
+    "dev": "npx --yes hyperframes@0.6.112 preview",
+    "check": "npx --yes hyperframes@0.6.112 lint",
+    "render": "npx --yes hyperframes@0.6.112 render -o out/video.mp4"
   },
   "keywords": ["qs", "university", "ranking", "hyperframes", "animation"],
   "author": "",
