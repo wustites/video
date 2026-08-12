@@ -29,8 +29,12 @@ jobs:
       - name: Install system packages
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
+      - name: Validate composition
+        run: npm run check
+        working-directory: top500
+
       - name: Render video
-        run: npx --yes hyperframes@0.6.112 render -o out/top500-vertical.mp4
+        run: npm run render
         working-directory: top500
 
       - name: Upload artifact

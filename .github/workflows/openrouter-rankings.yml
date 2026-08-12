@@ -29,10 +29,12 @@ jobs:
       - name: Install system packages
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
+      - name: Validate compositions
+        run: npm run check
+        working-directory: openrouter-rankings
+
       - name: Render videos
-        run: |
-          npx --yes hyperframes@0.6.112 render -c compositions/en.html -o out/openrouter-rankings-en-vertical.mp4
-          npx --yes hyperframes@0.6.112 render -c compositions/zh.html -o out/openrouter-rankings-zh-vertical.mp4
+        run: npm run render
         working-directory: openrouter-rankings
 
       - name: Upload artifact
