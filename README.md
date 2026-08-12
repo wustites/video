@@ -6,7 +6,6 @@
 
 | 项目 | 内容 | 语言 | 时长 | 默认输出 |
 | --- | --- | --- | ---: | --- |
-| [Apple 苹果](./apple/) | Apple 风格的水果苹果产品介绍(创意向) | 中 | 54 秒 | `out/video.mp4` |
 | [Metro de Lima](./metro-lima/) | 秘鲁利马地铁系统介绍（Remotion） | 西 | 56 秒 | `out/video.mp4` |
 | [AI Model Rankings](./ai-model-rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | `out/ai-model-rankings-*-vertical.mp4` |
 | [OpenRouter Rankings](./openrouter-rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | `out/openrouter-rankings-*-vertical.mp4` |
@@ -14,8 +13,9 @@
 | [QS Universities](./qs-universities/) | QS 世界大学排名 | 中 | 52 秒 | `out/video.mp4` |
 | [Solar System](./solar/) | 太阳系科普动画 | 英、中、日、韩 | 90 秒 | `out/solar-system-*-vertical.mp4` |
 | [Top 500](./top500/) | 2025 年《财富》世界 500 强 | 中 | 29 秒 | `out/top500-vertical.mp4` |
+| [Kakeya Conjecture](./kakeya-conjecture/) | 挂谷猜想科普动画 | 中 | 42 秒 | `out/kakeya-conjecture.mp4` |
 
-所有项目均采用 `1080 × 1920` 竖屏画布。具体数据来源、内容结构和资源要求见各项目目录内的 README。
+榜单和数据项目采用 `1080 × 1920` 竖屏画布；Kakeya Conjecture 使用 `1920 × 1080` 横屏画布。具体数据来源、内容结构和资源要求见各项目目录内的 README。
 
 ## 环境要求
 
@@ -49,7 +49,7 @@ npm run render
 
 预览服务启动后，终端会输出 Studio 地址。修改 HTML、CSS 或 JavaScript 后，页面会自动刷新。
 
-> 各项目脚本不完全相同。执行命令前请先查看对应的 `package.json`；例如 `qs-universities` 使用 `npm run preview`，其余主要项目使用 `npm run dev`。
+> 各项目脚本不完全相同。执行命令前请先查看对应的 `package.json`；HyperFrames 项目统一使用 `npm run dev`，Metro de Lima 使用 Remotion 脚本。
 
 ## 推荐工作流
 
@@ -71,13 +71,13 @@ npm run render
 
 | 项目 | Tag 格式 | 工作流 |
 | --- | --- | --- |
-| Apple 苹果 | `v*-apple` | `apple.yml` |
 | AI Model Rankings | `v*-ai-model-rankings` | `ai-model-rankings.yml` |
 | OpenRouter Rankings | `v*-openrouter-rankings` | `openrouter-rankings.yml` |
 | Population CN | `v*-population-cn` | `population-cn.yml` |
 | QS Universities | `v*-qs-universities` | `qs-universities.yml` |
 | Solar System | `v*-solar`（全部）或 `v*-solar-<lang>`（单语言） | `solar.yml` |
 | Top 500 | `v*-top500` | `top500.yml` |
+| Kakeya Conjecture | `v*-kakeya-conjecture` | `kakeya-conjecture.yml` |
 
 例如发布 Solar：
 

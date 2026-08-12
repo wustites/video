@@ -8,196 +8,341 @@
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; }
       body {
-        background: #0a0a0a;
-        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-        color: #f5f5f5;
+        background: #06080d;
+        font-family: "Segoe UI", Arial, sans-serif;
+        color: #f8fafc;
+        -webkit-font-smoothing: antialiased;
       }
       #root {
         width: 1080px; height: 1920px; position: relative; overflow: hidden;
       }
       .bg-gradient {
         position: absolute; inset: 0;
-        background: radial-gradient(ellipse at 30% 20%, rgba(59,130,246,.15) 0%, transparent 60%),
-                    radial-gradient(ellipse at 70% 80%, rgba(168,85,247,.1) 0%, transparent 60%);
+        background:
+          radial-gradient(ellipse at 28% 12%, rgba(59,130,246,.16) 0%, transparent 58%),
+          radial-gradient(ellipse at 78% 30%, rgba(139,92,246,.12) 0%, transparent 55%),
+          radial-gradient(ellipse at 55% 92%, rgba(236,72,153,.1) 0%, transparent 50%);
+      }
+      .bg-grid {
+        position: absolute; inset: 0; opacity: .05;
+        background-image:
+          linear-gradient(rgba(255,255,255,.6) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.6) 1px, transparent 1px);
+        background-size: 96px 96px;
+        mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 75%);
+        -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 75%);
       }
       .scene {
-        position: absolute; inset: 0; padding: 72px 64px 112px;
+        position: absolute; inset: 0; padding: 76px 68px 128px;
         display: flex; flex-direction: column;
       }
       .kicker {
         display: inline-flex; align-items: center; gap: 12px;
-        padding: 12px 18px; border: 1px solid rgba(245,245,245,.15); border-radius: 8px;
-        background: rgba(245,245,245,.06); color: #a0a0a0; font-size: 28px; font-weight: 700;
+        padding: 14px 22px; border: 1px solid rgba(255,255,255,.14); border-radius: 14px;
+        background: rgba(255,255,255,.05); color: #94a3b8; font-size: 28px; font-weight: 700;
+        letter-spacing: .02em;
       }
-      .kicker-dot { width: 10px; height: 10px; border-radius: 20px; background: #3B82F6; }
+      .kicker-dot { width: 12px; height: 12px; border-radius: 20px; background: #3B82F6; box-shadow: 0 0 14px #3B82F6; }
+      .scene-title {
+        font-size: 74px; line-height: 1.14; font-weight: 900; margin-top: 34px; letter-spacing: 0;
+      }
+      .scene-sub {
+        font-size: 30px; line-height: 1.5; color: #94a3b8; font-weight: 600; margin-top: 22px;
+      }
+      .accent { background: linear-gradient(90deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+      .chip {
+        display: inline-flex; align-items: center; gap: 10px;
+        padding: 12px 20px; border-radius: 999px; font-size: 26px; font-weight: 800;
+      }
+      .chip-country {
+        font-size: 22px; font-weight: 900; padding: 4px 12px; border-radius: 8px; color: #fff;
+      }
+      .country-cn { background: rgba(244,63,94,.85); }
+      .country-us { background: rgba(59,130,246,.85); }
       .metric {
-        border-top: 8px solid var(--accent); padding: 24px 28px;
-        background: rgba(245,245,245,.06); box-shadow: 0 22px 70px rgba(0,0,0,.4);
+        border-radius: 20px; padding: 30px 34px;
+        background: rgba(255,255,255,.05);
+        border: 1px solid rgba(255,255,255,.1);
+        box-shadow: 0 24px 60px rgba(0,0,0,.4);
+        position: relative; overflow: hidden;
       }
-      .metric-label { font-size: 28px; color: #a0a0a0; font-weight: 700; }
-      .metric-value { font-size: 60px; font-weight: 900; margin-top: 8px; }
+      .metric::before {
+        content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px;
+        background: var(--accent);
+      }
+      .metric-label { font-size: 27px; color: #94a3b8; font-weight: 700; }
+      .metric-value { font-size: 60px; font-weight: 900; margin-top: 12px; letter-spacing: 0; }
+      .metric-sub { font-size: 24px; color: #64748b; font-weight: 700; margin-top: 6px; }
+
       .bar-row {
-        display: grid; grid-template-columns: 62px 1fr 160px; gap: 18px; align-items: center;
+        display: grid; grid-template-columns: 64px 1fr 170px; gap: 20px; align-items: center;
+        padding: 10px 18px; border-radius: 16px; background: rgba(255,255,255,.035);
       }
       .bar-rank {
-        width: 54px; height: 54px; display: grid; place-items: center;
-        color: white; font-size: 27px; font-weight: 900;
+        width: 58px; height: 58px; display: grid; place-items: center;
+        color: #f8fafc; font-size: 28px; font-weight: 900; border-radius: 14px;
+        background: #1e293b; border-left: 8px solid #64748b;
       }
-      .bar-track { height: 35px; background: rgba(245,245,245,.08); margin-top: 9px; overflow: hidden; }
-      .bar-fill { height: 100%; }
-      .bar-name { font-size: 26px; font-weight: 800; }
-      .bar-provider { font-size: 20px; color: #a0a0a0; font-weight: 600; }
-      .bar-tokens { font-size: 26px; font-weight: 800; text-align: right; }
+      .bar-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+      .bar-name { font-size: 30px; font-weight: 800; line-height: 1.15; }
+      .bar-provider { font-size: 22px; color: #94a3b8; font-weight: 600; margin-top: 5px; display: flex; gap: 10px; align-items: center; }
+      .bar-track { height: 34px; background: rgba(255,255,255,.07); margin-top: 12px; border-radius: 8px; overflow: hidden; }
+      .bar-fill { height: 100%; border-radius: 8px; }
+      .bar-tokens { font-size: 32px; font-weight: 900; text-align: right; font-variant-numeric: tabular-nums; }
+      .bar-tokens small { font-size: 22px; font-weight: 700; color: #94a3b8; }
       .growth-badge {
         display: inline-flex; align-items: center; gap: 4px;
-        padding: 4px 10px; border-radius: 12px; font-size: 18px; font-weight: 700;
+        padding: 5px 12px; border-radius: 999px; font-size: 21px; font-weight: 800;
       }
-      .growth-up { background: rgba(34,197,94,.2); color: #22c55e; }
-      .growth-down { background: rgba(239,68,68,.2); color: #ef4444; }
-      .provider-bar { height: 30px; background: rgba(245,245,245,.08); margin-top: 10px; }
-      .provider-fill { height: 100%; }
-      .provider-row-label { font-size: 32px; font-weight: 800; }
-      .provider-row-value { font-size: 36px; font-weight: 800; }
+      .growth-up { background: rgba(34,197,94,.16); color: #4ade80; }
+      .growth-down { background: rgba(239,68,68,.16); color: #f87171; }
+      .growth-flat { background: rgba(148,163,184,.14); color: #94a3b8; }
+
+      .donut-wrap { display: flex; align-items: center; gap: 56px; margin-top: 56px; }
+      .donut {
+        position: relative; width: 520px; height: 520px; border-radius: 50%;
+        flex: 0 0 auto;
+      }
+      .donut-hole {
+        position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+        width: 258px; height: 258px; border-radius: 50%; background: #0a0e16;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        border: 1px solid rgba(255,255,255,.08);
+      }
+      .donut-total { font-size: 62px; font-weight: 900; font-variant-numeric: tabular-nums; }
+      .donut-total-label { font-size: 24px; color: #94a3b8; font-weight: 700; margin-top: 6px; }
+      .donut-legend { display: grid; gap: 20px; flex: 1; }
+      .legend-row { display: flex; align-items: center; gap: 18px; }
+      .legend-swatch { width: 26px; height: 26px; border-radius: 8px; flex: 0 0 auto; }
+      .legend-name { font-size: 29px; font-weight: 800; flex: 1; }
+      .legend-val { font-size: 27px; font-weight: 800; color: #94a3b8; font-variant-numeric: tabular-nums; }
+      .legend-pct { font-size: 27px; font-weight: 900; width: 74px; text-align: right; font-variant-numeric: tabular-nums; }
+
+      .grow-row { padding: 20px 22px; border-radius: 18px; background: rgba(255,255,255,.035); }
+      .grow-head { display: flex; justify-content: space-between; align-items: center; }
+      .grow-name { font-size: 31px; font-weight: 800; }
+      .grow-provider { font-size: 22px; color: #94a3b8; font-weight: 600; margin-top: 4px; }
+      .grow-pct { font-size: 38px; font-weight: 900; color: #4ade80; font-variant-numeric: tabular-nums; }
+      .grow-track { height: 22px; background: rgba(255,255,255,.07); margin-top: 14px; border-radius: 999px; overflow: hidden; }
+      .grow-fill { height: 100%; border-radius: 999px; }
+
+      .insight-row {
+        display: flex; align-items: center; gap: 24px;
+        padding: 26px 30px; border-radius: 18px; background: rgba(255,255,255,.04);
+        border: 1px solid rgba(255,255,255,.08);
+      }
+      .insight-ic {
+        width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center;
+        font-size: 30px; font-weight: 900; color: #f8fafc; flex: 0 0 auto;
+        background: #1e293b; border-left: 8px solid #64748b;
+      }
+      .insight-text { font-size: 36px; font-weight: 800; line-height: 1.25; }
+      .insight-sub { font-size: 25px; color: #94a3b8; font-weight: 600; margin-top: 6px; }
+
       .timeline-bar {
-        position: absolute; left: 64px; right: 64px; bottom: 48px;
-        height: 7px; background: rgba(245,245,245,.12);
+        position: absolute; left: 68px; right: 68px; bottom: 52px;
+        height: 8px; background: rgba(255,255,255,.1); border-radius: 99px; overflow: hidden;
       }
-      .timeline-fill { height: 100%; background: #3B82F6; }
+      .timeline-fill { height: 100%; background: linear-gradient(90deg, #3B82F6, #8B5CF6, #EC4899); border-radius: 99px; }
+      .scene-dots {
+        position: absolute; bottom: 78px; left: 0; right: 0;
+        display: flex; justify-content: center; gap: 16px;
+      }
+      .scene-dot {
+        width: 14px; height: 14px; border-radius: 99px; background: rgba(255,255,255,.18);
+        transition: background .3s;
+      }
+      .scene-dot.active { background: #60a5fa; box-shadow: 0 0 12px rgba(96,165,250,.8); }
+      .watermark {
+        position: absolute; top: 84px; right: 68px;
+        font-size: 24px; font-weight: 700; color: #94a3b8;
+      }
       .gradient-line {
-        height: 12px;
-        background: linear-gradient(90deg, #3B82F6, #a855f7, #ec4899);
+        height: 12px; border-radius: 99px;
+        background: linear-gradient(90deg, #3B82F6, #8B5CF6, #EC4899);
       }
     </style>
   </head>
   <body>
     <div id="root" data-composition-id="openrouter-rankings-zh" data-start="0" data-duration="45" data-width="1080" data-height="1920">
       <div class="bg-gradient"></div>
+      <div class="bg-grid"></div>
+      <div class="watermark">openrouter.ai/rankings</div>
 
-      <div id="scene-intro" class="scene" style="padding-top:82px;opacity:0">
+      <div id="scene-intro" class="scene" style="opacity:0">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div class="kicker"><span class="kicker-dot"></span>OpenRouter 本周排名</div>
         </div>
-        <div style="margin-top:146px" id="intro-title">
-          <div style="font-size:100px;line-height:1.02;font-weight:900">本周<br/><span style="color:#3B82F6">热门 AI 模型</span></div>
-          <div style="margin-top:42px;width:820px;font-size:38px;line-height:1.48;color:#a0a0a0;font-weight:600">来自数百万用户通过 OpenRouter 访问模型的真实使用数据。</div>
+        <div style="margin-top:120px" id="intro-title">
+          <div style="font-size:102px;line-height:1.08;font-weight:900">本周<br/><span class="accent">热门 AI 模型</span></div>
+          <div style="margin-top:40px;width:880px;font-size:37px;line-height:1.55;color:#94a3b8;font-weight:600">
+            来自数百万开发者通过 OpenRouter 调度大模型流量的真实使用数据。
+          </div>
+          <div style="margin-top:36px">
+            <span class="chip" style="background:rgba(59,130,246,.12);color:#60a5fa;border:1px solid rgba(59,130,246,.3)">2026.07.28 – 08.03 周榜</span>
+          </div>
         </div>
         <div style="margin-top:auto;display:grid;gap:24px" id="intro-metrics">
-          <div class="metric" style="--accent:#3B82F6"><div class="metric-label">总 Token 数</div><div class="metric-value">30+ 万亿</div></div>
-          <div class="metric" style="--accent:#a855f7"><div class="metric-label">最热门模型</div><div class="metric-value">DeepSeek V4 Flash</div></div>
-          <div class="metric" style="--accent:#ec4899"><div class="metric-label">增长最快</div><div class="metric-value">GLM 5.2 (+123%)</div></div>
+          <div class="metric" style="--accent:#3B82F6">
+            <div class="metric-label">本周 Token 总量</div>
+            <div class="metric-value"><span id="m-total">0</span> 万亿</div>
+            <div class="metric-sub">OpenRouter 全部模型一周用量</div>
+          </div>
+          <div class="metric" style="--accent:#8B5CF6">
+            <div class="metric-label">最热门模型</div>
+            <div class="metric-value">DeepSeek V4 Flash</div>
+            <div class="metric-sub">8.5 万亿 Token · 本周第一</div>
+          </div>
+          <div class="metric" style="--accent:#EC4899">
+            <div class="metric-label">增长最快</div>
+            <div class="metric-value">Claude Opus 5 <span style="color:#4ade80;font-size:42px">+5.1%</span></div>
+            <div class="metric-sub">环比上周 Token 变化</div>
+          </div>
         </div>
       </div>
 
       <div id="scene-ranking" class="scene" style="opacity:0">
         <div class="kicker"><span class="kicker-dot"></span>Token 使用量 Top 10</div>
-        <div style="font-size:68px;line-height:1.08;font-weight:900;margin-top:30px">DeepSeek V4 Flash<br/>以 4.83T 领跑</div>
-        <div style="font-size:24px;color:#a0a0a0;font-weight:700;margin-top:18px">OpenRouter 本周 Token 使用量</div>
-        <div id="bars-container" style="margin-top:42px;display:grid;gap:16px"></div>
+        <div class="scene-title">DeepSeek V4 Flash<br/><span class="accent">以 8.5 万亿领跑</span></div>
+        <div class="scene-sub">OpenRouter 本周 Token 使用量 · <span class="chip-country country-cn">中</span> <span class="chip-country country-us">美</span> = 模型所属国家</div>
+        <div id="bars-container" style="margin-top:36px;display:grid;gap:8px"></div>
       </div>
 
-      <div id="scene-providers" class="scene" style="padding-top:58px;opacity:0">
+      <div id="scene-providers" class="scene" style="opacity:0">
         <div class="kicker"><span class="kicker-dot"></span>供应商分布</div>
-        <div style="font-size:72px;line-height:1.08;font-weight:900;margin-top:30px">DeepSeek 和 Anthropic<br/>主导使用量</div>
-        <div style="font-size:28px;line-height:1.42;color:#a0a0a0;margin-top:22px">Top 10 中各供应商的 Token 份额</div>
-        <div id="provider-list" style="display:grid;gap:22px;margin-top:44px"></div>
-      </div>
-
-      <div id="scene-growth" class="scene" style="opacity:0">
-        <div class="kicker"><span class="kicker-dot"></span>增长趋势</div>
-        <div style="font-size:68px;line-height:1.08;font-weight:900;margin-top:30px">中国模型<br/>强势崛起</div>
-        <div style="font-size:24px;color:#a0a0a0;font-weight:700;margin-top:18px">Top 10 中的周环比增长</div>
-        <div id="growth-container" style="margin-top:42px;display:grid;gap:20px"></div>
-      </div>
-
-      <div id="scene-outro" class="scene" style="padding-top:82px;opacity:0">
-        <div style="margin-top:130px" id="outro-content">
-          <div class="kicker"><span class="kicker-dot"></span>核心发现</div>
-          <div style="font-size:86px;line-height:1.1;font-weight:900;margin-top:58px">AI 格局<br/>正在快速变化。</div>
-          <div class="gradient-line" id="outro-line" style="margin-top:58px;width:0%"></div>
-          <div style="margin-top:58px;display:grid;gap:20px;font-size:36px;color:#a0a0a0;font-weight:700">
-            <span>处理 30+ 万亿 Token</span>
-            <span>中国模型快速增长</span>
-            <span>数据来源 OpenRouter Rankings</span>
+        <div class="scene-title" style="font-size:68px">DeepSeek 领先<br/><span class="accent">占全部 Token 21.9%</span></div>
+        <div class="scene-sub">各模型供应商在 OpenRouter 的 Token 占比</div>
+        <div class="donut-wrap" id="donut-wrap">
+          <div class="donut" id="donut">
+            <div class="donut-hole">
+              <div><span id="d-total">0</span> 万亿</div>
+              <div class="donut-total-label">本周 Token 总量</div>
+            </div>
           </div>
+          <div class="donut-legend" id="donut-legend"></div>
+        </div>
+        <div style="margin-top:34px;font-size:26px;color:#94a3b8;font-weight:700">
+          Top 6 供应商合计占 <span style="color:#f8fafc;font-weight:900">68.9%</span>
         </div>
       </div>
 
+      <div id="scene-growth" class="scene" style="opacity:0">
+        <div class="kicker"><span class="kicker-dot"></span>增长最快</div>
+        <div class="scene-title">这些模型<br/><span class="accent">涨幅最大</span></div>
+        <div class="scene-sub">Top 20 模型周环比 Token 增长</div>
+        <div id="growth-container" style="margin-top:40px;display:grid;gap:18px"></div>
+      </div>
+
+      <div id="scene-outro" class="scene" style="opacity:0">
+        <div style="margin-top:60px" id="outro-content">
+          <div class="kicker"><span class="kicker-dot"></span>核心发现</div>
+          <div class="scene-title" style="font-size:86px;margin-top:48px">排名格局<br/>正在洗牌。</div>
+          <div class="gradient-line" id="outro-line" style="margin-top:52px;width:0%"></div>
+          <div style="margin-top:52px;display:grid;gap:22px" id="outro-insights"></div>
+        </div>
+      </div>
+
+      <div class="scene-dots" id="scene-dots">
+        <div class="scene-dot" data-dot="0"></div>
+        <div class="scene-dot" data-dot="1"></div>
+        <div class="scene-dot" data-dot="2"></div>
+        <div class="scene-dot" data-dot="3"></div>
+        <div class="scene-dot" data-dot="4"></div>
+      </div>
       <div class="timeline-bar"><div class="timeline-fill" id="timeline-fill"></div></div>
     </div>
 
     <script>
       const models = [
-        { rank: 1, name: "DeepSeek V4 Flash", provider: "DeepSeek", tokens: "4.83T", tokensNum: 4.83, growth: 3, color: "#3B82F6" },
-        { rank: 2, name: "MiMo-V2.5", provider: "小米", tokens: "4.49T", tokensNum: 4.49, growth: 17, color: "#ef4444" },
-        { rank: 3, name: "MiniMax M3", provider: "MiniMax", tokens: "3.83T", tokensNum: 3.83, growth: 7, color: "#f97316" },
-        { rank: 4, name: "Owl Alpha", provider: "OpenRouter", tokens: "3.29T", tokensNum: 3.29, growth: 38, color: "#a855f7" },
-        { rank: 5, name: "Hy3 Preview", provider: "腾讯", tokens: "3.28T", tokensNum: 3.28, growth: 6, color: "#22c55e" },
-        { rank: 6, name: "Claude Opus 4.7", provider: "Anthropic", tokens: "2.34T", tokensNum: 2.34, growth: 20, color: "#ec4899" },
-        { rank: 7, name: "DeepSeek V4 Pro", provider: "DeepSeek", tokens: "2.07T", tokensNum: 2.07, growth: 17, color: "#3B82F6" },
-        { rank: 8, name: "Claude Opus 4.8", provider: "Anthropic", tokens: "2.06T", tokensNum: 2.06, growth: 47, color: "#ec4899" },
-        { rank: 9, name: "GLM 5.2", provider: "智谱 AI", tokens: "1.92T", tokensNum: 1.92, growth: 123, color: "#eab308" },
-        { rank: 10, name: "Claude Sonnet 4.6", provider: "Anthropic", tokens: "1.49T", tokensNum: 1.49, growth: 4, color: "#ec4899" }
+        { rank: 1,  name: "DeepSeek V4 Flash", provider: "DeepSeek",      country: "cn", tokens: 8.54, growth: 0.1, color: "#3B82F6" },
+        { rank: 2,  name: "MiMo V2.5",         provider: "小米",           country: "cn", tokens: 6.31, growth: -0.4, color: "#F43F5E" },
+        { rank: 3,  name: "Hy3",               provider: "腾讯",           country: "cn", tokens: 4.82, growth: 0.2, color: "#22C55E" },
+        { rank: 4,  name: "DeepSeek V4 Pro",   provider: "DeepSeek",      country: "cn", tokens: 3.28, growth: 0.0, color: "#38BDF8" },
+        { rank: 5,  name: "GLM 5.2",           provider: "智谱 AI",        country: "cn", tokens: 2.89, growth: -0.1, color: "#F59E0B" },
+        { rank: 6,  name: "Nemotron-3 Ultra",  provider: "NVIDIA",        country: "us", tokens: 2.46, growth: 0.0, color: "#8B5CF6" },
+        { rank: 7,  name: "MiniMax M3",        provider: "MiniMax",       country: "cn", tokens: 1.96, growth: 0.0, color: "#FB923C" },
+        { rank: 8,  name: "GPT-5.6 Luna",      provider: "OpenAI",        country: "us", tokens: 1.94, growth: 4.7, color: "#10B981" },
+        { rank: 9,  name: "Step 3.7 Flash",    provider: "阶跃星辰",       country: "cn", tokens: 1.66, growth: -0.1, color: "#22D3EE" },
+        { rank: 10, name: "Kimi K3",           provider: "月之暗面",       country: "cn", tokens: 1.42, growth: 0.2, color: "#E879F9" }
       ];
 
       const providers = [
-        { name: "DeepSeek", tokens: 6.9, color: "#3B82F6" },
-        { name: "Anthropic", tokens: 5.89, color: "#ec4899" },
-        { name: "小米", tokens: 4.49, color: "#ef4444" },
-        { name: "MiniMax", tokens: 3.83, color: "#f97316" },
-        { name: "OpenRouter", tokens: 3.29, color: "#a855f7" },
-        { name: "腾讯", tokens: 3.28, color: "#22c55e" },
-        { name: "智谱 AI", tokens: 1.92, color: "#eab308" }
+        { name: "DeepSeek",  tokens: 12.41, pct: 21.9, color: "#3B82F6" },
+        { name: "小米",       tokens: 6.90,  pct: 12.2, color: "#F43F5E" },
+        { name: "OpenAI",    tokens: 5.59,  pct: 9.8,  color: "#10B981" },
+        { name: "Google",    tokens: 4.85,  pct: 8.5,  color: "#FB923C" },
+        { name: "腾讯",       tokens: 4.85,  pct: 8.5,  color: "#22C55E" },
+        { name: "Anthropic", tokens: 4.57,  pct: 8.0,  color: "#EC4899" },
+        { name: "其他",       tokens: 16.99, pct: 31.1, color: "rgba(148,163,184,.4)" }
       ];
 
       const growthModels = [
-        { name: "GLM 5.2", provider: "智谱 AI", growth: 123, color: "#eab308" },
-        { name: "Claude Opus 4.8", provider: "Anthropic", growth: 47, color: "#ec4899" },
-        { name: "Owl Alpha", provider: "OpenRouter", growth: 38, color: "#a855f7" },
-        { name: "Claude Opus 4.7", provider: "Anthropic", growth: 20, color: "#ec4899" },
-        { name: "MiMo-V2.5", provider: "小米", growth: 17, color: "#ef4444" },
-        { name: "DeepSeek V4 Pro", provider: "DeepSeek", growth: 17, color: "#3B82F6" }
+        { name: "Claude Opus 5",   provider: "Anthropic",     growth: 5.1, color: "#EC4899" },
+        { name: "GPT-5.6 Luna",    provider: "OpenAI",        growth: 4.7, color: "#10B981" },
+        { name: "Laguna S 2.1",    provider: "Poolside",      growth: 3.5, color: "#FB923C" },
+        { name: "Ling 3.0 Flash",  provider: "Inclusion AI",  growth: 2.3, color: "#22D3EE" },
+        { name: "GPT-5.6 Terra",   provider: "OpenAI",        growth: 1.7, color: "#34D399" }
       ];
+
+      const insights = [
+        { text: "Top 10 中有 8 个是中国模型", sub: "DeepSeek、小米、腾讯、智谱 AI 等", color: "#F43F5E", ic: "中" },
+        { text: "DeepSeek 一家达 8.5 万亿", sub: "超过第二名与第三名之和", color: "#3B82F6", ic: "1" },
+        { text: "Claude Opus 5 涨幅最大", sub: "环比上周 +5.1%", color: "#EC4899", ic: "↑" },
+        { text: "数据来源 openrouter.ai/rankings", sub: "2026.08.03 周度使用量", color: "#8B5CF6", ic: "ℹ" }
+      ];
+
+      function countryChip(c) {
+        return '<span class="chip-country ' + (c === 'cn' ? 'country-cn' : 'country-us') + '">' + (c === 'cn' ? '中' : '美') + '</span>';
+      }
+      function growthBadge(g) {
+        if (g > 0.05) return '<span class="growth-badge growth-up">+' + g.toFixed(1) + '%</span>';
+        if (g < -0.05) return '<span class="growth-badge growth-down">' + g.toFixed(1) + '%</span>';
+        return '<span class="growth-badge growth-flat">' + g.toFixed(1) + '%</span>';
+      }
 
       function buildBars() {
         const container = document.getElementById('bars-container');
-        const max = models[0].tokensNum;
+        const max = models[0].tokens;
         models.forEach((item, i) => {
           const row = document.createElement('div');
           row.className = 'bar-row';
           row.id = 'bar-' + i;
-          const growthClass = item.growth >= 0 ? 'growth-up' : 'growth-down';
-          const growthSign = item.growth >= 0 ? '+' : '';
           row.innerHTML = `
-            <div class="bar-rank" style="background:${item.color}">${item.rank}</div>
+            <div class="bar-rank" style="background:#1e293b;border-left-color:${item.color}">${item.rank}</div>
             <div>
-              <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
-                <div>
-                  <div class="bar-name">${item.name}</div>
-                  <div class="bar-provider">${item.provider}</div>
-                </div>
-                <div class="growth-badge ${growthClass}">${growthSign}${item.growth}%</div>
+              <div class="bar-head">
+                <div class="bar-name">${item.name}</div>
+                ${growthBadge(item.growth)}
               </div>
-              <div class="bar-track"><div class="bar-fill" style="width:0%;background:linear-gradient(90deg,${item.color},${item.color}B8)"></div></div>
+              <div class="bar-provider">${item.provider} ${countryChip(item.country)}</div>
+              <div class="bar-track"><div class="bar-fill" id="bar-fill-${i}" style="width:0%;background:linear-gradient(90deg,${item.color},${item.color}B8)"></div></div>
             </div>
-            <div class="bar-tokens">${item.tokens}</div>`;
+            <div class="bar-tokens"><span id="bar-val-${i}">0.00</span><small> 万亿</small></div>`;
           container.appendChild(row);
         });
       }
 
       function buildProviders() {
-        const container = document.getElementById('provider-list');
-        const max = providers[0].tokens;
+        const legend = document.getElementById('donut-legend');
         providers.forEach((item, i) => {
           const row = document.createElement('div');
-          row.id = 'prow-' + i;
+          row.className = 'legend-row';
+          row.id = 'legend-' + i;
           row.innerHTML = `
-            <div style="display:flex;justify-content:space-between">
-              <div class="provider-row-label">${item.name}</div>
-              <div class="provider-row-value" id="pval-${i}">${item.tokens}T</div>
-            </div>
-            <div class="provider-bar"><div class="provider-fill" style="width:0%;background:${item.color}"></div></div>`;
-          container.appendChild(row);
+            <span class="legend-swatch" style="background:${item.color}"></span>
+            <span class="legend-name">${item.name}</span>
+            <span class="legend-val"><span id="legend-val-${i}">0.0</span> 万亿</span>
+            <span class="legend-pct">${item.pct}%</span>`;
+          legend.appendChild(row);
         });
+        let acc = 0;
+        const stops = providers.map(p => {
+          const from = acc;
+          acc += p.pct;
+          return `${p.color} ${from}% ${acc}%`;
+        });
+        document.getElementById('donut').style.background = 'conic-gradient(' + stops.join(', ') + ')';
+        document.getElementById('donut').style.boxShadow = '0 30px 80px rgba(0,0,0,.45)';
       }
 
       function buildGrowth() {
@@ -205,17 +350,32 @@
         const max = growthModels[0].growth;
         growthModels.forEach((item, i) => {
           const row = document.createElement('div');
+          row.className = 'grow-row';
           row.id = 'grow-' + i;
           row.innerHTML = `
-            <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="grow-head">
               <div>
-                <div style="font-size:28px;font-weight:800">${item.name}</div>
-                <div style="font-size:20px;color:#a0a0a0;font-weight:600">${item.provider}</div>
+                <div class="grow-name">${item.name}</div>
+                <div class="grow-provider">${item.provider}</div>
               </div>
-              <div class="growth-badge growth-up" style="font-size:24px;padding:8px 16px">+${item.growth}%</div>
+              <div class="grow-pct"><span id="grow-val-${i}">0.0</span>%</div>
             </div>
-            <div style="height:24px;background:rgba(245,245,245,.08);margin-top:10px;border-radius:12px;overflow:hidden">
-              <div id="grow-fill-${i}" style="height:100%;width:0%;background:linear-gradient(90deg,${item.color},${item.color}B8);border-radius:12px"></div>
+            <div class="grow-track"><div class="grow-fill" id="grow-fill-${i}" style="width:0%;background:linear-gradient(90deg,${item.color},#4ade80)"></div></div>`;
+          container.appendChild(row);
+        });
+      }
+
+      function buildInsights() {
+        const container = document.getElementById('outro-insights');
+        insights.forEach((item, i) => {
+          const row = document.createElement('div');
+          row.className = 'insight-row';
+          row.id = 'insight-' + i;
+          row.innerHTML = `
+            <div class="insight-ic" style="background:#1e293b;border-left-color:${item.color}">${item.ic}</div>
+            <div>
+              <div class="insight-text">${item.text}</div>
+              <div class="insight-sub">${item.sub}</div>
             </div>`;
           container.appendChild(row);
         });
@@ -224,6 +384,7 @@
       buildBars();
       buildProviders();
       buildGrowth();
+      buildInsights();
 
       const DURATION = 1350;
       const scenes = [
@@ -240,6 +401,44 @@
         return Math.min(fadeIn, fadeOut);
       }
 
+      function currentScene(frame) {
+        for (let i = scenes.length - 1; i > 0; i--) {
+          if (frame >= scenes[i].start) return i;
+        }
+        return 0;
+      }
+
+      // Rendering seeks this timeline once per output frame. Cache every node used
+      // in the hot path so frame updates only perform deterministic style writes.
+      const refs = {
+        scenes: scenes.map(scene => document.getElementById(scene.id)),
+        dots: Array.from(document.querySelectorAll('.scene-dot')),
+        introTitle: document.getElementById('intro-title'),
+        introMetrics: document.getElementById('intro-metrics'),
+        total: document.getElementById('m-total'),
+        bars: models.map((_, i) => ({
+          row: document.getElementById('bar-' + i),
+          fill: document.getElementById('bar-fill-' + i),
+          value: document.getElementById('bar-val-' + i)
+        })),
+        donutWrap: document.getElementById('donut-wrap'),
+        donutTotal: document.getElementById('d-total'),
+        legends: providers.map((_, i) => ({
+          row: document.getElementById('legend-' + i),
+          value: document.getElementById('legend-val-' + i)
+        })),
+        growth: growthModels.map((_, i) => ({
+          row: document.getElementById('grow-' + i),
+          fill: document.getElementById('grow-fill-' + i),
+          value: document.getElementById('grow-val-' + i)
+        })),
+        outroContent: document.getElementById('outro-content'),
+        outroLine: document.getElementById('outro-line'),
+        insights: insights.map((_, i) => document.getElementById('insight-' + i)),
+        timelineFill: document.getElementById('timeline-fill')
+      };
+      refs.bars[0].row.style.boxShadow = '0 0 0 1px rgba(96,165,250,.35), 0 18px 50px rgba(59,130,246,.18)';
+
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
 
@@ -251,64 +450,77 @@
           const frame = this.targets()[0].frame;
           const progress = frame / DURATION;
 
-          scenes.forEach(s => {
-            const el = document.getElementById(s.id);
-            el.style.opacity = sceneOpacity(frame, s.start, s.end);
+          scenes.forEach((s, i) => {
+            refs.scenes[i].style.opacity = sceneOpacity(frame, s.start, s.end);
           });
 
-          const titleEnter = gsap.utils.clamp(0, 1, frame / 36);
-          const introTitle = document.getElementById('intro-title');
-          introTitle.style.opacity = titleEnter;
-          introTitle.style.transform = `translateY(${(1 - titleEnter) * 76}px)`;
+          const cur = currentScene(frame);
+          refs.dots.forEach((dot, i) => dot.classList.toggle('active', i === cur));
 
-          const introMetrics = document.getElementById('intro-metrics');
-          introMetrics.style.opacity = gsap.utils.clamp(0, 1, (frame - 24) / 24);
+          const titleEnter = gsap.utils.clamp(0, 1, frame / 36);
+          refs.introTitle.style.opacity = titleEnter;
+          refs.introTitle.style.transform = 'translateY(' + ((1 - titleEnter) * 76) + 'px)';
+
+          const mEnter = gsap.utils.clamp(0, 1, (frame - 20) / 22);
+          refs.introMetrics.style.opacity = mEnter;
+          refs.introMetrics.style.transform = 'translateY(' + ((1 - mEnter) * 40) + 'px)';
+          refs.total.textContent = (56.8 * gsap.utils.clamp(0, 1, (frame - 26) / 34)).toFixed(1);
 
           const local = frame - 220;
           models.forEach((item, i) => {
-            const enter = gsap.utils.clamp(0, 1, (local - i * 5) / 30);
-            const row = document.getElementById('bar-' + i);
+            const enter = gsap.utils.clamp(0, 1, (local - i * 5) / 28);
+            const { row, fill, value } = refs.bars[i];
             if (row) {
               row.style.opacity = enter;
-              row.style.transform = `translateX(${(1 - enter) * -60}px)`;
-              const fill = row.querySelector('.bar-fill');
-              if (fill) fill.style.width = (enter * (item.tokensNum / models[0].tokensNum) * 100) + '%';
+              row.style.transform = 'translateX(' + ((1 - enter) * -60) + 'px)';
+              if (fill) fill.style.width = (enter * (item.tokens / models[0].tokens) * 100) + '%';
+              if (value) value.textContent = (item.tokens * gsap.utils.clamp(0, 1, (local - i * 5 - 4) / 22)).toFixed(2);
             }
           });
 
           const plocal = frame - 520;
+          refs.donutWrap.style.opacity = gsap.utils.clamp(0, 1, plocal / 20);
+          refs.donutWrap.style.transform = 'scale(' + (0.92 + 0.08 * gsap.utils.clamp(0, 1, plocal / 20)) + ')';
+          const dEnter = gsap.utils.clamp(0, 1, (plocal - 14) / 26);
+          refs.donutTotal.textContent = (56.8 * dEnter).toFixed(1);
           providers.forEach((item, i) => {
-            const enter = gsap.utils.clamp(0, 1, (plocal - i * 8) / 30);
-            const row = document.getElementById('prow-' + i);
+            const enter = gsap.utils.clamp(0, 1, (plocal - i * 5) / 24);
+            const { row, value } = refs.legends[i];
             if (row) {
               row.style.opacity = enter;
-              row.style.transform = `translateY(${(1 - enter) * 36}px)`;
-              const fill = row.querySelector('.provider-fill');
-              if (fill) fill.style.width = (enter * (item.tokens / providers[0].tokens) * 100) + '%';
+              row.style.transform = 'translateX(' + ((1 - enter) * 40) + 'px)';
+              if (value) value.textContent = (item.tokens * gsap.utils.clamp(0, 1, (plocal - i * 5 - 4) / 20)).toFixed(1);
             }
           });
 
           const glocal = frame - 760;
           growthModels.forEach((item, i) => {
-            const enter = gsap.utils.clamp(0, 1, (glocal - i * 8) / 30);
-            const row = document.getElementById('grow-' + i);
+            const enter = gsap.utils.clamp(0, 1, (glocal - i * 6) / 26);
+            const { row, fill, value } = refs.growth[i];
             if (row) {
               row.style.opacity = enter;
-              row.style.transform = `translateY(${(1 - enter) * 36}px)`;
-              const fill = document.getElementById('grow-fill-' + i);
+              row.style.transform = 'translateY(' + ((1 - enter) * 34) + 'px)';
               if (fill) fill.style.width = (enter * (item.growth / growthModels[0].growth) * 100) + '%';
+              if (value) value.textContent = (item.growth * gsap.utils.clamp(0, 1, (glocal - i * 6 - 4) / 20)).toFixed(1);
             }
           });
 
           const olocal = frame - 1060;
           const reveal = gsap.utils.clamp(0, 1, olocal / 24);
-          const outroContent = document.getElementById('outro-content');
-          outroContent.style.opacity = reveal;
-          outroContent.style.transform = `translateY(${(1 - reveal) * 54}px)`;
+          refs.outroContent.style.opacity = reveal;
+          refs.outroContent.style.transform = 'translateY(' + ((1 - reveal) * 54) + 'px)';
           const lineW = gsap.utils.clamp(0, 100, (olocal - 12) / 22 * 100);
-          document.getElementById('outro-line').style.width = lineW + '%';
+          refs.outroLine.style.width = lineW + '%';
+          insights.forEach((item, i) => {
+            const enter = gsap.utils.clamp(0, 1, (olocal - 24 - i * 8) / 22);
+            const row = refs.insights[i];
+            if (row) {
+              row.style.opacity = enter;
+              row.style.transform = 'translateX(' + ((1 - enter) * -46) + 'px)';
+            }
+          });
 
-          document.getElementById('timeline-fill').style.width = (progress * 100) + '%';
+          refs.timelineFill.style.width = (progress * 100) + '%';
         }
       }, 0);
 

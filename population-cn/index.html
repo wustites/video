@@ -3,14 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; }
       body {
         background: linear-gradient(180deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-        font-family: "Noto Sans SC", "Microsoft YaHei", "SimHei", sans-serif;
+        font-family: "Segoe UI", Arial, sans-serif;
       }
       #root {
         width: 1080px; height: 1920px;
@@ -25,7 +24,7 @@
       .chart-area { width: 900px; height: 1200px; position: relative; }
       .bar-row {
         position: absolute; left: 0; width: 900px; height: 76px;
-        display: flex; align-items: center;
+        display: flex; align-items: center; opacity: 0;
       }
       .bar-label {
         width: 140px; text-align: right; padding-right: 10px;
@@ -33,12 +32,11 @@
       }
       .bar-rect {
         height: 48px; border-radius: 8px;
-        transition: width 0.05s linear;
       }
       .bar-value {
         margin-left: 14px; color: #fff; font-size: 22px;
       }
-      .footer { margin-top: 40px; color: #666; font-size: 22px; }
+      .footer { margin-top: 40px; color: #b8b6c8; font-size: 22px; }
     </style>
   </head>
   <body>
@@ -101,14 +99,6 @@
           {p:"陕西",b:25},{p:"重庆",b:20},{p:"辽宁",b:18},{p:"黑龙江",b:12},{p:"山西",b:22},
           {p:"甘肃",b:18},{p:"吉林",b:10},{p:"内蒙古",b:12},{p:"新疆",b:22},{p:"上海",b:12},
           {p:"北京",b:12},{p:"天津",b:6},{p:"海南",b:8},{p:"宁夏",b:6},{p:"青海",b:5},{p:"西藏",b:4}
-        ]},
-        { year: 2025, data: [
-          {p:"广东",b:85},{p:"河南",b:45},{p:"山东",b:40},{p:"四川",b:35},{p:"河北",b:30},
-          {p:"湖南",b:25},{p:"安徽",b:25},{p:"江苏",b:32},{p:"湖北",b:22},{p:"广西",b:28},
-          {p:"浙江",b:30},{p:"云南",b:28},{p:"贵州",b:24},{p:"江西",b:22},{p:"福建",b:22},
-          {p:"陕西",b:17},{p:"重庆",b:14},{p:"辽宁",b:12},{p:"黑龙江",b:8},{p:"山西",b:15},
-          {p:"甘肃",b:12},{p:"吉林",b:7},{p:"内蒙古",b:8},{p:"新疆",b:15},{p:"上海",b:9},
-          {p:"北京",b:9},{p:"天津",b:4},{p:"海南",b:5},{p:"宁夏",b:4},{p:"青海",b:3},{p:"西藏",b:3}
         ]}
       ];
 
@@ -123,7 +113,7 @@
 
       const TOP_N = 15;
       const START_YEAR = 2000;
-      const END_YEAR = 2025;
+      const END_YEAR = 2023;
       const DURATION = 40;
 
       function interpolateData(currentYear) {
@@ -150,6 +140,7 @@
       const chart = document.getElementById("chart");
       const yearDisplay = document.getElementById("yearDisplay");
       const provinces = [...new Set(populationData.flatMap(d => d.data.map(x => x.p)))];
+      const rows = new Map();
 
       provinces.forEach(province => {
         const row = document.createElement("div");
@@ -157,6 +148,11 @@
         row.id = "row-" + province;
         row.innerHTML = `<div class="bar-label">${province}</div><div class="bar-rect" id="bar-${province}" style="background:${regionColors[province] || '#888'};width:0"></div><div class="bar-value" id="val-${province}"></div>`;
         chart.appendChild(row);
+        rows.set(province, {
+          row,
+          bar: document.getElementById("bar-" + province),
+          value: document.getElementById("val-" + province)
+        });
       });
 
       window.__timelines = window.__timelines || {};
@@ -173,25 +169,18 @@
 
           yearDisplay.textContent = Math.floor(currentYear);
 
-          topData.forEach((item, index) => {
-            const row = document.getElementById("row-" + item.p);
-            const bar = document.getElementById("bar-" + item.p);
-            const val = document.getElementById("val-" + item.p);
-            if (row && bar && val) {
-              gsap.to(row, { top: index * 76, duration: 0.3, ease: "power2.out", overwrite: true });
-              bar.style.width = ((item.b / maxBirths) * 550) + "px";
-              val.textContent = item.b + " 万";
-            }
+          rows.forEach(({ row }) => {
+            row.style.opacity = 0;
           });
 
-          provinces.forEach(p => {
-            const found = topData.find(x => x.p === p);
-            if (!found) {
-              const row = document.getElementById("row-" + p);
-              if (row) gsap.to(row, { opacity: 0, duration: 0.2, overwrite: true });
-            } else {
-              const row = document.getElementById("row-" + p);
-              if (row) gsap.to(row, { opacity: 1, duration: 0.2, overwrite: true });
+          topData.forEach((item, index) => {
+            const elements = rows.get(item.p);
+            if (elements) {
+              const { row, bar, value } = elements;
+              row.style.top = (index * 76) + "px";
+              row.style.opacity = 1;
+              bar.style.width = ((item.b / maxBirths) * 550) + "px";
+              value.textContent = item.b + " 万";
             }
           });
         }

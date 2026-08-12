@@ -11,10 +11,10 @@
 
 ## 使用方法
 
-1. 确保已安装 HyperFrames CLI
+1. 运行检查：`npm run check`
 2. 运行以下命令渲染视频：
    ```bash
-   npx hyperframes render -o out/video.mp4
+   npm run render
    ```
 3. 渲染完成后，视频将保存在 `out/video.mp4`
 
@@ -24,7 +24,7 @@
 - 时长：52秒
 - 分辨率：1080x1920
 - 特点：每页不同主题色（红、蓝、绿、橙、紫、青、红、青、橙、绿）
-- 字体：Noto Sans SC（Google Fonts）
+- 字体：由 HyperFrames 渲染环境提供的系统无衬线字体
 - 数据：100所大学，来自QS官网实时抓取
 
 ## 文件结构
