@@ -29,6 +29,15 @@ jobs:
       - name: Install system packages
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
+      - name: Run setup (fetch data) if defined
+        run: |
+          if [ -f package.json ] && grep -q '"setup"' package.json; then
+            npm run setup
+          else
+            echo "No setup script defined — skipping"
+          fi
+        working-directory: top500
+
       - name: Validate composition
         run: npm run check
         working-directory: top500
