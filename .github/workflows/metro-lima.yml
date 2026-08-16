@@ -32,6 +32,15 @@ jobs:
         run: npm ci
         working-directory: metro-lima
 
+      - name: Run setup (fetch data) if defined
+        run: |
+          if [ -f package.json ] && grep -q '"setup"' package.json; then
+            npm run setup
+          else
+            echo "No setup script defined — skipping"
+          fi
+        working-directory: metro-lima
+
       - name: Type check
         run: npm run check
         working-directory: metro-lima
