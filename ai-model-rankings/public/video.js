@@ -3,24 +3,26 @@
   const localeKey = root.dataset.locale || document.documentElement.lang || "en";
   const config = window.AI_MODEL_RANKINGS_I18N;
   const locale = config.locales[localeKey] || config.locales.en;
-  const shared = config.shared;
-  const providerName = key => locale.providers[key] || key;
-  const models = shared.models.map(item => ({ ...item, provider: providerName(item.providerKey) }));
-  const modelByName = new Map(models.map(item => [item.name, item]));
-  const scatterData = shared.scatterKeys
-    .map(name => modelByName.get(name) || shared.scatterExtra.find(item => item.name === name))
-    .filter(Boolean)
-    .filter(item => item.speed)
-    .map(item => ({ ...item, provider: providerName(item.providerKey) }));
-  const providers = shared.providerCounts.map(item => ({ ...item, name: providerName(item.providerKey) }));
-  const efficiencyCards = locale.scenes.efficiency.cards;
-  const tiers = locale.scenes.tiers.rows;
+  const data = window.AI_MODEL_RANKINGS_DATA || { models: [], scatterPoints: [], providerCounts: [], tierCounts: [0, 0, 0, 0], cards: [], metrics: {} };
+  const providerName = (key, label) => (locale.providers && locale.providers[key]) || label || key;
+  const models = data.models.map(item => ({ ...item, provider: providerName(item.providerKey, item.providerLabel) }));
+  const scatterData = data.scatterPoints.map(item => ({ ...item, provider: providerName(item.providerKey, item.providerLabel) }));
+  const providers = data.providerCounts.map(item => ({ ...item, name: providerName(item.providerKey, item.label) }));
+  const providerMax = Math.max(...providers.map(item => item.count));
+  const efficiencyCards = (locale.scenes.efficiency.cards || []).map((item, i) => {
+    const card = (data.cards && data.cards[i]) || {};
+    return { ...item, title: card.name || item.title, value: card.value || item.value, color: card.color || item.color };
+  });
+  const tiers = (locale.scenes.tiers.rows || []).map((item, i) => ({
+    ...item, count: (data.tierCounts && data.tierCounts[i]) || 0
+  }));
   const compositionId = root.dataset.compositionId;
   const DURATION = 1800;
 
   document.body.style.fontFamily = locale.fontFamily;
   root.innerHTML = buildMarkup(locale.scenes);
   injectStyles();
+  applyDynamicValues();
   buildBars();
   buildScatter();
   buildEfficiency();
@@ -43,10 +45,10 @@
           <div class="hero-subtitle">${scenes.intro.subtitle}</div>
         </div>
         <div id="intro-metrics" class="intro-metrics">
-          ${scenes.intro.metrics.map(item => `
+          ${scenes.intro.metrics.map((item, i) => `
             <div class="metric" style="--accent:${item.color}">
               <div class="metric-label">${item.label}</div>
-              <div class="metric-value">${item.value}</div>
+              <div class="metric-value" id="metric-val-${i}">${item.value}</div>
             </div>
           `).join("")}
         </div>
@@ -189,6 +191,20 @@
       .timeline-fill { height: 100%; background: #10B981; }
     `;
     document.head.appendChild(style);
+  }
+
+  function applyDynamicValues() {
+    const m = data.metrics || {};
+    const fill = (id, value) => {
+      const el = document.getElementById(id);
+      if (el && value) el.textContent = value;
+    };
+    fill("metric-val-0", m.totalModels);
+    fill("metric-val-1", m.topModel);
+    fill("metric-val-2", m.fastestModel);
+    document.querySelectorAll("#outro-content .outro-bullets span").forEach(el => {
+      el.textContent = el.textContent.replace("{{total}}", String(m.totalModels || "").replace("+", ""));
+    });
   }
 
   function buildBars() {
@@ -386,7 +402,7 @@
           row.style.opacity = enter;
           row.style.transform = `translateY(${(1 - enter) * 36}px)`;
           document.getElementById("pval-" + i).textContent = Math.round(item.count * enter);
-          row.querySelector(".provider-fill").style.width = (enter * (item.count / providers[0].count) * 100) + "%";
+          row.querySelector(".provider-fill").style.width = (enter * (item.count / providerMax) * 100) + "%";
         });
 
         const olocal = frame - 1540;
