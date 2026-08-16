@@ -6,11 +6,18 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <script src="../public/data.js"></script>
     <style>
+      @font-face {
+        font-family: "Noto Sans SC";
+        src: url("https://cdn.jsdelivr.net/gh/notofonts/noto-cjk@main/Sans/Variable/OTF/Subset/NotoSansSC-VF.otf") format("opentype");
+        font-weight: 100 900;
+        font-style: normal;
+        font-display: block;
+      }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; }
       body {
         background: #06080d;
-        font-family: "Segoe UI", Arial, sans-serif;
+        font-family: "Noto Sans SC", "Segoe UI", Arial, sans-serif;
         color: #f8fafc;
         -webkit-font-smoothing: antialiased;
       }

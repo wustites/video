@@ -80,7 +80,7 @@ window.AI_MODEL_RANKINGS_I18N = {
       }
     },
     zh: {
-      fontFamily: '"Segoe UI", Arial, sans-serif',
+      fontFamily: '"Noto Sans SC", "Segoe UI", Arial, sans-serif',
       providers: {
         anthropic: "Anthropic",
         openai: "OpenAI",
@@ -159,7 +159,7 @@ window.AI_MODEL_RANKINGS_I18N = {
       }
     },
     ja: {
-      fontFamily: '"Segoe UI", Arial, sans-serif',
+      fontFamily: '"Noto Sans JP", "Segoe UI", Arial, sans-serif',
       providers: {
         anthropic: "Anthropic",
         openai: "OpenAI",
