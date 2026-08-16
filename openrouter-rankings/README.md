@@ -59,10 +59,18 @@ npm run render
 
 ## Data update
 
-The rankings data is hardcoded in `compositions/en.html` and `compositions/zh.html`
-(the `models`, `providers`, `growthModels` and `insights` arrays). To refresh:
+Rankings data is fetched live from OpenRouter and written to `public/data.js`:
 
-1. Fetch the latest snapshot from the API and aggregate tokens per model / provider.
-2. Update the arrays in both files (keep model names/units consistent between languages).
-3. Update the week label, total tokens and insight copy.
-4. Re-run `npm run check` and render.
+```bash
+npm run setup   # fetch latest snapshot → public/data.js
+npm run check   # lint + validate + inspect
+npm run render
+```
+
+- `scripts/setup.mjs` calls `https://openrouter.ai/api/frontend/v1/rankings/models`,
+  aggregates the latest-day snapshot per model/provider, and computes the
+  day-over-day `change` as growth.
+- The setup runs automatically in CI before validate/render; if the fetch fails
+  it keeps the committed `public/data.js` snapshot so builds never break.
+- `compositions/en.html` / `compositions/zh.html` consume `window.OPENROUTER_RANKINGS_DATA`
+  and localize labels at runtime (provider names, date format, insight copy).

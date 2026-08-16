@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="../public/data.js"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; }
@@ -76,7 +77,7 @@
 
       .bar-row {
         display: grid; grid-template-columns: 64px 1fr 170px; gap: 20px; align-items: center;
-        padding: 10px 18px; border-radius: 16px; background: rgba(255,255,255,.035);
+        padding: 6px 18px; border-radius: 16px; background: rgba(255,255,255,.035);
       }
       .bar-rank {
         width: 58px; height: 58px; display: grid; place-items: center;
@@ -86,7 +87,7 @@
       .bar-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
       .bar-name { font-size: 30px; font-weight: 800; line-height: 1.15; }
       .bar-provider { font-size: 22px; color: #94a3b8; font-weight: 600; margin-top: 5px; display: flex; gap: 10px; align-items: center; }
-      .bar-track { height: 34px; background: rgba(255,255,255,.07); margin-top: 12px; border-radius: 8px; overflow: hidden; }
+      .bar-track { height: 30px; background: rgba(255,255,255,.07); margin-top: 8px; border-radius: 8px; overflow: hidden; }
       .bar-fill { height: 100%; border-radius: 8px; }
       .bar-tokens { font-size: 32px; font-weight: 900; text-align: right; font-variant-numeric: tabular-nums; }
       .bar-tokens small { font-size: 22px; font-weight: 700; color: #94a3b8; }
@@ -179,23 +180,23 @@
             来自数百万开发者通过 OpenRouter 调度大模型流量的真实使用数据。
           </div>
           <div style="margin-top:36px">
-            <span class="chip" style="background:rgba(59,130,246,.12);color:#60a5fa;border:1px solid rgba(59,130,246,.3)">2026.07.28 – 08.03 周榜</span>
+            <span class="chip" id="chip-week" style="background:rgba(59,130,246,.12);color:#60a5fa;border:1px solid rgba(59,130,246,.3)">…</span>
           </div>
         </div>
         <div style="margin-top:auto;display:grid;gap:24px" id="intro-metrics">
           <div class="metric" style="--accent:#3B82F6">
-            <div class="metric-label">本周 Token 总量</div>
+            <div class="metric-label">榜单 Token 总量</div>
             <div class="metric-value"><span id="m-total">0</span> 万亿</div>
             <div class="metric-sub">OpenRouter 全部模型一周用量</div>
           </div>
           <div class="metric" style="--accent:#8B5CF6">
             <div class="metric-label">最热门模型</div>
-            <div class="metric-value">DeepSeek V4 Flash</div>
-            <div class="metric-sub">8.5 万亿 Token · 本周第一</div>
+            <div class="metric-value" id="m-top">…</div>
+            <div class="metric-sub" id="m-top-sub">…</div>
           </div>
           <div class="metric" style="--accent:#EC4899">
             <div class="metric-label">增长最快</div>
-            <div class="metric-value">Claude Opus 5 <span style="color:#4ade80;font-size:42px">+5.1%</span></div>
+            <div class="metric-value" id="m-riser">…</div>
             <div class="metric-sub">环比上周 Token 变化</div>
           </div>
         </div>
@@ -203,33 +204,33 @@
 
       <div id="scene-ranking" class="scene" style="opacity:0">
         <div class="kicker"><span class="kicker-dot"></span>Token 使用量 Top 10</div>
-        <div class="scene-title">DeepSeek V4 Flash<br/><span class="accent">以 8.5 万亿领跑</span></div>
+        <div class="scene-title" id="rank-title">…</div>
         <div class="scene-sub">OpenRouter 本周 Token 使用量 · <span class="chip-country country-cn">中</span> <span class="chip-country country-us">美</span> = 模型所属国家</div>
-        <div id="bars-container" style="margin-top:36px;display:grid;gap:8px"></div>
+        <div id="bars-container" style="margin-top:36px;display:grid;gap:6px"></div>
       </div>
 
       <div id="scene-providers" class="scene" style="opacity:0">
         <div class="kicker"><span class="kicker-dot"></span>供应商分布</div>
-        <div class="scene-title" style="font-size:68px">DeepSeek 领先<br/><span class="accent">占全部 Token 21.9%</span></div>
+        <div class="scene-title" style="font-size:68px" id="prov-title">…</div>
         <div class="scene-sub">各模型供应商在 OpenRouter 的 Token 占比</div>
         <div class="donut-wrap" id="donut-wrap">
           <div class="donut" id="donut">
             <div class="donut-hole">
               <div><span id="d-total">0</span> 万亿</div>
-              <div class="donut-total-label">本周 Token 总量</div>
+              <div class="donut-total-label">榜单 Token 总量</div>
             </div>
           </div>
           <div class="donut-legend" id="donut-legend"></div>
         </div>
         <div style="margin-top:34px;font-size:26px;color:#94a3b8;font-weight:700">
-          Top 6 供应商合计占 <span style="color:#f8fafc;font-weight:900">68.9%</span>
+          Top 6 供应商合计占 <span style="color:#f8fafc;font-weight:900" id="prov-top6">…</span>
         </div>
       </div>
 
       <div id="scene-growth" class="scene" style="opacity:0">
         <div class="kicker"><span class="kicker-dot"></span>增长最快</div>
         <div class="scene-title">这些模型<br/><span class="accent">涨幅最大</span></div>
-        <div class="scene-sub">Top 20 模型周环比 Token 增长</div>
+        <div class="scene-sub">Top 20 模型环比 Token 增长</div>
         <div id="growth-container" style="margin-top:40px;display:grid;gap:18px"></div>
       </div>
 
@@ -253,42 +254,41 @@
     </div>
 
     <script>
-      const models = [
-        { rank: 1,  name: "DeepSeek V4 Flash", provider: "DeepSeek",      country: "cn", tokens: 8.54, growth: 0.1, color: "#3B82F6" },
-        { rank: 2,  name: "MiMo V2.5",         provider: "小米",           country: "cn", tokens: 6.31, growth: -0.4, color: "#F43F5E" },
-        { rank: 3,  name: "Hy3",               provider: "腾讯",           country: "cn", tokens: 4.82, growth: 0.2, color: "#22C55E" },
-        { rank: 4,  name: "DeepSeek V4 Pro",   provider: "DeepSeek",      country: "cn", tokens: 3.28, growth: 0.0, color: "#38BDF8" },
-        { rank: 5,  name: "GLM 5.2",           provider: "智谱 AI",        country: "cn", tokens: 2.89, growth: -0.1, color: "#F59E0B" },
-        { rank: 6,  name: "Nemotron-3 Ultra",  provider: "NVIDIA",        country: "us", tokens: 2.46, growth: 0.0, color: "#8B5CF6" },
-        { rank: 7,  name: "MiniMax M3",        provider: "MiniMax",       country: "cn", tokens: 1.96, growth: 0.0, color: "#FB923C" },
-        { rank: 8,  name: "GPT-5.6 Luna",      provider: "OpenAI",        country: "us", tokens: 1.94, growth: 4.7, color: "#10B981" },
-        { rank: 9,  name: "Step 3.7 Flash",    provider: "阶跃星辰",       country: "cn", tokens: 1.66, growth: -0.1, color: "#22D3EE" },
-        { rank: 10, name: "Kimi K3",           provider: "月之暗面",       country: "cn", tokens: 1.42, growth: 0.2, color: "#E879F9" }
-      ];
+      const D = window.OPENROUTER_RANKINGS_DATA;
 
-      const providers = [
-        { name: "DeepSeek",  tokens: 12.41, pct: 21.9, color: "#3B82F6" },
-        { name: "小米",       tokens: 6.90,  pct: 12.2, color: "#F43F5E" },
-        { name: "OpenAI",    tokens: 5.59,  pct: 9.8,  color: "#10B981" },
-        { name: "Google",    tokens: 4.85,  pct: 8.5,  color: "#FB923C" },
-        { name: "腾讯",       tokens: 4.85,  pct: 8.5,  color: "#22C55E" },
-        { name: "Anthropic", tokens: 4.57,  pct: 8.0,  color: "#EC4899" },
-        { name: "其他",       tokens: 16.99, pct: 31.1, color: "rgba(148,163,184,.4)" }
-      ];
+      const PROVIDER_ZH = {
+        "DeepSeek": "DeepSeek", "Tencent": "腾讯", "OpenAI": "OpenAI", "Google": "Google",
+        "Anthropic": "Anthropic", "Z AI": "智谱 AI", "Xiaomi": "小米", "MiniMax": "MiniMax",
+        "Moonshot AI": "月之暗面", "StepFun": "阶跃星辰", "NVIDIA": "NVIDIA", "Poolside": "Poolside",
+        "Meta": "Meta", "xAI": "xAI", "Inclusion AI": "Inclusion AI", "Mistral": "Mistral",
+        "Cohere": "Cohere", "Other": "其他"
+      };
+      const zhName = name => PROVIDER_ZH[name] || name;
 
-      const growthModels = [
-        { name: "Claude Opus 5",   provider: "Anthropic",     growth: 5.1, color: "#EC4899" },
-        { name: "GPT-5.6 Luna",    provider: "OpenAI",        growth: 4.7, color: "#10B981" },
-        { name: "Laguna S 2.1",    provider: "Poolside",      growth: 3.5, color: "#FB923C" },
-        { name: "Ling 3.0 Flash",  provider: "Inclusion AI",  growth: 2.3, color: "#22D3EE" },
-        { name: "GPT-5.6 Terra",   provider: "OpenAI",        growth: 1.7, color: "#34D399" }
-      ];
+      function fmtDateZH(iso) {
+        return iso.replace(/-/g, '.');
+      }
 
+      function hydrateStatic() {
+        document.getElementById('chip-week').textContent = fmtDateZH(D.dateRange.end) + ' 快照';
+        document.getElementById('m-top').textContent = D.topModel;
+        document.getElementById('m-top-sub').textContent = D.topTokens + ' 万亿 Token · 榜单第一';
+        const r = D.topGrowth;
+        const rColor = r.growth >= 0 ? '#4ade80' : '#f87171';
+        document.getElementById('m-riser').innerHTML = r.model + ' <span style="color:' + rColor + ';font-size:42px">' + (r.growth >= 0 ? '+' : '') + r.growth + '%</span>';
+        document.getElementById('rank-title').innerHTML = D.topModel + '<br/><span class="accent">以 ' + D.topTokens + ' 万亿领跑</span>';
+        document.getElementById('prov-title').innerHTML = zhName(D.providers[0].name) + ' 领先<br/><span class="accent">占全部 Token ' + D.providers[0].pct + '%</span>';
+        document.getElementById('prov-top6').textContent = D.top6Pct + '%';
+      }
+
+      const models = D.models.map(m => ({ ...m, provider: zhName(m.provider) }));
+      const providers = D.providers.map(p => ({ ...p, name: zhName(p.name) }));
+      const growthModels = D.growthModels.map(g => ({ ...g, provider: zhName(g.provider) }));
       const insights = [
-        { text: "Top 10 中有 8 个是中国模型", sub: "DeepSeek、小米、腾讯、智谱 AI 等", color: "#F43F5E", ic: "中" },
-        { text: "DeepSeek 一家达 8.5 万亿", sub: "超过第二名与第三名之和", color: "#3B82F6", ic: "1" },
-        { text: "Claude Opus 5 涨幅最大", sub: "环比上周 +5.1%", color: "#EC4899", ic: "↑" },
-        { text: "数据来源 openrouter.ai/rankings", sub: "2026.08.03 周度使用量", color: "#8B5CF6", ic: "ℹ" }
+        { text: 'Top 10 中有 ' + D.cnCount + ' 个是中国模型', sub: D.cnProviders.map(zhName).slice(0, 3).join('、') + (D.cnProviders.length > 3 ? ' 等' : ''), color: '#F43F5E', ic: '中' },
+        { text: D.topModel + ' 达 ' + D.topTokens + ' 万亿', sub: D.leaderGap ? '超过第二名与第三名之和' : '领跑榜单使用量', color: '#3B82F6', ic: '1' },
+        { text: D.topGrowth.model + ' 涨幅最大', sub: (D.topGrowth.growth >= 0 ? '+' : '') + D.topGrowth.growth + '% 环比上期', color: '#10B981', ic: '↑' },
+        { text: '数据来源 openrouter.ai/rankings', sub: '使用量快照 · ' + fmtDateZH(D.dateRange.end), color: '#8B5CF6', ic: 'ℹ' }
       ];
 
       function countryChip(c) {
@@ -385,6 +385,7 @@
       buildProviders();
       buildGrowth();
       buildInsights();
+      hydrateStatic();
 
       const DURATION = 1350;
       const scenes = [
@@ -464,7 +465,7 @@
           const mEnter = gsap.utils.clamp(0, 1, (frame - 20) / 22);
           refs.introMetrics.style.opacity = mEnter;
           refs.introMetrics.style.transform = 'translateY(' + ((1 - mEnter) * 40) + 'px)';
-          refs.total.textContent = (56.8 * gsap.utils.clamp(0, 1, (frame - 26) / 34)).toFixed(1);
+          refs.total.textContent = (D.totalTokens * gsap.utils.clamp(0, 1, (frame - 26) / 34)).toFixed(1);
 
           const local = frame - 220;
           models.forEach((item, i) => {
@@ -482,7 +483,7 @@
           refs.donutWrap.style.opacity = gsap.utils.clamp(0, 1, plocal / 20);
           refs.donutWrap.style.transform = 'scale(' + (0.92 + 0.08 * gsap.utils.clamp(0, 1, plocal / 20)) + ')';
           const dEnter = gsap.utils.clamp(0, 1, (plocal - 14) / 26);
-          refs.donutTotal.textContent = (56.8 * dEnter).toFixed(1);
+          refs.donutTotal.textContent = (D.totalTokens * dEnter).toFixed(1);
           providers.forEach((item, i) => {
             const enter = gsap.utils.clamp(0, 1, (plocal - i * 5) / 24);
             const { row, value } = refs.legends[i];
