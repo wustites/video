@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
-import {LimaMap, useMapData, type MapData} from './Map';
+import {SchematicMap} from './SchematicMap';
 import {useEntrance, useSceneOpacity} from './timing';
 
 const W = 1080;
@@ -86,7 +86,7 @@ const FinePrint: React.FC = () => (
       ...font,
     }}
   >
-    Datos: ATU · © OpenStreetMap contributors
+    Datos: ATU · Esquema ilustrativo
   </div>
 );
 
@@ -228,7 +228,7 @@ const Ridership: React.FC = () => {
 };
 
 /* ---------------- 场景 3：Línea 1 地图 ---------------- */
-const MapL1: React.FC<{data: MapData | null}> = ({data}) => {
+const MapL1: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = frame / fps;
@@ -240,18 +240,17 @@ const MapL1: React.FC<{data: MapData | null}> = ({data}) => {
   const desc = useEntrance('map-l1', 2.8, 0.5);
   return (
     <Scene id="map-l1" style={{padding: 0}}>
-      {/* 地图铺满背景，加深色遮罩保证文字可读 */}
-      <div style={{position: 'absolute', inset: 0, opacity: 0.85}}>
-        <LimaMap
-          data={data}
+      {/* 示意地图铺满背景 */}
+      <div style={{position: 'absolute', inset: 0}}>
+        <SchematicMap
+          emphasize="l1"
           showL2Under={false}
           l2DrawProgress={0}
-          showLabels={false}
           lineDrawProgress={draw}
-          emphasize="l1"
+          showLabels
         />
       </div>
-      <div style={{position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(6,10,20,0.25) 0%, rgba(6,10,20,0.88) 78%)'}} />
+      <div style={{position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(6,10,20,0.35) 0%, rgba(6,10,20,0) 30%, rgba(6,10,20,0) 60%, rgba(6,10,20,0.75) 100%)'}} />
       {/* 顶部标题区 */}
       <div
         style={{
@@ -424,7 +423,7 @@ const L1Record: React.FC = () => {
 };
 
 /* ---------------- 场景 5：Línea 2 地图 ---------------- */
-const MapL2: React.FC<{data: MapData | null}> = ({data}) => {
+const MapL2: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = frame / fps;
@@ -435,10 +434,10 @@ const MapL2: React.FC<{data: MapData | null}> = ({data}) => {
   const stats = useEntrance('map-l2', 1.8, 0.6);
   return (
     <Scene id="map-l2" style={{padding: 0}}>
-      <div style={{position: 'absolute', inset: 0, opacity: 0.85}}>
-        <LimaMap data={data} showL2Under l2DrawProgress={l2Draw} showLabels={false} emphasize="l2" />
+      <div style={{position: 'absolute', inset: 0}}>
+        <SchematicMap emphasize="l2" showL2Under l2DrawProgress={l2Draw} lineDrawProgress={1} showLabels />
       </div>
-      <div style={{position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(6,10,20,0.25) 0%, rgba(6,10,20,0.88) 78%)'}} />
+      <div style={{position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(6,10,20,0.35) 0%, rgba(6,10,20,0) 30%, rgba(6,10,20,0) 60%, rgba(6,10,20,0.75) 100%)'}} />
       <div
         style={{
           position: 'absolute',
@@ -701,15 +700,13 @@ export const MetroLima: React.FC = () => {
   const t = frame / fps;
   // 结尾淡出黑场：53s → 55.5s（旁白 52.2s 结束，留余量）
   const fadeOut = interpolate(t, [53, 55.5], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  // 地图数据顶层单次加载，两个地图场景共享
-  const mapData = useMapData();
   return (
     <AbsoluteFill style={{background: C.bg}}>
       <Intro />
       <Ridership />
-      <MapL1 data={mapData} />
+      <MapL1 />
       <L1Record />
-      <MapL2 data={mapData} />
+      <MapL2 />
       <L2Progress />
       <Future />
       <Fare />

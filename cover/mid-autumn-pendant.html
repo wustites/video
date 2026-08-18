@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=720, height=264">
+<title>中秋节微信红包挂件</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { 
+    width: 720px; height: 264px; 
+    overflow: hidden;
+    background: transparent;
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'STHeiti', sans-serif;
+    position: relative;
+  }
+  
+  /* 金色渐变背景 */
+  .bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 30%, #FF8C00 60%, #DAA520 100%);
+    border-radius: 16px;
+  }
+  
+  /* 装饰纹理 */
+  .pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.1;
+    background-image: 
+      radial-gradient(circle at 20% 50%, white 2px, transparent 2px),
+      radial-gradient(circle at 80% 50%, white 2px, transparent 2px);
+    background-size: 40px 40px;
+  }
+
+  /* 玉兔 */
+  .rabbit {
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px; height: 70px;
+  }
+
+  /* 月亮 */
+  .moon-small {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #FFFACD, #FFD700);
+    box-shadow: 0 0 20px rgba(255,215,0,0.5);
+    opacity: 0.6;
+  }
+
+  /* 标题文字 */
+  .title {
+    position: absolute;
+    left: 110px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 48px;
+    font-weight: bold;
+    color: #8B0000;
+    text-shadow: 0 2px 4px rgba(255,215,0,0.5), 0 1px 2px rgba(255,255,255,0.3);
+    letter-spacing: 6px;
+    white-space: nowrap;
+  }
+
+  .subtitle {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 22px;
+    color: rgba(139,0,0,0.7);
+    letter-spacing: 3px;
+  }
+
+  /* 祥云装饰 */
+  .cloud-deco {
+    position: absolute;
+    right: 160px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.25;
+  }
+  .cloud-deco svg { width: 60px; height: 30px; }
+
+  /* 底部金色装饰线 */
+  .gold-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, transparent, #8B0000, #FFD700, #8B0000, transparent);
+    border-radius: 0 0 16px 16px;
+  }
+</style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="pattern"></div>
+  
+  <!-- 月亮光晕 -->
+  <div class="moon-small"></div>
+  
+  <!-- 玉兔 SVG -->
+  <div class="rabbit">
+    <svg viewBox="0 0 60 70" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="30" cy="50" rx="18" ry="20" fill="white" opacity="0.95"/>
+      <circle cx="30" cy="22" r="14" fill="white" opacity="0.95"/>
+      <ellipse cx="20" cy="7" rx="5" ry="13" fill="white" opacity="0.95" transform="rotate(-15,20,7)"/>
+      <ellipse cx="20" cy="7" rx="3" ry="10" fill="#FFE4E1" opacity="0.7" transform="rotate(-15,20,7)"/>
+      <ellipse cx="40" cy="7" rx="5" ry="13" fill="white" opacity="0.95" transform="rotate(15,40,7)"/>
+      <ellipse cx="40" cy="7" rx="3" ry="10" fill="#FFE4E1" opacity="0.7" transform="rotate(15,40,7)"/>
+      <circle cx="24" cy="20" r="2.5" fill="#333"/>
+      <circle cx="36" cy="20" r="2.5" fill="#333"/>
+      <circle cx="25" cy="19" r="1" fill="white"/>
+      <circle cx="37" cy="19" r="1" fill="white"/>
+      <ellipse cx="30" cy="26" rx="2" ry="1.5" fill="#FFB6C1"/>
+      <circle cx="18" cy="25" r="3" fill="#FFB6C1" opacity="0.3"/>
+      <circle cx="42" cy="25" r="3" fill="#FFB6C1" opacity="0.3"/>
+      <circle cx="48" cy="52" r="5" fill="white" opacity="0.8"/>
+    </svg>
+  </div>
+
+  <div class="title">花好月圆</div>
+  <div class="subtitle">中秋快乐</div>
+
+  <!-- 祥云 -->
+  <div class="cloud-deco">
+    <svg viewBox="0 0 60 30" fill="rgba(139,0,0,0.5)">
+      <path d="M5,22 Q15,8 25,12 Q35,3 42,10 Q50,6 55,18 Q58,25 48,27 L10,27 Q3,27 5,22Z"/>
+    </svg>
+  </div>
+
+  <div class="gold-line"></div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "apple",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.6.112 preview",
+    "check": "npx --yes hyperframes@0.6.112 lint && npx --yes hyperframes@0.6.112 validate && npx --yes hyperframes@0.6.112 inspect",
+    "voiceover": "python -m edge_tts --voice zh-CN-XiaoxiaoNeural --file public/voiceover/narration.zh.txt --write-media public/voiceover/narration.zh.mp3 --write-subtitles public/voiceover/narration.zh.vtt",
+    "render": "npx --yes hyperframes@0.6.112 render -o out/video.mp4"
+  }
+}
