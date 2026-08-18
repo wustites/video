@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=750, height=1250">
+<title>中秋节微信红包封面</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { 
+    width: 750px; height: 1250px; 
+    overflow: hidden;
+    background: #C41E1E;
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'STHeiti', sans-serif;
+    position: relative;
+  }
+  
+  /* 主背景 - 渐变红底 */
+  .bg-gradient {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 60%, #E83030 0%, #B01010 50%, #7A0808 100%);
+  }
+  
+  /* 金色光晕 - 月亮 */
+  .moon-glow {
+    position: absolute;
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,215,0,0.5) 0%, rgba(255,180,0,0.2) 40%, transparent 70%);
+  }
+  
+  .moon {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #FFF8DC 0%, #FFD700 50%, #FFA500 100%);
+    box-shadow: 0 0 80px rgba(255,215,0,0.6), 0 0 160px rgba(255,215,0,0.3);
+  }
+  
+  /* 月亮上的阴影 */
+  .moon-crater {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(200,150,50,0.2);
+  }
+  .cr1 { width: 30px; height: 25px; top: 50px; left: 45px; }
+  .cr2 { width: 20px; height: 18px; top: 90px; left: 100px; }
+  .cr3 { width: 40px; height: 35px; top: 40px; left: 120px; }
+  .cr4 { width: 15px; height: 14px; top: 120px; left: 60px; }
+  
+  /* 祥云 */
+  .cloud {
+    position: absolute;
+    opacity: 0.5;
+  }
+  .cloud svg { width: 100%; height: 100%; }
+  
+  .cloud-1 { top: 350px; left: 30px; width: 150px; }
+  .cloud-2 { top: 380px; right: 20px; width: 180px; }
+  .cloud-3 { top: 500px; left: -10px; width: 200px; opacity: 0.35; }
+  
+  /* 玉兔 */
+  .rabbit {
+    position: absolute;
+    top: 280px;
+    left: 50%;
+    transform: translateX(-30%);
+    width: 80px; height: 100px;
+  }
+  
+  /* 灯笼 */
+  .lanterns {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .lantern {
+    position: absolute;
+  }
+  .lantern-1 { top: 60px; left: 50px; }
+  .lantern-2 { top: 60px; right: 50px; }
+  .lantern svg { width: 60px; height: 100px; }
+  
+  /* 底部装饰 */
+  .bottom-deco {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 320px;
+    background: linear-gradient(to top, rgba(120,8,8,0.8) 0%, transparent 100%);
+  }
+  
+  /* 金色边框 */
+  .gold-border {
+    position: absolute;
+    inset: 20px;
+    border: 4px solid rgba(255,215,0,0.7);
+    border-radius: 30px;
+    pointer-events: none;
+  }
+  
+  .gold-border-inner {
+    position: absolute;
+    inset: 30px;
+    border: 2px solid rgba(255,215,0,0.4);
+    border-radius: 24px;
+    pointer-events: none;
+  }
+  
+  /* 主标题文字 */
+  .main-title {
+    position: absolute;
+    top: 520px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+  }
+  .main-title .zh {
+    font-size: 72px;
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 0 4px 20px rgba(255,165,0,0.6), 0 2px 4px rgba(0,0,0,0.3);
+    letter-spacing: 12px;
+    line-height: 1.3;
+  }
+  .main-title .zh span {
+    display: inline-block;
+  }
+  .main-title .sub {
+    font-size: 28px;
+    color: rgba(255,215,0,0.8);
+    margin-top: 10px;
+    letter-spacing: 8px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+  
+  /* 底部文字 */
+  .bottom-text {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+  }
+  .bottom-text .title {
+    font-size: 32px;
+    color: #FFD700;
+    letter-spacing: 6px;
+    opacity: 0.9;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+  .bottom-text .desc {
+    font-size: 18px;
+    color: rgba(255,215,0,0.6);
+    margin-top: 8px;
+    letter-spacing: 4px;
+  }
+  
+  /* 装饰小花 */
+  .deco-flower {
+    position: absolute;
+    width: 30px; height: 30px;
+    opacity: 0.4;
+  }
+  .deco-flower svg { width: 100%; height: 100%; }
+  .df-1 { bottom: 130px; left: 80px; }
+  .df-2 { bottom: 130px; right: 80px; }
+  .df-3 { bottom: 180px; left: 130px; opacity: 0.3; }
+  .df-4 { bottom: 180px; right: 130px; opacity: 0.3; }
+  
+  /* 桂花枝 */
+  .osmanthus {
+    position: absolute;
+    opacity: 0.6;
+  }
+  .osmanthus-1 { bottom: 200px; left: 40px; width: 100px; }
+  .osmanthus-2 { bottom: 200px; right: 40px; width: 100px; transform: scaleX(-1); }
+
+  /* 星星点缀 */
+  .stars {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    width: 4px; height: 4px;
+    background: rgba(255,215,0,0.6);
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(255,215,0,0.3);
+  }
+  .star:nth-child(1) { top: 30px; left: 30%; }
+  .star:nth-child(2) { top: 50px; left: 70%; }
+  .star:nth-child(3) { top: 100px; left: 15%; }
+  .star:nth-child(4) { top: 160px; left: 80%; }
+  .star:nth-child(5) { top: 200px; left: 10%; }
+  .star:nth-child(6) { top: 250px; left: 75%; }
+  .star:nth-child(7) { top: 40px; left: 55%; }
+  
+  /* 中间装饰线 */
+  .mid-deco-line {
+    position: absolute;
+    top: 660px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px; height: 2px;
+    background: linear-gradient(to right, transparent, rgba(255,215,0,0.6), transparent);
+  }
+  
+  /* 底部波浪 */
+  .wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    opacity: 0.2;
+  }
+</style>
+</head>
+<body>
+  <!-- 背景渐变 -->
+  <div class="bg-gradient"></div>
+  
+  <!-- 星星 -->
+  <div class="stars">
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+    <div class="star"></div>
+  </div>
+
+  <!-- 月亮光晕 -->
+  <div class="moon-glow"></div>
+  
+  <!-- 月亮 -->
+  <div class="moon">
+    <div class="moon-crater cr1"></div>
+    <div class="moon-crater cr2"></div>
+    <div class="moon-crater cr3"></div>
+    <div class="moon-crater cr4"></div>
+  </div>
+
+  <!-- 祥云 SVG -->
+  <div class="cloud cloud-1">
+    <svg viewBox="0 0 150 80" fill="rgba(255,215,0,0.3)">
+      <path d="M10,60 Q30,20 60,25 Q80,5 110,20 Q140,10 145,40 Q150,60 130,65 L20,65 Q5,65 10,60Z"/>
+    </svg>
+  </div>
+  <div class="cloud cloud-2">
+    <svg viewBox="0 0 180 100" fill="rgba(255,215,0,0.25)">
+      <path d="M10,75 Q30,30 70,35 Q90,10 125,25 Q160,15 170,50 Q175,75 150,80 L20,80 Q5,80 10,75Z"/>
+    </svg>
+  </div>
+  <div class="cloud cloud-3">
+    <svg viewBox="0 0 200 90" fill="rgba(255,200,0,0.2)">
+      <path d="M10,65 Q40,20 80,30 Q100,8 140,20 Q170,10 185,45 Q195,65 170,70 L30,70 Q5,70 10,65Z"/>
+    </svg>
+  </div>
+
+  <!-- 玉兔 SVG -->
+  <div class="rabbit">
+    <svg viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- 身体 -->
+      <ellipse cx="40" cy="70" rx="25" ry="28" fill="white" opacity="0.95"/>
+      <!-- 头 -->
+      <circle cx="40" cy="32" r="20" fill="white" opacity="0.95"/>
+      <!-- 左耳 -->
+      <ellipse cx="27" cy="10" rx="7" ry="18" fill="white" opacity="0.95" transform="rotate(-15,27,10)"/>
+      <ellipse cx="27" cy="10" rx="4" ry="14" fill="#FFE4E1" opacity="0.7" transform="rotate(-15,27,10)"/>
+      <!-- 右耳 -->
+      <ellipse cx="53" cy="10" rx="7" ry="18" fill="white" opacity="0.95" transform="rotate(15,53,10)"/>
+      <ellipse cx="53" cy="10" rx="4" ry="14" fill="#FFE4E1" opacity="0.7" transform="rotate(15,53,10)"/>
+      <!-- 眼睛 -->
+      <circle cx="32" cy="30" r="3" fill="#333"/>
+      <circle cx="48" cy="30" r="3" fill="#333"/>
+      <circle cx="33" cy="29" r="1" fill="white"/>
+      <circle cx="49" cy="29" r="1" fill="white"/>
+      <!-- 鼻子 -->
+      <ellipse cx="40" cy="36" rx="3" ry="2" fill="#FFB6C1"/>
+      <!-- 嘴巴 -->
+      <path d="M37,39 Q40,43 43,39" stroke="#333" strokeWidth="1.2" fill="none"/>
+      <!-- 腮红 -->
+      <circle cx="25" cy="36" r="4" fill="#FFB6C1" opacity="0.3"/>
+      <circle cx="55" cy="36" r="4" fill="#FFB6C1" opacity="0.3"/>
+      <!-- 尾巴 -->
+      <circle cx="65" cy="75" r="7" fill="white" opacity="0.8"/>
+    </svg>
+  </div>
+
+  <!-- 灯笼 -->
+  <div class="lanterns">
+    <div class="lantern lantern-1">
+      <svg viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg">
+        <!-- 线 -->
+        <line x1="30" y1="0" x2="30" y2="20" stroke="#8B4513" strokeWidth="2"/>
+        <!-- 上盖 -->
+        <rect x="20" y="20" width="20" height="5" rx="2" fill="#8B4513"/>
+        <!-- 灯笼身体 -->
+        <ellipse cx="30" cy="55" rx="22" ry="28" fill="#FF4500" opacity="0.9"/>
+        <ellipse cx="30" cy="55" rx="22" ry="28" fill="none" stroke="#FFD700" strokeWidth="1.5"/>
+        <!-- 横纹 -->
+        <line x1="8" y1="45" x2="52" y2="45" stroke="#FFD700" strokeWidth="1" opacity="0.6"/>
+        <line x1="8" y1="65" x2="52" y2="65" stroke="#FFD700" strokeWidth="1" opacity="0.6"/>
+        <!-- 福字 -->
+        <text x="30" y="60" textAnchor="middle" fontSize="22" fill="#FFD700" fontWeight="bold">福</text>
+        <!-- 底盖 -->
+        <rect x="22" y="83" width="16" height="4" rx="1" fill="#8B4513"/>
+        <!-- 穗 -->
+        <line x1="30" y1="87" x2="30" y2="100" stroke="#FF4500" strokeWidth="2"/>
+      </svg>
+    </div>
+    <div class="lantern lantern-2">
+      <svg viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg">
+        <line x1="30" y1="0" x2="30" y2="20" stroke="#8B4513" strokeWidth="2"/>
+        <rect x="20" y="20" width="20" height="5" rx="2" fill="#8B4513"/>
+        <ellipse cx="30" cy="55" rx="22" ry="28" fill="#FF4500" opacity="0.9"/>
+        <ellipse cx="30" cy="55" rx="22" ry="28" fill="none" stroke="#FFD700" strokeWidth="1.5"/>
+        <line x1="8" y1="45" x2="52" y2="45" stroke="#FFD700" strokeWidth="1" opacity="0.6"/>
+        <line x1="8" y1="65" x2="52" y2="65" stroke="#FFD700" strokeWidth="1" opacity="0.6"/>
+        <text x="30" y="60" textAnchor="middle" fontSize="22" fill="#FFD700" fontWeight="bold">福</text>
+        <rect x="22" y="83" width="16" height="4" rx="1" fill="#8B4513"/>
+        <line x1="30" y1="87" x2="30" y2="100" stroke="#FF4500" strokeWidth="2"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 主标题 -->
+  <div class="main-title">
+    <div class="zh">花好月圆</div>
+    <div class="sub">中 秋 快 乐</div>
+  </div>
+
+  <!-- 装饰线 -->
+  <div class="mid-deco-line"></div>
+
+  <!-- 底部装饰区 -->
+  <div class="bottom-deco"></div>
+  
+  <!-- 桂花枝 -->
+  <div class="osmanthus osmanthus-1">
+    <svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,55 Q30,40 50,35 Q60,33 80,20 Q90,15 100,10" stroke="#8B6914" strokeWidth="3" fill="none"/>
+      <circle cx="20" cy="45" r="5" fill="#FFD700" opacity="0.6"/>
+      <circle cx="35" cy="38" r="4" fill="#FFD700" opacity="0.5"/>
+      <circle cx="50" cy="33" r="6" fill="#FFD700" opacity="0.6"/>
+      <circle cx="65" cy="27" r="4" fill="#FFD700" opacity="0.5"/>
+      <circle cx="80" cy="20" r="5" fill="#FFD700" opacity="0.6"/>
+      <circle cx="90" cy="14" r="3" fill="#FFD700" opacity="0.5"/>
+      <circle cx="23" cy="43" r="3" fill="#FFF8DC" opacity="0.6"/>
+      <circle cx="53" cy="31" r="3" fill="#FFF8DC" opacity="0.5"/>
+      <circle cx="83" cy="18" r="2.5" fill="#FFF8DC" opacity="0.6"/>
+    </svg>
+  </div>
+  <div class="osmanthus osmanthus-2">
+    <svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,55 Q30,40 50,35 Q60,33 80,20 Q90,15 100,10" stroke="#8B6914" strokeWidth="3" fill="none"/>
+      <circle cx="20" cy="45" r="5" fill="#FFD700" opacity="0.6"/>
+      <circle cx="35" cy="38" r="4" fill="#FFD700" opacity="0.5"/>
+      <circle cx="50" cy="33" r="6" fill="#FFD700" opacity="0.6"/>
+      <circle cx="65" cy="27" r="4" fill="#FFD700" opacity="0.5"/>
+      <circle cx="80" cy="20" r="5" fill="#FFD700" opacity="0.6"/>
+      <circle cx="90" cy="14" r="3" fill="#FFD700" opacity="0.5"/>
+      <circle cx="23" cy="43" r="3" fill="#FFF8DC" opacity="0.6"/>
+      <circle cx="53" cy="31" r="3" fill="#FFF8DC" opacity="0.5"/>
+      <circle cx="83" cy="18" r="2.5" fill="#FFF8DC" opacity="0.6"/>
+    </svg>
+  </div>
+
+  <!-- 底部文字 -->
+  <div class="bottom-text">
+    <div class="title">中 秋 团 圆</div>
+    <div class="desc">Mid-Autumn Festival</div>
+  </div>
+
+  <!-- 金色边框 -->
+  <div class="gold-border"></div>
+  <div class="gold-border-inner"></div>
+</body>
+</html>
