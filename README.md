@@ -14,6 +14,7 @@
 | [Solar System](./solar/) | 太阳系科普动画 | 英、中、日、韩 | 90 秒 | `out/solar-system-*-vertical.mp4` |
 | [Top 500](./top500/) | 2025 年《财富》世界 500 强 | 中 | 29 秒 | `out/top500-vertical.mp4` |
 | [Kakeya Conjecture](./kakeya-conjecture/) | 挂谷猜想科普动画 | 中 | 42 秒 | `out/kakeya-conjecture.mp4` |
+| [Cloudflare History](./cloudflare-history/) | Cloudflare 发展历程（Remotion） | 中 | 90 秒 | `out/video.mp4` |
 
 榜单和数据项目采用 `1080 × 1920` 竖屏画布；Kakeya Conjecture 使用 `1920 × 1080` 横屏画布。具体数据来源、内容结构和资源要求见各项目目录内的 README。
 
