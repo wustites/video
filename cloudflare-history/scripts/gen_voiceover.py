@@ -8,7 +8,7 @@ import sys
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VO = os.path.join(BASE, "public", "voiceover")
 VOICE = "zh-CN-YunjianNeural"
-RATE = "+8%"
+RATE = "+12%"
 
 os.makedirs(VO, exist_ok=True)
 

@@ -5,18 +5,18 @@ export const FPS = 30;
 /**
  * 场景时间轴（秒），与旁白 9 段逐段对齐。
  * 实测段落时长见 public/voiceover/segment-durations.json：
- * [9.72, 9.696, 10.248, 10.848, 8.376, 8.808, 10.512, 8.664, 10.512]
+ * [10.968, 10.392, 12.072, 11.832, 8.208, 8.904, 7.944, 8.352, 11.064]
  */
 export const SCENES = [
-  {id: 'intro', start: 0.0, end: 10.6},
-  {id: 'founding', start: 9.3, end: 20.1},
-  {id: 'fame', start: 19.0, end: 30.4},
-  {id: 'ssl', start: 29.25, end: 41.2},
-  {id: 'workers', start: 40.1, end: 49.7},
-  {id: 'dns', start: 48.5, end: 58.4},
-  {id: 'ipo', start: 57.3, end: 68.9},
-  {id: 'expansion', start: 67.8, end: 77.5},
-  {id: 'today', start: 76.5, end: 90.0},
+  {id: 'intro', start: 0.0, end: 11.85},
+  {id: 'founding', start: 10.55, end: 22.05},
+  {id: 'fame', start: 20.94, end: 34.22},
+  {id: 'ssl', start: 33.02, end: 46.0},
+  {id: 'workers', start: 44.85, end: 54.25},
+  {id: 'dns', start: 53.08, end: 63.15},
+  {id: 'ipo', start: 61.98, end: 71.0},
+  {id: 'expansion', start: 69.91, end: 79.45},
+  {id: 'today', start: 78.3, end: 90.0},
 ] as const;
 
 export const TOTAL_SECONDS = 90;

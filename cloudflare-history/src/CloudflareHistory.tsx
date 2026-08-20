@@ -274,9 +274,9 @@ const Intro: React.FC = () => {
           opacity: tag.opacity,
         }}
       >
-        从三个人
+        从三位创始人
         <br />
-        到互联网的守护者
+        到全球网络平台
       </div>
       <div
         style={{
@@ -290,7 +290,7 @@ const Intro: React.FC = () => {
           opacity: hint.opacity,
         }}
       >
-        ONE MAN'S DDoS IS ANOTHER MAN'S... · Cloudflare · 2009—2026
+        CONNECT · PROTECT · BUILD · Cloudflare · 2009—2026
       </div>
     </Scene>
   );
@@ -373,7 +373,7 @@ const Founding: React.FC = () => {
           transform: name.transform,
         }}
       >
-        Cloudflare = 「云中的防火墙」
+        最初构想：「云中的防火墙」
       </div>
       <div
         style={{
@@ -416,7 +416,7 @@ const Fame: React.FC = () => {
   const stat = useEntrance('fame', 3.6, 0.6, 'scale');
   return (
     <Scene id="fame">
-      <Kicker sceneId="fame">2011 / 2013 · 一战成名</Kicker>
+      <Kicker sceneId="fame">2011 / 2013 · DDoS 防护</Kicker>
       {/* 盾牌：防御攻击 */}
       <div style={{position: 'relative', width: 330, height: 330, opacity: shield.opacity, transform: shield.transform}}>
         {[1, 2, 3].map((i) => (
@@ -472,8 +472,8 @@ const Fame: React.FC = () => {
           sceneId="fame"
           delay={2.4}
           year="2011"
-          title="初露锋芒"
-          desc={'为知名目标\n抵御 DDoS 攻击'}
+          title="LulzSec 事件"
+          desc={'网站接入后\n防护受到关注'}
           accent={C.orange}
           style={{width: 400}}
         />
@@ -481,7 +481,7 @@ const Fame: React.FC = () => {
           sceneId="fame"
           delay={2.7}
           year="2013"
-          title="硬刚史上之最"
+          title="Spamhaus 攻击"
           desc={'Spamhaus 攻击\n峰值 300Gbps+'}
           accent={C.green}
           style={{width: 400}}
@@ -502,7 +502,7 @@ const Fame: React.FC = () => {
           transform: stat.transform,
         }}
       >
-        ⚡ 当时全球规模最大的网络攻击
+        ⚡ 当时公开报道的最大 DDoS 攻击
       </div>
     </Scene>
   );
@@ -548,7 +548,7 @@ const SSL: React.FC = () => {
           delay={1.8}
           year="SSL"
           title="Universal SSL"
-          desc={'任何网站\n免费获得加密'}
+          desc={'Cloudflare 用户\n免费启用 HTTPS'}
           accent={C.orange}
           style={{width: 430}}
         />
@@ -568,10 +568,10 @@ const SSL: React.FC = () => {
           transform: big.transform,
         }}
       >
-        🔒 HTTPS × for everyone
+        🔒 HTTPS · FOR EVERY USER
       </div>
       <div style={{...font, marginTop: 24, fontSize: 32, fontWeight: 700, color: C.sub, opacity: big.opacity}}>
-        全网走向加密时代
+        推动更多网站走向 HTTPS
       </div>
     </Scene>
   );
@@ -698,7 +698,7 @@ const Workers: React.FC = () => {
       >
         代码部署到离用户最近的边缘节点
         <br />
-        边缘计算的时代，就此开启
+        推动边缘计算进一步发展
       </div>
       <div style={{display: 'flex', gap: 22, marginTop: 44, opacity: chips.opacity}}>
         {['Serverless', '全球部署', '毫秒响应'].map((s) => (
@@ -915,9 +915,9 @@ const IPO: React.FC = () => {
           opacity: t.opacity,
         }}
       >
-        从创业公司到资本市场新星
+        从创业公司到公众公司
         <br />
-        华丽转身
+        完成上市
       </div>
     </Scene>
   );
@@ -1033,9 +1033,9 @@ const Today: React.FC = () => {
   const s3 = useEntrance('today', 1.9, 0.6, 'scale');
   const t = useEntrance('today', 3.6, 0.7);
   const stats = [
-    {num: '335+', unit: '座城市', desc: '全球网络覆盖', e: s1},
+    {num: '335', unit: '座城市', desc: '全球网络覆盖', e: s1},
     {num: '1.15 亿', unit: '次/秒', desc: '处理 HTTP 请求', e: s2},
-    {num: '21%', unit: '全球网站', desc: '使用 Cloudflare', e: s3},
+    {num: '约 25%', unit: '全球网站', desc: '使用反向代理服务', e: s3},
   ];
   return (
     <Scene id="today">
@@ -1077,7 +1077,7 @@ const Today: React.FC = () => {
           transform: t.transform,
         }}
       >
-        从三个人，到互联网的守护者
+        从三位创始人，到全球网络平台
       </div>
       <div
         style={{
@@ -1104,8 +1104,8 @@ export const CloudflareHistory: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = frame / fps;
-  // 结尾淡出黑场：88s → 90s
-  const fadeOut = interpolate(t, [88, 90], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // 结尾淡出黑场：旁白结束前后快速收尾
+  const fadeOut = interpolate(t, [89.2, 90], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <AbsoluteFill style={{background: C.bg}}>
       <Backdrop />
