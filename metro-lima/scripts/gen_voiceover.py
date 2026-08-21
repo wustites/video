@@ -12,10 +12,17 @@ RATE = "+0%"
 
 os.makedirs(VO, exist_ok=True)
 
+EXPECTED_SEGMENTS = 8  # 与 src/timing.ts 的 SCENE_IDS 数量一致
+
 with open(os.path.join(VO, "narration.es.txt"), encoding="utf-8") as f:
     text = f.read()
 paras = [p.strip() for p in text.split("\n\n") if p.strip()]
 print(f"paragraphs: {len(paras)}")
+if len(paras) != EXPECTED_SEGMENTS:
+    raise SystemExit(
+        f"旁白段落数 {len(paras)} != 预期 {EXPECTED_SEGMENTS}，"
+        "请同步 src/timing.ts 的 SCENE_IDS（或恢复 narration.es.txt 分段）"
+    )
 
 durations = []
 for i, para in enumerate(paras, 1):

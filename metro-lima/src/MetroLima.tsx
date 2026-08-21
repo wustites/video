@@ -1,7 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {SchematicMap} from './SchematicMap';
-import {useEntrance, useSceneOpacity} from './timing';
+import {FADE_OUT, useEntrance, useSceneOpacity} from './timing';
 
 const W = 1080;
 const H = 1920;
@@ -123,6 +123,7 @@ const Intro: React.FC = () => {
           fontWeight: 900,
           letterSpacing: -3,
           lineHeight: 1.05,
+          color: C.text,
           opacity: title.opacity,
           transform: title.transform,
         }}
@@ -363,7 +364,7 @@ const L1Record: React.FC = () => {
   return (
     <Scene id="l1record">
       <Kicker sceneId="l1record" offsetSec={0.2}>Línea 1</Kicker>
-      <div style={{...font, fontSize: 76, fontWeight: 900, lineHeight: 1.2, letterSpacing: -2, opacity: title.opacity, transform: title.transform}}>
+      <div style={{...font, fontSize: 76, fontWeight: 900, lineHeight: 1.2, letterSpacing: -2, color: C.text, opacity: title.opacity, transform: title.transform}}>
         Un viaducto elevado
         <br />
         que hizo historia
@@ -532,7 +533,7 @@ const L2Progress: React.FC = () => {
   return (
     <Scene id="l2progress">
       <Kicker sceneId="l2progress" offsetSec={0.2}>Línea 2 · Callao → Ate</Kicker>
-      <div style={{...font, fontSize: 56, fontWeight: 900, lineHeight: 1.2, letterSpacing: -2, opacity: title.opacity, transform: title.transform}}>
+      <div style={{...font, fontSize: 56, fontWeight: 900, lineHeight: 1.2, letterSpacing: -2, color: C.text, opacity: title.opacity, transform: title.transform}}>
         El este y el oeste
         <br />
         cada vez más cerca
@@ -575,7 +576,7 @@ const Future: React.FC = () => {
   return (
     <Scene id="future">
       <Kicker sceneId="future" offsetSec={0.2}>El futuro</Kicker>
-      <div style={{...font, fontSize: 76, fontWeight: 900, lineHeight: 1.2, letterSpacing: -2, opacity: title.opacity, transform: title.transform}}>
+      <div style={{...font, fontSize: 76, fontWeight: 900, lineHeight: 1.2, letterSpacing: -2, color: C.text, opacity: title.opacity, transform: title.transform}}>
         La red sigue
         <br />
         creciendo
@@ -583,7 +584,7 @@ const Future: React.FC = () => {
       <div style={{display: 'flex', gap: 44, marginTop: 70}}>
         {[
           {line: 'Línea 3', color: C.red, desc: 'Nueva línea\nen proyecto'},
-          {line: 'Línea 4', color: C.green, desc: 'Nueva línea\nen proyecto'},
+          {line: 'Línea 4', color: C.green, desc: 'Primer tramo\nen construcción'},
         ].map((f, i) => {
           const e = i === 0 ? card1 : card2;
           return (
@@ -635,7 +636,7 @@ const Fare: React.FC = () => {
   const outro = useEntrance('fare', 3.2, 0.9);
   return (
     <Scene id="fare">
-      <div style={{...font, fontSize: 66, fontWeight: 900, lineHeight: 1.25, letterSpacing: -2, opacity: title.opacity, transform: title.transform}}>
+      <div style={{...font, fontSize: 66, fontWeight: 900, lineHeight: 1.25, letterSpacing: -2, color: C.text, opacity: title.opacity, transform: title.transform}}>
         Viajar en metro
         <br />
         está al alcance de todos
@@ -698,8 +699,8 @@ export const MetroLima: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = frame / fps;
-  // 结尾淡出黑场：53s → 55.5s（旁白 52.2s 结束，留余量）
-  const fadeOut = interpolate(t, [53, 55.5], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // 结尾淡出黑场：旁白结束后 0.5s 起（避免压住尾音），持续 2.5s
+  const fadeOut = interpolate(t, [FADE_OUT.start, FADE_OUT.end], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <AbsoluteFill style={{background: C.bg}}>
       <Intro />
