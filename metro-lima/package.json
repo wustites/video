@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "remotion studio",
     "check": "tsc --noEmit",
-    "voiceover": "python scripts/gen_voiceover.py",
+    "voiceover": "python3 scripts/gen_voiceover.py",
     "render": "remotion render MetroLima out/video.mp4",
     "render:draft": "remotion render MetroLima out/preview.mp4 --log=error"
   },

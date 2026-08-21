@@ -1,6 +1,7 @@
 import React from 'react';
 import {Composition} from 'remotion';
 import {MetroLima} from './MetroLima';
+import {FPS, TOTAL_SECONDS} from './timing';
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -8,8 +9,8 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="MetroLima"
         component={MetroLima}
-        durationInFrames={56 * 30}
-        fps={30}
+        durationInFrames={Math.round(TOTAL_SECONDS * FPS)}
+        fps={FPS}
         width={1080}
         height={1920}
       />

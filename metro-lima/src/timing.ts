@@ -1,20 +1,48 @@
 import {useCurrentFrame, useVideoConfig} from 'remotion';
+import segDurations from '../public/voiceover/segment-durations.json';
 
 export const FPS = 30;
 
-/** 场景时间轴（秒），与旁白 8 段对齐（实测时长见 public/voiceover/segment-durations.json） */
-export const SCENES = [
-  {id: 'intro', start: 0.0, end: 4.872},
-  {id: 'ridership', start: 4.872, end: 9.984},
-  {id: 'map-l1', start: 9.984, end: 18.816},
-  {id: 'l1record', start: 18.816, end: 25.368},
-  {id: 'map-l2', start: 25.368, end: 33.744},
-  {id: 'l2progress', start: 33.744, end: 39.336},
-  {id: 'future', start: 39.336, end: 45.792},
-  {id: 'fare', start: 45.792, end: 52.176},
+/** 场景 id 顺序，与旁白段落（narration.es.txt 的 \n\n 分段）一一对应 */
+const SCENE_IDS = [
+  'intro',
+  'ridership',
+  'map-l1',
+  'l1record',
+  'map-l2',
+  'l2progress',
+  'future',
+  'fare',
 ] as const;
 
-export const TOTAL_SECONDS = 56;
+if (segDurations.length !== SCENE_IDS.length) {
+  throw new Error(
+    `旁白段落数(${segDurations.length})与场景数(${SCENE_IDS.length})不匹配，请先运行 npm run voiceover 重新生成音频`,
+  );
+}
+
+/** 场景时间轴（秒）：由旁白实测时长推导，重新生成旁白后自动对齐，无需手工同步 */
+export const SCENES: {id: (typeof SCENE_IDS)[number]; start: number; end: number}[] = [];
+let acc = 0;
+for (let i = 0; i < SCENE_IDS.length; i++) {
+  const start = acc;
+  acc += segDurations[i];
+  SCENES.push({id: SCENE_IDS[i], start, end: acc});
+}
+
+const LAST_END = SCENES[SCENES.length - 1].end;
+
+/** 结尾黑场淡出窗口（秒）：旁白结束后 0.5s 起，持续 2.5s */
+export const FADE_OUT = {
+  start: LAST_END + 0.5,
+  end: LAST_END + 3.0,
+};
+
+/**
+ * 总时长（秒）：旁白结束后留出结尾黑场淡出（FADE_OUT）+ 尾帧余量；
+ * 若旁白变长则自动延长，避免截断旁白。
+ */
+export const TOTAL_SECONDS = Math.max(56, Math.ceil(LAST_END + 3.8));
 
 /** 场景整体不透明度（含场景边界的淡入淡出） */
 export function useSceneOpacity(sceneId: string): number {
