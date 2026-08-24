@@ -7,6 +7,7 @@
 | 项目 | 内容 | 语言 | 时长 | 默认输出 |
 | --- | --- | --- | ---: | --- |
 | [Metro de Lima](./metro-lima/) | 秘鲁利马地铁系统介绍（Remotion） | 西 | 56 秒 | `out/video.mp4` |
+| [Sapporo Subway](./sapporo-subway/) | 日本札幌市营地铁介绍（Remotion） | 日 | 87 秒 | `out/video.mp4` |
 | [AI Model Rankings](./ai-model-rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | `out/ai-model-rankings-*-vertical.mp4` |
 | [OpenRouter Rankings](./openrouter-rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | `out/openrouter-rankings-*-vertical.mp4` |
 | [Population CN](./population-cn/) | 中国各省出生人口变化 | 中 | 40 秒 | `out/video.mp4` |
@@ -50,7 +51,7 @@ npm run render
 
 预览服务启动后，终端会输出 Studio 地址。修改 HTML、CSS 或 JavaScript 后，页面会自动刷新。
 
-> 各项目脚本不完全相同。执行命令前请先查看对应的 `package.json`；HyperFrames 项目统一使用 `npm run dev`，Metro de Lima 使用 Remotion 脚本。
+> 各项目脚本不完全相同。执行命令前请先查看对应的 `package.json`；HyperFrames 项目统一使用 `npm run dev`，Metro de Lima 与 Sapporo Subway 使用 Remotion 脚本。
 
 ## 推荐工作流
 
@@ -73,6 +74,7 @@ npm run render
 | 项目 | Tag 格式 | 工作流 |
 | --- | --- | --- |
 | AI Model Rankings | `v*-ai-model-rankings` | `ai-model-rankings.yml` |
+| Sapporo Subway | `v*-sapporo-subway` | `sapporo-subway.yml` |
 | OpenRouter Rankings | `v*-openrouter-rankings` | `openrouter-rankings.yml` |
 | Population CN | `v*-population-cn` | `population-cn.yml` |
 | QS Universities | `v*-qs-universities` | `qs-universities.yml` |
