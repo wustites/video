@@ -34,7 +34,17 @@ npx --yes hyperframes@0.6.112 doctor
 
 ## 字体规范
 
-日语 Remotion 项目统一使用 Google Fonts 的 **Noto Sans JP** 网络字体，当前日本经济数据可视化项目的实现位于 [`japan-economy/src/fonts.ts`](./japan-economy/src/fonts.ts)。字体通过 `@remotion/google-fonts` 加载，并在 Remotion 开始渲染前等待 `waitUntilDone()` 完成，确保浏览器不会在字体尚未加载时截帧。
+所有 Remotion 和 HyperFrames 项目必须使用与内容语言对应的 Google Fonts **Noto 网络字体**，不能默认依赖渲染机器上的本地字体。默认字体映射如下：
+
+| 内容语言 | Google Noto 字体 | CSS `font-family` |
+| --- | --- | --- |
+| 英语、西班牙语及其他拉丁文字 | Noto Sans | `"Noto Sans", sans-serif` |
+| 简体中文 | Noto Sans SC | `"Noto Sans SC", sans-serif` |
+| 繁体中文 | Noto Sans TC | `"Noto Sans TC", sans-serif` |
+| 日语 | Noto Sans JP | `"Noto Sans JP", sans-serif` |
+| 韩语 | Noto Sans KR | `"Noto Sans KR", sans-serif` |
+
+Remotion 项目应使用 `@remotion/google-fonts` 加载对应字体，并在开始渲染前等待字体完成加载。示例：
 
 ```ts
 import {loadFont} from '@remotion/google-fonts/NotoSansJP';
@@ -45,7 +55,15 @@ export const notoSansJP = loadFont('normal', {
 });
 ```
 
-使用网络字体时，开发预览和 CI 渲染环境需要能够访问 `fonts.googleapis.com` 与 `fonts.gstatic.com`。字体加载失败时，项目会继续使用 `sans-serif` 回退字体；若要求完全离线或可复现的字形，应将许可允许的字体文件放入项目资源并改用本地 `@font-face`。
+HyperFrames 项目应在 HTML 中通过 Google Fonts 的 `<link>` 或 `@import` 引入对应字体，并将其设置为页面和视频元素的全局字体：
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+```
+
+开发预览、Remotion 渲染和 HyperFrames CI 都需要能够访问 `fonts.googleapis.com` 与 `fonts.gstatic.com`。应在截图或渲染前确认 `document.fonts.ready`；字体加载失败时才允许回退到 `sans-serif`。若要求完全离线或严格可复现的字形，应使用许可允许的字体文件和本地 `@font-face`，但仍保持对应语言的 Noto 字体族。
 
 ## 快速开始
 
