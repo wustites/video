@@ -103,32 +103,29 @@ npm run render
 
 ## GitHub Actions 发布
 
-每个项目在 `.github/workflows/` 下有独立发布工作流。工作流由项目专属 tag 触发，统一使用 Node.js 22 和 FFmpeg，在 GitHub runner 中渲染 MP4，并上传 artifact 和 GitHub Release。
+普通的 Remotion / HyperFrames 项目统一使用 `.github/workflows/render-release.yml` 发布。工作流由 `<project_directory>-<semver>` tag 触发，自动解析项目、安装依赖、生成旁白、运行检查、渲染 MP4，并上传 artifact 和 GitHub Release。
 
 | 项目 | Tag 格式 | 工作流 |
 | --- | --- | --- |
-| AI Model Rankings | `v*-ai-model-rankings` | `ai-model-rankings.yml` |
-| Sapporo Subway | `v*-sapporo-subway` | `sapporo-subway.yml` |
-| Japan Economy | `v*-japan-economy` | `japan-economy.yml` |
-| OpenRouter Rankings | `v*-openrouter-rankings` | `openrouter-rankings.yml` |
-| Population CN | `v*-population-cn` | `population-cn.yml` |
-| QS Universities | `v*-qs-universities` | `qs-universities.yml` |
+| 普通 Remotion / HyperFrames 项目 | `<project_directory>-<semver>` | `render-release.yml` |
 | Solar System | `v*-solar`（全部）或 `v*-solar-<lang>`（单语言） | `solar.yml` |
-| Top 500 | `v*-top500` | `top500.yml` |
 | Kakeya Conjecture | `v*-kakeya-conjecture` | `kakeya-conjecture.yml` |
 
-例如发布 Solar：
+例如发布日本经济和札幌地铁：
 
 ```bash
-git tag v1.0.0-solar
-git push origin v1.0.0-solar
+git tag japan-economy-1.0.1
+git push origin japan-economy-1.0.1
+
+git tag sapporo-subway-1.0.4
+git push origin sapporo-subway-1.0.4
 ```
 
-该 tag 生成全部语言。只发布中文时，将语言代码放在项目名之前：
+Solar 和 Kakeya Conjecture 保留各自的特殊 workflow。Solar 仍支持按语言选择性渲染：
 
 ```bash
-git tag v1.0.0-solar-zh
-git push origin v1.0.0-solar-zh
+git tag v2.3.0-solar-ja
+git push origin v2.3.0-solar-ja
 ```
 
 可用语言代码为 `en`、`zh`、`ja`、`ko`。Solar 工作流只生成 tag 指定语言的旁白和真实 cue，在同步校验与 lint 通过后渲染对应 MP4。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./TTS.md)，同步实现与实际时长见 [音画同步方案](./AUDIO_VIDEO_SYNC.md)。
