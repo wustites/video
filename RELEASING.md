@@ -19,7 +19,7 @@ git push origin sapporo_subway-1.0.4
 3. 如果项目定义了 `voiceover`，安装 `edge-tts` 并生成旁白；
 4. 如果项目定义了 `setup`，运行项目 setup；
 5. 运行 `npm run check`（如果存在）；
-6. 运行 `npm run render`；
+6. 无 variant 时运行 `npm run render`；有 variant 时运行对应的 `npm run render:<variant>`；
 7. 校验 MP4 并上传 GitHub Release。
 
 生成的 MP3、时长 JSON、图片和 `out/` 目录不提交到 Git。旁白文本、数据、字幕和项目源代码必须提交。

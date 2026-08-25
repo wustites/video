@@ -47,8 +47,12 @@ jobs:
             exit 1
           fi
 
-          if ! node -e "const p=require('./$project/package.json'); process.exit(p.scripts?.render ? 0 : 1)"; then
-            echo "Project '$project' must define an npm run render script" >&2
+          if ! PROJECT_VARIANT="$variant" node -e 'const p=require("./" + process.argv[1] + "/package.json"); const variant=process.env.PROJECT_VARIANT; const script=variant ? `render:${variant}` : "render"; process.exit(p.scripts?.[script] ? 0 : 1)' "$project"; then
+            if [[ -n "$variant" ]]; then
+              echo "Project '$project' must define npm run render:$variant" >&2
+            else
+              echo "Project '$project' must define an npm run render script" >&2
+            fi
             exit 1
           fi
 
