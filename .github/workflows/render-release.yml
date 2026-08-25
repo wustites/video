@@ -30,12 +30,13 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ "$TAG" =~ ^([A-Za-z0-9_]+)-([0-9]+\.[0-9]+\.[0-9]+([+-][0-9A-Za-z.-]+)?)$ ]]; then
+          if [[ "$TAG" =~ ^([A-Za-z0-9_]+)-([0-9]+\.[0-9]+\.[0-9]+)(-([A-Za-z0-9_]+))?$ ]]; then
             project_key="${BASH_REMATCH[1]}"
             version="${BASH_REMATCH[2]}"
+            variant="${BASH_REMATCH[4]}"
           else
             echo "Invalid tag: $TAG" >&2
-            echo "Expected: <project_key>-<semver>, for example japan_economy-1.0.0" >&2
+            echo "Expected: <project_key>-<semver>[-<variant>], for example solar-1.0.0-zh" >&2
             exit 1
           fi
 
@@ -54,7 +55,17 @@ jobs:
           echo "project_key=$project_key" >> "$GITHUB_OUTPUT"
           echo "project=$project" >> "$GITHUB_OUTPUT"
           echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "asset_prefix=${project_key}-${version}" >> "$GITHUB_OUTPUT"
+          echo "variant=$variant" >> "$GITHUB_OUTPUT"
+          asset_prefix="${project_key}-${version}"
+          if [[ -n "$variant" ]]; then
+            asset_prefix="${asset_prefix}-${variant}"
+          fi
+          echo "asset_prefix=$asset_prefix" >> "$GITHUB_OUTPUT"
+          release_name="${project} ${version}"
+          if [[ -n "$variant" ]]; then
+            release_name="${release_name} ${variant}"
+          fi
+          echo "release_name=$release_name" >> "$GITHUB_OUTPUT"
           echo "project_dir=$GITHUB_WORKSPACE/$project" >> "$GITHUB_OUTPUT"
           echo "release_dir=$RUNNER_TEMP/release" >> "$GITHUB_OUTPUT"
 
@@ -110,10 +121,15 @@ jobs:
         working-directory: ${{ steps.release.outputs.project_dir }}
         env:
           CI: 'true'
+          PROJECT_VARIANT: ${{ steps.release.outputs.variant }}
         run: |
           rm -rf out
           mkdir -p out
-          npm run render
+          if [[ -n "$PROJECT_VARIANT" ]]; then
+            npm run "render:$PROJECT_VARIANT"
+          else
+            npm run render
+          fi
 
       - name: Validate rendered MP4 files
         env:
@@ -169,7 +185,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: ${{ steps.release.outputs.project }} ${{ steps.release.outputs.version }}
+          name: ${{ steps.release.outputs.release_name }}
           generate_release_notes: true
           files: ${{ steps.assets.outputs.path }}/*.mp4
           fail_on_unmatched_files: true

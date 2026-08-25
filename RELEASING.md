@@ -26,7 +26,7 @@ git push origin sapporo_subway-1.0.4
 
 ## 特殊项目
 
-- `solar` 保留多语言 workflow，支持按语言选择性渲染。
+- `solar` 使用通用 workflow。Tag 可使用 `solar-<version>-<variant>`，例如 `solar-1.0.0-zh`；Action 会直接执行对应的 `npm run render:<variant>`。
 - `kakeya_conjecture` 不是标准 npm 项目，保留自己的横屏校验与发布 workflow。
 
-旧的 `v<version>-<project>` tag 仅作为历史记录保留；新版本统一使用 `<project_key>-<semver>`。
+旧的 `v<version>-<project>` tag 仅作为历史记录保留；普通项目使用 `<project_key>-<semver>`，带变体的项目使用 `<project_key>-<semver>-<variant>`。
