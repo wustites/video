@@ -5,14 +5,14 @@
 ## Tag 格式
 
 ```bash
-git tag japan-economy-1.0.1
-git push origin japan-economy-1.0.1
+git tag japan_economy-1.0.1
+git push origin japan_economy-1.0.1
 
-git tag sapporo-subway-1.0.4
-git push origin sapporo-subway-1.0.4
+git tag sapporo_subway-1.0.4
+git push origin sapporo_subway-1.0.4
 ```
 
-格式为 `<project_directory>-<semver>`。Action 会从 tag 解析项目目录，验证 `package.json`、`package-lock.json` 和 `npm run render`，然后执行：
+格式为 `<project_key>-<semver>`，项目 key 只使用字母、数字和 `_`。Action 会优先查找同名目录；如果不存在，则将 `_` 转为 `-` 查找现有目录，例如 `japan_economy` 映射到 `japan-economy`。
 
 1. 安装 Node.js 22 依赖；
 2. 安装 FFmpeg；
@@ -29,4 +29,4 @@ git push origin sapporo-subway-1.0.4
 - `solar` 保留多语言 workflow，支持按语言选择性渲染。
 - `kakeya-conjecture` 不是标准 npm 项目，保留自己的横屏校验与发布 workflow。
 
-旧的 `v<version>-<project>` tag 仅作为历史记录保留；新版本统一使用 `<project>-<semver>`。
+旧的 `v<version>-<project>` tag 仅作为历史记录保留；新版本统一使用 `<project_key>-<semver>`。
