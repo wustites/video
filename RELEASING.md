@@ -12,7 +12,7 @@ git tag sapporo_subway-1.0.4
 git push origin sapporo_subway-1.0.4
 ```
 
-格式为 `<project_key>-<semver>`，项目 key 只使用字母、数字和 `_`。Action 会优先查找同名目录；如果不存在，则将 `_` 转为 `-` 查找现有目录，例如 `japan_economy` 映射到 `japan-economy`。
+格式为 `<project_key>-<semver>`，项目 key 只使用字母、数字和 `_`，并且必须与仓库根目录下的项目目录一一对应。例如，`japan_economy-1.0.1` 只会解析到 `japan_economy/`。
 
 1. 安装 Node.js 22 依赖；
 2. 安装 FFmpeg；
@@ -27,6 +27,6 @@ git push origin sapporo_subway-1.0.4
 ## 特殊项目
 
 - `solar` 保留多语言 workflow，支持按语言选择性渲染。
-- `kakeya-conjecture` 不是标准 npm 项目，保留自己的横屏校验与发布 workflow。
+- `kakeya_conjecture` 不是标准 npm 项目，保留自己的横屏校验与发布 workflow。
 
 旧的 `v<version>-<project>` tag 仅作为历史记录保留；新版本统一使用 `<project_key>-<semver>`。

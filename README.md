@@ -6,17 +6,17 @@
 
 | 项目 | 内容 | 语言 | 时长 | 默认输出 |
 | --- | --- | --- | ---: | --- |
-| [Metro de Lima](./metro-lima/) | 秘鲁利马地铁系统介绍（Remotion） | 西 | 56 秒 | `out/video.mp4` |
-| [Sapporo Subway](./sapporo-subway/) | 日本札幌市营地铁介绍（Remotion） | 日 | 87 秒 | `out/video.mp4` |
-| [AI Model Rankings](./ai-model-rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | `out/ai-model-rankings-*-vertical.mp4` |
-| [OpenRouter Rankings](./openrouter-rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | `out/openrouter-rankings-*-vertical.mp4` |
-| [Population CN](./population-cn/) | 中国各省出生人口变化 | 中 | 40 秒 | `out/video.mp4` |
-| [QS Universities](./qs-universities/) | QS 世界大学排名 | 中 | 52 秒 | `out/video.mp4` |
+| [Metro de Lima](./metro_lima/) | 秘鲁利马地铁系统介绍（Remotion） | 西 | 56 秒 | `out/video.mp4` |
+| [Sapporo Subway](./sapporo_subway/) | 日本札幌市营地铁介绍（Remotion） | 日 | 87 秒 | `out/video.mp4` |
+| [AI Model Rankings](./ai_model_rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | `out/ai-model-rankings-*-vertical.mp4` |
+| [OpenRouter Rankings](./openrouter_rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | `out/openrouter-rankings-*-vertical.mp4` |
+| [Population CN](./population_cn/) | 中国各省出生人口变化 | 中 | 40 秒 | `out/video.mp4` |
+| [QS Universities](./qs_universities/) | QS 世界大学排名 | 中 | 52 秒 | `out/video.mp4` |
 | [Solar System](./solar/) | 太阳系科普动画 | 英、中、日、韩 | 90 秒 | `out/solar-system-*-vertical.mp4` |
 | [Top 500](./top500/) | 2025 年《财富》世界 500 强 | 中 | 29 秒 | `out/top500-vertical.mp4` |
-| [Kakeya Conjecture](./kakeya-conjecture/) | 挂谷猜想科普动画 | 中 | 42 秒 | `out/kakeya-conjecture.mp4` |
-| [Cloudflare History](./cloudflare-history/) | Cloudflare 发展历程（Remotion） | 中 | 90 秒 | `out/video.mp4` |
-| [Japan Economy](./japan-economy/) | 日本 1985—2026 经济指标与日经指数（Remotion） | 日 | 70 秒 | `out/video.mp4` |
+| [Kakeya Conjecture](./kakeya_conjecture/) | 挂谷猜想科普动画 | 中 | 42 秒 | `out/kakeya-conjecture.mp4` |
+| [Cloudflare History](./cloudflare_history/) | Cloudflare 发展历程（Remotion） | 中 | 90 秒 | `out/video.mp4` |
+| [Japan Economy](./japan_economy/) | 日本 1985—2026 经济指标与日经指数（Remotion） | 日 | 70 秒 | `out/video.mp4` |
 
 榜单和数据项目采用 `1080 × 1920` 竖屏画布；Kakeya Conjecture 使用 `1920 × 1080` 横屏画布。具体数据来源、内容结构和资源要求见各项目目录内的 README。
 
@@ -71,7 +71,7 @@ HyperFrames 项目应在 HTML 中通过 Google Fonts 的 `<link>` 或 `@import` 
 进入任意项目目录后执行：
 
 ```bash
-cd ai-model-rankings
+cd ai_model_rankings
 
 # 检查 composition 结构和时间轴
 npm run check
