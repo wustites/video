@@ -1,11 +1,12 @@
 import React from 'react';
 import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {EVENTS, METRICS, Metric, MetricId, SOURCES, YEARS} from './data';
+import {notoSansJP} from './fonts';
 import {useEntrance, useSceneOpacity, useSceneProgress} from './timing';
 
 const W = 1080;
 const H = 1920;
-const FONT = '"Noto Sans CJK SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif';
+const FONT = `${notoSansJP.fontFamily}, sans-serif`;
 
 const C = {
   bg: '#0a0d14',
