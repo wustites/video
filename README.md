@@ -107,18 +107,18 @@ npm run render
 
 | 项目 | Tag 格式 | 工作流 |
 | --- | --- | --- |
-| 普通 Remotion / HyperFrames 项目 | `<project_directory>-<semver>` | `render-release.yml` |
+| 普通 Remotion / HyperFrames 项目 | `<project_key>-<semver>`，例如 `japan_economy-1.0.0` | `render-release.yml` |
 | Solar System | `v*-solar`（全部）或 `v*-solar-<lang>`（单语言） | `solar.yml` |
 | Kakeya Conjecture | `v*-kakeya-conjecture` | `kakeya-conjecture.yml` |
 
 例如发布日本经济和札幌地铁：
 
 ```bash
-git tag japan-economy-1.0.1
-git push origin japan-economy-1.0.1
+git tag japan_economy-1.0.1
+git push origin japan_economy-1.0.1
 
-git tag sapporo-subway-1.0.4
-git push origin sapporo-subway-1.0.4
+git tag sapporo_subway-1.0.4
+git push origin sapporo_subway-1.0.4
 ```
 
 Solar 和 Kakeya Conjecture 保留各自的特殊 workflow。Solar 仍支持按语言选择性渲染：

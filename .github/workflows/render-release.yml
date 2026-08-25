@@ -30,17 +30,25 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ "$TAG" =~ ^([A-Za-z0-9_-]+)-([0-9]+\.[0-9]+\.[0-9]+([+-][0-9A-Za-z.-]+)?)$ ]]; then
-            project="${BASH_REMATCH[1]}"
+          if [[ "$TAG" =~ ^([A-Za-z0-9_]+)-([0-9]+\.[0-9]+\.[0-9]+([+-][0-9A-Za-z.-]+)?)$ ]]; then
+            project_key="${BASH_REMATCH[1]}"
             version="${BASH_REMATCH[2]}"
           else
             echo "Invalid tag: $TAG" >&2
-            echo "Expected: <project_directory>-<semver>, for example japan-economy-1.0.0" >&2
+            echo "Expected: <project_key>-<semver>, for example japan_economy-1.0.0" >&2
             exit 1
           fi
 
+          project="$project_key"
+          if [[ ! -f "$project/package.json" ]]; then
+            hyphen_project="${project_key//_/-}"
+            if [[ -f "$hyphen_project/package.json" ]]; then
+              project="$hyphen_project"
+            fi
+          fi
+
           if [[ ! -f "$project/package.json" || ! -f "$project/package-lock.json" ]]; then
-            echo "Project '$project' must contain package.json and package-lock.json" >&2
+            echo "Project key '$project_key' does not resolve to a project with package.json and package-lock.json" >&2
             exit 1
           fi
 
@@ -49,9 +57,10 @@ jobs:
             exit 1
           fi
 
+          echo "project_key=$project_key" >> "$GITHUB_OUTPUT"
           echo "project=$project" >> "$GITHUB_OUTPUT"
           echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "asset_prefix=${project}-${version}" >> "$GITHUB_OUTPUT"
+          echo "asset_prefix=${project_key}-${version}" >> "$GITHUB_OUTPUT"
           echo "project_dir=$GITHUB_WORKSPACE/$project" >> "$GITHUB_OUTPUT"
           echo "release_dir=$RUNNER_TEMP/release" >> "$GITHUB_OUTPUT"
 
