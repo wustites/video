@@ -2,6 +2,7 @@
 logs
 *.log
 *.mp3
+**/public/voiceover/segment-durations.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

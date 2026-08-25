@@ -32,6 +32,22 @@ jobs:
         run: npm ci
         working-directory: metro-lima
 
+      - name: Setup Python for voiceover
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install FFmpeg for voiceover timing
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Generate Spanish voiceover
+        run: |
+          python -m pip install --upgrade pip edge-tts
+          npm run voiceover
+        working-directory: metro-lima
+
       - name: Run setup (fetch data) if defined
         run: |
           if [ -f package.json ] && grep -q '"setup"' package.json; then
