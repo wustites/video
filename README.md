@@ -103,12 +103,11 @@ npm run render
 
 ## GitHub Actions 发布
 
-普通的 Remotion / HyperFrames 项目统一使用 `.github/workflows/render-release.yml` 发布。工作流由 `<project_directory>-<semver>` tag 触发，自动解析项目、安装依赖、生成旁白、运行检查、渲染 MP4，并上传 artifact 和 GitHub Release。
+普通的 Remotion / HyperFrames 项目统一使用 `.github/workflows/render-release.yml` 发布。工作流由 `<project_key>-<semver>` tag 触发，自动解析项目、安装依赖、生成旁白、运行检查、渲染 MP4，并上传 artifact 和 GitHub Release。
 
 | 项目 | Tag 格式 | 工作流 |
 | --- | --- | --- |
-| 普通 Remotion / HyperFrames 项目 | `<project_key>-<semver>`，例如 `japan_economy-1.0.0` | `render-release.yml` |
-| Solar System | `v*-solar`（全部）或 `v*-solar-<lang>`（单语言） | `solar.yml` |
+| 所有 Remotion / HyperFrames 项目 | `<project_key>-<semver>[-<variant>]`，例如 `japan_economy-1.0.0`、`solar-1.0.0-zh` | `render-release.yml` |
 | Kakeya Conjecture | `v*-kakeya-conjecture` | `kakeya-conjecture.yml` |
 
 例如发布日本经济和札幌地铁：
@@ -121,14 +120,14 @@ git tag sapporo_subway-1.0.4
 git push origin sapporo_subway-1.0.4
 ```
 
-Solar 和 Kakeya Conjecture 保留各自的特殊 workflow。Solar 仍支持按语言选择性渲染：
+Solar 也使用通用的 `project-version-variant` 格式，variant 与项目脚本直接一一对应：
 
 ```bash
-git tag v2.3.0-solar-ja
-git push origin v2.3.0-solar-ja
+git tag solar-1.0.0-zh
+git push origin solar-1.0.0-zh
 ```
 
-可用语言代码为 `en`、`zh`、`ja`、`ko`。Solar 工作流只生成 tag 指定语言的旁白和真实 cue，在同步校验与 lint 通过后渲染对应 MP4。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./TTS.md)，同步实现与实际时长见 [音画同步方案](./AUDIO_VIDEO_SYNC.md)。
+Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，Action 会直接执行对应的 `npm run render:<variant>`。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./TTS.md)，同步实现与实际时长见 [音画同步方案](./AUDIO_VIDEO_SYNC.md)。
 
 ## 仓库约定
 
