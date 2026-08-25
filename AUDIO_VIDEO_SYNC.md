@@ -23,6 +23,72 @@
 - 与 composition 时间轴分离运行的 CSS animation。
 - 根据预估语速写死、但未用最终音频验证的时间点。
 
+## 当前仓库实现
+
+本仓库同时包含 Remotion 和 HyperFrames 项目。两者都遵循“最终音频优先”，但时间轴的实现方式不同：
+
+| 项目 | 框架 | 当前同步机制 |
+| --- | --- | --- |
+| `metro_lima` | Remotion | TTS 分段时长由 `ffprobe` 测量，写入 `segment-durations.json`，场景起止时间自动累加。 |
+| `sapporo_subway` | Remotion | 与 Metro Lima 相同，旁白段落与场景按顺序一一对应。 |
+| `cloudflare_history` | Remotion | 使用 `src/timing.ts` 中维护的场景时间数组；旁白脚本会生成分段时长，但当前场景时间仍需人工维护。 |
+| `japan_economy` | Remotion | 使用固定 30 fps、70 秒视觉时间轴；当前没有接入旁白音频主时钟。 |
+| `solar` | HyperFrames | 生成 MP3 后用 `ffprobe` 测量实际时长，生成 cue JSON/JS，并更新 composition 与音频时长。 |
+| `apple` | HyperFrames | 使用已生成的 MP3、VTT 和 HTML 中的静态 cue 时间。 |
+| `kakeya_conjecture` | HyperFrames | 当前没有音频轨道，只有 42 秒视觉时间轴。 |
+
+### Remotion 时间轴
+
+Remotion 以帧作为唯一运行时钟：
+
+```ts
+const seconds = frame / fps;
+```
+
+场景、淡入淡出和元素入场都通过 `useCurrentFrame()` 转换为秒数计算。Metro Lima 和 Sapporo Subway 的旁白脚本会执行以下流程：
+
+```text
+段落文本
+  → Edge TTS 生成分段 MP3
+  → ffprobe 测量每段实际时长
+  → 合并最终 MP3
+  → 写入 segment-durations.json
+  → timing.ts 累加场景起止时间
+  → Remotion 按帧渲染
+```
+
+旁白段落数与场景数不一致时，TypeScript 模块会直接抛错，阻止错误渲染。旁白结束后还会保留尾部淡出和余量，避免音频被截断。
+
+### HyperFrames 时间轴
+
+HyperFrames 使用 HTML 媒体轨道和 GSAP 时间轴：
+
+- `<audio>` 使用 `data-start`、`data-duration`、`data-track-index` 接入；
+- GSAP 时间轴以 `paused: true` 创建，并注册到 `window.__timelines`；
+- HyperFrames 统一负责播放器 seek、音频时间和 GSAP 时间轴；
+- 不使用 `setTimeout`、`audio.play()`、`audio.pause()` 或手动修改 `currentTime` 驱动同步。
+
+Solar 是当前自动化程度最高的 HyperFrames 项目。`scripts/generate_voiceover.py` 会根据最终音频写出 cue，`scripts/validate_sync.py` 再比较 MP3 的 `ffprobe` 时长、cue 边界、HTML 音频时长和 composition 尾部余量。
+
+### 通用 Action 流程
+
+普通项目统一使用 `.github/workflows/render-release.yml`：
+
+```text
+解析 <project_key>-<semver>[-<variant>]
+  → 精确定位同名项目目录
+  → npm ci
+  → 生成旁白（如果项目定义 voiceover）
+  → npm run check
+  → npm run render 或 npm run render:<variant>
+  → ffprobe 校验 MP4 视频流
+  → 上传 GitHub Release
+```
+
+例如 `solar-1.0.0-zh` 会定位到 `solar/`，并执行 `npm run render:zh`。生成的 MP3、`segment-durations.json` 和 `out/` 文件不提交 Git；Solar 的 cue JS/JSON 是同步数据文件，由旁白生成脚本在构建时更新。
+
+当前通用 Action 只强制检查最终 MP4 是否包含视频流，还没有把“必须包含音频流”作为所有项目的统一门槛。没有音频的 Kakeya Conjecture 因此使用纯视觉时间轴；有旁白的项目仍由各自的 `check` 或专用同步校验负责音频验证。
+
 HyperFrames 播放器负责统一 seek 媒体与 GSAP 时间轴。所有同步事件都使用相对于 composition 开头的秒数表示。
 
 ## 同步精度
