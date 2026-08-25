@@ -1,6 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {SapporoSchematicMap} from './SapporoSchematicMap';
+import {notoSansJP} from './fonts';
 import {FADE_OUT, useEntrance, useLineDraw, useSceneOpacity} from './timing';
 
 const W = 1080;
@@ -21,7 +22,7 @@ const C = {
 };
 
 const font = {
-  fontFamily: '"Noto Sans CJK JP", "Noto Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif',
+  fontFamily: `${notoSansJP.fontFamily}, sans-serif`,
 };
 
 const Scene: React.FC<{id: string; children: React.ReactNode; style?: React.CSSProperties}> = ({
