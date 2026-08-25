@@ -32,6 +32,21 @@
 npx --yes hyperframes@0.6.112 doctor
 ```
 
+## 字体规范
+
+日语 Remotion 项目统一使用 Google Fonts 的 **Noto Sans JP** 网络字体，当前日本经济数据可视化项目的实现位于 [`japan-economy/src/fonts.ts`](./japan-economy/src/fonts.ts)。字体通过 `@remotion/google-fonts` 加载，并在 Remotion 开始渲染前等待 `waitUntilDone()` 完成，确保浏览器不会在字体尚未加载时截帧。
+
+```ts
+import {loadFont} from '@remotion/google-fonts/NotoSansJP';
+
+export const notoSansJP = loadFont('normal', {
+  weights: ['400', '500', '600', '700', '800', '900'],
+  subsets: ['japanese', 'latin'],
+});
+```
+
+使用网络字体时，开发预览和 CI 渲染环境需要能够访问 `fonts.googleapis.com` 与 `fonts.gstatic.com`。字体加载失败时，项目会继续使用 `sans-serif` 回退字体；若要求完全离线或可复现的字形，应将许可允许的字体文件放入项目资源并改用本地 `@font-face`。
+
 ## 快速开始
 
 进入任意项目目录后执行：
