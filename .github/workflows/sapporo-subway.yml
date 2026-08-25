@@ -37,6 +37,11 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install FFmpeg for voiceover timing
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
       - name: Generate Japanese voiceover
         run: |
           python -m pip install --upgrade pip edge-tts
