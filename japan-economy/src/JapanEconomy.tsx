@@ -84,7 +84,7 @@ const Timeline: React.FC<{sceneId: string; activeYears?: number[]}> = ({sceneId,
   const e = useEntrance(sceneId, 1.0, 0.65);
   return (
     <div style={{...base, opacity: e.opacity, position: 'absolute', bottom: 42, left: 70, right: 70, color: C.muted}}>
-      <div style={{display: 'flex', justifyContent: 'space-between', fontSize: 18, fontWeight: 700, letterSpacing: 1}}><span>1985</span><span>日本经济指标 · 年度趋势</span><span>2026*</span></div>
+      <div style={{display: 'flex', justifyContent: 'space-between', fontSize: 18, fontWeight: 700, letterSpacing: 1}}><span>1985</span><span>日本経済指標 · 年次トレンド</span><span>2026*</span></div>
       <div style={{position: 'relative', height: 20, marginTop: 12}}>
         <div style={{position: 'absolute', top: 8, left: 0, right: 0, height: 2, background: C.line}} />
         {YEARS.filter((year) => activeYears.includes(year)).map((year) => {
@@ -146,30 +146,31 @@ const Intro: React.FC = () => {
   const num = useEntrance('intro', 1.8, 0.7, 'scale');
   const sub = useEntrance('intro', 2.8, 0.7);
   return <Scene id="intro" style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center'}}>
-    <div style={{...base, opacity: badge.opacity, transform: badge.transform, color: '#62d7c2', border: '1px solid #62d7c288', borderRadius: 999, padding: '14px 30px', fontSize: 25, letterSpacing: 5, fontWeight: 800}}>数据可视化 · 日本</div>
-    <div style={{...base, opacity: title.opacity, transform: title.transform, marginTop: 52, fontSize: 92, lineHeight: 1.08, fontWeight: 900, letterSpacing: -5, color: C.text}}>1985—2026<br/><span style={{color: '#62d7c2'}}>经济的 41 年</span></div>
-    <div style={{...base, opacity: num.opacity, transform: num.transform, display: 'flex', alignItems: 'baseline', gap: 12, marginTop: 58}}><span style={{fontSize: 148, fontWeight: 900, color: '#ff6b4a'}}>5</span><span style={{fontSize: 34, fontWeight: 800, color: C.sub}}>条指标</span></div>
-    <div style={{...base, opacity: sub.opacity, marginTop: 32, color: C.sub, fontSize: 30, lineHeight: 1.65, fontWeight: 600}}>房价 · 失业率 · 汇率<br/>出生人口 · GDP</div>
-    <div style={{...base, position: 'absolute', bottom: 76, color: C.muted, fontSize: 19, letterSpacing: 1}}>从泡沫繁荣，到人口与货币的再平衡</div>
+    <div style={{...base, opacity: badge.opacity, transform: badge.transform, color: '#62d7c2', border: '1px solid #62d7c288', borderRadius: 999, padding: '14px 30px', fontSize: 25, letterSpacing: 5, fontWeight: 800}}>データビジュアル · 日本</div>
+    <div style={{...base, opacity: title.opacity, transform: title.transform, marginTop: 52, fontSize: 92, lineHeight: 1.08, fontWeight: 900, letterSpacing: -5, color: C.text}}>1985—2026<br/><span style={{color: '#62d7c2'}}>経済の41年</span></div>
+    <div style={{...base, opacity: num.opacity, transform: num.transform, display: 'flex', alignItems: 'baseline', gap: 12, marginTop: 58}}><span style={{fontSize: 148, fontWeight: 900, color: '#ff6b4a'}}>6</span><span style={{fontSize: 34, fontWeight: 800, color: C.sub}}>つの指標</span></div>
+    <div style={{...base, opacity: sub.opacity, marginTop: 32, color: C.sub, fontSize: 30, lineHeight: 1.65, fontWeight: 600}}>住宅価格 · 失業率 · 為替<br/>出生数 · GDP · 日経平均</div>
+    <div style={{...base, position: 'absolute', bottom: 76, color: C.muted, fontSize: 19, letterSpacing: 1}}>バブルから、人口と通貨の再均衡へ</div>
   </Scene>;
 };
 
 const Bubble: React.FC = () => <Scene id="bubble">
-  <Header sceneId="bubble" eyebrow="01 · 资产价格" title="泡沫，曾经有多大？" />
-  <div style={{...base, marginTop: 42, color: C.sub, fontSize: 26, lineHeight: 1.55, fontWeight: 600}}>1985 年后，日元升值与宽松资金<br/>把房地产推向历史高点。</div>
+  <Header sceneId="bubble" eyebrow="01 · 資産価格" title="バブルは、どれほど大きかった？" />
+  <div style={{...base, marginTop: 42, color: C.sub, fontSize: 26, lineHeight: 1.55, fontWeight: 600}}>1985年以降、円高と金融緩和が<br/>不動産と株価を歴史的な高みへ押し上げた。</div>
   <div style={{marginTop: 42}}><MetricChart sceneId="bubble" metricId="house" delay={1.1} /></div>
-  <div style={{marginTop: 22}}><MetricChart sceneId="bubble" metricId="gdp" height={270} delay={1.45} /></div>
+  <div style={{marginTop: 22}}><MetricChart sceneId="bubble" metricId="nikkei" height={250} delay={1.45} /></div>
+  <div style={{marginTop: 22}}><MetricChart sceneId="bubble" metricId="gdp" height={250} delay={1.65} /></div>
   <div style={{...base, display: 'flex', gap: 16, marginTop: 22}}>
     <EventChip sceneId="bubble" delay={2.3} {...EVENTS[0]} />
     <EventChip sceneId="bubble" delay={2.55} {...EVENTS[1]} />
   </div>
-  <div style={{...base, marginTop: 30, padding: '20px 24px', borderLeft: '4px solid #ff6b4a', background: 'rgba(255,107,74,0.08)', color: C.text, fontSize: 24, lineHeight: 1.55, fontWeight: 700}}>房价峰值约为基准的 1.6 倍；泡沫破裂后，资产负债表修复成为长期主题。</div>
+  <div style={{...base, marginTop: 30, padding: '20px 24px', borderLeft: '4px solid #ff6b4a', background: 'rgba(255,107,74,0.08)', color: C.text, fontSize: 24, lineHeight: 1.55, fontWeight: 700}}>住宅価格は基準の約1.6倍まで上昇。バブル崩壊後は、バランスシート調整が長期テーマになった。</div>
   <Timeline sceneId="bubble" activeYears={[1985, 1991]} />
 </Scene>;
 
 const LostDecades: React.FC = () => <Scene id="lost">
-  <Header sceneId="lost" eyebrow="02 · 失落的三十年" title="就业与人口，双重下行" />
-  <div style={{...base, marginTop: 38, color: C.sub, fontSize: 26, lineHeight: 1.55, fontWeight: 600}}>经济没有崩溃，却长期缺少增长的动能。<br/>失业率上升，出生人口持续减少。</div>
+  <Header sceneId="lost" eyebrow="02 · 失われた30年" title="雇用と人口、二重の下落" />
+  <div style={{...base, marginTop: 38, color: C.sub, fontSize: 26, lineHeight: 1.55, fontWeight: 600}}>経済は崩壊しなかった。だが成長の勢いは長く戻らず、<br/>失業率は上がり、出生数は減り続けた。</div>
   <div style={{marginTop: 38}}><MetricChart sceneId="lost" metricId="unemployment" height={290} delay={1.0} /></div>
   <div style={{marginTop: 20}}><MetricChart sceneId="lost" metricId="births" height={290} delay={1.25} /></div>
   <div style={{...base, display: 'flex', gap: 12, marginTop: 22}}>
@@ -185,11 +186,11 @@ const YenScene: React.FC = () => {
   const p = useSceneProgress('yen');
   const value = Math.round(interpolate(p, [0.1, 0.7], [79, 150], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}));
   return <Scene id="yen">
-    <Header sceneId="yen" eyebrow="03 · 货币与政策" title="日元，走过一轮大摆动" />
+    <Header sceneId="yen" eyebrow="03 · 通貨と政策" title="円は、大きく振れた" />
     <div style={{...base, marginTop: 46, textAlign: 'center', opacity: e.opacity, transform: e.transform, padding: '35px 0 28px', borderTop: '1px solid #62d7c244', borderBottom: '1px solid #62d7c244'}}>
-      <div style={{fontSize: 24, color: C.muted, fontWeight: 700, letterSpacing: 2}}>美元兑日元 · 年均值</div>
+      <div style={{fontSize: 24, color: C.muted, fontWeight: 700, letterSpacing: 2}}>ドル円 · 年平均</div>
       <div style={{fontSize: 164, lineHeight: 1, fontWeight: 900, color: '#62d7c2', marginTop: 14}}>{value}</div>
-      <div style={{fontSize: 25, color: C.sub, fontWeight: 700, marginTop: 12}}>79 → 150 日元 / 美元</div>
+      <div style={{fontSize: 25, color: C.sub, fontWeight: 700, marginTop: 12}}>79 → 150 円 / ドル</div>
     </div>
     <div style={{marginTop: 30}}><MetricChart sceneId="yen" metricId="yen" height={320} delay={1.75} /></div>
     <div style={{...base, display: 'flex', gap: 16, marginTop: 22}}>
@@ -197,25 +198,25 @@ const YenScene: React.FC = () => {
       <EventChip sceneId="yen" delay={2.8} {...EVENTS[7]} />
     </div>
     <div style={{...base, display: 'flex', gap: 14, marginTop: 18}}>
-      <StatPill sceneId="yen" delay={3.1} value="2013" label="再通胀实验开始" color="#62d7c2" />
-      <StatPill sceneId="yen" delay={3.25} value="2022" label="输入型通胀出现" color="#ff6b4a" />
+      <StatPill sceneId="yen" delay={3.1} value="2013" label="再インフレ実験" color="#62d7c2" />
+      <StatPill sceneId="yen" delay={3.25} value="2022" label="輸入インフレ" color="#ff6b4a" />
     </div>
     <Timeline sceneId="yen" activeYears={[2013, 2022]} />
   </Scene>;
 };
 
-const MiniCard: React.FC<{sceneId: string; metric: Metric; index: number}> = ({sceneId, metric, index}) => <div style={{...base, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 22, padding: '19px 18px 13px', opacity: useEntrance(sceneId, 0.7 + index * 0.16, 0.5, 'rise').opacity}}>
-  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}><div style={{fontSize: 23, fontWeight: 800, color: C.text}}><span style={{color: metric.color}}>●</span> {metric.shortLabel}</div><div style={{fontSize: 17, color: C.muted, fontWeight: 700}}>{metric.unit}</div></div>
-  <div style={{marginTop: 10}}><MetricChart sceneId={sceneId} metricId={metric.id} width={415} height={160} compact delay={0.7 + index * 0.16} /></div>
-</div>;
+const MiniCard: React.FC<{sceneId: string; metric: Metric; index: number}> = ({sceneId, metric, index}) => {
+  const e = useEntrance(sceneId, 0.7 + index * 0.16, 0.5, 'rise');
+  return <div style={{...base, opacity: e.opacity, transform: e.transform}}><MetricChart sceneId={sceneId} metricId={metric.id} width={415} height={190} compact delay={0.7 + index * 0.16} /></div>;
+};
 
 const Dashboard: React.FC = () => <Scene id="dashboard">
-  <Header sceneId="dashboard" eyebrow="04 · 一张图看懂" title="五条曲线，五种现实" />
-  <div style={{...base, marginTop: 30, color: C.sub, fontSize: 25, lineHeight: 1.55, fontWeight: 600}}>同一条时间轴上，资产、就业、货币、人口与产出，走出了不同的方向。</div>
+  <Header sceneId="dashboard" eyebrow="04 · 一枚でわかる" title="6本の曲線、6つの現実" />
+  <div style={{...base, marginTop: 30, color: C.sub, fontSize: 25, lineHeight: 1.55, fontWeight: 600}}>同じ時間軸の上で、資産・雇用・通貨・人口・生産・株価は、<br/>それぞれ違う方向へ動いた。</div>
   <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 34}}>{METRICS.map((metric, index) => <MiniCard key={metric.id} sceneId="dashboard" metric={metric} index={index} />)}</div>
   <div style={{...base, marginTop: 26, padding: '26px 24px', borderRadius: 24, background: 'linear-gradient(135deg, rgba(98,215,194,0.15), rgba(94,167,255,0.08))', border: '1px solid rgba(98,215,194,0.3)'}}>
-    <div style={{fontSize: 23, color: '#62d7c2', fontWeight: 900, letterSpacing: 1}}>2026* 的注脚</div>
-    <div style={{fontSize: 24, color: C.text, fontWeight: 700, lineHeight: 1.55, marginTop: 12}}>人口仍在下行；房价与名义 GDP 则在通胀和城市集中中回升。增长，变得更依赖结构，而不是总量。</div>
+    <div style={{fontSize: 23, color: '#62d7c2', fontWeight: 900, letterSpacing: 1}}>2026* の注記</div>
+    <div style={{fontSize: 24, color: C.text, fontWeight: 700, lineHeight: 1.55, marginTop: 12}}>人口は減少を続ける一方、住宅価格・名目GDP・株価は上向く。成長は総量より、構造に左右される時代へ。</div>
   </div>
   <Timeline sceneId="dashboard" activeYears={[1991, 2008, 2020, 2024]} />
 </Scene>;
@@ -228,16 +229,16 @@ const ConclusionCard: React.FC<{sceneId: string; index: string; title: string; d
 const Outro: React.FC = () => {
   const title = useEntrance('outro', 0.35, 0.7, 'rise');
   const cards = [
-    ['01', '泡沫破裂', '房价用了二十多年才触底。', '#ff6b4a'],
-    ['02', '人口收缩', '出生人口从 143 万降到约 64 万。', '#c29bff'],
-    ['03', '货币转向', '日元从 79 走到 150，外部价格被重新定价。', '#62d7c2'],
-    ['04', '新的分化', '总量回升，不代表每个人都感到更富。', '#5ea7ff'],
+    ['01', 'バブル崩壊', '住宅価格が底を打つまで、20年以上を要した。', '#ff6b4a'],
+    ['02', '人口減少', '出生数は143万人から約64万人へ。', '#c29bff'],
+    ['03', '通貨の転換', '円は79円から150円へ。輸入価格が変わった。', '#62d7c2'],
+    ['04', '新しい分断', '総量の回復が、豊かさの実感を意味するとは限らない。', '#5ea7ff'],
   ] as const;
   return <Scene id="outro">
-    <div style={{...base, opacity: title.opacity, transform: title.transform}}><SectionLabel color="#f6c85f">结论 · 41 年之后</SectionLabel><div style={{fontSize: 68, lineHeight: 1.15, color: C.text, fontWeight: 900, marginTop: 22}}>日本经济的变化，<br/><span style={{color: '#f6c85f'}}>不是一条线。</span></div></div>
+    <div style={{...base, opacity: title.opacity, transform: title.transform}}><SectionLabel color="#f6c85f">結論 · 41年のあと</SectionLabel><div style={{fontSize: 68, lineHeight: 1.15, color: C.text, fontWeight: 900, marginTop: 22}}>日本経済の変化は、<br/><span style={{color: '#f6c85f'}}>一本の線ではない。</span></div></div>
     <div style={{display: 'flex', flexDirection: 'column', gap: 14, marginTop: 48}}>{cards.map(([index, titleText, desc, color], i) => <ConclusionCard key={index} sceneId="outro" index={index} title={titleText} desc={desc} color={color} delay={1.0 + i * 0.3} />)}</div>
-    <div style={{...base, marginTop: 38, paddingTop: 24, borderTop: `1px solid ${C.line}`, color: C.muted, fontSize: 17, lineHeight: 1.6, fontWeight: 600}}>数据来源：{SOURCES.join(' · ')}<br/>* 2025—2026 为暂估 / 预测，用于展示趋势，不代表最终统计值。</div>
-    <div style={{...base, position: 'absolute', bottom: 48, left: 70, right: 70, display: 'flex', justifyContent: 'space-between', color: C.faint, fontSize: 18, fontWeight: 700}}><span>JAPAN · 1985—2026</span><span>END OF DATA STORY</span></div>
+    <div style={{...base, marginTop: 38, paddingTop: 24, borderTop: `1px solid ${C.line}`, color: C.muted, fontSize: 17, lineHeight: 1.6, fontWeight: 600}}>出典：{SOURCES.join(' · ')}<br/>* 2025—2026は暫定値 / 推計値。最終的な公的統計を示すものではありません。</div>
+    <div style={{...base, position: 'absolute', bottom: 48, left: 70, right: 70, display: 'flex', justifyContent: 'space-between', color: C.faint, fontSize: 18, fontWeight: 700}}><span>JAPAN · 1985—2026</span><span>DATA STORY · END</span></div>
   </Scene>;
 };
 
