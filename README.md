@@ -16,6 +16,7 @@
 | [Top 500](./top500/) | 2025 年《财富》世界 500 强 | 中 | 29 秒 | `out/top500-vertical.mp4` |
 | [Kakeya Conjecture](./kakeya-conjecture/) | 挂谷猜想科普动画 | 中 | 42 秒 | `out/kakeya-conjecture.mp4` |
 | [Cloudflare History](./cloudflare-history/) | Cloudflare 发展历程（Remotion） | 中 | 90 秒 | `out/video.mp4` |
+| [Japan Economy](./japan-economy/) | 日本 1985—2026 经济指标与日经指数（Remotion） | 日 | 70 秒 | `out/video.mp4` |
 
 榜单和数据项目采用 `1080 × 1920` 竖屏画布；Kakeya Conjecture 使用 `1920 × 1080` 横屏画布。具体数据来源、内容结构和资源要求见各项目目录内的 README。
 
@@ -108,6 +109,7 @@ npm run render
 | --- | --- | --- |
 | AI Model Rankings | `v*-ai-model-rankings` | `ai-model-rankings.yml` |
 | Sapporo Subway | `v*-sapporo-subway` | `sapporo-subway.yml` |
+| Japan Economy | `v*-japan-economy` | `japan-economy.yml` |
 | OpenRouter Rankings | `v*-openrouter-rankings` | `openrouter-rankings.yml` |
 | Population CN | `v*-population-cn` | `population-cn.yml` |
 | QS Universities | `v*-qs-universities` | `qs-universities.yml` |
