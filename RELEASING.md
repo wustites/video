@@ -24,9 +24,4 @@ git push origin sapporo_subway-1.0.4
 
 生成的 MP3、时长 JSON、图片和 `out/` 目录不提交到 Git。旁白文本、数据、字幕和项目源代码必须提交。
 
-## 特殊项目
-
-- `solar` 使用通用 workflow。Tag 可使用 `solar-<version>-<variant>`，例如 `solar-1.0.0-zh`；Action 会直接执行对应的 `npm run render:<variant>`。
-- `kakeya_conjecture` 不是标准 npm 项目，保留自己的横屏校验与发布 workflow。
-
 旧的 `v<version>-<project>` tag 仅作为历史记录保留；普通项目使用 `<project_key>-<semver>`，带变体的项目使用 `<project_key>-<semver>-<variant>`。

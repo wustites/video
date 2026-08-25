@@ -109,7 +109,6 @@ npm run render
 | 项目 | Tag 格式 | 工作流 |
 | --- | --- | --- |
 | 所有 Remotion / HyperFrames 项目 | `<project_key>-<semver>[-<variant>]`，例如 `japan_economy-1.0.0`、`solar-1.0.0-zh` | `render-release.yml` |
-| Kakeya Conjecture | `v*-kakeya-conjecture` | `kakeya-conjecture.yml` |
 
 例如发布日本经济和札幌地铁：
 
@@ -121,14 +120,17 @@ git tag sapporo_subway-1.0.4
 git push origin sapporo_subway-1.0.4
 ```
 
-Solar 也使用通用的 `project-version-variant` 格式，variant 与项目脚本直接一一对应：
+所有项目都使用通用的 `project-version-variant` 格式，variant 与项目脚本直接一一对应。Kakeya Conjecture 发布示例：
 
 ```bash
 git tag solar-1.0.0-zh
 git push origin solar-1.0.0-zh
+
+git tag kakeya_conjecture-1.0.0
+git push origin kakeya_conjecture-1.0.0
 ```
 
-Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，必须带 variant 发版，Action 会直接执行对应的 `npm run render:<variant>`。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./TTS.md)，同步实现与实际时长见 [音画同步方案](./AUDIO_VIDEO_SYNC.md)。
+Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，必须带 variant 发版，Action 会直接执行对应的 `npm run render:<variant>`。Kakeya Conjecture 无 variant，直接执行 `npm run render`。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./TTS.md)，同步实现与实际时长见 [音画同步方案](./AUDIO_VIDEO_SYNC.md)。
 
 ## 仓库约定
 
