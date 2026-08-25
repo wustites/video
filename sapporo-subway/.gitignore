@@ -4,3 +4,7 @@ out/
 *.log
 .DS_Store
 .waveform-cache/
+public/voiceover/narration.ja.mp3
+public/voiceover/segment-durations.json
+public/voiceover/seg*.mp3
+public/voiceover/concat.txt
