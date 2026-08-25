@@ -30,7 +30,7 @@
 ## 文件结构
 
 ```
-qs-universities/
+qs_universities/
 ├── index.html          # 主要composition文件
 ├── meta.json           # 项目元数据
 ├── public/             # 静态资源目录

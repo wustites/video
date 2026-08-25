@@ -40,15 +40,9 @@ jobs:
           fi
 
           project="$project_key"
-          if [[ ! -f "$project/package.json" ]]; then
-            hyphen_project="${project_key//_/-}"
-            if [[ -f "$hyphen_project/package.json" ]]; then
-              project="$hyphen_project"
-            fi
-          fi
 
           if [[ ! -f "$project/package.json" || ! -f "$project/package-lock.json" ]]; then
-            echo "Project key '$project_key' does not resolve to a project with package.json and package-lock.json" >&2
+            echo "Project directory '$project' must contain package.json and package-lock.json" >&2
             exit 1
           fi
 

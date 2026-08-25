@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
-      - "kakeya-conjecture/**"
+      - "kakeya_conjecture/**"
       - ".github/workflows/kakeya-conjecture.yml"
   push:
     branches:
       - main
     paths:
-      - "kakeya-conjecture/**"
+      - "kakeya_conjecture/**"
       - ".github/workflows/kakeya-conjecture.yml"
     tags:
       - "v*-kakeya-conjecture"
@@ -45,19 +45,19 @@ jobs:
           else
             echo "No setup script defined — skipping"
           fi
-        working-directory: kakeya-conjecture
+        working-directory: kakeya_conjecture
 
       - name: Lint
         run: npx --yes hyperframes@0.7.60 lint .
-        working-directory: kakeya-conjecture
+        working-directory: kakeya_conjecture
 
       - name: Validate runtime and contrast
         run: npx --yes hyperframes@0.7.60 validate .
-        working-directory: kakeya-conjecture
+        working-directory: kakeya_conjecture
 
       - name: Inspect layout
         run: npx --yes hyperframes@0.7.60 inspect . --samples 12 --json
-        working-directory: kakeya-conjecture
+        working-directory: kakeya_conjecture
 
   build:
     name: Render release video
@@ -78,13 +78,13 @@ jobs:
 
       - name: Render high-quality MP4
         run: npx --yes hyperframes@0.7.60 render . --output out/kakeya-conjecture.mp4 --quality high --workers auto --strict
-        working-directory: kakeya-conjecture
+        working-directory: kakeya_conjecture
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: kakeya-conjecture-${{ github.sha }}
-          path: kakeya-conjecture/out/kakeya-conjecture.mp4
+          path: kakeya_conjecture/out/kakeya-conjecture.mp4
           if-no-files-found: error
           retention-days: 30
 
@@ -92,7 +92,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: kakeya-conjecture/out/kakeya-conjecture.mp4
+          files: kakeya_conjecture/out/kakeya-conjecture.mp4
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
