@@ -89,6 +89,73 @@ Solar 是当前自动化程度最高的 HyperFrames 项目。`scripts/generate_v
 
 当前通用 Action 只强制检查最终 MP4 是否包含视频流，还没有把“必须包含音频流”作为所有项目的统一门槛。没有音频的 Kakeya Conjecture 因此使用纯视觉时间轴；有旁白的项目仍由各自的 `check` 或专用同步校验负责音频验证。
 
+## 向统一旁白同步机制迁移
+
+其他项目可以迁移到与 Solar 相同的“实际音频时长驱动”机制，但应统一数据协议，而不是强行复用 Remotion 和 HyperFrames 的同一套运行时代码。
+
+### 推荐的统一协议
+
+所有带旁白的项目应遵循以下流程：
+
+```text
+旁白段落文本
+  → 按段生成 TTS 音频
+  → 使用 ffprobe 测量每段实际时长
+  → 生成 cues.json（start / end / text / scene）
+  → 由框架读取 cues 驱动画面和字幕
+  → check-sync 校验音频、cue 和 composition 时长
+  → 渲染并校验最终 MP4
+```
+
+建议的 cue 数据至少包含：
+
+```json
+{
+  "id": "intro",
+  "start": 0.0,
+  "end": 4.8,
+  "text": "旁白文本",
+  "scene": "intro"
+}
+```
+
+Remotion 通过 `useCurrentFrame()` 将帧转换为秒数读取 cue；HyperFrames 则通过 `<audio>` 的媒体轨道和暂停的 GSAP 时间轴读取同一份时间数据。
+
+### 项目迁移状态
+
+| 项目 | 迁移难度 | 下一步 |
+| --- | --- | --- |
+| `metro_lima` | 低 | 已按段测量音频时长，只需抽取为统一 cue manifest。 |
+| `sapporo_subway` | 低 | 已按段测量音频时长，只需抽取为统一 cue manifest。 |
+| `cloudflare_history` | 低 | 已生成分段时长，但需把 `src/timing.ts` 的手工场景时间改为读取 manifest。 |
+| `apple` | 中 | 将现有 WebVTT 逐句时间戳转换为统一 cue manifest。 |
+| `japan_economy` | 中 | 先增加旁白文本和 TTS，再把固定 70 秒场景改为音频驱动。 |
+| `ai_model_rankings` | 中 | 先增加旁白和段落 cue。 |
+| `openrouter_rankings` | 中 | 先增加旁白和段落 cue。 |
+| `population_cn` | 中 | 当前只有背景音乐说明，需要先定义旁白或保持纯视觉模式。 |
+| `qs_universities` | 中 | 先增加旁白和段落 cue。 |
+| `top500` | 中 | 先增加旁白和段落 cue。 |
+| `kakeya_conjecture` | 不适用 | 当前没有音频，保持 42 秒纯视觉时间轴；除非新增旁白。 |
+
+### Variant 与旁白生成
+
+通用 Action 已支持 `<project>-<version>-<variant>`，例如：
+
+```text
+solar-1.0.0-zh
+  → project = solar
+  → variant = zh
+  → npm run render:zh
+```
+
+为了让旁白生成也只处理目标变体，带多语言的项目应支持：
+
+```bash
+npm run voiceover -- --language zh
+```
+
+通用 Action 随后将 Tag 中的 variant 传给 `voiceover` 和 `render:<variant>`。当前 Action 已按 variant 选择渲染脚本，但仍会调用项目默认的 `npm run voiceover`；Solar 的 variant 构建因此仍可能先生成全部语言，这是后续统一时需要消除的差异。
+
 HyperFrames 播放器负责统一 seek 媒体与 GSAP 时间轴。所有同步事件都使用相对于 composition 开头的秒数表示。
 
 ## 同步精度
