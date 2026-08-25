@@ -47,12 +47,14 @@
 ## 使用
 
 ```bash
-npm run check          # tsc 类型检查
 npm run dev            # 启动 Remotion Studio 本地预览
-npm run voiceover      # 重新生成旁白音频（Edge TTS，需网络）
+npm run voiceover      # 生成旁白音频与时长文件（Edge TTS，需 Python、FFmpeg 和网络）
+npm run check          # tsc 类型检查
 npm run render:draft   # 草稿质量试渲染
 npm run render         # 正式渲染到 out/video.mp4
 ```
+
+`public/voiceover/narration.ja.mp3` 和 `segment-durations.json` 是生成产物，不提交到 Git。GitHub Actions 会在类型检查和正式渲染前自动安装 `edge-tts` 并生成这两个文件；本地首次运行或修改旁白后，也需要先执行 `npm run voiceover`。
 
 ## 旁白
 
@@ -74,6 +76,6 @@ sapporo-subway/
   scripts/                  # 音频生成脚本
     gen_voiceover.py        # Edge TTS 旁白生成 + 拼接
   public/
-    voiceover/              # 旁白文本与音频
+    voiceover/              # 旁白文本；MP3 与时长文件由脚本 / Action 生成
   out/video.mp4             # 渲染产物（不入库）
 ```
