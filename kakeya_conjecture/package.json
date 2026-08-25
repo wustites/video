@@ -1,0 +1,14 @@
+{
+  "name": "kakeya-conjecture",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.7.60 preview",
+    "lint": "npx --yes hyperframes@0.7.60 lint .",
+    "validate": "npx --yes hyperframes@0.7.60 validate .",
+    "inspect": "npx --yes hyperframes@0.7.60 inspect . --samples 12 --json",
+    "check": "npm run lint && npm run validate && npm run inspect",
+    "render": "npx --yes hyperframes@0.7.60 render . --output out/kakeya-conjecture.mp4 --quality high --workers auto --strict"
+  }
+}
