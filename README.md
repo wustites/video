@@ -127,7 +127,7 @@ git tag solar-1.0.0-zh
 git push origin solar-1.0.0-zh
 ```
 
-Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，Action 会直接执行对应的 `npm run render:<variant>`。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./TTS.md)，同步实现与实际时长见 [音画同步方案](./AUDIO_VIDEO_SYNC.md)。
+Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，必须带 variant 发版，Action 会直接执行对应的 `npm run render:<variant>`。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./TTS.md)，同步实现与实际时长见 [音画同步方案](./AUDIO_VIDEO_SYNC.md)。
 
 ## 仓库约定
 

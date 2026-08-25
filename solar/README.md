@@ -10,11 +10,11 @@ npm run voiceover
 npm run sync:validate
 npm run dev
 npm run check
-npm run render
 ```
 
 The composition IDs are `solar-en`, `solar-zh`, `solar-ja`, and `solar-ko`.
-`npm run render` renders all four MP4 files into `out/`.
+Render one language with `npm run render:en`, `npm run render:zh`,
+`npm run render:ja`, or `npm run render:ko`.
 The narration sources are `public/voiceover/narration.{lang}.txt`. Generated MP3
 files are not committed. `npm run voiceover` generates segmented Edge TTS audio,
 merges each language into its final MP3, writes cue JS/JSON from measured segment
@@ -23,8 +23,7 @@ data and runs HyperFrames lint.
 
 Tags use the common release workflow. A tag such as `solar-1.0.0-zh` resolves
 to this directory and runs `npm run render:zh`, releasing only the selected
-variant. A tag without a variant, such as `solar-1.0.0`, runs `npm run render`
-and renders all four languages.
+variant. Solar release tags must include a variant.
 
 The current CI voices are:
 
