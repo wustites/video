@@ -1,0 +1,174 @@
+name: Render project release
+
+on:
+  push:
+    tags:
+      - '*-*.*.*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: render-release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  render-release:
+    name: Render ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v4
+
+      - name: Parse and validate tag
+        id: release
+        env:
+          TAG: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "$TAG" =~ ^([A-Za-z0-9_-]+)-([0-9]+\.[0-9]+\.[0-9]+([+-][0-9A-Za-z.-]+)?)$ ]]; then
+            project="${BASH_REMATCH[1]}"
+            version="${BASH_REMATCH[2]}"
+          else
+            echo "Invalid tag: $TAG" >&2
+            echo "Expected: <project_directory>-<semver>, for example japan-economy-1.0.0" >&2
+            exit 1
+          fi
+
+          if [[ ! -f "$project/package.json" || ! -f "$project/package-lock.json" ]]; then
+            echo "Project '$project' must contain package.json and package-lock.json" >&2
+            exit 1
+          fi
+
+          if ! node -e "const p=require('./$project/package.json'); process.exit(p.scripts?.render ? 0 : 1)"; then
+            echo "Project '$project' must define an npm run render script" >&2
+            exit 1
+          fi
+
+          echo "project=$project" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "asset_prefix=${project}-${version}" >> "$GITHUB_OUTPUT"
+          echo "project_dir=$GITHUB_WORKSPACE/$project" >> "$GITHUB_OUTPUT"
+          echo "release_dir=$RUNNER_TEMP/release" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ${{ steps.release.outputs.project }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ steps.release.outputs.project_dir }}
+        run: npm ci
+
+      - name: Install FFmpeg tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ffmpeg
+
+      - name: Set up Python for voiceover
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate voiceover when the project defines it
+        working-directory: ${{ steps.release.outputs.project_dir }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if node -e "const p=require('./package.json'); process.exit(p.scripts?.voiceover ? 0 : 1)"; then
+            python -m pip install --upgrade pip edge-tts
+            npm run voiceover
+          else
+            echo "No voiceover script defined — skipping"
+          fi
+
+      - name: Run setup when the project defines it
+        working-directory: ${{ steps.release.outputs.project_dir }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if node -e "const p=require('./package.json'); process.exit(p.scripts?.setup ? 0 : 1)"; then
+            npm run setup
+          else
+            echo "No setup script defined — skipping"
+          fi
+
+      - name: Type-check project
+        working-directory: ${{ steps.release.outputs.project_dir }}
+        run: npm run check --if-present
+
+      - name: Render video
+        working-directory: ${{ steps.release.outputs.project_dir }}
+        env:
+          CI: 'true'
+        run: |
+          rm -rf out
+          mkdir -p out
+          npm run render
+
+      - name: Validate rendered MP4 files
+        env:
+          PROJECT_DIR: ${{ steps.release.outputs.project_dir }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -d '' videos < <(find "$PROJECT_DIR/out" -maxdepth 1 -type f -name '*.mp4' -print0)
+
+          if [[ "${#videos[@]}" -eq 0 ]]; then
+            echo "No MP4 files were rendered in $PROJECT_DIR/out" >&2
+            exit 1
+          fi
+
+          for video in "${videos[@]}"; do
+            video_streams="$(ffprobe -v error -select_streams v -show_entries stream=index -of csv=p=0 "$video")"
+            if [[ -z "$video_streams" ]]; then
+              echo "No video stream found in $video" >&2
+              exit 1
+            fi
+          done
+
+      - name: Prepare release assets
+        id: assets
+        env:
+          ASSET_PREFIX: ${{ steps.release.outputs.asset_prefix }}
+          PROJECT_DIR: ${{ steps.release.outputs.project_dir }}
+          RELEASE_DIR: ${{ steps.release.outputs.release_dir }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -d '' videos < <(find "$PROJECT_DIR/out" -maxdepth 1 -type f -name '*.mp4' -print0)
+          mkdir -p "$RELEASE_DIR"
+
+          if [[ "${#videos[@]}" -eq 1 ]]; then
+            cp "${videos[0]}" "$RELEASE_DIR/$ASSET_PREFIX.mp4"
+          else
+            for video in "${videos[@]}"; do
+              base="$(basename "$video")"
+              cp "$video" "$RELEASE_DIR/${ASSET_PREFIX}-${base}"
+            done
+          fi
+
+          echo "path=$RELEASE_DIR" >> "$GITHUB_OUTPUT"
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.release.outputs.asset_prefix }}
+          path: ${{ steps.assets.outputs.path }}
+          if-no-files-found: error
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.release.outputs.project }} ${{ steps.release.outputs.version }}
+          generate_release_notes: true
+          files: ${{ steps.assets.outputs.path }}/*.mp4
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
