@@ -6,6 +6,7 @@
     "dev": "remotion studio",
     "check": "tsc --noEmit",
     "voiceover": "python3 scripts/gen_voiceover.py",
+    "render": "remotion render JapanEconomy out/video.mp4",
     "render:draft": "remotion render JapanEconomy out/preview.mp4 --log=error"
   },
   "dependencies": {
