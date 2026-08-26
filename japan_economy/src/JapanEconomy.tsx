@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {EVENTS, METRICS, Metric, MetricId, SOURCES, YEARS} from './data';
 import {notoSansJP} from './fonts';
 import {useEntrance, useSceneOpacity, useSceneProgress} from './timing';
@@ -251,4 +251,5 @@ export const JapanEconomy: React.FC = () => <AbsoluteFill style={{background: C.
   <YenScene />
   <Dashboard />
   <Outro />
+  <Audio src={staticFile('voiceover/narration.ja.mp3')} />
 </AbsoluteFill>;

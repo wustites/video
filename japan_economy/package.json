@@ -1,12 +1,11 @@
 {
   "name": "japan-economy-1985-2026",
-  "version": "1.0.0",
-  "private": true,
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "remotion studio",
     "check": "tsc --noEmit",
-    "render": "remotion render JapanEconomy out/video.mp4",
+    "voiceover": "python3 scripts/gen_voiceover.py",
     "render:draft": "remotion render JapanEconomy out/preview.mp4 --log=error"
   },
   "dependencies": {
