@@ -32,7 +32,7 @@
 | `metro_lima` | Remotion | TTS 分段时长由 `ffprobe` 测量，写入 `segment-durations.json`，场景起止时间自动累加。 |
 | `sapporo_subway` | Remotion | 与 Metro Lima 相同，旁白段落与场景按顺序一一对应。 |
 | `cloudflare_history` | Remotion | 使用 `src/timing.ts` 中维护的场景时间数组；旁白脚本会生成分段时长，但当前场景时间仍需人工维护。 |
-| `japan_economy` | Remotion | 使用固定 30 fps、70 秒视觉时间轴；当前没有接入旁白音频主时钟。 |
+| `japan_economy` | Remotion | 与 Metro Lima 相同：旁白段落实测时长驱动场景起止与总时长。 |
 | `solar` | HyperFrames | 生成 MP3 后用 `ffprobe` 测量实际时长，生成 cue JSON/JS，并更新 composition 与音频时长。 |
 | `apple` | HyperFrames | 使用已生成的 MP3、VTT 和 HTML 中的静态 cue 时间。 |
 | `kakeya_conjecture` | HyperFrames | 当前没有音频轨道，只有 42 秒视觉时间轴。 |
@@ -129,7 +129,7 @@ Remotion 通过 `useCurrentFrame()` 将帧转换为秒数读取 cue；HyperFrame
 | `sapporo_subway` | 低 | 已按段测量音频时长，只需抽取为统一 cue manifest。 |
 | `cloudflare_history` | 低 | 已生成分段时长，但需把 `src/timing.ts` 的手工场景时间改为读取 manifest。 |
 | `apple` | 中 | 将现有 WebVTT 逐句时间戳转换为统一 cue manifest。 |
-| `japan_economy` | 中 | 先增加旁白文本和 TTS，再把固定 70 秒场景改为音频驱动。 |
+| `japan_economy` | 低 | 已按段测量音频时长并驱动场景时间轴，只需抽取为统一 cue manifest。 |
 | `ai_model_rankings` | 中 | 先增加旁白和段落 cue。 |
 | `openrouter_rankings` | 中 | 先增加旁白和段落 cue。 |
 | `population_cn` | 中 | 当前只有背景音乐说明，需要先定义旁白或保持纯视觉模式。 |

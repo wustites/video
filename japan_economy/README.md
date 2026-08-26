@@ -17,10 +17,15 @@ Remotionで制作した日本語の縦型データビジュアライゼーショ
 ```bash
 npm install
 npm run dev
+npm run voiceover
 npm run check
 npm run render:draft
 npm run render
 ```
+
+## 旁白
+
+日本語ナレーションは `public/voiceover/narration.ja.txt` に段落ごとに分割して収録しています。`npm run voiceover`（Edge TTS / ja-JP-NanamiNeural）が各段落の MP3 を生成し、実測時間から `segment-durations.json` を書き出します。シーンの開始・終了時刻と総尺は [`src/timing.ts`](src/timing.ts) がこの実測時間から自動算出するため、ナレーションを修正したら必ず再生成してください。
 
 ## データの扱い
 
