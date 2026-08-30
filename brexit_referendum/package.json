@@ -1,0 +1,24 @@
+{
+  "name": "brexit-referendum",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "remotion studio",
+    "check": "tsc --noEmit",
+    "voiceover": "python3 scripts/gen_voiceover.py",
+    "render": "remotion render BrexitReferendum out/video.mp4",
+    "render:draft": "remotion render BrexitReferendum out/preview.mp4 --log=error"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.504",
+    "@remotion/google-fonts": "4.0.504",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "remotion": "4.0.504"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "typescript": "^5.8.3"
+  }
+}
