@@ -1,0 +1,26 @@
+{
+  "name": "imperial-house-law-2026",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "remotion studio",
+    "check": "tsc --noEmit",
+    "voiceover": "python scripts/gen_voiceover.py",
+    "render": "remotion render ImperialHouseLaw out/imperial-house-law-ja.mp4",
+    "render:draft": "remotion render ImperialHouseLaw out/preview.mp4 --scale=0.5 --concurrency=4 --log=error",
+    "render:still": "remotion still ImperialHouseLaw out/cover.png --frame=45"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.504",
+    "@remotion/google-fonts": "4.0.518",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "remotion": "4.0.504"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "typescript": "^5.8.3"
+  }
+}
