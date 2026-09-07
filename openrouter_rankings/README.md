@@ -16,7 +16,7 @@ Visualization video of weekly model usage rankings from [OpenRouter](https://ope
 # Preview
 npm run dev
 
-# Lint
+# TypeScript type check
 npm run check
 
 # Render to MP4
@@ -59,17 +59,19 @@ npm run render
 
 ## Data update
 
-Rankings data is fetched live from OpenRouter and written to `public/data.js`:
+The setup script fetches OpenRouter data into the legacy `public/data.js` file.
+Current Remotion renders use `src/data.ts`; manually synchronize that snapshot
+after setup and before checking or rendering. CI setup does not perform this synchronization:
 
 ```bash
 npm run setup   # fetch latest snapshot → public/data.js
-npm run check   # lint + validate + inspect
+npm run check   # TypeScript type check
 npm run render
 ```
 
 - `scripts/setup.mjs` calls `https://openrouter.ai/api/frontend/v1/rankings/models`,
   aggregates the latest-day snapshot per model/provider, and computes the
-  day-over-day `change` as growth.
+  API-provided `change` as growth (scaled to percent and clamped to ±150%).
 - The setup runs automatically in CI before validate/render; if the fetch fails
   it keeps the committed `public/data.js` snapshot so builds never break.
 - `compositions/en.html` / `compositions/zh.html` consume `window.OPENROUTER_RANKINGS_DATA`

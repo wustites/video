@@ -1,13 +1,13 @@
 # QS世界大学排名前100
 
-一个使用 HyperFrames 技术创建的动画视频，展示QS世界大学排名前100的大学。
+一个使用 Remotion 创建的动画视频，展示QS世界大学排名前100的大学。
 
 ## 项目特点
 
-- 使用 HyperFrames 框架创建动画视频
-- 展示QS世界大学排名前10的大学（示例数据）
-- 支持GSAP动画效果
-- 响应式设计，适配1080x1920分辨率
+- 使用 Remotion 框架创建动画视频
+- 展示已提交快照中的 100 所大学，每页 10 所
+- 使用按帧驱动的动画效果
+- 固定1080x1920竖屏画布
 
 ## 使用方法
 
@@ -20,18 +20,18 @@
 
 ## 渲染结果
 
-- 文件大小：9.7 MB
 - 时长：52秒
 - 分辨率：1080x1920
 - 特点：每页不同主题色（红、蓝、绿、橙、紫、青、红、青、橙、绿）
-- 字体：由 HyperFrames 渲染环境提供的系统无衬线字体
-- 数据：100所大学，来自QS官网实时抓取
+- 字体：通过 `@remotion/google-fonts` 加载的 Noto Sans SC
+- 数据：100所大学，使用已提交的静态快照，渲染时不抓取
 
 ## 文件结构
 
 ```
 qs_universities/
-├── index.html          # 主要composition文件
+├── src/                # 当前 Remotion 入口、组件、数据和字体
+├── index.html          # 历史 HyperFrames composition
 ├── meta.json           # 项目元数据
 ├── public/             # 静态资源目录
 └── README.md           # 项目说明
@@ -39,9 +39,9 @@ qs_universities/
 
 ## 自定义
 
-- 修改 `index.html` 中的 `universities` 数组可更新大学数据
-- 修改 `index.html` 中的样式可自定义外观
-- 修改 `index.html` 中的GSAP时间线可调整动画效果
+- 修改 `src/data.ts` 中的 `UNIVERSITIES` 数组可更新大学数据
+- 修改 `src/QsUniversities.tsx` 中的样式可自定义外观
+- 修改 `src/QsUniversities.tsx` 中的帧时间轴可调整动画效果
 
 ## 数据说明
 
@@ -63,11 +63,11 @@ qs_universities/
 
 ## 技术栈
 
-- HyperFrames - 视频渲染框架
-- GSAP - 动画库
-- HTML/CSS/JavaScript - 前端技术
+- Remotion - 视频渲染框架
+- React / TypeScript - 组件与动画
+- HyperFrames / GSAP - 保留的历史实现
 
-## Remotion 端口
+## Remotion 移植
 
 HyperFrames `index.html` 之外，新增 Remotion 实现（`src/` + `remotion.config.ts` + `tsconfig.json`），原文件保持不动：
 

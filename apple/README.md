@@ -7,7 +7,7 @@
 
 - 画布:`1080 × 1920` 竖屏
 - 语言:中文(zh-CN 旁白)
-- 时长:54 秒(旁白实测 52.3s;见 `index.html` 顶部 `TOTAL` 常量)
+- 时长:54 秒(旁白实测 52.3s;见 `src/data.ts` 的 `TOTAL_SECONDS` 常量)
 - 默认输出:`out/video.mp4`
 
 ## 内容结构
@@ -35,7 +35,7 @@
 ## 脚本
 
 ```bash
-npm run check      # lint + validate + inspect(布局与对比度)
+npm run check      # TypeScript 类型检查
 npm run dev        # 本地预览(Studio)
 npm run voiceover  # 用 Edge TTS 重新生成旁白 MP3 + WebVTT
 npm run render     # 渲染 out/video.mp4
@@ -54,9 +54,9 @@ npm run render     # 渲染 out/video.mp4
 
 ## 时长同步
 
-`index.html` 顶部 `TOTAL`(54s)与 `<audio data-duration="52.3">` 需与旁白 MP3
-实测时长一致;场景切换点位于 `SCENES` 数组(秒),已按 `narration.zh.vtt` 的逐句 cue 对齐。
-重新生成旁白后若时长变化,请同步更新这两处。
+当前 Remotion 时间轴位于 `src/data.ts`：`TOTAL_SECONDS` 为 54 秒，`SCENES` 定义场景切换点。
+重新生成旁白后若时长变化，请根据 MP3 实测时长和 VTT cue 调整场景时间及总时长，并保留结尾余量。
+旧 HyperFrames 版的 `index.html` 时间轴需另行维护。
 
 ## Remotion 移植
 
