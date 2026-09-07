@@ -1,16 +1,27 @@
 {
   "name": "openrouter-rankings",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npx --yes hyperframes@0.6.112 preview",
-    "lint": "npx --yes hyperframes@0.6.112 lint",
-    "validate": "npx --yes hyperframes@0.6.112 validate",
-    "inspect": "npx --yes hyperframes@0.6.112 inspect --samples 10",
-    "check": "npm run lint && npm run validate && npm run inspect",
-    "render": "npm run render:en && npm run render:zh",
-    "render:en": "npx --yes hyperframes@0.6.112 render -c compositions/en.html -o out/openrouter-rankings-en-vertical.mp4",
-    "render:zh": "npx --yes hyperframes@0.6.112 render -c compositions/zh.html -o out/openrouter-rankings-zh-vertical.mp4",
+    "dev": "remotion studio",
+    "check": "tsc --noEmit",
+    "render": "remotion render OpenrouterRankingsEn out/video.mp4",
+    "render:en": "remotion render OpenrouterRankingsEn out/openrouter-rankings-en.mp4",
+    "render:zh": "remotion render OpenrouterRankingsZh out/openrouter-rankings-zh.mp4",
+    "render:draft": "remotion render OpenrouterRankingsEn out/preview.mp4 --log=error",
     "setup": "node scripts/setup.mjs"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.504",
+    "@remotion/google-fonts": "4.0.504",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "remotion": "4.0.504"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "typescript": "^5.8.3"
   }
 }

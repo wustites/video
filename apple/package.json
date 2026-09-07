@@ -1,11 +1,25 @@
 {
   "name": "apple",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npx --yes hyperframes@0.6.112 preview",
-    "check": "npx --yes hyperframes@0.6.112 lint && npx --yes hyperframes@0.6.112 validate && npx --yes hyperframes@0.6.112 inspect",
-    "voiceover": "python -m edge_tts --voice zh-CN-XiaoxiaoNeural --file public/voiceover/narration.zh.txt --write-media public/voiceover/narration.zh.mp3 --write-subtitles public/voiceover/narration.zh.vtt",
-    "render": "npx --yes hyperframes@0.6.112 render -o out/video.mp4"
+    "dev": "remotion studio",
+    "check": "tsc --noEmit",
+    "voiceover": "python3 -m edge_tts --voice zh-CN-XiaoxiaoNeural --file public/voiceover/narration.zh.txt --write-media public/voiceover/narration.zh.mp3 --write-subtitles public/voiceover/narration.zh.vtt",
+    "render": "remotion render Apple out/video.mp4",
+    "render:draft": "remotion render Apple out/preview.mp4 --log=error"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.504",
+    "@remotion/google-fonts": "4.0.504",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "remotion": "4.0.504"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "typescript": "^5.8.3"
   }
 }
