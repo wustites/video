@@ -1,23 +1,27 @@
 # Video Projects
 
-本仓库收录数据可视化、榜单与科普类视频项目，基于 **HyperFrames** 或 **Remotion** 制作。
+本仓库收录数据可视化、榜单与科普类视频项目，当前 16 个项目均基于 **Remotion** 制作；部分目录保留了早期 HyperFrames 源文件。
 
 ## 项目一览
 
 | 项目 | 内容 | 语言 | 时长 | 框架 | 默认输出 |
 | --- | --- | --- | ---: | --- | --- |
-| [Metro de Lima](./metro_lima/) | 秘鲁利马地铁系统介绍 | 西 | 56 秒 | Remotion | `out/video.mp4` |
-| [Sapporo Subway](./sapporo_subway/) | 日本札幌市营地铁介绍 | 日 | 87 秒 | Remotion | `out/video.mp4` |
+| [Metro de Lima](./metro_lima/) | 秘鲁利马地铁系统介绍 | 西 | 随旁白生成 | Remotion | `out/video.mp4` |
+| [Sapporo Subway](./sapporo_subway/) | 日本札幌市营地铁介绍 | 日 | 随旁白生成 | Remotion | `out/video.mp4` |
 | [Cloudflare History](./cloudflare_history/) | Cloudflare 发展历程 | 中 | 90 秒 | Remotion | `out/video.mp4` |
-| [Japan Economy](./japan_economy/) | 日本 1985—2026 经济指标与日经指数 | 日 | 70 秒 | Remotion | `out/video.mp4` |
-| [AI Model Rankings](./ai_model_rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | Remotion | `out/ai-model-rankings-*-vertical.mp4` |
-| [Apple](./apple/) | Apple 主题视频 | 中 | 54 秒 | Remotion | `out/video.mp4` |
-| [OpenRouter Rankings](./openrouter_rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | Remotion | `out/openrouter-rankings-*-vertical.mp4` |
+| [Japan Economy](./japan_economy/) | 日本 1985—2026 经济指标与日经指数 | 日 | 随旁白生成 | Remotion | `out/video.mp4` |
+| [AI Model Rankings](./ai_model_rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | Remotion | `out/video.mp4` |
+| [Apple](./apple/) | 水果苹果创意介绍 | 中 | 54 秒 | Remotion | `out/video.mp4` |
+| [OpenRouter Rankings](./openrouter_rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | Remotion | `out/video.mp4` |
 | [Population CN](./population_cn/) | 中国各省出生人口变化 | 中 | 40 秒 | Remotion | `out/video.mp4` |
 | [QS Universities](./qs_universities/) | QS 世界大学排名 | 中 | 52 秒 | Remotion | `out/video.mp4` |
-| [Solar System](./solar/) | 太阳系科普动画 | 英、中、日、韩 | 90 秒 | Remotion | `out/solar-system-*-vertical.mp4` |
-| [Top 500](./top500/) | 2025 年《财富》世界 500 强 | 中 | 29 秒 | Remotion | `out/top500-vertical.mp4` |
-| [Kakeya Conjecture](./kakeya_conjecture/) | 挂谷猜想科普动画 | 中 | 42 秒 | Remotion | `out/kakeya-conjecture.mp4` |
+| [Solar System](./solar/) | 太阳系科普动画 | 英、中、日、韩 | 随旁白生成 | Remotion | `out/video.mp4` |
+| [Top 500](./top500/) | 2025 年《财富》世界 500 强 | 中 | 29 秒 | Remotion | `out/video.mp4` |
+| [Kakeya Conjecture](./kakeya_conjecture/) | 挂谷猜想科普动画 | 中 | 42 秒 | Remotion | `out/video.mp4` |
+| [Brexit Referendum](./brexit_referendum/) | 英国脱欧公投回顾 | 英 | 随旁白生成 | Remotion | `out/video.mp4` |
+| [Red Army JP](./red_army_jp/) | 日本赤军历史 | 日 | 随旁白生成 | Remotion | `out/red-army-ja.mp4` |
+| [Southern Kurils JP](./southern_kurils_jp/) | 南千岛群岛介绍 | 日 | 随旁白生成 | Remotion | `out/southern-kurils-ja.mp4` |
+| [Imperial House Law JP](./imperial_house_law_jp/) | 皇室典范改正议题 | 日 | 随旁白生成 | Remotion | `out/imperial-house-law-ja.mp4` |
 
 榜单和数据项目采用 `1080 × 1920` 竖屏画布；Kakeya Conjecture 使用 `1920 × 1080` 横屏画布。具体数据来源、内容结构和资源要求见各项目目录内的 README。
 
@@ -27,12 +31,6 @@
 - FFmpeg
 - Chrome 或 Chromium
 - npm
-
-首次使用时可检查本机环境：
-
-```bash
-npx --yes hyperframes@0.6.112 doctor
-```
 
 ## 字体规范
 
@@ -73,34 +71,32 @@ HyperFrames 项目应在 HTML 中通过 Google Fonts 的 `<link>` 或 `@import` 
 
 ```bash
 cd ai_model_rankings
+npm ci
 
-# 检查 composition 结构和时间轴
+# TypeScript 类型检查
 npm run check
 
 # 启动本地预览
 npm run dev
 
-# 渲染项目配置的全部语言版本
+# 渲染默认英语版本到 out/video.mp4
 npm run render
 ```
 
-预览服务启动后，终端会输出 Studio 地址。修改 HTML、CSS 或 JavaScript 后，页面会自动刷新。
+预览服务启动后，终端会输出 Remotion Studio 地址。修改 `src/` 中的组件、样式或数据后，预览会自动刷新。
 
-> 各项目脚本不完全相同。执行命令前请先查看对应的 `package.json`；HyperFrames 项目统一使用 `npm run dev`，Metro de Lima 与 Sapporo Subway 使用 Remotion 脚本。
+各项目的 `npm run check` 当前均为 `tsc --noEmit`，不包含布局、内容或音画同步检查。多语言项目使用 `npm run render:<语言代码>` 单独渲染；`npm run render` 只生成默认版本。具体输出以 `package.json` 为准。
 
 ## 推荐工作流
 
-1. 阅读项目 README，确认主题、数据口径、语言和输出文件。
-2. 先完成每个场景最完整状态下的静态布局。
-3. 运行 `npm run check`，修复 composition、轨道和时间轴问题。
-4. 使用 `npx --yes hyperframes@0.6.112 inspect` 检查文字溢出和画布越界。
-5. 启动预览，检查关键帧、转场、字幕和音画同步。
-6. 使用 draft 质量快速试渲染，确认无误后再进行最终渲染。
+1. 阅读项目 README，确认主题、数据口径、语言和输出文件，并执行 `npm ci`。
+2. 项目定义了 `voiceover` 时，先安装 Python 的 `edge-tts` 和 FFmpeg，再运行 `npm run voiceover` 生成所需音频与时间轴文件。
+3. 项目定义了 `setup` 时，按该项目的数据更新说明执行；AI 榜单项目还需手动同步 `src/data.ts`。
+4. 修改 `src/` 中的组件和数据，运行 `npm run check`。
+5. 运行 `npm run dev`，检查关键帧、转场、文字溢出、字幕和音画同步。
+6. 运行 `npm run render:draft` 试渲染，确认后运行 `npm run render` 或对应语言脚本。
 
-```bash
-npx --yes hyperframes@0.6.112 render --quality draft --output out/preview.mp4
-npm run render
-```
+`render:draft` 的参数因项目而异，部分项目仅改变输出文件和日志级别；请查看 `package.json`，不要默认认为它会降低分辨率或缩短渲染时间。
 
 ## GitHub Actions 发布
 
@@ -120,7 +116,7 @@ git tag sapporo_subway-1.0.4
 git push origin sapporo_subway-1.0.4
 ```
 
-所有项目都使用通用的 `project-version-variant` 格式，variant 与项目脚本直接一一对应。Kakeya Conjecture 发布示例：
+所有项目都使用通用的 `project-version-variant` 格式，variant 与项目脚本直接一一对应。Solar 与 Kakeya Conjecture 发布示例：
 
 ```bash
 git tag solar-1.0.0-zh
@@ -130,50 +126,30 @@ git tag kakeya_conjecture-1.0.0
 git push origin kakeya_conjecture-1.0.0
 ```
 
-Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，必须带 variant 发版，Action 会直接执行对应的 `npm run render:<variant>`。Kakeya Conjecture 无 variant，直接执行 `npm run render`。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./TTS.md)，同步实现与实际时长见 [音画同步方案](./AUDIO_VIDEO_SYNC.md)。
+Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，可带 variant 单独发版，Action 会直接执行对应的 `npm run render:<variant>`。Solar 不带 variant 时渲染默认英语版。Kakeya Conjecture 无 variant，直接执行 `npm run render`。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./TTS.md)，同步实现与实际时长见 [音画同步方案](./AUDIO_VIDEO_SYNC.md)。
 
 ## 仓库约定
 
 - 一个视频项目对应一个顶层目录。
-- `index.html` 是默认 composition 入口。
-- 多语言版本放在 `compositions/`，共享资源放在 `public/`。
+- Remotion 入口为 `src/index.ts`，composition 注册在 `src/Root.tsx`。
+- Remotion 多语言版本通过 composition 和语言参数注册，共享资源放在 `public/`；`compositions/` 中的 HTML 为保留的 HyperFrames 源文件。
 - 渲染产物统一写入 `out/`，不要提交临时预览文件。
 - 数据、单位、统计年份和来源必须在项目 README 中说明。
-- 新增项目时应提供 `meta.json`、`package.json`、README 和可执行的检查、预览、渲染脚本。
+- 新增项目时应提供 `package.json`、`package-lock.json`、README、Remotion 入口与配置和可执行的检查、预览、渲染脚本。
 
 ## 常见问题
 
 ### 渲染失败或浏览器无法启动
 
-先运行环境诊断：
+先确认已执行 `npm ci`，所需旁白和时间轴文件已生成，再检查 Node.js、FFmpeg、Chrome 和可用内存。字体加载问题按上方字体规范排查。
 
-```bash
-npx --yes hyperframes@0.6.112 doctor
-```
+### 文字被裁切或多语言排版不一致
 
-重点检查 Node.js 版本、FFmpeg、Chrome 和可用内存。
-
-### 文字被裁切或超出画布
-
-运行布局检查，并增加采样密度：
-
-```bash
-npx --yes hyperframes@0.6.112 inspect --samples 15
-```
-
-如果溢出是刻意设计的装饰或入场状态，可按需使用 `data-layout-ignore` 或 `data-layout-allow-overflow`，不要用它们掩盖真实布局问题。
-
-### 多语言版本排版不一致
-
-分别打开对应的 `compositions/<lang>.html`，检查标题换行、字号、行高和长词溢出。不同语言可以共享数据与节奏，但应允许独立排版。
+在 Remotion Studio 中分别选择各语言的 composition，检查标题换行、字号、行高与场景边界。类型检查不会发现文字溢出，需要在预览和试渲染中确认。
 
 ### 渲染速度过慢
 
-迭代阶段使用 `--quality draft`，减少高成本滤镜、模糊和粒子效果。仍有问题时可运行：
-
-```bash
-npx --yes hyperframes@0.6.112 benchmark .
-```
+先查看 `render:draft` 的实际参数，并减少高成本滤镜、模糊和粒子效果。Solar 的 WebGL 配置与渲染要求见其项目 README。
 
 ## 文档
 
@@ -185,10 +161,4 @@ npx --yes hyperframes@0.6.112 benchmark .
 
 ## 新增项目
 
-推荐使用 HyperFrames 初始化命令创建基础结构：
-
-```bash
-npx --yes hyperframes@0.6.112 init project-name
-```
-
-完成后将目录放在仓库根目录，补充项目 README，并在上方“项目一览”中登记。提交前至少完成 lint、布局检查和一次完整渲染。
+新增 Remotion 项目时，提供 `src/index.ts`、`src/Root.tsx`、配置文件、依赖锁文件及检查、预览、渲染脚本。补充项目 README，并在上方“项目一览”中登记。提交前完成类型检查、人工布局检查和一次完整渲染。HyperFrames 的历史制作流程见上方专题文档。

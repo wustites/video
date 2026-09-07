@@ -1,13 +1,12 @@
 # Solar
 
-A HyperFrames + Three.js animation of a stylized 3D solar system with Edge TTS narration in English, Chinese, Japanese, and Korean.
+A Remotion + Three.js animation of a stylized 3D solar system with Edge TTS narration in English, Chinese, Japanese, and Korean.
 
 ## Scripts
 
 ```bash
 npm install
 npm run voiceover
-npm run sync:validate
 npm run dev
 npm run check
 ```
@@ -18,12 +17,11 @@ Render one language with `npm run render:en`, `npm run render:zh`,
 The narration sources are `public/voiceover/narration.{lang}.txt`. Generated MP3
 files are not committed. `npm run voiceover` generates segmented Edge TTS audio,
 merges each language into its final MP3, writes cue JS/JSON from measured segment
-durations, and updates composition durations. `npm run check` validates the sync
-data and runs HyperFrames lint.
+durations, and updates composition durations. `npm run check` runs TypeScript type checking; inspect audio/video sync in Studio and a rendered preview.
 
 Tags use the common release workflow. A tag such as `solar-1.0.0-zh` resolves
 to this directory and runs `npm run render:zh`, releasing only the selected
-variant. Solar release tags must include a variant.
+variant. Without a variant, the workflow runs `npm run render` and releases the default English version.
 
 The current CI voices are:
 
@@ -32,15 +30,14 @@ The current CI voices are:
 - Japanese: `ja-JP-NanamiNeural`
 - Korean: `ko-KR-SunHiNeural`
 
-Typography is loaded from the Google Noto repository through jsDelivr at preview
-and render time:
+Typography is loaded through `@remotion/google-fonts` at preview and render time:
 
 - English: `Noto Sans`
 - Chinese: `Noto Sans SC`
 - Japanese: `Noto Sans JP`
 - Korean: `Noto Sans KR`
 
-Network access to `cdn.jsdelivr.net` is required. Font binaries are not stored in
+Network access to the Google Fonts font host (`fonts.gstatic.com`) is required. Font binaries are not stored in
 this repository.
 
 Install the pinned generator before running the local pipeline:

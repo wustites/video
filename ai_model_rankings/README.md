@@ -4,7 +4,7 @@ Visualization video of AI model rankings from [Artificial Analysis](https://arti
 
 ## Features
 
-- Intelligence Index rankings for top AI models (live data)
+- Intelligence Index rankings for top AI models (committed snapshot)
 - Speed vs Intelligence scatter plot
 - Provider distribution analysis
 - Animated bar charts and data visualizations
@@ -14,11 +14,12 @@ Visualization video of AI model rankings from [Artificial Analysis](https://arti
 ```bash
 # Fetch latest leaderboard data → public/data.js
 npm run setup
+# Manually synchronize public/data.js into src/data.ts before rendering
 
 # Preview
 npm run dev
 
-# Lint
+# TypeScript type check
 npm run check
 
 # Render to MP4
@@ -47,6 +48,7 @@ Native Remotion port lives in `src/` alongside the original HyperFrames files:
 - `src/AiModelRankings.tsx` — one component for all locales (`locale` prop:
   `en` | `zh` | `ja`), 7 scenes sharing the HyperFrames timeline
   (intro 0–240, ranking 210–510, scatter 480–780, efficiency 750–1050,
+  tiers 1020–1320, providers 1290–1560, outro 1530–1800 frames).
 - `src/data.ts` — static snapshot of `public/data.js` (15 ranked models,
   16 scatter points, 8 provider counts, tier counts, insight cards, metrics).
 - `src/i18n.ts` — en+zh+ja copy from `public/i18n.js`; `{{placeholders}}`
@@ -67,5 +69,9 @@ npm run render         # render EN to out/video.mp4
 npm run render:draft   # fast draft preview to out/preview.mp4
 ```
 
-Original HyperFrames preview/render scripts (`compositions/*.html`,
-`public/video.js`, `npm run render:en|zh|ja`) are unchanged.
+Original HyperFrames source files (`compositions/*.html`, `public/video.js`) are retained.
+`npm run render:en`, `npm run render:zh`, and `npm run render:ja` now render Remotion compositions.
+
+`npm run setup` only updates `public/data.js`; it does not update the Remotion
+snapshot. Manually synchronize `src/data.ts` before checking and rendering.
+CI also runs setup, but the Remotion output still uses the committed TypeScript snapshot.

@@ -1,6 +1,6 @@
-# 世界五百强 HyperFrames 可视化视频
+# 世界五百强 Remotion 可视化视频
 
-一个中文竖屏数据可视化短片，基于 HyperFrames 制作，主题为 2025 年《财富》世界500强。
+一个中文竖屏数据可视化短片，基于 Remotion 制作，主题为 2025 年《财富》世界500强。
 
 ## 使用
 
@@ -14,7 +14,7 @@ npm run dev
 npm run render
 ```
 
-输出文件：`out/top500-vertical.mp4`
+输出文件：`out/video.mp4`
 
 ## 内容
 
@@ -31,16 +31,16 @@ npm run render
 
 ## GitHub Actions 发布
 
-推送 `v*-top500` 标签或手动运行工作流时，Actions 会检查并渲染竖屏 MP4，然后上传构建产物。
+推送 `top500-<semver>` 标签时，Actions 会检查并渲染竖屏 MP4，然后上传构建产物。
 
 发布 Release：
 
 ```bash
-git tag v1.0.0-top500
-git push origin v1.0.0-top500
+git tag top500-1.0.0
+git push origin top500-1.0.0
 ```
 
-推送 `v*-top500` 标签后，工作流会创建 GitHub Release，并上传 `out/top500-vertical.mp4`。
+推送 `top500-<semver>` 标签后，工作流会创建 GitHub Release，并上传 `out/video.mp4`。
 
 ## Remotion 移植说明
 

@@ -1,11 +1,11 @@
 # population-cn
 
-HyperFrames 视频：中国各省出生人口变化 (2000-2023)
+Remotion 视频：中国各省出生人口变化 (2000-2023)
 
 ## 使用
 
 ```bash
-# 检查 composition
+# TypeScript 类型检查
 npm run check
 
 # 启动预览
@@ -17,14 +17,14 @@ npm run render
 
 ## GitHub Actions
 
-推送 `v*-population-cn` Tag 自动构建并发布：
+推送 `population_cn-<semver>` Tag 自动构建并发布：
 
 ```bash
-git tag v1.0.0-population-cn
-git push origin v1.0.0-population-cn
+git tag population_cn-1.0.0
+git push origin population_cn-1.0.0
 ```
 
-## Remotion 端口
+## Remotion 移植
 
 与 HyperFrames 原版并列的 Remotion 实现（`src/` + `remotion.config.ts`），竖屏 1080x1920@30fps，40 秒（1200 帧）。
 
