@@ -57,3 +57,47 @@ npm run render     # 渲染 out/video.mp4
 `index.html` 顶部 `TOTAL`(54s)与 `<audio data-duration="52.3">` 需与旁白 MP3
 实测时长一致;场景切换点位于 `SCENES` 数组(秒),已按 `narration.zh.vtt` 的逐句 cue 对齐。
 重新生成旁白后若时长变化,请同步更新这两处。
+
+## Remotion 移植
+
+HyperFrames 版(`index.html`)之外,本目录同时提供 Remotion 版(`src/`)。
+原文件保留不动;Remotion 版按相同 54s / 8 场景时间轴重放。
+
+```bash
+npm run dev            # Remotion Studio 预览
+npm run check          # tsc --noEmit
+npm run voiceover      # 同 HyperFrames 版,重新生成旁白 MP3 + WebVTT
+npm run render         # 渲染 Apple 成片到 out/video.mp4
+npm run render:draft   # 快速预览渲染到 out/preview.mp4
+```
+
+### VTT → Sequence 映射
+
+`src/data.ts` 的 `SCENES` 表由 `index.html` 顶部 `SCENES` 数组逐项移植
+(秒,相邻场景重叠 0.5s 交叉淡入淡出);`cues` 列为该场景覆盖的
+`public/voiceover/narration.zh.vtt` 句子编号(共 20 句),与原版注释一致:
+
+| 场景 | 时间(秒) | VTT 句子 | 句子时间 |
+| --- | --- | --- | --- |
+| intro 开场 | 0.0–5.0 | 1–2 | 0.1–4.4s |
+| reveal 揭幕 | 4.4–8.5 | 3 | 4.44–7.86s |
+| design 设计 | 8.0–14.6 | 4–5 | 7.86–14.28s |
+| chip 芯片 | 14.2–25.3 | 6–9 | 14.28–24.84s |
+| market 市场 | 24.8–34.0 | 10–12 | 24.84–33.73s |
+| lineup 系列 | 33.7–42.0 | 13–15 | 33.73–41.48s |
+| origin 起源 | 41.5–47.5 | 16–17 | 41.48–46.45s |
+| outro 结尾 | 47.0–54.0 | 18–20 | 46.45–52.21s |
+
+### HyperFrames → Remotion 对应关系
+
+| 原版 | Remotion 版 |
+| --- | --- |
+| `SCENES` 表 + `sceneOpacity`/`applyScene`(含 `display:none` 切换) | 每场景一个 `<Sequence>` + `SceneShell`(0.4s 淡入/尾 0.5s 淡出,透明度为 0 时返回 `null`) |
+| `tl.from` 入场(`at` 绝对秒) | `easeAt(t, at-start, dur)` → `interpolate` + `Easing.out(Easing.cube)`(对应 `power3.out`),`stagger` 展开为按索引递增的 `at` |
+| `back.out(1.6)`(origin 引言章) | `spring({damping: 12})` 缩放回弹 |
+| `#market-bar-fill` width tween(0% → 51%) | `interpolate(t, [3.5, 5.1], [0, 51])` → `width: %` |
+| `#outro-line` scaleX tween | `interpolate(t, [1.0, 1.9], [0, 1])` → `scaleX` |
+| `#outro-think` letterSpacing tween | `interpolate(t, [3.9, 4.9], [18, 3])` → `letterSpacing` |
+| 内联 apple 剪影 SVG | `AppleMark` JSX 组件 |
+| `@font-face` Noto Sans SC 可变字体 | `@remotion/google-fonts/NotoSansSC` + `Root` 字体门控 |
+| 单条 `<audio>` 旁白 MP3 | 单个 `<Audio staticFile("voiceover/narration.zh.mp3")>`(无运行时 fetch,渲染时需 MP3 已生成) |

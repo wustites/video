@@ -66,3 +66,20 @@ qs_universities/
 - HyperFrames - 视频渲染框架
 - GSAP - 动画库
 - HTML/CSS/JavaScript - 前端技术
+
+## Remotion 端口
+
+HyperFrames `index.html` 之外，新增 Remotion 实现（`src/` + `remotion.config.ts` + `tsconfig.json`），原文件保持不动：
+
+- `src/data.ts` — 100 所大学静态数组，按 `PER_PAGE=10` 切分为 10 页；每页主题色（`PAGE_COLORS`，对应原 `.page-N` 变量）。
+- `src/QsUniversities.tsx` — 主合成：帧索引分页（每页 150 帧/5s，52s@30fps 共 1560 帧，末页吸收 2s 尾巴）；
+  条目以 `i*0.12*30` 帧 stagger 经 `spring` 入场（替代 GSAP `fromTo` + `power3.out`），页间 0.6s 交叉淡入淡出；
+  前 10 名排名保持金色 `.rank-top10` 样式；无音频。
+- `src/Root.tsx` + `src/index.ts` — 注册 `QsUniversities` 合成（1080x1920@30fps）；`src/fonts.ts` 经 `@remotion/google-fonts` 加载 Noto Sans SC。
+
+```bash
+npm run dev            # remotion studio
+npm run check          # tsc --noEmit
+npm run render         # remotion render QsUniversities out/video.mp4
+npm run render:draft   # 草稿预览 out/preview.mp4
+```

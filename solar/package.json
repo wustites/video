@@ -1,18 +1,31 @@
 {
   "name": "solar-vertical",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npx --yes hyperframes@0.6.112 preview",
+    "dev": "remotion studio",
+    "check": "tsc --noEmit",
     "voiceover": "python scripts/generate_voiceover.py",
-    "sync:validate": "python scripts/validate_sync.py",
-    "lint": "npx --yes hyperframes@0.6.112 lint",
-    "validate": "npx --yes hyperframes@0.6.112 validate",
-    "inspect": "npx --yes hyperframes@0.6.112 inspect --samples 10",
-    "check": "npm run sync:validate && npm run lint && npm run validate && npm run inspect",
-    "render:en": "npx --yes hyperframes@0.6.112 render -c compositions/en.html -o out/solar-system-en-vertical.mp4",
-    "render:zh": "npx --yes hyperframes@0.6.112 render -c compositions/zh.html -o out/solar-system-zh-vertical.mp4",
-    "render:ja": "npx --yes hyperframes@0.6.112 render -c compositions/ja.html -o out/solar-system-ja-vertical.mp4",
-    "render:ko": "npx --yes hyperframes@0.6.112 render -c compositions/ko.html -o out/solar-system-ko-vertical.mp4"
+    "render": "remotion render solar-en out/video.mp4",
+    "render:draft": "remotion render solar-en out/preview.mp4 --log=error",
+    "render:en": "remotion render solar-en out/solar-system-en-vertical.mp4",
+    "render:zh": "remotion render solar-zh out/solar-system-zh-vertical.mp4",
+    "render:ja": "remotion render solar-ja out/solar-system-ja-vertical.mp4",
+    "render:ko": "remotion render solar-ko out/solar-system-ko-vertical.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.504",
+    "@remotion/google-fonts": "4.0.504",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "remotion": "4.0.504",
+    "three": "0.160.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@types/three": "0.160.0",
+    "typescript": "^5.8.3"
   }
 }

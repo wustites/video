@@ -10,14 +10,14 @@
 | [Sapporo Subway](./sapporo_subway/) | 日本札幌市营地铁介绍 | 日 | 87 秒 | Remotion | `out/video.mp4` |
 | [Cloudflare History](./cloudflare_history/) | Cloudflare 发展历程 | 中 | 90 秒 | Remotion | `out/video.mp4` |
 | [Japan Economy](./japan_economy/) | 日本 1985—2026 经济指标与日经指数 | 日 | 70 秒 | Remotion | `out/video.mp4` |
-| [AI Model Rankings](./ai_model_rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | HyperFrames | `out/ai-model-rankings-*-vertical.mp4` |
-| [Apple](./apple/) | Apple 主题视频 | 中 | — | HyperFrames | `out/video.mp4` |
-| [OpenRouter Rankings](./openrouter_rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | HyperFrames | `out/openrouter-rankings-*-vertical.mp4` |
-| [Population CN](./population_cn/) | 中国各省出生人口变化 | 中 | 40 秒 | HyperFrames | `out/video.mp4` |
-| [QS Universities](./qs_universities/) | QS 世界大学排名 | 中 | 52 秒 | HyperFrames | `out/video.mp4` |
-| [Solar System](./solar/) | 太阳系科普动画 | 英、中、日、韩 | 90 秒 | HyperFrames | `out/solar-system-*-vertical.mp4` |
-| [Top 500](./top500/) | 2025 年《财富》世界 500 强 | 中 | 29 秒 | HyperFrames | `out/top500-vertical.mp4` |
-| [Kakeya Conjecture](./kakeya_conjecture/) | 挂谷猜想科普动画 | 中 | 42 秒 | HyperFrames | `out/kakeya-conjecture.mp4` |
+| [AI Model Rankings](./ai_model_rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | Remotion | `out/ai-model-rankings-*-vertical.mp4` |
+| [Apple](./apple/) | Apple 主题视频 | 中 | 54 秒 | Remotion | `out/video.mp4` |
+| [OpenRouter Rankings](./openrouter_rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | Remotion | `out/openrouter-rankings-*-vertical.mp4` |
+| [Population CN](./population_cn/) | 中国各省出生人口变化 | 中 | 40 秒 | Remotion | `out/video.mp4` |
+| [QS Universities](./qs_universities/) | QS 世界大学排名 | 中 | 52 秒 | Remotion | `out/video.mp4` |
+| [Solar System](./solar/) | 太阳系科普动画 | 英、中、日、韩 | 90 秒 | Remotion | `out/solar-system-*-vertical.mp4` |
+| [Top 500](./top500/) | 2025 年《财富》世界 500 强 | 中 | 29 秒 | Remotion | `out/top500-vertical.mp4` |
+| [Kakeya Conjecture](./kakeya_conjecture/) | 挂谷猜想科普动画 | 中 | 42 秒 | Remotion | `out/kakeya-conjecture.mp4` |
 
 榜单和数据项目采用 `1080 × 1920` 竖屏画布；Kakeya Conjecture 使用 `1920 × 1080` 横屏画布。具体数据来源、内容结构和资源要求见各项目目录内的 README。
 

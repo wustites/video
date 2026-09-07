@@ -74,3 +74,11 @@ npm run render
   it keeps the committed `public/data.js` snapshot so builds never break.
 - `compositions/en.html` / `compositions/zh.html` consume `window.OPENROUTER_RANKINGS_DATA`
   and localize labels at runtime (provider names, date format, insight copy).
+
+## Remotion port
+
+- `src/data.ts` is the static snapshot converted from `public/data.js`; no render-time fetch.
+- `src/i18n.ts` unifies the former en/zh fork: `PROVIDER_ZH` map (`zhName`), `fmtDate` per locale (`Aug 15, 2026` vs `2026.08.15`), token units (`T` vs `万亿`), and all scene copy + 4 insight rows per locale.
+- `src/OpenrouterRankings.tsx` takes a `locale` prop (`en` | `zh`); `Root.tsx` registers `OpenrouterRankingsEn` + `OpenrouterRankingsZh` (1080x1920 @ 30fps, 1350 frames = 45s) sharing the one component — forked duplication eliminated.
+- Frame-driven (no GSAP/DOM): bars x10 (`toFixed(2)` counters, width normalized to top model, 5f stagger), provider donut via SVG `stroke-dasharray` segments + `d-total` counter (`toFixed(1)`), growth rows x5 normalized to fastest riser (`toFixed(1)`), 4 insight rows staggered 8f, 5 scene-dots nav + timeline fill.
+- Original HyperFrames files (`compositions/`, `public/`, `scripts/`) stay in place; `npm run setup` still refreshes `public/data.js` (then re-sync `src/data.ts`).

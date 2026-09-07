@@ -4,11 +4,21 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npx --yes hyperframes@0.7.60 preview",
-    "lint": "npx --yes hyperframes@0.7.60 lint .",
-    "validate": "npx --yes hyperframes@0.7.60 validate .",
-    "inspect": "npx --yes hyperframes@0.7.60 inspect . --samples 12 --json",
-    "check": "npm run lint && npm run validate && npm run inspect",
-    "render": "npx --yes hyperframes@0.7.60 render . --output out/kakeya-conjecture.mp4 --quality high --workers auto --strict"
+    "dev": "remotion studio",
+    "check": "tsc --noEmit",
+    "render": "remotion render Kakeya out/video.mp4",
+    "render:draft": "remotion render Kakeya out/preview.mp4 --log=error"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.504",
+    "@remotion/google-fonts": "4.0.504",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "remotion": "4.0.504"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "typescript": "^5.8.3"
   }
 }
