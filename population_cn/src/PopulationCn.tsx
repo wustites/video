@@ -15,7 +15,7 @@ const MAX_BAR_W = 550;
 
 export const PopulationCn: React.FC = () => {
   const frame = useCurrentFrame();
-  const currentYear = interpolate(frame, [0, TOTAL_FRAMES], [START_YEAR, END_YEAR]);
+  const currentYear = interpolate(frame, [0, TOTAL_FRAMES - 1], [START_YEAR, END_YEAR]);
   const topData = interpolateData(currentYear);
   const maxBirths = topData[0]?.b ?? 100;
   const yearDisplay = Math.floor(currentYear);
