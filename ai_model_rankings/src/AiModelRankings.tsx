@@ -2,6 +2,7 @@ import React from 'react';
 import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
 import {CARDS, METRICS, MODELS, PROVIDER_COUNTS, SCATTER_POINTS, TIER_COUNTS} from './data';
 import {LOCALES, type LocaleKey} from './i18n';
+import {layoutScatter, SCATTER_W, SCATTER_H} from './scatter';
 
 export const FPS = 30;
 export const DURATION_IN_FRAMES = 1800;
@@ -21,15 +22,7 @@ const TOP_SCORE = MODELS[0].score;
 const TIER_MAX = Math.max(...TIER_COUNTS);
 const PROVIDER_MAX = Math.max(...PROVIDER_COUNTS.map((p) => p.count));
 
-// Same scale functions as public/video.js buildScatter — precomputed once at
-// module scope so no per-frame DOM measurement is ever needed.
-const SCATTER_W = 952;
-const SCATTER_H = 800;
-const scatterPos = (speed: number | null, score: number) => ({
-  x: ((speed ?? 0) / 800) * (SCATTER_W - 120) + 60,
-  y: SCATTER_H - ((score - 20) / 40) * (SCATTER_H - 120) - 60,
-});
-const SCATTER_POS = SCATTER_POINTS.map((p) => scatterPos(p.speed, p.score));
+const SCATTER_POS = layoutScatter(SCATTER_POINTS);
 const prog = (frame: number, start: number, len: number) =>
   interpolate(frame, [start, start + len], [0, 1], {
     extrapolateLeft: 'clamp',
@@ -211,7 +204,7 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
         <Kicker text={s.scatter.kicker} />
         <div className="scene-title">{s.scatter.title}</div>
         <div className="scene-subtitle small">{s.scatter.subtitle}</div>
-        <div className="scatter-container" style={{width: SCATTER_W, height: SCATTER_H}}>
+        <div className="scatter-container" style={{width: SCATTER_W, height: SCATTER_H, flex: '0 0 auto'}}>
           <div style={{position: 'absolute', inset: 0}}>
             <div style={{position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: 'rgba(248,250,252,.2)'}} />
             <div style={{position: 'absolute', top: 0, bottom: 0, left: 0, width: 2, background: 'rgba(248,250,252,.2)'}} />
@@ -220,11 +213,11 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
           </div>
           {SCATTER_POINTS.map((item, i) => {
             const enter = prog(scatterLocal - i * 6, 0, 30);
-            const {x, y} = SCATTER_POS[i];
+            const {x, y, labelLeft, labelWidth, labelOnLeft} = SCATTER_POS[i];
             return (
               <React.Fragment key={`${item.name}-${i}`}>
                 <div className="scatter-dot" style={{left: x, top: y, width: 24, height: 24, background: item.color, opacity: enter * 0.85, transform: `translate(-50%,-50%) scale(${enter})`}} />
-                <div className="scatter-label" style={{left: x + 16, top: y - 8, color: item.color, opacity: enter}}>{item.name}</div>
+                <div className="scatter-label" style={{left: labelLeft, top: y - 8, width: labelWidth, textAlign: labelOnLeft ? 'right' : 'left', whiteSpace: 'normal', overflowWrap: 'anywhere', color: item.color, opacity: enter}}>{item.name}</div>
               </React.Fragment>
             );
           })}
