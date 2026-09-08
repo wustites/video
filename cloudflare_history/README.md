@@ -25,7 +25,7 @@
 | 扩张 | 2022 收购 Area 1 · 2023 Workers AI · 2025 收购 Replicate | 70.3–78.7s |
 | 如今 | 335 座城市 · 平均每秒 1.15 亿 HTTP 请求 · 约 25% 网站使用 Cloudflare 反向代理服务 | 78.7–89.7s |
 
-场景时间轴与旁白逐段对齐（实测时长见 `public/voiceover/segment-durations.json`）。
+场景时间轴按既有旁白逐段编排（实测时长见 `public/voiceover/segment-durations.json`）。`src/timing.ts` 使用固定场景时间和 90 秒总时长，不会读取生成的时长 JSON；重新生成旁白后，需要根据实测时长手动调整场景切换点与总时长。
 
 ## 数据来源
 
@@ -40,7 +40,7 @@
 npm run dev            # 启动 Remotion Studio 本地预览
 npm run voiceover      # 生成旁白音频与时长文件（Edge TTS，需 Python、FFmpeg 和网络）
 npm run check          # tsc 类型检查
-npm run render:draft   # 草稿质量试渲染
+npm run render:draft   # 试渲染，仅更改输出路径与日志级别，不降低画质
 npm run render         # 正式渲染到 out/video.mp4
 ```
 
