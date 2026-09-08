@@ -68,7 +68,7 @@ npm run dev            # Remotion Studio 预览
 npm run check          # tsc --noEmit
 npm run voiceover      # 同 HyperFrames 版,重新生成旁白 MP3 + WebVTT
 npm run render         # 渲染 Apple 成片到 out/video.mp4
-npm run render:draft   # 快速预览渲染到 out/preview.mp4
+npm run render:draft   # 预览渲染到 out/preview.mp4，仅更改输出路径与日志级别
 ```
 
 ### VTT → Sequence 映射

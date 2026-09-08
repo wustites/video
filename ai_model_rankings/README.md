@@ -65,7 +65,7 @@ fetch, no per-frame DOM queries.
 npm run dev            # Remotion Studio
 npm run check          # tsc --noEmit
 npm run render         # render EN to out/video.mp4
-npm run render:draft   # fast draft preview to out/preview.mp4
+npm run render:draft   # preview to out/preview.mp4; only changes output and log level
 ```
 
 Original HyperFrames source files (`compositions/*.html`, `public/video.js`) are retained.

@@ -12,7 +12,7 @@ HyperFrames 原作（`index.html`，42s，1920×1080 横屏）+ Remotion 移植�
   crossfade，以及 24.0–25.15s 的 teal 色圆形 iris wipe）：
   线条生长 per-path `strokeDashoffset` + `interpolate`，index-stagger 按 per-element
   delay 序列展开，有限旋转/挤压窗口（转针 325°、扇形 18°、三角形挤压、tube 图 4°、
-  结尾针 12°）均为 clamp 后的有限补间，无限循环。
+  结尾针 12°）均为 clamp 后的有限补间，不使用无限循环。
 - 字体经 `@remotion/google-fonts` 加载 Noto Sans SC（300/400/700/900）+
   Noto Serif SC（400/700，公式用），`Root.tsx` 以 `delayRender` 门控等待字体就绪。
 - 几何坐标（扇形线、针云、tube 图）收录于 `src/data.ts`；渲染时无 fetch、无 DOM 查询。

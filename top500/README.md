@@ -40,7 +40,7 @@ git tag top500-1.0.0
 git push origin top500-1.0.0
 ```
 
-推送 `top500-<semver>` 标签后，工作流会创建 GitHub Release，并上传 `out/video.mp4`。
+推送 `top500-<semver>` 标签后，工作流会创建 GitHub Release，并将 `out/video.mp4` 重命名为 `top500-<semver>.mp4` 后上传。
 
 ## Remotion 移植说明
 
