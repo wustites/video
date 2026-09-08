@@ -40,7 +40,7 @@ const en: Locale = {
     },
     ranking: {
       kicker: 'Intelligence Index Top 15',
-      title: 'Claude Opus 5<br/>Leads the Pack',
+      title: 'Intelligence Index<br/>Top 15 Models',
       subtitle: 'Intelligence Index Score (higher is better)',
     },
     scatter: {
@@ -74,7 +74,7 @@ const en: Locale = {
     },
     providers: {
       kicker: 'Provider Distribution',
-      title: 'Anthropic & OpenAI<br/>Dominate the Top 20',
+      title: 'Top 20 Models<br/>by Provider',
       subtitle: 'Number of models in the top 20 by provider',
     },
     outro: {
@@ -105,7 +105,7 @@ const zh: Locale = {
     },
     ranking: {
       kicker: '智能指数前 15 名',
-      title: 'Claude Opus 5<br/>领跑全场',
+      title: '智能指数<br/>前 15 名模型',
       subtitle: '智能指数评分（越高越好）',
     },
     scatter: {
@@ -139,7 +139,7 @@ const zh: Locale = {
     },
     providers: {
       kicker: '厂商分布',
-      title: 'Anthropic 与 OpenAI<br/>主导前 20 名',
+      title: '前 20 名模型<br/>厂商分布',
       subtitle: '各厂商在前 20 名中的模型数量',
     },
     outro: {
@@ -170,7 +170,7 @@ const ja: Locale = {
     },
     ranking: {
       kicker: '知能指数トップ15',
-      title: 'Claude Opus 5 が<br/>トップを走る',
+      title: '知能指数<br/>上位15モデル',
       subtitle: '知能指数スコア（高いほど優秀）',
     },
     scatter: {
@@ -204,7 +204,7 @@ const ja: Locale = {
     },
     providers: {
       kicker: 'プロバイダー分布',
-      title: 'Anthropic と OpenAI が<br/>トップ20を主導',
+      title: '上位20モデルの<br/>プロバイダー分布',
       subtitle: 'トップ20に入ったモデル数をプロバイダー別に集計',
     },
     outro: {

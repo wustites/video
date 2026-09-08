@@ -68,3 +68,29 @@ for (const project of ['ai_model_rankings', 'openrouter_rankings']) {
     }
   });
 }
+
+test('scatter keeps high scores, fast models and labels within the plot', async () => {
+  const {layoutScatter, SCATTER_W, SCATTER_H} = await loadTs(readFileSync(path.join(root, 'ai_model_rankings/src/scatter.ts'), 'utf8'));
+  const snapshot = JSON.parse(readFileSync(path.join(root, 'ai_model_rankings/src/snapshot.json'), 'utf8'));
+  for (const points of [snapshot.scatterPoints, [{speed: 100, score: 80}, {speed: 940, score: 60}], [{speed: 0, score: 0}, {speed: null, score: 0}], []]) {
+    const layout = layoutScatter(points);
+    assert.equal(layout.length, points.length);
+    for (const p of layout) {
+      assert.ok(p.x >= 12 && p.x <= SCATTER_W - 12);
+      assert.ok(p.y >= 12 && p.y <= SCATTER_H - 12);
+      assert.ok(p.labelLeft >= 0 && p.labelLeft + p.labelWidth <= SCATTER_W);
+    }
+    if (points.length === 2 && points[0].score === 80) {
+      assert.ok(layout[0].y < layout[1].y);
+      assert.ok(layout[0].x < layout[1].x);
+    }
+  }
+});
+
+test('ranking and provider titles do not assert a fixed winner in any locale', async () => {
+  const {LOCALES} = await loadTs(readFileSync(path.join(root, 'ai_model_rankings/src/i18n.ts'), 'utf8'));
+  for (const locale of Object.values(LOCALES)) {
+    assert.doesNotMatch(locale.scenes.ranking.title, /Claude|Opus/);
+    assert.doesNotMatch(locale.scenes.providers.title, /Anthropic|OpenAI/);
+  }
+});
