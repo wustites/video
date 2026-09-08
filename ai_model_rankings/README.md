@@ -12,9 +12,8 @@ Visualization video of AI model rankings from [Artificial Analysis](https://arti
 ## Usage
 
 ```bash
-# Fetch latest leaderboard data → public/data.js
+# Fetch latest leaderboard data → src/snapshot.json and public/data.js
 npm run setup
-# Manually synchronize public/data.js into src/data.ts before rendering
 
 # Preview
 npm run dev
@@ -30,11 +29,11 @@ npm run render
 
 `scripts/setup.mjs` scrapes the Artificial Analysis models leaderboard, parses the
 SSR table (model name, creator, Intelligence Index, median tokens/s), and writes
-the snapshot to `public/data.js` (`window.AI_MODEL_RANKINGS_DATA`).
+the snapshot to `src/snapshot.json` for Remotion and `public/data.js` for legacy compositions.
 
 - `public/video.js` merges the snapshot with localized copy from `public/i18n.js`.
 - Setup runs automatically in CI before validate/render; if the fetch fails it
-  keeps the committed `public/data.js` snapshot so builds never break.
+  keeps `src/snapshot.json`; if that snapshot is missing, setup fails.
 
 ## Data Source
 
@@ -49,7 +48,7 @@ Native Remotion port lives in `src/` alongside the original HyperFrames files:
   `en` | `zh` | `ja`), 7 scenes sharing the HyperFrames timeline
   (intro 0–240, ranking 210–510, scatter 480–780, efficiency 750–1050,
   tiers 1020–1320, providers 1290–1560, outro 1530–1800 frames).
-- `src/data.ts` — static snapshot of `public/data.js` (15 ranked models,
+- `src/data.ts` — typed exports from `src/snapshot.json` (15 ranked models,
   16 scatter points, 8 provider counts, tier counts, insight cards, metrics).
 - `src/i18n.ts` — en+zh+ja copy from `public/i18n.js`; `{{placeholders}}`
   resolve from the static snapshot at render.
@@ -72,6 +71,5 @@ npm run render:draft   # fast draft preview to out/preview.mp4
 Original HyperFrames source files (`compositions/*.html`, `public/video.js`) are retained.
 `npm run render:en`, `npm run render:zh`, and `npm run render:ja` now render Remotion compositions.
 
-`npm run setup` only updates `public/data.js`; it does not update the Remotion
-snapshot. Manually synchronize `src/data.ts` before checking and rendering.
-CI also runs setup, but the Remotion output still uses the committed TypeScript snapshot.
+`npm run setup` updates both `src/snapshot.json` and legacy `public/data.js`.
+Remotion bundles the JSON snapshot, so local renders and CI use the updated data without manual synchronization.

@@ -77,8 +77,8 @@ export function interpolateData(currentYear: number): ProvinceValue[] {
   const lastYear = years[years.length - 1] as number;
   const firstData = populationData.find(d => d.year === firstYear)?.data ?? [];
   const lastData = populationData.find(d => d.year === lastYear)?.data ?? [];
-  if (currentYear <= firstYear) return firstData;
-  if (currentYear >= lastYear) return lastData;
+  if (currentYear <= firstYear) return [...firstData].sort((a, b) => b.b - a.b).slice(0, TOP_N);
+  if (currentYear >= lastYear) return [...lastData].sort((a, b) => b.b - a.b).slice(0, TOP_N);
   let prevYear = firstYear, nextYear = lastYear;
   for (let i = 0; i < years.length - 1; i++) {
     const a = years[i] as number, b = years[i + 1] as number;

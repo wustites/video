@@ -59,12 +59,11 @@ npm run render
 
 ## Data update
 
-The setup script fetches OpenRouter data into the legacy `public/data.js` file.
-Current Remotion renders use `src/data.ts`; manually synchronize that snapshot
-after setup and before checking or rendering. CI setup does not perform this synchronization:
+The setup script updates `src/snapshot.json` for Remotion and legacy `public/data.js`.
+Local renders and CI bundle the updated JSON snapshot without manual synchronization:
 
 ```bash
-npm run setup   # fetch latest snapshot → public/data.js
+npm run setup   # fetch latest snapshot → src/snapshot.json and public/data.js
 npm run check   # TypeScript type check
 npm run render
 ```
@@ -73,14 +72,14 @@ npm run render
   aggregates the latest-day snapshot per model/provider, and computes the
   API-provided `change` as growth (scaled to percent and clamped to ±150%).
 - The setup runs automatically in CI before validate/render; if the fetch fails
-  it keeps the committed `public/data.js` snapshot so builds never break.
+  it keeps `src/snapshot.json`; if that snapshot is missing, setup fails.
 - `compositions/en.html` / `compositions/zh.html` consume `window.OPENROUTER_RANKINGS_DATA`
   and localize labels at runtime (provider names, date format, insight copy).
 
 ## Remotion port
 
-- `src/data.ts` is the static snapshot converted from `public/data.js`; no render-time fetch.
+- `src/data.ts` provides typed exports from `src/snapshot.json`; no render-time fetch.
 - `src/i18n.ts` unifies the former en/zh fork: `PROVIDER_ZH` map (`zhName`), `fmtDate` per locale (`Aug 15, 2026` vs `2026.08.15`), token units (`T` vs `万亿`), and all scene copy + 4 insight rows per locale.
 - `src/OpenrouterRankings.tsx` takes a `locale` prop (`en` | `zh`); `Root.tsx` registers `OpenrouterRankingsEn` + `OpenrouterRankingsZh` (1080x1920 @ 30fps, 1350 frames = 45s) sharing the one component — forked duplication eliminated.
 - Frame-driven (no GSAP/DOM): bars x10 (`toFixed(2)` counters, width normalized to top model, 5f stagger), provider donut via SVG `stroke-dasharray` segments + `d-total` counter (`toFixed(1)`), growth rows x5 normalized to fastest riser (`toFixed(1)`), 4 insight rows staggered 8f, 5 scene-dots nav + timeline fill.
-- Original HyperFrames files (`compositions/`, `public/`, `scripts/`) stay in place; `npm run setup` still refreshes `public/data.js` (then re-sync `src/data.ts`).
+- Original HyperFrames files (`compositions/`, `public/`, `scripts/`) stay in place; `npm run setup` refreshes both `src/snapshot.json` and `public/data.js`.

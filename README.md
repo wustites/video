@@ -91,7 +91,7 @@ npm run render
 
 1. 阅读项目 README，确认主题、数据口径、语言和输出文件，并执行 `npm ci`。
 2. 项目定义了 `voiceover` 时，先安装 Python 的 `edge-tts` 和 FFmpeg，再运行 `npm run voiceover` 生成所需音频与时间轴文件。
-3. 项目定义了 `setup` 时，按该项目的数据更新说明执行；AI 榜单项目还需手动同步 `src/data.ts`。
+3. 项目定义了 `setup` 时，按该项目的数据更新说明执行；榜单项目会自动更新 Remotion 使用的 `src/snapshot.json`。
 4. 修改 `src/` 中的组件和数据，运行 `npm run check`。
 5. 运行 `npm run dev`，检查关键帧、转场、文字溢出、字幕和音画同步。
 6. 运行 `npm run render:draft` 试渲染，确认后运行 `npm run render` 或对应语言脚本。
@@ -162,3 +162,9 @@ Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，可带 variant 单独发版，
 ## 新增项目
 
 新增 Remotion 项目时，提供 `src/index.ts`、`src/Root.tsx`、配置文件、依赖锁文件及检查、预览、渲染脚本。补充项目 README，并在上方“项目一览”中登记。提交前完成类型检查、人工布局检查和一次完整渲染。HyperFrames 的历史制作流程见上方专题文档。
+
+榜单数据更新与人口视频边界的回归检查（先安装 `population_cn` 依赖）：
+
+```bash
+node --test tests/review-regressions.test.mjs
+```
