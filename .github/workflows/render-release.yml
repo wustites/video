@@ -30,7 +30,9 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ "$TAG" =~ ^([A-Za-z0-9_]+)-([0-9]+\.[0-9]+\.[0-9]+)(-([A-Za-z0-9_]+))?$ ]]; then
+          # Parse from the semver portion so project directories may contain
+          # hyphens as well as underscores.
+          if [[ "$TAG" =~ ^([A-Za-z0-9_-]+)-([0-9]+\.[0-9]+\.[0-9]+)(-([A-Za-z0-9_-]+))?$ ]]; then
             project_key="${BASH_REMATCH[1]}"
             version="${BASH_REMATCH[2]}"
             variant="${BASH_REMATCH[4]}"
@@ -41,6 +43,11 @@ jobs:
           fi
 
           project="$project_key"
+
+          if [[ "$project" == .* || "$project" == *..* ]]; then
+            echo "Invalid project path in tag: $project" >&2
+            exit 1
+          fi
 
           if [[ ! -f "$project/package.json" || ! -f "$project/package-lock.json" ]]; then
             echo "Project directory '$project' must contain package.json and package-lock.json" >&2
