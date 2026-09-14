@@ -45,7 +45,7 @@
 
 ## 发布标签
 
-GitHub Actions 使用项目目录名作为 `project_key`：
+GitHub Actions 使用项目目录名作为 `project_key`。项目目录名规范为只含字母、数字和下划线，不包含连字符：
 
 ```text
 <project_path>-<semver>[-<variant>]

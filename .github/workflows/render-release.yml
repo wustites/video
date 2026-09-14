@@ -30,9 +30,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Parse from the semver portion so project directories may contain
-          # hyphens as well as underscores.
-          if [[ "$TAG" =~ ^([A-Za-z0-9_-]+)-([0-9]+\.[0-9]+\.[0-9]+)(-([A-Za-z0-9_-]+))?$ ]]; then
+          if [[ "$TAG" =~ ^([A-Za-z0-9_]+)-([0-9]+\.[0-9]+\.[0-9]+)(-([A-Za-z0-9_]+))?$ ]]; then
             project_key="${BASH_REMATCH[1]}"
             version="${BASH_REMATCH[2]}"
             variant="${BASH_REMATCH[4]}"
