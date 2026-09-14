@@ -65,7 +65,7 @@ npm run render         # 正式渲染到 out/video.mp4
 ## 文件结构
 
 ```text
-metro_lima/
+geography_transport/metro_lima/
   src/                      # Remotion composition（TSX）
     index.ts                # registerRoot 入口
     Root.tsx                # Composition 注册

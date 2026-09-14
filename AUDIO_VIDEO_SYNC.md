@@ -85,7 +85,7 @@ Solar 是当前自动化程度最高的 HyperFrames 项目。`scripts/generate_v
   → 上传 GitHub Release
 ```
 
-例如 `solar-1.0.0-zh` 会定位到 `solar/`，并执行 `npm run render:zh`。生成的 MP3、`segment-durations.json` 和 `out/` 文件不提交 Git；Solar 的 cue JS/JSON 是同步数据文件，由旁白生成脚本在构建时更新。
+例如 `solar-1.0.0-zh` 会定位到 `science_nature/solar/`，并执行 `npm run render:zh`。生成的 MP3、`segment-durations.json` 和 `out/` 文件不提交 Git；Solar 的 cue JS/JSON 是同步数据文件，由旁白生成脚本在构建时更新。
 
 当前通用 Action 只强制检查最终 MP4 是否包含视频流，还没有把“必须包含音频流”作为所有项目的统一门槛。没有音频的 Kakeya Conjecture 因此使用纯视觉时间轴；有旁白的项目仍由各自的 `check` 或专用同步校验负责音频验证。
 

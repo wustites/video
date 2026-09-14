@@ -86,7 +86,7 @@ git push origin v1.0.0-solar-zh
 
 ### 本地复现 Solar TTS
 
-在 `solar/` 目录执行：
+在 `science_nature/solar/` 目录执行：
 
 ```bash
 python -m pip install edge-tts==7.2.7
@@ -239,7 +239,7 @@ npx --yes hyperframes@0.6.112 render \
 
 ## Solar 项目现状
 
-`solar/` 当前保留了四种语言的旁白文本，composition 仍引用以下 MP3：
+`science_nature/solar/` 当前保留了四种语言的旁白文本，composition 仍引用以下 MP3：
 
 ```text
 public/voiceover/solar-system-en.mp3

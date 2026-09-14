@@ -42,29 +42,28 @@ jobs:
             exit 1
           fi
 
-          project="$project_key"
-
-          if [[ "$project" == .* || "$project" == *..* ]]; then
-            echo "Invalid project path in tag: $project" >&2
+          project_dir="$(find . -mindepth 2 -maxdepth 3 -type d -name "$project_key" -print -quit)"
+          if [[ -z "$project_dir" ]]; then
+            echo "Project directory '$project_key' was not found" >&2
             exit 1
           fi
 
-          if [[ ! -f "$project/package.json" || ! -f "$project/package-lock.json" ]]; then
-            echo "Project directory '$project' must contain package.json and package-lock.json" >&2
+          if [[ ! -f "$project_dir/package.json" || ! -f "$project_dir/package-lock.json" ]]; then
+            echo "Project directory '$project_dir' must contain package.json and package-lock.json" >&2
             exit 1
           fi
 
-          if ! PROJECT_VARIANT="$variant" node -e 'const p=require("./" + process.argv[1] + "/package.json"); const variant=process.env.PROJECT_VARIANT; const script=variant ? `render:${variant}` : "render"; process.exit(p.scripts?.[script] ? 0 : 1)' "$project"; then
+          if ! PROJECT_VARIANT="$variant" node -e 'const p=require("./" + process.argv[1] + "/package.json"); const variant=process.env.PROJECT_VARIANT; const script=variant ? `render:${variant}` : "render"; process.exit(p.scripts?.[script] ? 0 : 1)' "$project_dir"; then
             if [[ -n "$variant" ]]; then
-              echo "Project '$project' must define npm run render:$variant" >&2
+              echo "Project '$project_key' must define npm run render:$variant" >&2
             else
-              echo "Project '$project' must define an npm run render script" >&2
+              echo "Project '$project_key' must define an npm run render script" >&2
             fi
             exit 1
           fi
 
           echo "project_key=$project_key" >> "$GITHUB_OUTPUT"
-          echo "project=$project" >> "$GITHUB_OUTPUT"
+          echo "project=$project_dir" >> "$GITHUB_OUTPUT"
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "variant=$variant" >> "$GITHUB_OUTPUT"
           asset_prefix="${project_key}-${version}"
@@ -72,12 +71,12 @@ jobs:
             asset_prefix="${asset_prefix}-${variant}"
           fi
           echo "asset_prefix=$asset_prefix" >> "$GITHUB_OUTPUT"
-          release_name="${project} ${version}"
+          release_name="${project_key} ${version}"
           if [[ -n "$variant" ]]; then
             release_name="${release_name} ${variant}"
           fi
           echo "release_name=$release_name" >> "$GITHUB_OUTPUT"
-          echo "project_dir=$GITHUB_WORKSPACE/$project" >> "$GITHUB_OUTPUT"
+          echo "project_dir=$GITHUB_WORKSPACE/${project_dir#./}" >> "$GITHUB_OUTPUT"
           echo "release_dir=$RUNNER_TEMP/release" >> "$GITHUB_OUTPUT"
 
       - name: Set up Node.js

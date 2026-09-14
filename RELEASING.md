@@ -12,7 +12,7 @@ git tag sapporo_subway-1.0.4
 git push origin sapporo_subway-1.0.4
 ```
 
-格式为 `<project_key>-<version>[-<variant>]`。`version` 为三段数字（例如 `1.0.1`）；项目 key 和可选 variant 只使用字母、数字和 `_`。项目 key 必须与仓库根目录下的项目目录一一对应。例如，`japan_economy-1.0.1` 只会解析到 `japan_economy/`；`solar-1.0.0-zh` 会执行 `solar/` 的 `render:zh` 脚本。当前解析器不支持任意 SemVer 预发布或构建元数据后缀。
+格式为 `<project_key>-<version>[-<variant>]`。`version` 为三段数字（例如 `1.0.1`）；项目 key 和可选 variant 只使用字母、数字、`_` 和 `-`。项目 key 必须与分类目录下的项目目录一一对应。例如，`japan_economy-1.0.1` 会解析到 `data_visualization/japan_economy/`；`solar-1.0.0-zh` 会执行 `science_nature/solar/` 的 `render:zh` 脚本。当前解析器不支持任意 SemVer 预发布或构建元数据后缀。
 
 1. 安装 Node.js 22 依赖；
 2. 安装 FFmpeg；

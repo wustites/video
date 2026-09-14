@@ -8,22 +8,22 @@
 
 | 项目 | 内容 | 语言 | 时长 | 框架 | 默认输出 |
 | --- | --- | --- | ---: | --- | --- |
-| [Metro de Lima](./metro_lima/) | 秘鲁利马地铁系统介绍 | 西 | 随旁白生成 | Remotion | `out/video.mp4` |
-| [Sapporo Subway](./sapporo_subway/) | 日本札幌市营地铁介绍 | 日 | 随旁白生成 | Remotion | `out/video.mp4` |
-| [Cloudflare History](./cloudflare_history/) | Cloudflare 发展历程 | 中 | 90 秒 | Remotion | `out/video.mp4` |
-| [Japan Economy](./japan_economy/) | 日本 1985—2026 经济指标与日经指数 | 日 | 随旁白生成 | Remotion | `out/video.mp4` |
-| [AI Model Rankings](./ai_model_rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | Remotion | `out/video.mp4` |
-| [Apple](./apple/) | 水果苹果创意介绍 | 中 | 54 秒 | Remotion | `out/video.mp4` |
-| [OpenRouter Rankings](./openrouter_rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | Remotion | `out/video.mp4` |
-| [Population CN](./population_cn/) | 中国各省出生人口变化 | 中 | 40 秒 | Remotion | `out/video.mp4` |
-| [QS Universities](./qs_universities/) | QS 世界大学排名 | 中 | 52 秒 | Remotion | `out/video.mp4` |
-| [Solar System](./solar/) | 太阳系科普动画 | 英、中、日、韩 | 随旁白生成 | Remotion | `out/video.mp4` |
-| [Top 500](./top500/) | 2025 年《财富》世界 500 强 | 中 | 29 秒 | Remotion | `out/video.mp4` |
-| [Kakeya Conjecture](./kakeya_conjecture/) | 挂谷猜想科普动画 | 中 | 42 秒 | Remotion | `out/video.mp4` |
-| [Brexit Referendum](./brexit_referendum/) | 英国脱欧公投回顾 | 英 | 随旁白生成 | Remotion | `out/video.mp4` |
-| [Red Army JP](./red_army_jp/) | 日本赤军历史 | 日 | 随旁白生成 | Remotion | `out/red-army-ja.mp4` |
-| [Southern Kurils JP](./southern_kurils_jp/) | 南千岛群岛介绍 | 日 | 随旁白生成 | Remotion | `out/southern-kurils-ja.mp4` |
-| [Imperial House Law JP](./imperial_house_law_jp/) | 皇室典范改正议题 | 日 | 随旁白生成 | Remotion | `out/imperial-house-law-ja.mp4` |
+| [Metro de Lima](./geography_transport/metro_lima/) | 秘鲁利马地铁系统介绍 | 西 | 随旁白生成 | Remotion | `out/video.mp4` |
+| [Sapporo Subway](./geography_transport/sapporo_subway/) | 日本札幌市营地铁介绍 | 日 | 随旁白生成 | Remotion | `out/video.mp4` |
+| [Cloudflare History](./history_society/cloudflare_history/) | Cloudflare 发展历程 | 中 | 90 秒 | Remotion | `out/video.mp4` |
+| [Japan Economy](./data_visualization/japan_economy/) | 日本 1985—2026 经济指标与日经指数 | 日 | 随旁白生成 | Remotion | `out/video.mp4` |
+| [AI Model Rankings](./data_visualization/ai_model_rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | Remotion | `out/video.mp4` |
+| [Apple](./creative_brand/apple/) | 水果苹果创意介绍 | 中 | 54 秒 | Remotion | `out/video.mp4` |
+| [OpenRouter Rankings](./data_visualization/openrouter_rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | Remotion | `out/video.mp4` |
+| [Population CN](./data_visualization/population_cn/) | 中国各省出生人口变化 | 中 | 40 秒 | Remotion | `out/video.mp4` |
+| [QS Universities](./data_visualization/qs_universities/) | QS 世界大学排名 | 中 | 52 秒 | Remotion | `out/video.mp4` |
+| [Solar System](./science_nature/solar/) | 太阳系科普动画 | 英、中、日、韩 | 随旁白生成 | Remotion | `out/video.mp4` |
+| [Top 500](./data_visualization/top500/) | 2025 年《财富》世界 500 强 | 中 | 29 秒 | Remotion | `out/video.mp4` |
+| [Kakeya Conjecture](./science_nature/kakeya_conjecture/) | 挂谷猜想科普动画 | 中 | 42 秒 | Remotion | `out/video.mp4` |
+| [Brexit Referendum](./history_society/brexit_referendum/) | 英国脱欧公投回顾 | 英 | 随旁白生成 | Remotion | `out/video.mp4` |
+| [Red Army JP](./history_society/red_army_jp/) | 日本赤军历史 | 日 | 随旁白生成 | Remotion | `out/red-army-ja.mp4` |
+| [Southern Kurils JP](./history_society/southern_kurils_jp/) | 南千岛群岛介绍 | 日 | 随旁白生成 | Remotion | `out/southern-kurils-ja.mp4` |
+| [Imperial House Law JP](./history_society/imperial_house_law_jp/) | 皇室典范改正议题 | 日 | 随旁白生成 | Remotion | `out/imperial-house-law-ja.mp4` |
 
 榜单和数据项目采用 `1080 × 1920` 竖屏画布；Kakeya Conjecture 使用 `1920 × 1080` 横屏画布。具体数据来源、内容结构和资源要求见各项目目录内的 README。
 
@@ -72,7 +72,7 @@ HyperFrames 项目应在 HTML 中通过 Google Fonts 的 `<link>` 或 `@import` 
 进入任意项目目录后执行：
 
 ```bash
-cd ai_model_rankings
+cd data_visualization/ai_model_rankings
 npm ci
 
 # TypeScript 类型检查

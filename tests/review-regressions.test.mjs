@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import test from 'node:test';
-import ts from '../population_cn/node_modules/typescript/lib/typescript.js';
+import ts from '../data_visualization/population_cn/node_modules/typescript/lib/typescript.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 async function loadTs(source) {
@@ -14,8 +14,8 @@ async function loadTs(source) {
 }
 
 test('population frames retain a sorted top 15 and reach the final year', async () => {
-  const d = await loadTs(readFileSync(path.join(root, 'population_cn/src/data.ts'), 'utf8'));
-  const component = readFileSync(path.join(root, 'population_cn/src/PopulationCn.tsx'), 'utf8');
+  const d = await loadTs(readFileSync(path.join(root, 'data_visualization/population_cn/src/data.ts'), 'utf8'));
+  const component = readFileSync(path.join(root, 'data_visualization/population_cn/src/PopulationCn.tsx'), 'utf8');
   const range = component.match(/interpolate\(frame, \[0, ([^\]]+)\], \[START_YEAR, END_YEAR\]/);
   assert.ok(range);
   const end = Function('TOTAL_FRAMES', `return ${range[1]}`)(d.TOTAL_FRAMES);
@@ -33,11 +33,12 @@ test('population frames retain a sorted top 15 and reach the final year', async 
 
 for (const project of ['ai_model_rankings', 'openrouter_rankings']) {
   test(`${project}: setup updates the data consumed by Remotion and preserves fallback`, async () => {
+    const projectRoot = path.join(root, 'data_visualization', project);
     const dir = mkdtempSync(path.join(tmpdir(), 'video-rankings-'));
     try {
       for (const sub of ['scripts', 'src', 'public']) mkdirSync(path.join(dir, sub));
-      copyFileSync(path.join(root, project, 'scripts/setup.mjs'), path.join(dir, 'scripts/setup.mjs'));
-      copyFileSync(path.join(root, project, 'src/snapshot.json'), path.join(dir, 'src/snapshot.json'));
+      copyFileSync(path.join(projectRoot, 'scripts/setup.mjs'), path.join(dir, 'scripts/setup.mjs'));
+      copyFileSync(path.join(projectRoot, 'src/snapshot.json'), path.join(dir, 'src/snapshot.json'));
       const rows = Array.from({length: 100}, (_, i) => ({date: '2030-01-01', model_permaslug: `openai/test-${i}`, total_completion_tokens: 1e12 + i, total_prompt_tokens: 1e12, change: 0.1}));
       const html = '<tr></tr><tr></tr>' + Array.from({length: 60}, (_, i) => `<tr>${[`Test Model ${i}`, '', 'OpenAI', 80 - i, '', 100 + i, '', ''].map(c => `<td>${c}</td>`).join('')}</tr>`).join('');
       const mock = path.join(dir, 'mock.mjs');
@@ -46,7 +47,7 @@ for (const project of ['ai_model_rankings', 'openrouter_rankings']) {
       run();
       const snapshotText = readFileSync(path.join(dir, 'src/snapshot.json'), 'utf8');
       const snapshot = JSON.parse(snapshotText);
-      const adapter = readFileSync(path.join(root, project, 'src/data.ts'), 'utf8').replace("import snapshot from './snapshot.json';", `const snapshot = ${snapshotText};`);
+      const adapter = readFileSync(path.join(projectRoot, 'src/data.ts'), 'utf8').replace("import snapshot from './snapshot.json';", `const snapshot = ${snapshotText};`);
       const data = await loadTs(adapter);
       if (project === 'ai_model_rankings') {
         assert.equal(data.METRICS.topScore, 80);
@@ -70,8 +71,8 @@ for (const project of ['ai_model_rankings', 'openrouter_rankings']) {
 }
 
 test('scatter keeps high scores, fast models and labels within the plot', async () => {
-  const {layoutScatter, SCATTER_W, SCATTER_H} = await loadTs(readFileSync(path.join(root, 'ai_model_rankings/src/scatter.ts'), 'utf8'));
-  const snapshot = JSON.parse(readFileSync(path.join(root, 'ai_model_rankings/src/snapshot.json'), 'utf8'));
+  const {layoutScatter, SCATTER_W, SCATTER_H} = await loadTs(readFileSync(path.join(root, 'data_visualization/ai_model_rankings/src/scatter.ts'), 'utf8'));
+  const snapshot = JSON.parse(readFileSync(path.join(root, 'data_visualization/ai_model_rankings/src/snapshot.json'), 'utf8'));
   for (const points of [snapshot.scatterPoints, [{speed: 100, score: 80}, {speed: 940, score: 60}], [{speed: 0, score: 0}, {speed: null, score: 0}], []]) {
     const layout = layoutScatter(points);
     assert.equal(layout.length, points.length);
@@ -88,7 +89,7 @@ test('scatter keeps high scores, fast models and labels within the plot', async 
 });
 
 test('ranking and provider titles do not assert a fixed winner in any locale', async () => {
-  const {LOCALES} = await loadTs(readFileSync(path.join(root, 'ai_model_rankings/src/i18n.ts'), 'utf8'));
+  const {LOCALES} = await loadTs(readFileSync(path.join(root, 'data_visualization/ai_model_rankings/src/i18n.ts'), 'utf8'));
   for (const locale of Object.values(LOCALES)) {
     assert.doesNotMatch(locale.scenes.ranking.title, /Claude|Opus/);
     assert.doesNotMatch(locale.scenes.providers.title, /Anthropic|OpenAI/);

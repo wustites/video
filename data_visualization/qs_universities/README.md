@@ -29,7 +29,7 @@
 ## 文件结构
 
 ```
-qs_universities/
+data_visualization/qs_universities/
 ├── src/                # 当前 Remotion 入口、组件、数据和字体
 ├── index.html          # 历史 HyperFrames composition
 ├── meta.json           # 项目元数据
