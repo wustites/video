@@ -40,9 +40,9 @@ jobs:
             exit 1
           fi
 
-          project_dir="$(find . -mindepth 2 -maxdepth 3 -type d -name "$project_key" -print -quit)"
+          project_dir="$(node -e 'const projects=require("./projects.json"); const project=projects[process.argv[1]]; if (!project) process.exit(1); process.stdout.write(project)' "$project_key" 2>/dev/null || true)"
           if [[ -z "$project_dir" ]]; then
-            echo "Project directory '$project_key' was not found" >&2
+            echo "Project '$project_key' is not registered in projects.json" >&2
             exit 1
           fi
 
