@@ -95,3 +95,46 @@ test('ranking and provider titles do not assert a fixed winner in any locale', a
     assert.doesNotMatch(locale.scenes.providers.title, /Anthropic|OpenAI/);
   }
 });
+
+test('shandong scenes tile the narration and never leave an empty frame', async () => {
+  const projectRoot = path.join(root, 'education/shandong_universities');
+  const {buildTimeline, sceneOpacity} = await loadTs(readFileSync(path.join(projectRoot, 'src/scenes.ts'), 'utf8'));
+  const {CITIES} = await loadTs(readFileSync(path.join(projectRoot, 'src/data.ts'), 'utf8'));
+  const {GEO_CITIES} = await loadTs(readFileSync(path.join(projectRoot, 'src/shandongGeo.ts'), 'utf8'));
+  const durations = JSON.parse(readFileSync(path.join(projectRoot, 'public/voiceover/segment-durations.json'), 'utf8'));
+  const paragraphs = readFileSync(path.join(projectRoot, 'public/voiceover/narration.zh.txt'), 'utf8')
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  const ids = ['intro', 'overview', ...CITIES.map((c) => c.name), 'outro'];
+  assert.equal(paragraphs.length, ids.length);
+  assert.deepEqual(
+    GEO_CITIES.map((c) => c.name),
+    CITIES.map((c) => c.name),
+  );
+
+  const timeline = buildTimeline(ids, durations);
+  const lastNarrationFrame = timeline.scenes[timeline.scenes.length - 1].endFrame;
+  for (let i = 1; i < timeline.scenes.length; i++) {
+    assert.equal(timeline.scenes[i].startFrame, timeline.scenes[i - 1].endFrame);
+  }
+  const cover = (frame) => Math.max(...timeline.scenes.map((s) => sceneOpacity(s, frame)));
+  for (let frame = 0; frame <= lastNarrationFrame; frame++) {
+    assert.equal(cover(frame), 1, `frame ${frame} has no fully visible scene`);
+  }
+  let previous = 1;
+  for (let frame = lastNarrationFrame + 1; frame < timeline.totalFrames; frame++) {
+    const current = cover(frame);
+    assert.ok(current <= previous, `frame ${frame} brightens again during the end fade`);
+    previous = current;
+  }
+  assert.equal(previous, 0);
+  assert.throws(() => buildTimeline(ids, durations.slice(1)), /npm run voiceover/);
+
+  CITIES.forEach((city, i) => {
+    const text = paragraphs[i + 2].replace(/[（）()]/g, '');
+    for (const school of city.schools) {
+      assert.ok(text.includes(school.replace(/[（）()]/g, '')), `${city.name} 段落缺少 ${school}`);
+    }
+  });
+});
