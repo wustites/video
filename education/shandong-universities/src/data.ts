@@ -1,17 +1,21 @@
-export type City = {name: string; x: number; y: number};
-export type School = {city: string; name: string; type: string; tag: string; desc: string; x: number; y: number};
+export type City = {name: string; schools: string[]; x: number; y: number};
 
+// 口径：每个地市最多 5 所，代表性本科院校，非官方排名。
 export const CITIES: City[] = [
-  {name:'济南',x:45,y:42},{name:'青岛',x:78,y:38},{name:'淄博',x:57,y:36},{name:'枣庄',x:30,y:74},
-  {name:'东营',x:61,y:20},{name:'烟台',x:88,y:18},{name:'潍坊',x:71,y:28},{name:'济宁',x:39,y:61},
-  {name:'泰安',x:48,y:54},{name:'威海',x:96,y:24},{name:'日照',x:73,y:63},{name:'临沂',x:61,y:70},
-  {name:'德州',x:39,y:19},{name:'聊城',x:28,y:29},{name:'滨州',x:52,y:14},{name:'菏泽',x:18,y:62},
-];
-
-export const SCHOOLS: School[] = [
-  {city:'济南',name:'山东大学',type:'综合类 · 教育部直属',tag:'学科门类齐全',desc:'基础学科、医学、人文社科与工科交叉布局。',x:45,y:42},
-  {city:'青岛',name:'中国海洋大学',type:'海洋特色 · 教育部直属',tag:'海洋科学',desc:'以海洋和水产学科见长，面向海洋事业培养人才。',x:78,y:38},
-  {city:'青岛',name:'中国石油大学（华东）',type:'能源特色 · 工科优势',tag:'能源与石化',desc:'地学、能源、化工与工程技术形成特色组合。',x:78,y:38},
-  {city:'威海',name:'哈尔滨工业大学（威海）',type:'工科底色 · 校区办学',tag:'先进制造',desc:'关注智能制造、海洋与信息技术等方向。',x:96,y:24},
-  {city:'淄博',name:'山东理工大学',type:'工科特色 · 应用导向',tag:'产业实践',desc:'机械、车辆、农业工程与信息技术值得关注。',x:57,y:36},
+  {name:'济南',schools:['山东大学','山东师范大学','山东财经大学','齐鲁工业大学','济南大学'],x:45,y:42},
+  {name:'青岛',schools:['中国海洋大学','中国石油大学（华东）','青岛大学','青岛科技大学','青岛理工大学'],x:78,y:38},
+  {name:'淄博',schools:['山东理工大学','齐鲁医药学院'],x:57,y:36},
+  {name:'枣庄',schools:['枣庄学院'],x:30,y:74},
+  {name:'东营',schools:['山东石油化工学院'],x:61,y:20},
+  {name:'烟台',schools:['烟台大学','鲁东大学','山东工商学院','烟台理工学院','烟台南山学院'],x:88,y:18},
+  {name:'潍坊',schools:['潍坊学院','潍坊医学院','潍坊科技学院'],x:71,y:28},
+  {name:'济宁',schools:['曲阜师范大学','济宁医学院','济宁学院'],x:39,y:61},
+  {name:'泰安',schools:['山东农业大学','泰山学院','泰山科技学院'],x:48,y:54},
+  {name:'威海',schools:['山东大学（威海）','哈尔滨工业大学（威海）'],x:96,y:24},
+  {name:'日照',schools:['曲阜师范大学（日照校区）','山东体育学院（日照校区）'],x:73,y:63},
+  {name:'临沂',schools:['临沂大学'],x:61,y:70},
+  {name:'德州',schools:['德州学院'],x:39,y:19},
+  {name:'聊城',schools:['聊城大学','聊城大学东昌学院'],x:28,y:29},
+  {name:'滨州',schools:['山东航空学院','滨州医学院'],x:52,y:14},
+  {name:'菏泽',schools:['菏泽学院'],x:18,y:62},
 ];

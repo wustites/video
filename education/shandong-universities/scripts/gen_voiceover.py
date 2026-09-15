@@ -10,7 +10,7 @@ VO.mkdir(parents=True, exist_ok=True)
 durations=[]
 for i, para in enumerate(paras, 1):
     seg=VO/f'seg{i}.mp3'
-    subprocess.run([sys.executable,'-m','edge_tts','--voice',VOICE,'--rate=+0%','--text',para,'--write-media',str(seg)],check=True)
+    subprocess.run([sys.executable,'-m','edge_tts','--voice',VOICE,'--rate=+25%','--text',para,'--write-media',str(seg)],check=True)
     probe=subprocess.run(['ffprobe','-v','error','-show_entries','format=duration','-of','default=noprint_wrappers=1:nokey=1',str(seg)],capture_output=True,text=True,check=True)
     durations.append(float(probe.stdout.strip()))
 concat=VO/'concat.txt'
