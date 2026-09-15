@@ -13,6 +13,12 @@
 | Japan Economy | [`data_visualization/japan_economy/`](./data_visualization/japan_economy/) | 日本 1985—2026 年经济指标与日经指数 |
 | Population CN | [`data_visualization/population_cn/`](./data_visualization/population_cn/) | 中国各省出生人口变化 |
 
+## 教育
+
+| 项目名 | 项目路径 | 内容简介 |
+| --- | --- | --- |
+| Shandong Universities | [`education/shandong_universities/`](./education/shandong_universities/) | 山东本科院校地图速览 |
+
 ## 历史、社会与时事
 
 | 项目名 | 项目路径 | 内容简介 |

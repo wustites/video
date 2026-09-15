@@ -1,6 +1,6 @@
 # Video Projects
 
-本仓库收录数据可视化、榜单与科普类视频项目，当前 16 个项目均基于 **Remotion** 制作；部分目录保留了早期 HyperFrames 源文件。
+本仓库收录数据可视化、榜单与科普类视频项目，当前 17 个项目均基于 **Remotion** 制作；部分目录保留了早期 HyperFrames 源文件。
 
 项目按主题分类、项目名称与根目录路径见 [视频项目索引](./PROJECTS.md)；Action 使用 [`projects.json`](./projects.json) 维护项目名到实际路径的对应关系。
 
@@ -24,6 +24,7 @@
 | [Red Army JP](./history_society/red_army_jp/) | 日本赤军历史 | 日 | 随旁白生成 | Remotion | `out/red-army-ja.mp4` |
 | [Southern Kurils JP](./history_society/southern_kurils_jp/) | 南千岛群岛介绍 | 日 | 随旁白生成 | Remotion | `out/southern-kurils-ja.mp4` |
 | [Imperial House Law JP](./history_society/imperial_house_law_jp/) | 皇室典范改正议题 | 日 | 随旁白生成 | Remotion | `out/imperial-house-law-ja.mp4` |
+| [Shandong Universities](./education/shandong_universities/) | 山东本科院校地图速览 | 中 | 随旁白生成 | Remotion | `out/shandong-atlas.mp4` |
 
 榜单和数据项目采用 `1080 × 1920` 竖屏画布；Kakeya Conjecture 使用 `1920 × 1080` 横屏画布。具体数据来源、内容结构和资源要求见各项目目录内的 README。
 
