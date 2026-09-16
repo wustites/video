@@ -13,6 +13,22 @@ async function loadTs(source) {
   return import('data:text/javascript;base64,' + Buffer.from(js).toString('base64'));
 }
 
+// 有相对导入的模块：先递归把相对路径改写成 data: URL，再转译整体 import
+const moduleUrls = new Map();
+function moduleUrl(file) {
+  const cached = moduleUrls.get(file);
+  if (cached) return cached;
+  let source = readFileSync(file, 'utf8');
+  for (const [, spec] of source.matchAll(/(?:from|import)\s+'(\.[^']+)'/g)) {
+    const target = path.resolve(path.dirname(file), /\.[cm]?[jt]sx?$/.test(spec) ? spec : `${spec}.ts`);
+    source = source.replaceAll(`'${spec}'`, `'${moduleUrl(target)}'`);
+  }
+  const url = 'data:text/javascript;base64,' + Buffer.from(ts.transpileModule(source, {compilerOptions: {target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022}}).outputText).toString('base64');
+  moduleUrls.set(file, url);
+  return url;
+}
+const loadModule = (file) => import(moduleUrl(file));
+
 test('population frames retain a sorted top 15 and reach the final year', async () => {
   const d = await loadTs(readFileSync(path.join(root, 'data_visualization/population_cn/src/data.ts'), 'utf8'));
   const component = readFileSync(path.join(root, 'data_visualization/population_cn/src/PopulationCn.tsx'), 'utf8');
@@ -106,7 +122,7 @@ test('shandong scenes tile the narration and never leave an empty frame', async 
     .split(/\n{2,}/)
     .map((p) => p.trim())
     .filter(Boolean);
-  const ids = ['intro', 'overview', ...CITIES.map((c) => c.name), 'outro'];
+  const ids = ['intro', ...CITIES.map((c) => c.name)];
   assert.equal(paragraphs.length, ids.length);
   assert.deepEqual(
     GEO_CITIES.map((c) => c.name),
@@ -132,9 +148,61 @@ test('shandong scenes tile the narration and never leave an empty frame', async 
   assert.throws(() => buildTimeline(ids, durations.slice(1)), /npm run voiceover/);
 
   CITIES.forEach((city, i) => {
-    const text = paragraphs[i + 2].replace(/[（）()]/g, '');
+    const text = paragraphs[i + 1].replace(/[（）()]/g, '');
     for (const school of city.schools) {
       assert.ok(text.includes(school.replace(/[（）()]/g, '')), `${city.name} 段落缺少 ${school}`);
     }
   });
+});
+
+test('shandong map camera focuses each city inside the map band without jumping', async () => {
+  const projectRoot = path.join(root, 'education/shandong_universities');
+  const load = (rel) => loadModule(path.join(projectRoot, rel));
+  const {FPS, buildTimeline} = await load('src/scenes.ts');
+  const {CITIES} = await load('src/data.ts');
+  const {GEO_CITIES} = await load('src/shandongGeo.ts');
+  const {PROVINCE_CAMERA, buildCameraKeys, cameraAt, focusAt, focusWeight, FRAME, MAP_BAND_BOTTOM, project, viewOf} = await load('src/mapCamera.ts');
+  const durations = JSON.parse(readFileSync(path.join(projectRoot, 'public/voiceover/segment-durations.json'), 'utf8'));
+  const ids = ['intro', ...CITIES.map((c) => c.name)];
+  const timeline = buildTimeline(ids, durations);
+  const keys = buildCameraKeys(ids, timeline.scenes, FPS);
+
+  // 每个地市：聚焦期间整块真实边界都落在信息卡上方，且比全省视图更近
+  GEO_CITIES.forEach((geo, i) => {
+    const scene = keys[i + 1];
+    assert.equal(scene.sceneId, geo.name);
+    for (let frame = scene.startFrame + scene.fadeFrames; frame <= scene.endFrame - scene.fadeFrames; frame++) {
+      const cam = cameraAt(frame, keys);
+      assert.ok(cam.vbW < PROVINCE_CAMERA.vbW, `${geo.name} frame ${frame} 未推近`);
+      const view = viewOf(cam);
+      for (const x of [geo.bbox.x, geo.bbox.x + geo.bbox.w]) {
+        for (const y of [geo.bbox.y, geo.bbox.y + geo.bbox.h]) {
+          const {px, py} = project(view, x, y);
+          assert.ok(px >= 0 && px <= FRAME.width && py >= 0 && py <= MAP_BAND_BOTTOM, `${geo.name} frame ${frame} 边界出画：${px.toFixed(0)},${py.toFixed(0)}`);
+        }
+      }
+    }
+  });
+
+  // 全片相机连续：不允许单帧跳变（切换窗口写错时这里会失败）
+  let maxCenterStep = 0;
+  let maxZoomStep = 1;
+  for (let frame = 0; frame < timeline.totalFrames; frame++) {
+    const a = cameraAt(frame, keys);
+    const b = cameraAt(frame + 1, keys);
+    maxCenterStep = Math.max(maxCenterStep, Math.hypot(b.cx - a.cx, b.cy - a.cy) / a.vbW);
+    maxZoomStep = Math.max(maxZoomStep, Math.max(b.vbW / a.vbW, a.vbW / b.vbW));
+  }
+  // 实测峰值出现在飞行中段（约 0.065 倍可见宽度 / 1.11 倍宽度），阈值留约 40% 余量；
+  // 切换窗口写错时会退化成一次性跳变（远超 1 倍），因此这两个断言能兜住。
+  assert.ok(maxCenterStep < 0.09, `单帧平移过大：${maxCenterStep.toFixed(3)} 倍可见宽度`);
+  assert.ok(maxZoomStep < 1.15, `单帧缩放过大：${maxZoomStep.toFixed(3)}`);
+
+  // 高亮权重始终归一：任一帧所有地市的权重之和不超过 1，且不会同时出现两个满权重
+  const weights = (frame) => GEO_CITIES.map((g) => focusWeight(focusAt(frame, keys), g.name));
+  for (let frame = 0; frame < timeline.totalFrames; frame++) {
+    const sum = weights(frame).reduce((a, b) => a + b, 0);
+    assert.ok(sum <= 1 + 1e-9, `frame ${frame} 高亮权重 ${sum}`);
+  }
+  assert.deepEqual(weights(keys[0].startFrame), weights(keys[0].startFrame).map(() => 0));
 });

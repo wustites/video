@@ -17,6 +17,8 @@ export type GeoCity = {
   y: number;
   lx: number;
   ly: number;
+  /** 简化后边界的包围盒（viewBox 单位），供地图相机推导聚焦窗口 */
+  bbox: {x: number; y: number; w: number; h: number};
 };
 
 export const GEO_CITIES: GeoCity[] = [
@@ -27,6 +29,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 248.3,
     lx: 281.8,
     ly: 248.3,
+    bbox: {x: 207.1, y: 145.2, w: 201.3, h: 177.7},
   },
   {
     name: '青岛',
@@ -35,6 +38,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 270.2,
     lx: 699.3,
     ly: 270.2,
+    bbox: {x: 586.1, y: 189.4, w: 169.2, h: 181.3},
   },
   {
     name: '淄博',
@@ -43,6 +47,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 251.7,
     lx: 458.3,
     ly: 251.7,
+    bbox: {x: 359.8, y: 174.0, w: 111.9, h: 156.4},
   },
   {
     name: '枣庄',
@@ -51,6 +56,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 446.9,
     lx: 342.4,
     ly: 472.9,
+    bbox: {x: 274.6, y: 400.1, w: 117.5, h: 98.8},
   },
   {
     name: '东营',
@@ -59,6 +65,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 133.1,
     lx: 485.6,
     ly: 107.1,
+    bbox: {x: 424.5, y: 73.2, w: 137.3, h: 140.4},
   },
   {
     name: '烟台',
@@ -67,6 +74,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 178.8,
     lx: 734.7,
     ly: 152.8,
+    bbox: {x: 591.7, y: 68.0, w: 273.2, h: 187.8},
   },
   {
     name: '潍坊',
@@ -75,6 +83,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 258.2,
     lx: 535.8,
     ly: 232.2,
+    bbox: {x: 431.9, y: 171.5, w: 211.5, h: 183.4},
   },
   {
     name: '济宁',
@@ -83,6 +92,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 394.5,
     lx: 266.5,
     ly: 420.5,
+    bbox: {x: 166.4, y: 323.9, w: 198.7, h: 178.3},
   },
   {
     name: '泰安',
@@ -91,6 +101,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 321.6,
     lx: 299.9,
     ly: 347.6,
+    bbox: {x: 186.7, y: 266.9, w: 224.8, h: 97.4},
   },
   {
     name: '威海',
@@ -99,6 +110,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 193.0,
     lx: 912.6,
     ly: 193.0,
+    bbox: {x: 778.2, y: 141.0, w: 176.8, h: 97.4},
   },
   {
     name: '日照',
@@ -107,6 +119,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 370.5,
     lx: 543.7,
     ly: 396.5,
+    bbox: {x: 480.9, y: 317.4, w: 122.7, h: 111.6},
   },
   {
     name: '临沂',
@@ -115,6 +128,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 401.4,
     lx: 404.6,
     ly: 401.4,
+    bbox: {x: 344.6, y: 298.0, w: 205.6, h: 210.6},
   },
   {
     name: '德州',
@@ -123,6 +137,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 177.9,
     lx: 256.2,
     ly: 203.9,
+    bbox: {x: 153.6, y: 90.1, w: 212.6, h: 184.5},
   },
   {
     name: '聊城',
@@ -131,6 +146,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 268.9,
     lx: 128.2,
     ly: 268.9,
+    bbox: {x: 97.3, y: 202.8, w: 146.7, h: 144.3},
   },
   {
     name: '滨州',
@@ -139,6 +155,7 @@ export const GEO_CITIES: GeoCity[] = [
     y: 144.3,
     lx: 394.0,
     ly: 118.3,
+    bbox: {x: 327.8, y: 56.6, w: 128.4, h: 185.1},
   },
   {
     name: '菏泽',
@@ -147,5 +164,6 @@ export const GEO_CITIES: GeoCity[] = [
     y: 419.6,
     lx: 106.3,
     ly: 419.6,
+    bbox: {x: 45.0, y: 337.1, w: 183.3, h: 151.6},
   },
 ];

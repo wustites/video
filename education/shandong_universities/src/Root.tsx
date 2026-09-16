@@ -1,6 +1,7 @@
 import React from 'react';
 import {Composition, continueRender, delayRender} from 'remotion';
 import {ShandongAtlas} from './ShandongAtlas';
+import {FRAME} from './mapCamera';
 import {notoSansSC} from './fonts';
 import {FPS, TOTAL_FRAMES} from './timing';
 
@@ -17,8 +18,8 @@ export const RemotionRoot: React.FC = () => (
       component={ShandongAtlas}
       durationInFrames={TOTAL_FRAMES}
       fps={FPS}
-      width={1080}
-      height={1920}
+      width={FRAME.width}
+      height={FRAME.height}
     />
   </>
 );

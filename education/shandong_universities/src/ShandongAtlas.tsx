@@ -1,60 +1,115 @@
 import React from 'react';
 import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {CITIES, City} from './data';
-import {FADE_OUT, useEntrance, useSceneOpacity} from './timing';
+import {CAMERA_KEYS, FADE_OUT, useContentOpacity, useEntrance} from './timing';
 import {fontFamily} from './fonts';
-import {GEO_CITIES, MAP_VIEWBOX_H, MAP_VIEWBOX_W, PROVINCE_PATH} from './shandongGeo';
+import {
+  Camera,
+  CameraView,
+  cameraAt,
+  cityOf,
+  Focus,
+  focusAt,
+  focusWeight,
+  FRAME,
+  MAP_BAND_BOTTOM,
+  project,
+  viewOf,
+} from './mapCamera';
+import {GEO_CITIES, MAP_VIEWBOX_W, PROVINCE_PATH} from './shandongGeo';
 
 const C = {bg:'#071B2D',panel:'#0F3D56',cyan:'#19C3B1',gold:'#F4B942',white:'#F4F7F8',muted:'#A7C0C8'};
 const font = {fontFamily: `"${fontFamily}", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif`};
-const Scene:React.FC<{id:string;children:React.ReactNode}>=({id,children})=>{const opacity=useSceneOpacity(id);if(opacity<=0)return null;return <AbsoluteFill style={{opacity,padding:'92px 72px',justifyContent:'center',color:C.white,...font}}>{children}</AbsoluteFill>;};
 
-const Background:React.FC=()=> <AbsoluteFill style={{background:C.bg,...font}}><div style={{position:'absolute',inset:0,opacity:.15,backgroundImage:`linear-gradient(rgba(25,195,177,.32) 1px,transparent 1px),linear-gradient(90deg,rgba(25,195,177,.32) 1px,transparent 1px)`,backgroundSize:'54px 54px'}}/><div style={{position:'absolute',left:-180,top:420,width:1100,height:1100,border:'2px solid rgba(25,195,177,.18)',borderRadius:'50%'}}/></AbsoluteFill>;
+/** 左右安全边距 */
+const PAD = 68;
 
-const GEO_BY_NAME = new Map(GEO_CITIES.map((g)=>[g.name,g]));
+/** 屏幕下半部分的信息卡：顶边与 MAP_BAND_BOTTOM 对齐，高度固定，版面不随内容跳动 */
+const SHEET_TOP = MAP_BAND_BOTTOM;
+const SHEET_SCRIM = 170; // 地图向信息卡过渡的渐变高度
 
-// 真实山东省地图：省界 + 16 地级市分区，标记与标签按数据生成的真实坐标摆放。
-// 地图在 viewBox 坐标系内构建（MAP_VIEWBOX_W × MAP_VIEWBOX_H），
-// 标记/标签用百分比定位到相同坐标系，文字以固定像素渲染，保证任何尺寸下清晰。
-export const ProvinceMap:React.FC<{width:number;active?:string;labels:'all'|'active'|'none'}>=({width,active,labels})=>{
+const ROW_H = 88;
+const ROW_GAP = 10;
+
+const Scene:React.FC<{id:string;children:React.ReactNode}>=({id,children})=>{
+  const opacity=useContentOpacity(id);
+  if(opacity<=0)return null;
+  return <AbsoluteFill style={{opacity,color:C.white,...font}}>{children}</AbsoluteFill>;
+};
+
+const Background:React.FC=()=> <AbsoluteFill style={{background:C.bg,...font}}><div style={{position:'absolute',inset:0,opacity:.15,backgroundImage:`linear-gradient(rgba(25,195,177,.32) 1px,transparent 1px),linear-gradient(90deg,rgba(25,195,177,.32) 1px,transparent 1px)`,backgroundSize:'54px 54px'}}/></AbsoluteFill>;
+
+/** 聚焦地市的名字牌：贴在行政中心标记旁边，切换时随相机一起淡入淡出 */
+const CityTag:React.FC<{name:string;view:CameraView;opacity:number}>=({name,view,opacity})=>{
+  const g=cityOf(name);
+  const p=project(view,g.x,g.y);
+  const side=p.px>FRAME.width/2?-1:1; // 名字牌放在画面更空旷的一侧
+  return <div style={{position:'absolute',left:p.px+side*38,top:p.py,transform:side>0?'translate(0,-50%)':'translate(-100%,-50%)',opacity,padding:'10px 22px',background:'rgba(7,27,45,.88)',border:`2px solid ${C.gold}`,borderRadius:2,fontSize:40,fontWeight:900,letterSpacing:3,whiteSpace:'nowrap',color:C.white,boxShadow:'0 10px 26px rgba(0,0,0,.5)'}}>{g.name}</div>;
+};
+
+// 真实山东省地图：省界 + 16 地级市分区，整层常驻，相机逐场驱动。
+// 相机给出可见 viewBox 矩形（中心 + 宽度），SVG 的 viewBox 直接跟着相机走，
+// 因此平移缩放是连续的；标记与标签是 HTML 覆盖层，按同一映射换算成像素，
+// 描边宽度按 1/scale 折算，放大时线宽与文字大小都保持恒定。
+const MapLayer:React.FC=()=>{
   const f=useCurrentFrame();
-  const h=Math.round(MAP_VIEWBOX_H*width/MAP_VIEWBOX_W);
-  const s=width/MAP_VIEWBOX_W; // 1 viewBox 单位对应的像素
-  const act=active?GEO_BY_NAME.get(active):undefined;
-  const actSide=act&&act.x>560?-1:1; // 迷你图中城市标签放到更空旷的一侧
-  return <div style={{position:'relative',width,height:h}}>
-    <svg viewBox={`0 0 ${MAP_VIEWBOX_W} ${MAP_VIEWBOX_H}`} style={{position:'absolute',inset:0,filter:'drop-shadow(0 18px 24px rgba(0,0,0,.35))'}}>
-      <path d={PROVINCE_PATH} fill={C.panel} stroke={C.cyan} strokeWidth={1.4*s} strokeLinejoin="round"/>
+  const camera:Camera=cameraAt(f,CAMERA_KEYS);
+  const focus:Focus=focusAt(f,CAMERA_KEYS);
+  const view=viewOf(camera);
+  const toUnits=(px:number)=>px/view.scale; // 像素 → viewBox 单位
+  const focused=focus.to!==undefined||focus.from!==undefined;
+  // 全省视图才显示全部地市名，推进到地市后只留聚焦标签
+  const labelFade=interpolate(camera.vbW,[MAP_VIEWBOX_W*0.5,MAP_VIEWBOX_W*0.78],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
+  return <div style={{position:'absolute',inset:0,overflow:'hidden'}}>
+    <svg width={FRAME.width} height={FRAME.height} viewBox={`${view.x0} ${view.y0} ${view.vbW} ${view.vbH}`} style={{position:'absolute',left:0,top:0}}>
+      <path d={PROVINCE_PATH} fill={C.panel} stroke="rgba(25,195,177,.6)" strokeWidth={toUnits(2.6)} strokeLinejoin="round"/>
       {GEO_CITIES.map((g)=>{
-        const isActive=g.name===active;
-        return <path key={g.name} d={g.path}
-          fill={isActive?'rgba(244,185,66,.16)':'rgba(15,61,86,.5)'}
-          stroke={isActive?'rgba(244,185,66,.9)':'rgba(25,195,177,.38)'}
-          strokeWidth={isActive?3*s:1*s} strokeLinejoin="round"/>;
+        const w=focusWeight(focus,g.name);
+        return <React.Fragment key={g.name}>
+          {w>0&&<path d={g.path} fill="none" stroke={`rgba(244,185,66,${.26*w})`} strokeWidth={toUnits(14)} strokeLinejoin="round"/>}
+          <path d={g.path}
+            fill={w>0?`rgba(244,185,66,${.06+.2*w})`:'rgba(15,61,86,.55)'}
+            stroke={w>0?`rgba(244,185,66,${.55+.35*w})`:'rgba(25,195,177,.38)'}
+            strokeWidth={toUnits(w>0?2.8:1.5)}
+            opacity={focused&&w<=0?.42:1}
+            strokeLinejoin="round"/>
+        </React.Fragment>;
       })}
     </svg>
     {GEO_CITIES.map((g)=>{
-      const isActive=g.name===active;
-      const dim=active!==undefined&&!isActive;
-      const r=(isActive?24:12)*s*(isActive?1+.14*Math.sin(f/12):1);
-      return <div key={g.name} style={{position:'absolute',left:`${g.x/MAP_VIEWBOX_W*100}%`,top:`${g.y/MAP_VIEWBOX_H*100}%`,width:r,height:r,marginLeft:-r/2,marginTop:-r/2,borderRadius:'50%',background:isActive?C.gold:C.cyan,border:`${(isActive?3:1.6)*s}px solid rgba(7,27,45,.9)`,boxShadow:isActive?`0 0 0 ${16*s}px rgba(244,185,66,.16)`:'0 2px 6px rgba(0,0,0,.45)',opacity:dim?.32:1}}/>;
+      const w=focusWeight(focus,g.name);
+      const p=project(view,g.x,g.y);
+      const r=8+12*w+(w>0?2.2*Math.sin(f/9):0);
+      return <div key={g.name} style={{position:'absolute',left:p.px,top:p.py,width:r*2,height:r*2,marginLeft:-r,marginTop:-r,borderRadius:'50%',background:w>.2?C.gold:C.cyan,border:'3px solid rgba(7,27,45,.9)',boxShadow:w>.2?`0 0 0 ${10+6*w}px rgba(244,185,66,.18)`:'0 2px 6px rgba(0,0,0,.5)',opacity:focused&&w<=0?.4:1}}/>;
     })}
-    {labels==='all'&&GEO_CITIES.map((g)=><div key={g.name} style={{position:'absolute',left:`${g.lx/MAP_VIEWBOX_W*100}%`,top:`${g.ly/MAP_VIEWBOX_H*100}%`,transform:'translate(-50%,-50%)',fontSize:19*s,fontWeight:g.name===active?900:500,color:g.name===active?C.white:C.muted,letterSpacing:1,whiteSpace:'nowrap'}}>{g.name}</div>)}
-    {labels==='active'&&act&&<div style={{position:'absolute',left:`${((act.x+actSide*46)/MAP_VIEWBOX_W)*100}%`,top:`${(act.y/MAP_VIEWBOX_H)*100}%`,transform:actSide>0?'translate(0,-50%)':'translate(-100%,-50%)',fontSize:22,fontWeight:900,color:C.white,letterSpacing:2,whiteSpace:'nowrap'}}>{act.name}</div>}
+    {labelFade>0&&GEO_CITIES.map((g)=>{
+      const p=project(view,g.lx,g.ly);
+      return <div key={g.name} style={{position:'absolute',left:p.px,top:p.py,transform:'translate(-50%,-50%)',fontSize:22,fontWeight:600,color:C.muted,letterSpacing:1,whiteSpace:'nowrap',opacity:labelFade*(focused?.6:1)}}>{g.name}</div>;
+    })}
+    {[focus.from,focus.to].filter((name,i,list)=>name!==undefined&&list.indexOf(name)===i).map((name)=><CityTag key={name} name={name!} view={view} opacity={focusWeight(focus,name!)}/>)}
   </div>;
 };
 
-const Header:React.FC<{text:string;index?:string}>=({text,index})=><div style={{position:'absolute',top:70,left:72,right:72,display:'flex',justifyContent:'space-between',alignItems:'center'}}><span style={{fontSize:23,letterSpacing:4,color:C.cyan,fontWeight:900}}>{text}</span>{index&&<span style={{fontSize:23,letterSpacing:3,color:C.gold}}>{index}</span>}</div>;
+/** 顶部标题条与它下方的一层遮罩，保证文字压在地图上依然清晰 */
+const Header:React.FC<{text:string;right?:string}>=({text,right})=> <div style={{position:'absolute',left:0,right:0,top:0,height:190,background:`linear-gradient(180deg,rgba(7,27,45,.94),rgba(7,27,45,0))`}}><div style={{position:'absolute',top:64,left:PAD,right:PAD,display:'flex',justifyContent:'space-between',alignItems:'center'}}><span style={{fontSize:24,letterSpacing:5,color:C.cyan,fontWeight:900}}>{text}</span>{right&&<span style={{fontSize:24,letterSpacing:3,color:C.gold,fontWeight:900}}>{right}</span>}</div></div>;
 
-const Intro:React.FC=()=>{const a=useEntrance('intro',0,0.8);return <Scene id="intro"><Header text="SHANDONG · UNIVERSITY ATLAS"/><div style={{opacity:a}}><div style={{fontSize:116,fontWeight:900,lineHeight:1.06,letterSpacing:-5}}>山东各地<br/>重点本科院校</div><div style={{width:270,height:8,background:C.gold,marginTop:34}}/><div style={{fontSize:32,lineHeight:1.55,color:C.muted,marginTop:34}}>16 个地市快速盘点<br/>每个地区最多 5 所代表性院校</div></div><div style={{position:'absolute',right:24,bottom:110,opacity:.92}}><ProvinceMap width={800} labels="none"/></div></Scene>;};
+/** 底部信息卡的底板：整层常驻，不随场景淡入淡出，场景只负责在它上面切换文字 */
+const SheetPanel:React.FC=()=> <>
+  <div style={{position:'absolute',left:0,right:0,top:SHEET_TOP-SHEET_SCRIM,height:SHEET_SCRIM,background:`linear-gradient(180deg,rgba(7,27,45,0),${C.bg})`}}/>
+  <div style={{position:'absolute',left:0,right:0,top:SHEET_TOP,bottom:0,background:C.bg,borderTop:`1px solid rgba(25,195,177,.3)`}}/>
+</>;
 
-const Overview:React.FC=()=> <Scene id="overview"><Header text="全省总览" index="16 地市"/><div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:16}}><div style={{fontSize:50,fontWeight:900}}>从鲁西南到胶东沿海</div><div style={{fontSize:27,color:C.muted}}>真实省界与地市分区 · 圆点为地级市行政中心</div><ProvinceMap width={940} labels="all"/></div><div style={{position:'absolute',left:72,bottom:72,fontSize:19,color:C.muted,letterSpacing:1}}>代表性本科院校 · 非官方排名 · 具体招生以当年章程为准</div></Scene>;
+/** 信息卡内容区：固定高度、内容垂直居中，短名单不会让版面塌下去 */
+const Sheet:React.FC<{children:React.ReactNode}>=({children})=>
+  <div style={{position:'absolute',left:0,right:0,top:SHEET_TOP,bottom:0,padding:`48px ${PAD}px`,display:'flex',flexDirection:'column',justifyContent:'center'}}>{children}</div>;
 
-const CityScene:React.FC<{city:City;index:number}>=({city,index})=>{const a=useEntrance(city.name,0);const b=useEntrance(city.name,0,0.8);return <Scene id={city.name}><Header text="地市速览" index={`${String(index).padStart(2,'0')} / 16`}/><div style={{display:'flex',alignItems:'center',gap:44,width:'100%',opacity:a,transform:`translateY(${(1-a)*22}px)`}}><div style={{flex:'0 0 460px',display:'flex',flexDirection:'column',gap:16}}><div style={{display:'inline-flex',alignSelf:'flex-start',padding:'12px 20px',border:`2px solid ${C.cyan}`,color:C.cyan,fontSize:25,fontWeight:900}}>{city.name} · 本科院校</div><div style={{fontSize:23,color:C.gold,letterSpacing:2,fontWeight:900}}>代表性重点院校（非排名）</div><div style={{fontSize:66,fontWeight:900,lineHeight:1.08}}>{city.name}</div><div style={{display:'flex',flexDirection:'column',gap:10,marginTop:8}}>{city.schools.map((school,i)=><div key={school} style={{display:'flex',alignItems:'center',gap:14,padding:'12px 18px',background:i===0?'rgba(15,61,86,.9)':'rgba(15,61,86,.55)',borderLeft:`5px solid ${i===0?C.gold:C.cyan}`,fontSize:28,fontWeight:i===0?900:700}}><span style={{color:C.gold,fontSize:20}}>{String(i+1).padStart(2,'0')}</span>{school}</div>)}</div></div><div style={{flex:1,display:'flex',justifyContent:'center',opacity:b,transform:`scale(${.96+.04*b})`}}><ProvinceMap width={430} active={city.name} labels="active"/></div></div></Scene>};
+const Rule:React.FC=()=> <div style={{width:118,height:8,background:C.gold,margin:'24px 0 0'}}/>;
 
-const Outro:React.FC=()=> <Scene id="outro"><Header text="END CARD"/><div style={{fontSize:70,fontWeight:900,lineHeight:1.12}}>一张地图，<br/>看懂山东本科版图</div><div style={{width:270,height:8,background:C.gold,marginTop:34}}/><div style={{fontSize:30,lineHeight:1.55,color:C.muted,maxWidth:850,marginTop:30}}>本片按地市盘点代表性本科院校，不构成院校排名或志愿建议。报考前请核对当年官方招生章程。</div></Scene>;
+const Intro:React.FC=()=>{const a=useEntrance('intro',0.12,0.35);return <Scene id="intro"><Header text="SHANDONG · UNIVERSITY ATLAS" right="山东 · 16 地市"/><Sheet><div style={{opacity:a,transform:`translateY(${(1-a)*60}px)`}}><div style={{fontSize:22,letterSpacing:7,color:C.cyan,fontWeight:900}}>16 个地市 · 一张地图</div><div style={{fontSize:92,fontWeight:900,lineHeight:1.12,letterSpacing:-2,marginTop:18}}>山东各地<br/>重点本科院校</div><Rule/><div style={{fontSize:32,lineHeight:1.55,color:C.muted,marginTop:24}}>每个地市最多 5 所代表性院校<br/>旁白按地市逐个切换，地图同步聚焦</div></div></Sheet></Scene>;};
+
+const CityScene:React.FC<{city:City;index:number}>=({city,index})=>{const a=useEntrance(city.name,0.12,0.35);return <Scene id={city.name}><Header text="地市速览" right={`${String(index).padStart(2,'0')} / ${CITIES.length}`}/><Sheet><div style={{opacity:a,transform:`translateY(${(1-a)*60}px)`}}><div style={{display:'flex',alignItems:'baseline',gap:20}}><span style={{fontSize:88,fontWeight:900,lineHeight:1,letterSpacing:-2}}>{city.name}</span><span style={{fontSize:28,color:C.muted}}>本科院校 {city.schools.length} 所</span></div><div style={{fontSize:24,color:C.gold,letterSpacing:4,fontWeight:900,marginTop:14}}>代表性重点院校</div><div style={{display:'flex',flexDirection:'column',gap:ROW_GAP,marginTop:22}}>{city.schools.map((school,i)=><div key={school} style={{display:'flex',alignItems:'center',gap:20,height:ROW_H,paddingLeft:22,background:'rgba(15,61,86,.55)',borderLeft:`5px solid ${C.cyan}`}}><span style={{color:C.muted,fontSize:22,fontWeight:900}}>{String(i+1).padStart(2,'0')}</span><span style={{fontSize:40,fontWeight:800}}>{school}</span></div>)}</div></div></Sheet></Scene>;};
 
 // 结尾黑场：旁白结束后 0.5s 起、2.5s 内淡到全黑，避免最后一帧硬切
 const FadeToBlack:React.FC=()=>{const f=useCurrentFrame();const {fps}=useVideoConfig();const o=interpolate(f/fps,[FADE_OUT.start,FADE_OUT.end],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});return <AbsoluteFill style={{background:'#000',opacity:o,pointerEvents:'none'}}/>;};
 
-export const ShandongAtlas:React.FC=()=> <AbsoluteFill><Background/><Intro/><Overview/>{CITIES.map((city,i)=><CityScene key={city.name} city={city} index={i+1}/>)}<Outro/><FadeToBlack/><Audio src={staticFile('voiceover/narration.zh.mp3')}/></AbsoluteFill>;
+export const ShandongAtlas:React.FC=()=> <AbsoluteFill><Background/><MapLayer/><SheetPanel/><Intro/>{CITIES.map((city,i)=><CityScene key={city.name} city={city} index={i+1}/>)}<FadeToBlack/><Audio src={staticFile('voiceover/narration.zh.mp3')}/></AbsoluteFill>;
