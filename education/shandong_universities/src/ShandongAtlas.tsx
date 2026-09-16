@@ -112,4 +112,4 @@ const CityScene:React.FC<{city:City;index:number}>=({city,index})=>{const a=useE
 // 结尾黑场：旁白结束后 0.5s 起、2.5s 内淡到全黑，避免最后一帧硬切
 const FadeToBlack:React.FC=()=>{const f=useCurrentFrame();const {fps}=useVideoConfig();const o=interpolate(f/fps,[FADE_OUT.start,FADE_OUT.end],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});return <AbsoluteFill style={{background:'#000',opacity:o,pointerEvents:'none'}}/>;};
 
-export const ShandongAtlas:React.FC=()=> <AbsoluteFill><Background/><MapLayer/><SheetPanel/><Intro/>{CITIES.map((city,i)=><CityScene key={city.name} city={city} index={i+1}/>)}<FadeToBlack/><Audio src={staticFile('voiceover/narration.zh.mp3')}/></AbsoluteFill>;
+export const ShandongAtlas:React.FC=()=> <AbsoluteFill style={{...font}}><Background/><MapLayer/><SheetPanel/><Intro/>{CITIES.map((city,i)=><CityScene key={city.name} city={city} index={i+1}/>)}<FadeToBlack/><Audio src={staticFile('voiceover/narration.zh.mp3')}/></AbsoluteFill>;
