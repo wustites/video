@@ -1,5 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {notoSans} from './fonts';
 import {SchematicMap} from './SchematicMap';
 import {FADE_OUT, useEntrance, useSceneOpacity} from './timing';
 
@@ -20,7 +21,7 @@ const C = {
 };
 
 const font = {
-  fontFamily: '"Noto Sans", "Arial", sans-serif',
+  fontFamily: `${notoSans.fontFamily}, sans-serif`,
 };
 
 const Scene: React.FC<{id: string; children: React.ReactNode; style?: React.CSSProperties}> = ({

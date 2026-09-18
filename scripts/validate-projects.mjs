@@ -25,7 +25,12 @@ for (const [key, project] of Object.entries(manifest.projects)) {
   const packagePath = path.join(projectDir, 'package.json');
   assert.ok(existsSync(packagePath), `${key}: missing ${project.path}/package.json`);
   assert.ok(existsSync(path.join(projectDir, 'src/index.ts')), `${key}: missing src/index.ts`);
-  assert.ok(existsSync(path.join(projectDir, 'src/Root.tsx')), `${key}: missing src/Root.tsx`);
+  const rootPath = path.join(projectDir, 'src/Root.tsx');
+  assert.ok(existsSync(rootPath), `${key}: missing src/Root.tsx`);
+  assert.ok(existsSync(path.join(projectDir, 'src/fonts.ts')), `${key}: missing src/fonts.ts`);
+  const rootSource = readFileSync(rootPath, 'utf8');
+  assert.ok(rootSource.includes('delayRender'), `${key}: Root.tsx must gate rendering while fonts load`);
+  assert.ok(rootSource.includes('continueRender'), `${key}: Root.tsx must continue after fonts load`);
 
   const pkg = JSON.parse(readFileSync(packagePath, 'utf8'));
   assert.ok(!packageNames.has(pkg.name), `${key}: duplicate package name ${pkg.name}`);
@@ -34,6 +39,7 @@ for (const [key, project] of Object.entries(manifest.projects)) {
   for (const variant of project.variants) {
     assert.ok(pkg.scripts?.[`render:${variant}`], `${key}: missing npm script render:${variant}`);
   }
+  assert.ok(pkg.dependencies?.['@remotion/google-fonts'], `${key}: @remotion/google-fonts is required`);
 
   const remotionVersions = ['@remotion/cli', '@remotion/google-fonts', 'remotion']
     .map((dependency) => pkg.dependencies?.[dependency])

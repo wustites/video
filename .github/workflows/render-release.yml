@@ -143,10 +143,24 @@ jobs:
             exit 1
           fi
 
+          expects_audio="$(PROJECT_DIR="$PROJECT_DIR" node -e 'const p=require(process.env.PROJECT_DIR + "/package.json"); process.stdout.write(p.scripts?.voiceover ? "true" : "false")')"
+
           for video in "${videos[@]}"; do
             video_streams="$(ffprobe -v error -select_streams v -show_entries stream=index -of csv=p=0 "$video")"
             if [[ -z "$video_streams" ]]; then
               echo "No video stream found in $video" >&2
+              exit 1
+            fi
+            if [[ "$expects_audio" == "true" ]]; then
+              audio_streams="$(ffprobe -v error -select_streams a -show_entries stream=index -of csv=p=0 "$video")"
+              if [[ -z "$audio_streams" ]]; then
+                echo "Project defines voiceover but no audio stream was found in $video" >&2
+                exit 1
+              fi
+            fi
+            duration="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$video")"
+            if ! VIDEO_DURATION="$duration" node -e 'const value=Number(process.env.VIDEO_DURATION); process.exit(Number.isFinite(value) && value > 0 ? 0 : 1)'; then
+              echo "Invalid duration '$duration' in $video" >&2
               exit 1
             fi
           done

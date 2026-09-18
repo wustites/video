@@ -1,5 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {notoSansSC} from './fonts';
 import {useEntrance, useSceneOpacity} from './timing';
 
 const W = 1080;
@@ -21,7 +22,7 @@ const C = {
 };
 
 const font = {
-  fontFamily: '"Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", "Arial", sans-serif',
+  fontFamily: `${notoSansSC.fontFamily}, sans-serif`,
 };
 
 /* ---------------- 通用组件 ---------------- */

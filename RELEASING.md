@@ -25,6 +25,6 @@ git push origin sapporo_subway-1.0.4
 
 生成的 MP3、临时时长文件和 `out/` 渲染产物不提交到 Git。旁白文本、数据、字幕和项目源代码必须提交；作为源资源使用的图片和已跟踪的时间轴快照（例如 `solar/public/voiceover/cues.*.json`）按项目约定维护，具体忽略规则见 `.gitignore`。
 
-工作流校验 `out/` 中存在 MP4 且包含视频流，再上传 artifact 和 GitHub Release。单个 MP4 重命名为 `<project_key>-<version>[-<variant>].mp4`；多个 MP4 则在各原文件名前添加该前缀。此校验不检查旁白完整性、音画同步或画面布局。
+工作流校验 `out/` 中存在 MP4、包含视频流且总时长有效；定义了 `voiceover` 的项目还必须包含音频流，之后才会上传 artifact 和 GitHub Release。单个 MP4 重命名为 `<project_key>-<version>[-<variant>].mp4`；多个 MP4 则在各原文件名前添加该前缀。此校验仍不判断旁白内容完整性、音画同步或画面布局。
 
 旧的 `v<version>-<project>` tag 仅作为历史记录保留；普通项目使用 `<project_key>-<semver>`，带变体的项目使用 `<project_key>-<semver>-<variant>`。
