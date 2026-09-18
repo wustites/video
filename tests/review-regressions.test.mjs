@@ -29,6 +29,34 @@ function moduleUrl(file) {
 }
 const loadModule = (file) => import(moduleUrl(file));
 
+test('video core builds deterministic sequential timelines and animation values', async () => {
+  const core = await loadTs(readFileSync(path.join(root, 'packages/video-core/src/timeline.ts'), 'utf8'));
+  const timeline = core.buildSequentialTimeline(['intro', 'outro'], [1.25, 2.5], 2.6);
+  assert.deepEqual(timeline.scenes, [
+    {id: 'intro', start: 0, end: 1.25},
+    {id: 'outro', start: 1.25, end: 3.75},
+  ]);
+  assert.equal(timeline.audioEnd, 3.75);
+  assert.equal(timeline.totalSeconds, 7);
+  assert.equal(core.sceneProgressAt(timeline.scenes[1], 0), 0);
+  assert.equal(core.sceneProgressAt(timeline.scenes[1], 2.5), 0.5);
+  assert.equal(core.sceneProgressAt(timeline.scenes[1], 10), 1);
+  assert.ok(Math.abs(core.sceneOpacityAt(timeline.scenes[0], -0.19, 0.38) - 0.5) < 1e-9);
+  assert.ok(Math.abs(core.sceneOpacityAt(timeline.scenes[0], 1.44, 0.38) - 0.5) < 1e-9);
+  assert.deepEqual(core.entranceAt(timeline.scenes[0], 0, 0, 0.65, 36, 0.88), {
+    opacity: 0,
+    y: 36,
+    scale: 0.88,
+  });
+  assert.deepEqual(core.entranceAt(timeline.scenes[0], 0.65, 0, 0.65, 36, 0.88), {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+  });
+  assert.throws(() => core.buildSequentialTimeline(['intro'], [], 0), /does not match/);
+  assert.throws(() => core.buildSequentialTimeline(['intro'], [0], 0), /must be positive/);
+});
+
 test('population frames retain a sorted top 15 and reach the final year', async () => {
   const d = await loadTs(readFileSync(path.join(root, 'data_visualization/population_cn/src/data.ts'), 'utf8'));
   const component = readFileSync(path.join(root, 'data_visualization/population_cn/src/PopulationCn.tsx'), 'utf8');

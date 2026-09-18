@@ -91,6 +91,10 @@ npm run render
 
 各项目的 `npm run check` 当前均为 `tsc --noEmit`，不包含布局、内容或音画同步检查。多语言项目使用 `npm run render:<语言代码>` 单独渲染；`npm run render` 只生成默认版本。具体输出以 `package.json` 为准。
 
+仓库根目录的 `npm run check` 会校验项目清单、共享包并依次检查全部 17 个项目。对于尚未生成旁白时长 JSON 的项目，检查器只在类型检查期间创建最小 JSON fixture，并在检查后立即删除；正式渲染仍必须先运行该项目的 `voiceover`。
+
+跨项目稳定能力放在 `packages/` 中。目前 `@video/core` 提供顺序时间轴、场景进度、淡入淡出和入场动画计算；具体场景布局和视觉组件继续留在各视频项目内。
+
 ## 推荐工作流
 
 1. 阅读项目 README，确认主题、数据口径、语言和输出文件，并执行 `npm ci`。

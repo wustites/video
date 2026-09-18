@@ -1,0 +1,13 @@
+{
+  "name": "@video/core",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./timeline": "./src/timeline.ts"
+  },
+  "peerDependencies": {
+    "remotion": "4.0.504"
+  }
+}
