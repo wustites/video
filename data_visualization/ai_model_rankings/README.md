@@ -13,7 +13,7 @@ Visualization video of AI model rankings from [Artificial Analysis](https://arti
 
 ```bash
 # Fetch latest leaderboard data → src/snapshot.json and public/data.js
-npm run setup
+npm run data:update
 
 # Preview
 npm run dev
@@ -71,5 +71,5 @@ npm run render:draft   # preview to out/preview.mp4; only changes output and log
 Original HyperFrames source files (`compositions/*.html`, `public/video.js`) are retained.
 `npm run render:en`, `npm run render:zh`, and `npm run render:ja` now render Remotion compositions.
 
-`npm run setup` updates both `src/snapshot.json` and legacy `public/data.js`.
+`npm run data:update` updates both `src/snapshot.json` and legacy `public/data.js`. Run it explicitly and review the snapshot before release; release CI does not refresh data.
 Remotion bundles the JSON snapshot, so local renders and CI use the updated data without manual synchronization.

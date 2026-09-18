@@ -1,6 +1,6 @@
 # 视频项目索引
 
-本文件记录仓库中各视频项目的名称和根目录路径。项目名称与实际路径的机器可读对应关系维护在 [`projects.json`](./projects.json)，本文件负责按主题展示。每个项目都是独立的 Remotion 工程；`cover/`、`skills/` 和根目录文档不属于视频项目。
+本文件记录仓库中各视频项目的名称和根目录路径。名称、路径、语言和发布 variant 的机器可读定义统一维护在 [`projects.json`](./projects.json)，本文件负责按主题展示。每个项目都是 npm workspace 中独立的 Remotion 工程；`cover/`、`skills/` 和根目录文档不属于视频项目。
 
 ## 数据可视化与榜单
 

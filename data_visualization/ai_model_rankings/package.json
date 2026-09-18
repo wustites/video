@@ -11,7 +11,7 @@
     "render:zh": "remotion render AiModelRankingsZh out/ai-model-rankings-zh.mp4",
     "render:ja": "remotion render AiModelRankingsJa out/ai-model-rankings-ja.mp4",
     "render:draft": "remotion render AiModelRankingsEn out/preview.mp4 --log=error",
-    "setup": "node scripts/setup.mjs"
+    "data:update": "node scripts/setup.mjs"
   },
   "dependencies": {
     "@remotion/cli": "4.0.504",

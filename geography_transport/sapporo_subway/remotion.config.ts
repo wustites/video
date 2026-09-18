@@ -1,5 +1,3 @@
-import {Config} from '@remotion/cli/config';
+import {configureRemotion} from '../../remotion.shared';
 
-Config.setVideoImageFormat('jpeg');
-Config.setOverwriteOutput(true);
-Config.setChromiumOpenGlRenderer('angle');
+configureRemotion();

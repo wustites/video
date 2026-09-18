@@ -1,4 +1,4 @@
-// Updated by npm run setup; bundled locally without render-time network requests.
+// Updated explicitly by npm run data:update; bundled locally without render-time network requests.
 import snapshot from './snapshot.json';
 
 export type ModelEntry = {

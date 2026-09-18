@@ -63,12 +63,12 @@ The setup script updates `src/snapshot.json` for Remotion and legacy `public/dat
 Local renders and CI bundle the updated JSON snapshot without manual synchronization:
 
 ```bash
-npm run setup   # fetch latest snapshot → src/snapshot.json and public/data.js
+npm run data:update   # fetch latest snapshot → src/snapshot.json and public/data.js
 npm run check   # TypeScript type check
 npm run render
 ```
 
-- `scripts/setup.mjs` calls `https://openrouter.ai/api/frontend/v1/rankings/models`,
+- `scripts/setup.mjs` is invoked by `npm run data:update` and calls `https://openrouter.ai/api/frontend/v1/rankings/models`,
   aggregates the latest-day snapshot per model/provider, and computes the
   API-provided `change` as growth (scaled to percent and clamped to ±150%).
 - The setup runs automatically in CI before validate/render; if the fetch fails
@@ -82,4 +82,4 @@ npm run render
 - `src/i18n.ts` unifies the former en/zh fork: `PROVIDER_ZH` map (`zhName`), `fmtDate` per locale (`Aug 15, 2026` vs `2026.08.15`), token units (`T` vs `万亿`), and all scene copy + 4 insight rows per locale.
 - `src/OpenrouterRankings.tsx` takes a `locale` prop (`en` | `zh`); `Root.tsx` registers `OpenrouterRankingsEn` + `OpenrouterRankingsZh` (1080x1920 @ 30fps, 1350 frames = 45s) sharing the one component — forked duplication eliminated.
 - Frame-driven (no GSAP/DOM): bars x10 (`toFixed(2)` counters, width normalized to top model, 5f stagger), provider donut via SVG `stroke-dasharray` segments + `d-total` counter (`toFixed(1)`), growth rows x5 normalized to fastest riser (`toFixed(1)`), 4 insight rows staggered 8f, 5 scene-dots nav + timeline fill.
-- Original HyperFrames files (`compositions/`, `public/`, `scripts/`) stay in place; `npm run setup` refreshes both `src/snapshot.json` and `public/data.js`.
+- Original HyperFrames files (`compositions/`, `public/`, `scripts/`) stay in place; `npm run data:update` refreshes both `src/snapshot.json` and `public/data.js`. Release CI uses the committed snapshot and never refreshes it automatically.

@@ -2,7 +2,7 @@
 
 本仓库收录数据可视化、榜单与科普类视频项目，当前 17 个项目均基于 **Remotion** 制作；部分目录保留了早期 HyperFrames 源文件。
 
-项目按主题分类、项目名称与根目录路径见 [视频项目索引](./PROJECTS.md)；Action 使用 [`projects.json`](./projects.json) 维护项目名到实际路径的对应关系。
+项目按主题分类、项目名称与根目录路径见 [视频项目索引](./PROJECTS.md)；[`projects.json`](./projects.json) 是项目路径、名称、语言和发布 variant 的唯一机器可读清单。
 
 ## 项目一览
 
@@ -70,11 +70,12 @@ HyperFrames 项目应在 HTML 中通过 Google Fonts 的 `<link>` 或 `@import` 
 
 ## 快速开始
 
-进入任意项目目录后执行：
+依赖由根目录 npm workspace 统一管理。首次使用先在仓库根目录执行：
 
 ```bash
-cd data_visualization/ai_model_rankings
 npm ci
+
+cd data_visualization/ai_model_rankings
 
 # TypeScript 类型检查
 npm run check
@@ -94,7 +95,7 @@ npm run render
 
 1. 阅读项目 README，确认主题、数据口径、语言和输出文件，并执行 `npm ci`。
 2. 项目定义了 `voiceover` 时，先安装 Python 的 `edge-tts` 和 FFmpeg，再运行 `npm run voiceover` 生成所需音频与时间轴文件。
-3. 项目定义了 `setup` 时，按该项目的数据更新说明执行；榜单项目会自动更新 Remotion 使用的 `src/snapshot.json`。
+3. 只有需要主动刷新数据时才执行项目的 `npm run data:update`；发布流程始终使用 Git 中已经审阅并冻结的 snapshot。
 4. 修改 `src/` 中的组件和数据，运行 `npm run check`。
 5. 运行 `npm run dev`，检查关键帧、转场、文字溢出、字幕和音画同步。
 6. 运行 `npm run render:draft` 试渲染，确认后运行 `npm run render` 或对应语言脚本。
@@ -103,7 +104,7 @@ npm run render
 
 ## GitHub Actions 发布
 
-普通的 Remotion / HyperFrames 项目统一使用 `.github/workflows/render-release.yml` 发布。工作流由 `<project_key>-<semver>` tag 触发，自动解析项目、安装依赖、生成旁白、运行检查、渲染 MP4，并上传 artifact 和 GitHub Release。
+普通的 Remotion / HyperFrames 项目统一使用 `.github/workflows/render-release.yml` 发布。工作流由 `<project_key>-<semver>` tag 触发，自动解析项目、安装依赖、生成旁白、运行检查、渲染 MP4，并上传 artifact 和 GitHub Release。工作流不会联网刷新业务数据，发布内容来自 tag 中已提交的 snapshot。
 
 | 项目 | Tag 格式 | 工作流 |
 | --- | --- | --- |
@@ -138,7 +139,7 @@ Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，可带 variant 单独发版，
 - Remotion 多语言版本通过 composition 和语言参数注册，共享资源放在 `public/`；`compositions/` 中的 HTML 为保留的 HyperFrames 源文件。
 - 渲染产物统一写入 `out/`，不要提交临时预览文件。
 - 数据、单位、统计年份和来源必须在项目 README 中说明。
-- 新增项目时应提供 `package.json`、`package-lock.json`、README、Remotion 入口与配置和可执行的检查、预览、渲染脚本。
+- 新增项目时应提供 `package.json`、README、Remotion 入口与配置和可执行的检查、预览、渲染脚本，并登记到根目录 `projects.json`；依赖锁统一维护在根目录。
 
 ## 常见问题
 

@@ -10,7 +10,7 @@
     "render:en": "remotion render OpenrouterRankingsEn out/openrouter-rankings-en.mp4",
     "render:zh": "remotion render OpenrouterRankingsZh out/openrouter-rankings-zh.mp4",
     "render:draft": "remotion render OpenrouterRankingsEn out/preview.mp4 --log=error",
-    "setup": "node scripts/setup.mjs"
+    "data:update": "node scripts/setup.mjs"
   },
   "dependencies": {
     "@remotion/cli": "4.0.504",

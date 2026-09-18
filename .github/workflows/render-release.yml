@@ -40,14 +40,14 @@ jobs:
             exit 1
           fi
 
-          project_dir="$(node -e 'const projects=require("./projects.json"); const project=projects[process.argv[1]]; if (!project) process.exit(1); process.stdout.write(project)' "$project_key" 2>/dev/null || true)"
+          project_dir="$(node -e 'const manifest=require("./projects.json"); const project=manifest.projects?.[process.argv[1]]; if (!project) process.exit(1); process.stdout.write(project.path)' "$project_key" 2>/dev/null || true)"
           if [[ -z "$project_dir" ]]; then
             echo "Project '$project_key' is not registered in projects.json" >&2
             exit 1
           fi
 
-          if [[ ! -f "$project_dir/package.json" || ! -f "$project_dir/package-lock.json" ]]; then
-            echo "Project directory '$project_dir' must contain package.json and package-lock.json" >&2
+          if [[ ! -f "$project_dir/package.json" ]]; then
+            echo "Project directory '$project_dir' must contain package.json" >&2
             exit 1
           fi
 
@@ -82,11 +82,13 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: ${{ steps.release.outputs.project }}/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: ${{ steps.release.outputs.project_dir }}
         run: npm ci
+
+      - name: Validate project manifest
+        run: npm run validate:projects
 
       - name: Install FFmpeg tools
         run: |
@@ -104,21 +106,10 @@ jobs:
         run: |
           set -euo pipefail
           if node -e "const p=require('./package.json'); process.exit(p.scripts?.voiceover ? 0 : 1)"; then
-            python -m pip install --upgrade pip edge-tts
+            python -m pip install --requirement "$GITHUB_WORKSPACE/requirements-voiceover.txt"
             npm run voiceover
           else
             echo "No voiceover script defined — skipping"
-          fi
-
-      - name: Run setup when the project defines it
-        working-directory: ${{ steps.release.outputs.project_dir }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          if node -e "const p=require('./package.json'); process.exit(p.scripts?.setup ? 0 : 1)"; then
-            npm run setup
-          else
-            echo "No setup script defined — skipping"
           fi
 
       - name: Type-check project

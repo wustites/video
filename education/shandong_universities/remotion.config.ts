@@ -1,3 +1,3 @@
-import {Config} from '@remotion/cli/config';
-Config.setVideoImageFormat('jpeg');
-Config.setOverwriteOutput(true);
+import {configureRemotion} from '../../remotion.shared';
+
+configureRemotion(false);

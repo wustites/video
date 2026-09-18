@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import test from 'node:test';
-import ts from '../data_visualization/population_cn/node_modules/typescript/lib/typescript.js';
+import ts from 'typescript';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 async function loadTs(source) {
@@ -48,7 +48,7 @@ test('population frames retain a sorted top 15 and reach the final year', async 
 });
 
 for (const project of ['ai_model_rankings', 'openrouter_rankings']) {
-  test(`${project}: setup updates the data consumed by Remotion and preserves fallback`, async () => {
+  test(`${project}: data:update refreshes the data consumed by Remotion and preserves fallback`, async () => {
     const projectRoot = path.join(root, 'data_visualization', project);
     const dir = mkdtempSync(path.join(tmpdir(), 'video-rankings-'));
     try {
