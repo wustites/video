@@ -102,12 +102,19 @@ jobs:
 
       - name: Generate voiceover when the project defines it
         working-directory: ${{ steps.release.outputs.project_dir }}
+        env:
+          PROJECT_KEY: ${{ steps.release.outputs.project_key }}
+          PROJECT_VARIANT: ${{ steps.release.outputs.variant }}
         shell: bash
         run: |
           set -euo pipefail
           if node -e "const p=require('./package.json'); process.exit(p.scripts?.voiceover ? 0 : 1)"; then
             python -m pip install --requirement "$GITHUB_WORKSPACE/requirements-voiceover.txt"
-            npm run voiceover
+            if [[ "$PROJECT_KEY" == "solar" ]]; then
+              npm run voiceover -- --language "${PROJECT_VARIANT:-en}"
+            else
+              npm run voiceover
+            fi
           else
             echo "No voiceover script defined — skipping"
           fi

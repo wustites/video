@@ -21,7 +21,8 @@ durations, and updates composition durations. `npm run check` runs TypeScript ty
 
 Tags use the common release workflow. A tag such as `solar-1.0.0-zh` resolves
 to this directory and runs `npm run render:zh`, releasing only the selected
-variant. Without a variant, the workflow runs `npm run render` and releases the default English version.
+variant. The workflow generates narration only for that language. Without a variant,
+it generates English narration, runs `npm run render`, and releases the default English version.
 
 The current CI voices are:
 
@@ -43,7 +44,7 @@ this repository.
 Install the pinned generator before running the local pipeline:
 
 ```bash
-python -m pip install edge-tts==7.2.7
+python3 -m pip install -r ../../requirements-voiceover.txt
 npm run voiceover
 npm run check
 ```

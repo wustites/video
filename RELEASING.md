@@ -23,6 +23,8 @@ git push origin sapporo_subway-1.0.4
 
 发布流程不会执行 `data:update` 或访问排行榜数据源。需要刷新数据时，应在打 tag 前显式运行项目的 `npm run data:update`，审阅并提交生成的 snapshot。
 
+Solar 的单语言 tag 只生成对应语言的旁白；不带 variant 的 tag 只生成默认英语旁白。其余语言继续使用已提交的 cue 数据参与打包，无需为本次发布重新合成音频。
+
 生成的 MP3、临时时长文件和 `out/` 渲染产物不提交到 Git。旁白文本、数据、字幕和项目源代码必须提交；作为源资源使用的图片和已跟踪的时间轴快照（例如 `solar/public/voiceover/cues.*.json`）按项目约定维护，具体忽略规则见 `.gitignore`。
 
 工作流校验 `out/` 中存在 MP4、包含视频流且总时长有效；定义了 `voiceover` 的项目还必须包含音频流，之后才会上传 artifact 和 GitHub Release。单个 MP4 重命名为 `<project_key>-<version>[-<variant>].mp4`；多个 MP4 则在各原文件名前添加该前缀。此校验仍不判断旁白内容完整性、音画同步或画面布局。

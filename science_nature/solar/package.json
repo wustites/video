@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "remotion studio",
     "check": "tsc --noEmit",
-    "voiceover": "python scripts/generate_voiceover.py",
+    "voiceover": "python3 scripts/generate_voiceover.py",
     "render": "remotion render solar-en out/video.mp4",
     "render:draft": "remotion render solar-en out/preview.mp4 --log=error",
     "render:en": "remotion render solar-en out/solar-system-en-vertical.mp4",
