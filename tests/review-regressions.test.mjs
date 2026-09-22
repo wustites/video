@@ -55,6 +55,12 @@ test('video core builds deterministic sequential timelines and animation values'
   });
   assert.throws(() => core.buildSequentialTimeline(['intro'], [], 0), /does not match/);
   assert.throws(() => core.buildSequentialTimeline(['intro'], [0], 0), /must be positive/);
+  assert.throws(() => core.buildSequentialTimeline(['intro', 'intro'], [1, 1]), /Duplicate scene ID/);
+  assert.throws(() => core.buildSequentialTimeline(['intro', 'outro'], [Number.MAX_VALUE, Number.MAX_VALUE]), /finite number range/);
+  assert.throws(() => core.buildSequentialTimeline(['intro'], [Number.MAX_VALUE], Number.MAX_VALUE), /finite number range/);
+  assert.throws(() => core.sceneOpacityAt(timeline.scenes[0], 0, -1), /fadeSeconds must be non-negative/);
+  assert.equal(core.sceneOpacityAt(timeline.scenes[0], 0, 0), 1);
+  assert.throws(() => core.entranceAt(timeline.scenes[0], 0, 0, 0, 36, 0.88), /Entrance duration must be positive/);
 });
 
 test('population frames retain a sorted top 15 and reach the final year', async () => {
