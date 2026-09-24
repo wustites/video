@@ -1,0 +1,11 @@
+node_modules/
+out/
+*.log
+.DS_Store
+__pycache__/
+.waveform-cache/
+public/voiceover/narration.ru.mp3
+public/voiceover/segment-durations.json
+public/voiceover/seg*.mp3
+public/voiceover/concat.txt
+public/voiceover/subtitles.ru-en.vtt

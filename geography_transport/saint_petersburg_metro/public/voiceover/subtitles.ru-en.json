@@ -1,0 +1,42 @@
+[
+  {
+    "scene": "intro",
+    "ru": "Петербургский метрополитен — это не просто транспорт. Это шесть линий, семьдесят пять станций и сто тридцать один километр пути под землёй и над землёй.",
+    "en": "Saint Petersburg Metro is not just transport. It is six lines, seventy-five stations, and 131 kilometres of routes underground and above ground."
+  },
+  {
+    "scene": "network",
+    "ru": "Первый участок открылся 15 ноября 1955 года: семь станций соединили центр города с юго-западом. За десятилетия сеть превратилась в городскую магистраль.",
+    "en": "The first section opened on 15 November 1955: seven stations linked the city centre with the southwest. Over the decades, it grew into a citywide backbone."
+  },
+  {
+    "scene": "history",
+    "ru": "Строительство началось ещё до войны, а затем продолжилось после блокадного Ленинграда. Сегодня линии связывают центр, спальные районы и острова.",
+    "en": "Construction began even before the war and continued after the Siege of Leningrad. Today, the lines connect the centre, residential districts, and islands."
+  },
+  {
+    "scene": "map",
+    "ru": "Красная, синяя, зелёная, оранжевая, фиолетовая и бирюзовая линии образуют сложный узел пересадок в центре города.",
+    "en": "The red, blue, green, orange, purple, and turquoise lines form a complex interchange network in the city centre."
+  },
+  {
+    "scene": "depth",
+    "ru": "Главная особенность сети — глубина. Водоносные грунты и подземные воды заставляли строить станции особенно глубоко. «Адмиралтейская» находится примерно на 86 метрах под землёй.",
+    "en": "The network's defining feature is its depth. Water-bearing soil and underground waterways required unusually deep stations. Admiralteyskaya lies about 86 metres below ground."
+  },
+  {
+    "scene": "architecture",
+    "ru": "Архитектура станций — отдельная достопримечательность: мраморные залы, мозаики, бронзовые скульптуры и узнаваемые люстры.",
+    "en": "The station architecture is a landmark in itself: marble halls, mosaics, bronze sculptures, and distinctive chandeliers."
+  },
+  {
+    "scene": "service",
+    "ru": "Метро ежедневно перевозит около 1,8 миллиона пассажиров. Оплата возможна картой «Подорожник» или бесконтактной банковской картой. Годовой пассажиропоток превышает 680 миллионов поездок.",
+    "en": "The metro carries about 1.8 million passengers each day. You can pay with a Podorozhnik card or a contactless bank card. Annual ridership exceeds 680 million trips."
+  },
+  {
+    "scene": "outro",
+    "ru": "Петербургский метрополитен соединяет не только улицы, но и историю города. Подземный Петербург продолжает жить и удивлять.",
+    "en": "Saint Petersburg Metro connects not only streets, but also the city's history. Underground Petersburg keeps living and surprising visitors."
+  }
+]

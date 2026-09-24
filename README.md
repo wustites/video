@@ -1,6 +1,6 @@
 # Video Projects
 
-本仓库收录数据可视化、榜单与科普类视频项目，当前 17 个项目均基于 **Remotion** 制作；部分目录保留了早期 HyperFrames 源文件。
+本仓库收录数据可视化、榜单与科普类视频项目，当前 18 个项目均基于 **Remotion** 制作；部分目录保留了早期 HyperFrames 源文件。
 
 项目按主题分类、项目名称与根目录路径见 [视频项目索引](./PROJECTS.md)；[`projects.json`](./projects.json) 是项目路径、名称、语言和发布 variant 的唯一机器可读清单。
 
@@ -9,6 +9,7 @@
 | 项目 | 内容 | 语言 | 时长 | 框架 | 默认输出 |
 | --- | --- | --- | ---: | --- | --- |
 | [Metro de Lima](./geography_transport/metro_lima/) | 秘鲁利马地铁系统介绍 | 西 | 随旁白生成 | Remotion | `out/video.mp4` |
+| [Saint Petersburg Metro](./geography_transport/saint_petersburg_metro/) | 俄罗斯圣彼得堡地铁系统介绍（俄英双语字幕） | 俄 + 英字幕 | 随旁白生成 | Remotion | `out/video.mp4` |
 | [Sapporo Subway](./geography_transport/sapporo_subway/) | 日本札幌市营地铁介绍 | 日 | 随旁白生成 | Remotion | `out/video.mp4` |
 | [Cloudflare History](./history_society/cloudflare_history/) | Cloudflare 发展历程 | 中 | 90 秒 | Remotion | `out/video.mp4` |
 | [Japan Economy](./data_visualization/japan_economy/) | 日本 1985—2026 经济指标与日经指数 | 日 | 随旁白生成 | Remotion | `out/video.mp4` |
@@ -91,7 +92,7 @@ npm run render
 
 各项目的 `npm run check` 当前均为 `tsc --noEmit`，不包含布局、内容或音画同步检查。多语言项目使用 `npm run render:<语言代码>` 单独渲染；`npm run render` 只生成默认版本。具体输出以 `package.json` 为准。
 
-仓库根目录的 `npm run check` 会校验项目清单、共享包，并以最多三个并发任务检查全部 17 个项目。对于尚未生成旁白时长 JSON 的项目，检查器只在类型检查期间创建最小 JSON fixture，并在检查后立即删除；正式渲染仍必须先运行该项目的 `voiceover`。
+仓库根目录的 `npm run check` 会校验项目清单、共享包，并以最多三个并发任务检查全部 18 个项目。对于尚未生成旁白时长 JSON 的项目，检查器只在类型检查期间创建最小 JSON fixture，并在检查后立即删除；正式渲染仍必须先运行该项目的 `voiceover`。
 
 跨项目稳定能力放在 `packages/` 中。目前 `@video/core` 提供顺序时间轴、场景进度、淡入淡出和入场动画计算；具体场景布局和视觉组件继续留在各视频项目内。
 

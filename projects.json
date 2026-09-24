@@ -13,6 +13,7 @@
     "population_cn": {"path": "data_visualization/population_cn", "name": "Population CN", "languages": ["zh"], "variants": []},
     "qs_universities": {"path": "data_visualization/qs_universities", "name": "QS Universities", "languages": ["zh"], "variants": []},
     "red_army_jp": {"path": "history_society/red_army_jp", "name": "Red Army JP", "languages": ["ja"], "variants": []},
+    "saint_petersburg_metro": {"path": "geography_transport/saint_petersburg_metro", "name": "Saint Petersburg Metro", "languages": ["ru", "en"], "variants": []},
     "sapporo_subway": {"path": "geography_transport/sapporo_subway", "name": "Sapporo Subway", "languages": ["ja"], "variants": []},
     "shandong_universities": {"path": "education/shandong_universities", "name": "Shandong Universities", "languages": ["zh"], "variants": []},
     "solar": {"path": "science_nature/solar", "name": "Solar System", "languages": ["en", "zh", "ja", "ko"], "variants": ["en", "zh", "ja", "ko"]},
