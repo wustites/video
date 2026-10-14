@@ -96,7 +96,6 @@ for (const project of ['ai_model_rankings', 'openrouter_rankings']) {
       const run = () => execFileSync(process.execPath, ['--import', mock, 'scripts/setup.mjs'], {cwd: dir, stdio: 'pipe'});
       run();
       const snapshotText = readFileSync(path.join(dir, 'src/snapshot.json'), 'utf8');
-      const snapshot = JSON.parse(snapshotText);
       const adapter = readFileSync(path.join(projectRoot, 'src/data.ts'), 'utf8').replace("import snapshot from './snapshot.json';", `const snapshot = ${snapshotText};`);
       const data = await loadTs(adapter);
       if (project === 'ai_model_rankings') {
@@ -107,8 +106,6 @@ for (const project of ['ai_model_rankings', 'openrouter_rankings']) {
         assert.equal(data.DATA.dateRange.end, '2030-01-01');
         assert.equal(data.DATA.models.length, 10);
       }
-      const legacy = readFileSync(path.join(dir, 'public/data.js'), 'utf8');
-      assert.deepEqual(JSON.parse(legacy.slice(legacy.indexOf(' = ') + 3).trim().replace(/;$/, '')), snapshot);
       writeFileSync(mock, 'globalThis.fetch = async () => {throw new Error("offline")};');
       run();
       assert.equal(readFileSync(path.join(dir, 'src/snapshot.json'), 'utf8'), snapshotText);

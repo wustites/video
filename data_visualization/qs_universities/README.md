@@ -31,8 +31,6 @@
 ```
 data_visualization/qs_universities/
 ├── src/                # 当前 Remotion 入口、组件、数据和字体
-├── index.html          # 历史 HyperFrames composition
-├── meta.json           # 项目元数据
 ├── public/             # 静态资源目录
 └── README.md           # 项目说明
 ```
@@ -65,11 +63,10 @@ data_visualization/qs_universities/
 
 - Remotion - 视频渲染框架
 - React / TypeScript - 组件与动画
-- HyperFrames / GSAP - 保留的历史实现
 
 ## Remotion 移植
 
-HyperFrames `index.html` 之外，新增 Remotion 实现（`src/` + `remotion.config.ts` + `tsconfig.json`），原文件保持不动：
+由早期 HyperFrames 版移植的 Remotion 实现（`src/` + `remotion.config.ts` + `tsconfig.json`）：
 
 - `src/data.ts` — 100 所大学静态数组，按 `PER_PAGE=10` 切分为 10 页；每页主题色（`PAGE_COLORS`，对应原 `.page-N` 变量）。
 - `src/QsUniversities.tsx` — 主合成：帧索引分页（每页 150 帧/5s，52s@30fps 共 1560 帧，末页吸收 2s 尾巴）；

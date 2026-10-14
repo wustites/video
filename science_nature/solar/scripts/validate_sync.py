@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import subprocess
 from pathlib import Path
 
@@ -25,15 +24,6 @@ def audio_duration(path: Path) -> float:
         text=True,
     )
     return float(result.stdout.strip())
-
-
-def html_durations(language: str) -> tuple[float, float]:
-    html = (ROOT / "compositions" / f"{language}.html").read_text(encoding="utf-8")
-    composition_match = re.search(r'data-composition-id="solar-[^"]+"[^>]*data-duration="([0-9.]+)"', html)
-    audio_match = re.search(r'<audio id="voiceover"[^>]*data-duration="([0-9.]+)"', html)
-    if not composition_match or not audio_match:
-        raise ValueError(f"{language}: composition or audio duration not found")
-    return float(composition_match.group(1)), float(audio_match.group(1))
 
 
 def validate(language: str) -> None:
@@ -61,9 +51,7 @@ def validate(language: str) -> None:
         raise ValueError(f"{language}: recorded audio duration differs from ffprobe")
     if previous_end > actual_audio_duration + TOLERANCE:
         raise ValueError(f"{language}: last cue exceeds audio duration")
-    comp_duration, html_audio_duration = html_durations(language)
-    if abs(html_audio_duration - actual_audio_duration) > TOLERANCE:
-        raise ValueError(f"{language}: HTML audio duration differs from ffprobe")
+    comp_duration = payload["compositionDuration"]
     if comp_duration < actual_audio_duration + 0.45:
         raise ValueError(f"{language}: composition does not include end padding")
     print(f"Validated {language}: {len(cues)} cues, audio={actual_audio_duration:.3f}s, composition={comp_duration:.3f}s")

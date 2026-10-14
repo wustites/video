@@ -10,7 +10,7 @@ Blender Python 适合生成：
 - 粒子、流体、布料、刚体等物理模拟；
 - 需要真实灯光、阴影、材质和景深的镜头；
 - 大量仅数据、文字或模型参数不同的批量视频；
-- 供 HyperFrames、Remotion 或非线性编辑软件继续合成的透明背景素材。
+- 供 Remotion 或非线性编辑软件继续合成的透明背景素材。
 
 它不是制作所有视频的最低成本方案。以二维文字排版、榜单、图表和字幕为主时，HTML/CSS 通常迭代更快；Blender 更适合作为三维镜头生成器，或承担整条视频中视觉复杂度最高的部分。
 
@@ -214,16 +214,16 @@ ffmpeg \
 
 应先用 Eevee 验证镜头、节奏和构图。只有视觉目标确实依赖路径追踪时再切换 Cycles，并在固定硬件上测试单帧耗时和显存峰值。
 
-## 与 HyperFrames 配合
+## 与 Remotion 配合
 
 本仓库以二维信息视频为主，推荐采用混合工作流：
 
 1. Blender Python 生成三维镜头或透明背景帧序列。
-2. FFmpeg 将帧序列编码为中间视频。
-3. HyperFrames 负责标题、图表、字幕、旁白、转场和多语言版本。
-4. 在 HyperFrames 中将 Blender 视频作为静音 `<video>` 轨道接入，音频继续使用独立 `<audio>` 轨道。
+2. FFmpeg 将帧序列编码为中间视频（需要透明通道时使用 ProRes 4444 或 WebM VP9）。
+3. Remotion 负责标题、图表、字幕、旁白、转场和多语言版本。
+4. 将 Blender 视频放入 `public/`，用 `<OffthreadVideo src={staticFile(...)} muted />` 接入，旁白继续使用独立的 `<Audio>`。
 
-这种分工让 Blender 专注于三维渲染，让 HTML/CSS 保持文字和数据排版的高迭代速度。若整条视频都由三维镜头构成，也可以完全在 Blender 的 Video Sequence Editor 或 Compositor 中完成，但需要自行维护字幕、音频、版本化和质量检查流程。
+这种分工让 Blender 专注于三维渲染，让 React 组件保持文字和数据排版的高迭代速度。若整条视频都由三维镜头构成，也可以完全在 Blender 的 Video Sequence Editor 或 Compositor 中完成，但需要自行维护字幕、音频、版本化和质量检查流程。
 
 ## 批处理与 CI
 

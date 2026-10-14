@@ -1,6 +1,6 @@
 # 挂谷猜想：一根针能藏进多小的地方？ (Kakeya Conjecture)
 
-HyperFrames 原作（`index.html`，42s，1920×1080 横屏）+ Remotion 移植（`src/`）。
+Remotion 实现（`src/`，42s，1920×1080 横屏），由早期 HyperFrames 版移植。
 
 ## Remotion port
 

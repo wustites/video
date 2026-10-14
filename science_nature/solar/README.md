@@ -16,8 +16,8 @@ Render one language with `npm run render:en`, `npm run render:zh`,
 `npm run render:ja`, or `npm run render:ko`.
 The narration sources are `public/voiceover/narration.{lang}.txt`. Generated MP3
 files are not committed. `npm run voiceover` generates segmented Edge TTS audio,
-merges each language into its final MP3, writes cue JS/JSON from measured segment
-durations, and updates composition durations. `npm run check` runs TypeScript type checking; inspect audio/video sync in Studio and a rendered preview.
+merges each language into its final MP3, writes `cues.{lang}.json` (cues plus audio and
+composition durations) from measured segment durations. `npm run check` runs TypeScript type checking; inspect audio/video sync in Studio and a rendered preview.
 
 Tags use the common release workflow. A tag such as `solar-1.0.0-zh` resolves
 to this directory and runs `npm run render:zh`, releasing only the selected
@@ -50,12 +50,11 @@ npm run check
 ```
 
 Audio/video timing, measured durations, and validation rules are documented in
-[`../AUDIO_VIDEO_SYNC.md`](../AUDIO_VIDEO_SYNC.md).
+[`docs/AUDIO_VIDEO_SYNC.md`](../../docs/AUDIO_VIDEO_SYNC.md).
 
-## Remotion port (`src/`, alongside the HyperFrames originals)
+## Remotion implementation (`src/`)
 
-The original HyperFrames compositions (`compositions/*.html`,
-`public/solar-scene.js`, `public/solar-composition.js`) are untouched. The
+The original HyperFrames compositions have been removed. The
 Remotion port lives in `src/` + `remotion.config.ts` + `tsconfig.json` and
 reuses the generated `public/voiceover/cues.*.json` as its timing source.
 

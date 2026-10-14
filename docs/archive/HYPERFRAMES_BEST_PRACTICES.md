@@ -1,5 +1,7 @@
 # HyperFrames 视频制作最佳实践
 
+> **历史文档。** 本仓库已不再使用 HyperFrames（见 [ADR 0001](../decisions/0001-remotion-as-primary-framework.md)）。本文保留 HyperFrames 时期（2026-06 至 2026-09）的制作规范，仅供独立 HyperFrames 作品参考，不适用于 monorepo 中的项目。
+
 本文档用于统一本仓库内 HyperFrames 视频项目的工程结构、画布规格、动画实现、数据处理与交付标准。
 
 ## 适用范围

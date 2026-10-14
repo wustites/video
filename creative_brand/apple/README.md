@@ -56,24 +56,23 @@ npm run render     # 渲染 out/video.mp4
 
 当前 Remotion 时间轴位于 `src/data.ts`：`TOTAL_SECONDS` 为 54 秒，`SCENES` 定义场景切换点。
 重新生成旁白后若时长变化，请根据 MP3 实测时长和 VTT cue 调整场景时间及总时长，并保留结尾余量。
-旧 HyperFrames 版的 `index.html` 时间轴需另行维护。
 
-## Remotion 移植
+## Remotion 实现
 
-HyperFrames 版(`index.html`)之外,本目录同时提供 Remotion 版(`src/`)。
-原文件保留不动;Remotion 版按相同 54s / 8 场景时间轴重放。
+本项目最初用 HyperFrames 制作，已移植为 Remotion（`src/`），按相同 54s / 8 场景时间轴重放。
+HyperFrames 源文件已删除，背景见[框架决策记录](../../docs/decisions/0001-remotion-as-primary-framework.md)。
 
 ```bash
 npm run dev            # Remotion Studio 预览
 npm run check          # tsc --noEmit
-npm run voiceover      # 同 HyperFrames 版,重新生成旁白 MP3 + WebVTT
+npm run voiceover      # 重新生成旁白 MP3 + WebVTT
 npm run render         # 渲染 Apple 成片到 out/video.mp4
 npm run render:draft   # 预览渲染到 out/preview.mp4，仅更改输出路径与日志级别
 ```
 
 ### VTT → Sequence 映射
 
-`src/data.ts` 的 `SCENES` 表由 `index.html` 顶部 `SCENES` 数组逐项移植
+`src/data.ts` 的 `SCENES` 表由原 HyperFrames 版 `index.html` 顶部 `SCENES` 数组逐项移植
 (秒,相邻场景重叠 0.5s 交叉淡入淡出);`cues` 列为该场景覆盖的
 `public/voiceover/narration.zh.vtt` 句子编号(共 20 句),与原版注释一致:
 
@@ -90,7 +89,7 @@ npm run render:draft   # 预览渲染到 out/preview.mp4，仅更改输出路径
 
 ### HyperFrames → Remotion 对应关系
 
-| 原版 | Remotion 版 |
+| 原 HyperFrames 版 | Remotion 版 |
 | --- | --- |
 | `SCENES` 表 + `sceneOpacity`/`applyScene`(含 `display:none` 切换) | 每场景一个 `<Sequence>` + `SceneShell`(0.4s 淡入/尾 0.5s 淡出,透明度为 0 时返回 `null`) |
 | `tl.from` 入场(`at` 绝对秒) | `easeAt(t, at-start, dur)` → `interpolate` + `Easing.out(Easing.cube)`(对应 `power3.out`),`stagger` 展开为按索引递增的 `at` |

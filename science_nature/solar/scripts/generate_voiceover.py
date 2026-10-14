@@ -17,7 +17,6 @@ import edge_tts
 
 ROOT = Path(__file__).resolve().parents[1]
 VOICEOVER_DIR = ROOT / "public" / "voiceover"
-COMPOSITIONS_DIR = ROOT / "compositions"
 
 LANGUAGES = {
     "en": {
@@ -94,29 +93,8 @@ def write_cues(language: str, voice: str, texts: list[str], segment_durations: l
         "cues": cues,
     }
     json_path = VOICEOVER_DIR / f"cues.{language}.json"
-    js_path = VOICEOVER_DIR / f"cues.{language}.js"
     json_text = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
     json_path.write_text(json_text, encoding="utf-8")
-    js_path.write_text("window.SOLAR_VOICEOVER = " + json_text.rstrip() + ";\n", encoding="utf-8")
-
-    composition_path = COMPOSITIONS_DIR / f"{language}.html"
-    html = composition_path.read_text(encoding="utf-8")
-    html = re.sub(
-        r'(data-composition-id="solar-[^"]+"[^>]*data-duration=")[0-9.]+"',
-        rf'\g<1>{composition_duration}"',
-        html,
-    )
-    html = re.sub(
-        r'(<audio id="voiceover"[^>]*data-duration=")[0-9.]+"',
-        rf'\g<1>{round(audio_duration, 3)}"',
-        html,
-    )
-    composition_path.write_text(html, encoding="utf-8")
-    if language == "en":
-        index_path = ROOT / "index.html"
-        index_html = index_path.read_text(encoding="utf-8")
-        index_html = re.sub(r'data-duration="[0-9.]+"', f'data-duration="{composition_duration}"', index_html)
-        index_path.write_text(index_html, encoding="utf-8")
 
 
 async def generate_language(language: str) -> None:

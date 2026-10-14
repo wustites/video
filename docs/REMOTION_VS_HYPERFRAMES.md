@@ -1,6 +1,6 @@
 # Remotion vs HyperFrames
 
-本文档比较两种“视频即代码”方案，并给出本仓库的技术选型建议。结论基于 2026-07-20 可用的官方文档；产品能力、版本和许可可能变化，正式采用前应重新核对。
+本文档比较两种“视频即代码”方案。框架对比基于 2026-07-20 可用的官方文档，产品能力、版本和许可可能变化，正式采用前应重新核对；本仓库的选型结论已于 2026-10-14 更新，决策依据见 [ADR 0001](./decisions/0001-remotion-as-primary-framework.md)。
 
 ## 结论
 
@@ -9,7 +9,7 @@
 - **Remotion** 把视频建模为随帧变化的 React 组件，适合已经采用 React/TypeScript、需要把视频能力嵌入 Web 产品，或需要成熟云端并行渲染方案的团队。
 - **HyperFrames** 把 HTML 作为 composition 和时间轴的事实来源，以 `data-*` 描述片段与时序，并可用 GSAP、CSS、Lottie、Three.js 等驱动画面，适合 HTML 原生工作流、AI Agent 生成、命令行批处理和强调可复现输出的项目。
 
-**对本仓库的建议：继续使用 HyperFrames。** 现有项目、检查脚本、CI、时间轴规范和多语言 composition 都已围绕 HyperFrames 建立。只有在明确需要 React 组件生态、Remotion Player 或 Remotion Lambda 时，才值得为新项目单独评估 Remotion；不建议仅为“换框架”迁移已有视频。
+**对本仓库的建议：以 Remotion 为唯一主力框架。** 所有项目、`@video/core` 共享层、旁白脚本、CI 与发布流程都已围绕 Remotion 建立；HyperFrames 只用于不进入主流程的独立单件作品。仓库曾两次整体切换框架（Remotion → HyperFrames → Remotion），不应再仅为“换框架”迁移已有视频。
 
 ## 核心差异
 
@@ -96,12 +96,12 @@ HyperFrames 在普通 HTML 上增加尺寸、起点、时长和轨道等属性�
 
 | 仓库现状 | 影响 |
 | --- | --- |
-| 所有项目均为 HyperFrames HTML composition | 迁移 Remotion 需要把 HTML/GSAP 时间轴重写为 React/帧计算，不能机械转换 |
-| 已固定 HyperFrames CLI 版本 | 现有本地与 CI 渲染更容易复现；升级应统一回归 |
-| 已有 lint、inspect、音画同步和多语言规范 | 继续使用 HyperFrames 可以直接复用质量门禁 |
-| 项目以离线短视频和 GitHub Actions 发布为主 | 暂无 Remotion Player 或 Lambda 带来的决定性收益 |
+| 18 个项目均为 Remotion，HyperFrames 源文件已删除 | 迁回 HyperFrames 需要把帧计算重写为 HTML/GSAP 时间轴，不能机械转换 |
+| `@video/core`、共享旁白脚本与 Remotion 配置 | 新项目复用成本低，换框架会使共享层作废 |
+| 内容以旁白实测时长驱动的数据叙事和地图为主 | 适合“画面是帧的函数”，可复用 TypeScript 类型、React 组件和 d3 |
+| 项目以离线短视频和 GitHub Actions 发布为主 | Remotion Player 和 Lambda 暂非必要，但也不构成迁移理由 |
 
-因此，本仓库默认技术栈保持 HyperFrames。若未来开发“用户在网页中实时改参数并预览、提交后大规模云渲染”的视频 SaaS，可用一个独立原型同时验证以下指标，再决定是否采用 Remotion：
+重新评估的条件见 [ADR 0001](./decisions/0001-remotion-as-primary-framework.md#重新评估的条件)。若确有需要，先用一个新项目在固定环境下做基准对比，验证以下指标：
 
 1. 相同模板的开发时间与代码量。
 2. 预览首屏时间、seek 流畅度与长视频内存占用。

@@ -1,6 +1,6 @@
 # Video Projects
 
-本仓库收录数据可视化、榜单与科普类视频项目，当前 18 个项目均基于 **Remotion** 制作；部分目录保留了早期 HyperFrames 源文件。
+本仓库收录数据可视化、榜单与科普类视频项目，18 个项目均基于 **Remotion** 制作（框架选型见 [ADR 0001](./docs/decisions/0001-remotion-as-primary-framework.md)）。
 
 项目按主题分类、项目名称与根目录路径见 [视频项目索引](./PROJECTS.md)；[`projects.json`](./projects.json) 是项目路径、名称、语言和发布 variant 的唯一机器可读清单。
 
@@ -38,7 +38,7 @@
 
 ## 字体规范
 
-所有 Remotion 和 HyperFrames 项目必须使用与内容语言对应的 Google Fonts **Noto 网络字体**，不能默认依赖渲染机器上的本地字体。默认字体映射如下：
+所有项目必须使用与内容语言对应的 Google Fonts **Noto 网络字体**，不能默认依赖渲染机器上的本地字体。默认字体映射如下：
 
 | 内容语言 | Google Noto 字体 | CSS `font-family` |
 | --- | --- | --- |
@@ -59,15 +59,7 @@ export const notoSansJP = loadFont('normal', {
 });
 ```
 
-HyperFrames 项目应在 HTML 中通过 Google Fonts 的 `<link>` 或 `@import` 引入对应字体，并将其设置为页面和视频元素的全局字体：
-
-```html
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-```
-
-开发预览、Remotion 渲染和 HyperFrames CI 都需要能够访问 `fonts.googleapis.com` 与 `fonts.gstatic.com`。应在截图或渲染前确认 `document.fonts.ready`；字体加载失败时才允许回退到 `sans-serif`。若要求完全离线或严格可复现的字形，应使用许可允许的字体文件和本地 `@font-face`，但仍保持对应语言的 Noto 字体族。
+开发预览、Remotion 渲染和 CI 都需要能够访问 `fonts.googleapis.com` 与 `fonts.gstatic.com`。应在截图或渲染前确认 `document.fonts.ready`；字体加载失败时才允许回退到 `sans-serif`。若要求完全离线或严格可复现的字形，应使用许可允许的字体文件和本地 `@font-face`，但仍保持对应语言的 Noto 字体族。
 
 ## 快速开始
 
@@ -109,11 +101,11 @@ npm run render
 
 ## GitHub Actions 发布
 
-普通的 Remotion / HyperFrames 项目统一使用 `.github/workflows/render-release.yml` 发布。工作流由 `<project_key>-<semver>` tag 触发，自动解析项目、安装依赖、生成旁白、运行检查、渲染 MP4，并上传 artifact 和 GitHub Release。工作流不会联网刷新业务数据，发布内容来自 tag 中已提交的 snapshot。
+所有项目统一使用 `.github/workflows/render-release.yml` 发布。工作流由 `<project_key>-<semver>` tag 触发，自动解析项目、安装依赖、生成旁白、运行检查、渲染 MP4，并上传 artifact 和 GitHub Release。工作流不会联网刷新业务数据，发布内容来自 tag 中已提交的 snapshot。
 
 | 项目 | Tag 格式 | 工作流 |
 | --- | --- | --- |
-| 所有 Remotion / HyperFrames 项目 | `<project_key>-<semver>[-<variant>]`，例如 `japan_economy-1.0.0`、`solar-1.0.0-zh` | `render-release.yml` |
+| 所有项目 | `<project_key>-<semver>[-<variant>]`，例如 `japan_economy-1.0.0`、`solar-1.0.0-zh` | `render-release.yml` |
 
 例如发布日本经济和札幌地铁：
 
@@ -135,13 +127,14 @@ git tag kakeya_conjecture-1.0.0
 git push origin kakeya_conjecture-1.0.0
 ```
 
-Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，可带 variant 单独发版，Action 会直接执行对应的 `npm run render:<variant>`。Solar 不带 variant 时渲染默认英语版。Kakeya Conjecture 无 variant，直接执行 `npm run render`。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./TTS.md)，同步实现与实际时长见 [音画同步方案](./AUDIO_VIDEO_SYNC.md)。
+Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，可带 variant 单独发版，Action 会直接执行对应的 `npm run render:<variant>`。Solar 不带 variant 时渲染默认英语版。Kakeya Conjecture 无 variant，直接执行 `npm run render`。具体声音、复现命令和 CI 限制见 [TTS 旁白方案](./docs/TTS.md)，同步实现见 [音画同步方案](./docs/AUDIO_VIDEO_SYNC.md)，发版细节见 [发布流程](./docs/RELEASING.md)。
 
 ## 仓库约定
 
 - 一个视频项目对应一个顶层目录。
 - Remotion 入口为 `src/index.ts`，composition 注册在 `src/Root.tsx`。
-- Remotion 多语言版本通过 composition 和语言参数注册，共享资源放在 `public/`；`compositions/` 中的 HTML 为保留的 HyperFrames 源文件。
+- Remotion 多语言版本通过 composition 和语言参数注册，共享资源放在 `public/`。
+- 跨项目复用的代码放在 `packages/`：`@video/core`（时间轴、Remotion 配置）与 `packages/voiceover`（Edge TTS 旁白脚本）。
 - 渲染产物统一写入 `out/`，不要提交临时预览文件。
 - 数据、单位、统计年份和来源必须在项目 README 中说明。
 - 新增项目时应提供 `package.json`、README、Remotion 入口与配置和可执行的检查、预览、渲染脚本，并登记到根目录 `projects.json`；依赖锁统一维护在根目录。
@@ -162,15 +155,17 @@ Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，可带 variant 单独发版，
 
 ## 文档
 
-- [HyperFrames 视频制作最佳实践](./HYPERFRAMES_BEST_PRACTICES.md)：工程结构、视觉规范、时间轴、数据、音频、多语言与交付检查。
-- [Remotion vs HyperFrames](./REMOTION_VS_HYPERFRAMES.md)：编程模型、工作流、渲染部署、选型标准与本仓库建议。
-- [使用 Blender Python 生成视频](./BLENDER_PYTHON_VIDEO.md)：脚本化建模与动画、后台渲染、帧序列、FFmpeg 编码及 HyperFrames 混合工作流。
-- [TTS 旁白方案](./TTS.md)：旁白生成、文件约定、composition 接入、字幕同步、验证流程与 Solar 历史方案。
-- [音画同步方案](./AUDIO_VIDEO_SYNC.md)：音频主时钟、cue 数据结构、字幕与场景对齐、同步验证和漂移排查。
+- [ADR 0001：以 Remotion 作为主力视频框架](./docs/decisions/0001-remotion-as-primary-framework.md)：框架迁移历史、决定与重新评估条件。
+- [TTS 旁白方案](./docs/TTS.md)：旁白生成、文件约定、Remotion 接入与验证流程。
+- [音画同步方案](./docs/AUDIO_VIDEO_SYNC.md)：音频主时钟、时间数据、字幕与场景对齐、同步验证和漂移排查。
+- [发布流程](./docs/RELEASING.md)：tag 格式与 Release 工作流。
+- [Remotion vs HyperFrames](./docs/REMOTION_VS_HYPERFRAMES.md)：两种框架的编程模型、渲染部署与选型标准。
+- [使用 Blender Python 生成视频](./docs/BLENDER_PYTHON_VIDEO.md)：脚本化建模与动画、后台渲染、帧序列与 FFmpeg 编码。
+- [HyperFrames 视频制作最佳实践](./docs/archive/HYPERFRAMES_BEST_PRACTICES.md)（历史文档）：HyperFrames 时期的制作规范。
 
 ## 新增项目
 
-新增 Remotion 项目时，提供 `src/index.ts`、`src/Root.tsx`、配置文件、依赖锁文件及检查、预览、渲染脚本。补充项目 README，并在上方“项目一览”中登记。提交前完成类型检查、人工布局检查和一次完整渲染。HyperFrames 的历史制作流程见上方专题文档。
+新增 Remotion 项目时，提供 `src/index.ts`、`src/Root.tsx`、配置文件、依赖锁文件及检查、预览、渲染脚本。补充项目 README，并在上方“项目一览”中登记。提交前完成类型检查、人工布局检查和一次完整渲染。
 
 榜单数据更新与人口视频边界的回归检查（先安装 `population_cn` 依赖）：
 

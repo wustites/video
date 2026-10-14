@@ -26,7 +26,7 @@ git push origin population_cn-1.0.0
 
 ## Remotion 移植
 
-与 HyperFrames 原版并列的 Remotion 实现（`src/` + `remotion.config.ts`），竖屏 1080x1920@30fps，40 秒（1200 帧）。
+由早期 HyperFrames 版移植的 Remotion 实现（`src/` + `remotion.config.ts`），竖屏 1080x1920@30fps，40 秒（1200 帧）。
 
 - `src/data.ts`：静态人口数据（2000/2005/2010/2015/2020/2023，31 省）+ `regionColors` + `TOP_N=15`，
   `interpolateData()` 与原版逐行一致的纯函数：按帧年份线性插值、round、重排取前 15。

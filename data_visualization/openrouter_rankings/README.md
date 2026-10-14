@@ -73,8 +73,6 @@ npm run render
   API-provided `change` as growth (scaled to percent and clamped to ±150%).
 - The setup runs automatically in CI before validate/render; if the fetch fails
   it keeps `src/snapshot.json`; if that snapshot is missing, setup fails.
-- `compositions/en.html` / `compositions/zh.html` consume `window.OPENROUTER_RANKINGS_DATA`
-  and localize labels at runtime (provider names, date format, insight copy).
 
 ## Remotion port
 
@@ -82,4 +80,4 @@ npm run render
 - `src/i18n.ts` unifies the former en/zh fork: `PROVIDER_ZH` map (`zhName`), `fmtDate` per locale (`Aug 15, 2026` vs `2026.08.15`), token units (`T` vs `万亿`), and all scene copy + 4 insight rows per locale.
 - `src/OpenrouterRankings.tsx` takes a `locale` prop (`en` | `zh`); `Root.tsx` registers `OpenrouterRankingsEn` + `OpenrouterRankingsZh` (1080x1920 @ 30fps, 1350 frames = 45s) sharing the one component — forked duplication eliminated.
 - Frame-driven (no GSAP/DOM): bars x10 (`toFixed(2)` counters, width normalized to top model, 5f stagger), provider donut via SVG `stroke-dasharray` segments + `d-total` counter (`toFixed(1)`), growth rows x5 normalized to fastest riser (`toFixed(1)`), 4 insight rows staggered 8f, 5 scene-dots nav + timeline fill.
-- Original HyperFrames files (`compositions/`, `public/`, `scripts/`) stay in place; `npm run data:update` refreshes both `src/snapshot.json` and `public/data.js`. Release CI uses the committed snapshot and never refreshes it automatically.
+- The original HyperFrames files have been removed (see the [framework decision record](../../docs/decisions/0001-remotion-as-primary-framework.md)); `npm run data:update` refreshes `src/snapshot.json`. Release CI uses the committed snapshot and never refreshes it automatically.

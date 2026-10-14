@@ -1,6 +1,6 @@
 # Video project releases
 
-普通的 Remotion / HyperFrames 项目使用统一的 tag 发版流程，不再为每个项目维护独立的 Release workflow。
+所有项目使用统一的 tag 发版流程，不再为每个项目维护独立的 Release workflow。
 
 ## Tag 格式
 
