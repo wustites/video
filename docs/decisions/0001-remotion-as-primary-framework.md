@@ -26,9 +26,10 @@
 
 1. Remotion 是本仓库唯一的主力框架。新项目默认使用 Remotion，并通过 `@video/core` 复用时间轴和渲染配置。
 2. 删除已不再使用的 HyperFrames 源文件（`index.html`、`compositions/`、`hyperframes.json`、`meta.json` 及配套的 `public/*.js`）。需要时可从 `742918d`（清理前最后一个提交）恢复，例如 `git show 742918d:science_nature/solar/index.html`。
-3. HyperFrames 只用于独立于 monorepo 主流程的单件作品（例如 `cover/` 下的纯 HTML 封面），不接入 `projects.json`、CI 发布流程和 `@video/core`。
-4. 在 Remotion 之内按内容类型细分的技术选型见 [按内容类型的技术选型](../TECH_SELECTION.md)。
-5. HyperFrames 相关文档移入 `docs/archive/` 或标注为历史内容。
+3. 本仓库内，HyperFrames 只用于独立于 monorepo 主流程的单件作品（例如 `cover/` 下的纯 HTML 封面），不接入 `projects.json`、CI 发布流程和 `@video/core`。
+4. 账号范围内按用途分工（2026-10-14 补充）：模板化、批量或自动化生产的视频用 Remotion（本仓库、[ZeroMarker/daily](https://github.com/ZeroMarker/daily)）；Agent 从文字、音乐或设计稿直接生成、按作品维护的视频（论文科普、品牌片、MV、绘本动画等）用 HyperFrames，放在独立仓库并自带发布流程（如 [wustites/anime](https://github.com/wustites/anime)）。两类仓库互不迁移；详见 [账号范围的框架分工](../TECH_SELECTION.md#账号范围的框架分工)。
+5. 在 Remotion 之内按内容类型细分的技术选型见 [按内容类型的技术选型](../TECH_SELECTION.md)。
+6. HyperFrames 相关文档移入 `docs/archive/` 或标注为历史内容。
 
 ## 理由
 
@@ -41,7 +42,7 @@
 只有满足下列条件之一，并且先用**一个新项目**试点（不回迁已有项目），才重新讨论框架：
 
 - Remotion 许可成为实际成本（例如以公司名义使用，且超出免费范围）。
-- 新内容以 Agent 从零生成的一次性视频为主，HTML 源文件和 `hyperframes check` 一类结构化检查带来明确收益。
+- 本仓库的新内容以 Agent 从零生成、按作品维护的视频为主（这类内容按第 4 条应放到独立的 HyperFrames 仓库，而不是迁移本仓库）。
 - Remotion 在字体、渲染确定性或 CI 上反复出现问题，而同一条代表性视频在固定环境下的基准对比显示另一方案能解决。
 
 任何框架迁移都必须新增一份 ADR，写明动因、对比数据和回退方案。

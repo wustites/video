@@ -1,6 +1,6 @@
 # 按内容类型的技术选型
 
-本文档按视频的**内容类型**给出技术选型：用什么框架、画面怎么画、数据和素材怎么进来、旁白怎么同步，以及仓库里可参考的项目。框架层面的总体决定见 [ADR 0001](./decisions/0001-remotion-as-primary-framework.md)：monorepo 内一律使用 Remotion，本文档只在 Remotion 之内细分，并标出少数适合在主流程之外处理的类型。
+本文档按视频的**内容类型**给出技术选型：用什么框架、画面怎么画、数据和素材怎么进来、旁白怎么同步，以及仓库里可参考的项目。框架层面的总体决定见 [ADR 0001](./decisions/0001-remotion-as-primary-framework.md)：monorepo 内一律使用 Remotion；本仓库之外的视频仓库如何分工，见[账号范围的框架分工](#账号范围的框架分工)。
 
 ## 速查表
 
@@ -18,7 +18,30 @@
 | [写实三维镜头](#10-写实三维镜头) | Blender → Remotion | Blender 渲染帧序列，Remotion 合成 | `.blend` + Python 脚本 | Remotion 主时间轴 | 同原项目 | 暂无（见 [Blender 文档](./BLENDER_PYTHON_VIDEO.md)） |
 | [封面与静帧](#11-封面与静帧) | `remotion still` 或独立 HTML | 同视频组件，或纯 HTML/CSS | 同视频 | 不适用 | 按平台规格 | `cover/`、imperial_house_law_jp 的 `render:still` |
 | [实拍素材与口播剪辑](#12-实拍素材与口播剪辑) | 剪辑软件为主；包装用 Remotion | `<OffthreadVideo>` + 叠加图层 | 素材文件不入库 | 以素材音轨为主时钟 | 按素材 | 暂无 |
-| [一次性 Agent 短片](#13-一次性-agent-短片) | HyperFrames（主流程之外） | HTML + GSAP | 随作品 | HyperFrames 时间轴 | 按需 | 暂无 |
+| [一次性 Agent 短片](#13-一次性-agent-短片) | HyperFrames（独立仓库） | HTML + GSAP | 随作品 | HyperFrames 时间轴 | 按需 | [wustites/anime](https://github.com/wustites/anime) |
+
+## 账号范围的框架分工
+
+本仓库之外，同一账号下还有多个视频仓库。框架按**生产方式**而不是按题材分工：
+
+| 生产方式 | 框架 | 仓库形态 | 例子 |
+| --- | --- | --- | --- |
+| 模板化、批量、全自动（数据驱动、每期更新、每日生成、同一模板套用多个对象） | Remotion | monorepo 或单一模板仓库，共享组件和时间轴，统一发布流程 | 本仓库；[ZeroMarker/daily](https://github.com/ZeroMarker/daily)（全自动 AI 新闻日报） |
+| Agent 按作品生成（从文字、音乐或设计稿直接生成，每部作品视觉风格独立，较少复用代码） | HyperFrames | 独立仓库，一个仓库放一组同类作品（`videos/<name>/` 或 `<name>/`），自带 tag 发布流程 | [wustites/anime](https://github.com/wustites/anime)（寓言动态绘本）；论文科普、品牌片、MV 类作品 |
+| 逐帧精确复刻参考动画 | 自写 Canvas + FFmpeg 渲染器 | 独立仓库 | 产品官方动画复刻、卡牌影片 |
+
+判断方法：
+
+- 同一份代码要产出很多条视频，或者要在无人值守的情况下定时生产 → Remotion。
+- 每条视频都是单独设计的作品，主要由 Agent 根据 brief 和 storyboard 生成 → HyperFrames。
+- 两种都像时，看是否需要复用 `@video/core`、`packages/voiceover` 和本仓库的发布流程：需要就放进本仓库用 Remotion，不需要就建独立的 HyperFrames 仓库。
+
+约定：
+
+- 两类仓库之间不迁移已有作品；HyperFrames 作品需要长期维护时，在它自己的仓库里维护，不必重写成 Remotion。
+- 新选题前先查已有作品，避免同一题材在两个框架里各做一遍。
+- 各仓库各自锁定框架版本；升级 HyperFrames 或 Remotion 时逐个仓库回归。
+- 旁白统一使用 Edge TTS；HyperFrames 仓库可以直接调用本仓库的 [`packages/voiceover/edge_narration.py`](../packages/voiceover/README.md)，不必另写脚本。
 
 ## 通用规则
 
@@ -169,7 +192,7 @@
 
 - **框架**：可以使用 HyperFrames：HTML 源文件便于 Agent 直接生成和检查，不必遵守 monorepo 的结构。
 - **位置**：放在 monorepo 之外，或者一个不属于 workspaces、不登记到 `projects.json` 的目录中。
-- **升级为正式项目**：如果这个短片需要长期维护、做多语言版本或进入发布流程，按本仓库约定用 Remotion 重写，而不是把 HyperFrames 接入主流程。
+- **升级为正式作品**：需要长期维护或发布时，放进同类 HyperFrames 作品仓库，使用它的发布流程（见[账号范围的框架分工](#账号范围的框架分工)）。只有需要变成模板、批量生产或复用本仓库共享层时，才用 Remotion 重写并纳入本仓库。
 
 ## 新项目选型步骤
 
