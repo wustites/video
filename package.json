@@ -12,7 +12,7 @@
     "packages/*"
   ],
   "scripts": {
-    "check": "npm run validate:projects && tsc -p tsconfig.tools.json && tsc -p packages/video-core/tsconfig.json && node scripts/check-projects.mjs",
+    "check": "npm run validate:projects && tsc -p packages/video-core/tsconfig.json && node scripts/check-projects.mjs",
     "test": "node --test tests/*.test.mjs",
     "validate:projects": "node scripts/validate-projects.mjs"
   },

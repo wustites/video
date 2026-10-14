@@ -6,13 +6,14 @@
   "scripts": {
     "dev": "remotion studio",
     "check": "tsc --noEmit",
-    "voiceover": "python3 scripts/gen_voiceover.py",
+    "voiceover": "python3 ../../packages/voiceover/edge_narration.py --voice es-PE-CamilaNeural --lang es --expected 8",
     "render": "remotion render MetroLima out/video.mp4",
     "render:draft": "remotion render MetroLima out/preview.mp4 --log=error"
   },
   "dependencies": {
     "@remotion/cli": "4.0.504",
     "@remotion/google-fonts": "4.0.504",
+    "@video/core": "0.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "remotion": "4.0.504"

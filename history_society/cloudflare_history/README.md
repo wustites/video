@@ -51,7 +51,7 @@ npm run render         # 正式渲染到 out/video.mp4
 - 文本：`public/voiceover/narration.zh.txt`
 - 音频：`public/voiceover/narration.zh.mp3`（89.7s，按段落生成后拼接）
 - 声音：Edge TTS `zh-CN-YunjianNeural`（专业男声，+12% 语速）
-- 生成命令：`python3 scripts/gen_voiceover.py`（或 `npm run voiceover`）
+- 生成命令：`npm run voiceover`（调用共享脚本 `packages/voiceover/edge_narration.py`）
 
 ## 文件结构
 
@@ -62,8 +62,6 @@ history_society/cloudflare_history/
     Root.tsx                # Composition 注册
     CloudflareHistory.tsx   # 主 composition（9 场景）
     timing.ts               # 场景时间轴与动画工具
-  scripts/
-    gen_voiceover.py        # Edge TTS 旁白生成 + 拼接
   public/
     voiceover/              # 旁白文本；MP3 与时长文件由脚本 / Action 生成
   out/video.mp4             # 渲染产物（不入库）

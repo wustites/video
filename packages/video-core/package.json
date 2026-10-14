@@ -5,9 +5,11 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./timeline": "./src/timeline.ts"
+    "./timeline": "./src/timeline.ts",
+    "./remotion-config": "./src/remotion-config.ts"
   },
   "peerDependencies": {
-    "remotion": "4.0.504"
+    "remotion": "4.0.504",
+    "@remotion/cli": "4.0.504"
   }
 }

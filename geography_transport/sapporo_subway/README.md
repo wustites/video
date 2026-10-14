@@ -61,7 +61,7 @@ npm run render         # 正式渲染到 out/video.mp4
 - 文本：`public/voiceover/narration.ja.txt`
 - 音频：`public/voiceover/narration.ja.mp3`（87.05s，按段落生成后拼接）
 - 声音：Edge TTS `ja-JP-NanamiNeural`（日语女声）
-- 生成命令：`python3 scripts/gen_voiceover.py`（或 `npm run voiceover`）
+- 生成命令：`npm run voiceover`（调用共享脚本 `packages/voiceover/edge_narration.py`）
 
 ## 文件结构
 
@@ -73,8 +73,6 @@ geography_transport/sapporo_subway/
     SapporoSubway.tsx       # 主 composition（8 场景）
     SapporoSchematicMap.tsx # 手绘示意地铁图组件
     timing.ts               # 场景时间轴（由 segment-durations.json 推导）与动画工具
-  scripts/                  # 音频生成脚本
-    gen_voiceover.py        # Edge TTS 旁白生成 + 拼接
   public/
     voiceover/              # 旁白文本；MP3 与时长文件由脚本 / Action 生成
   out/video.mp4             # 渲染产物（不入库）

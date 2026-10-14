@@ -1,3 +1,3 @@
-import {configureRemotion} from '../../remotion.shared';
+import {configureRemotion} from '@video/core/remotion-config';
 
 configureRemotion();

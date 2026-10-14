@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "remotion studio",
     "check": "tsc --noEmit",
-    "voiceover": "python3 scripts/gen_voiceover.py",
+    "voiceover": "python3 ../../packages/voiceover/edge_narration.py --voice ja-JP-NanamiNeural --lang ja --rate=+8% --expected 7",
     "render": "remotion render SouthernKurils out/southern-kurils-ja.mp4",
     "render:draft": "remotion render SouthernKurils out/preview.mp4 --scale=0.5 --concurrency=4 --log=error",
     "render:still": "remotion still SouthernKurils out/cover.png --frame=45"
