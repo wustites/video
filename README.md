@@ -156,6 +156,7 @@ Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，可带 variant 单独发版，
 ## 文档
 
 - [ADR 0001：以 Remotion 作为主力视频框架](./docs/decisions/0001-remotion-as-primary-framework.md)：框架迁移历史、决定与重新评估条件。
+- [按内容类型的技术选型](./docs/TECH_SELECTION.md)：榜单、时序数据、地图、叙事、3D、数学科普、品牌、多语言等类型的画面技术、数据流水线与参考项目。
 - [TTS 旁白方案](./docs/TTS.md)：旁白生成、文件约定、Remotion 接入与验证流程。
 - [音画同步方案](./docs/AUDIO_VIDEO_SYNC.md)：音频主时钟、时间数据、字幕与场景对齐、同步验证和漂移排查。
 - [发布流程](./docs/RELEASING.md)：tag 格式与 Release 工作流。

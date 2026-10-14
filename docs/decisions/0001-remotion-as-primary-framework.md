@@ -27,7 +27,8 @@
 1. Remotion 是本仓库唯一的主力框架。新项目默认使用 Remotion，并通过 `@video/core` 复用时间轴和渲染配置。
 2. 删除已不再使用的 HyperFrames 源文件（`index.html`、`compositions/`、`hyperframes.json`、`meta.json` 及配套的 `public/*.js`）。需要时可从 `742918d`（清理前最后一个提交）恢复，例如 `git show 742918d:science_nature/solar/index.html`。
 3. HyperFrames 只用于独立于 monorepo 主流程的单件作品（例如 `cover/` 下的纯 HTML 封面），不接入 `projects.json`、CI 发布流程和 `@video/core`。
-4. HyperFrames 相关文档移入 `docs/archive/` 或标注为历史内容。
+4. 在 Remotion 之内按内容类型细分的技术选型见 [按内容类型的技术选型](../TECH_SELECTION.md)。
+5. HyperFrames 相关文档移入 `docs/archive/` 或标注为历史内容。
 
 ## 理由
 
