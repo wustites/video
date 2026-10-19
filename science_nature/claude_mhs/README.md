@@ -1,14 +1,17 @@
 # Claude MHS 介绍视频 (claude_mhs)
 
-Remotion 制作的中文竖屏 (1080×1920) 科技解说短视频，介绍 Anthropic 于 2026-08-27 发布的 Model Hardware Standard (MHS) 研究预览。8 段 Edge TTS 旁白（zh-CN-YunxiNeural）驱动场景时间轴。
+HyperFrames（HTML + GSAP）制作的中文竖屏 (1080×1920) 科技解说短视频，介绍 Anthropic 于 2026-08-27 发布的 Model Hardware Standard (MHS) 研究预览。8 段 Edge TTS 旁白（zh-CN-YunxiNeural）驱动场景时间轴：`npm run voiceover` 生成旁白后，`sync-timing.mjs` 把各段时长写进 `index.html` 的 `data-start` / `data-duration`。
+
+最初用 Remotion 编写，2026-10-19 迁移到 HyperFrames（见 [ADR 0002](../../docs/decisions/0002-free-framework-choice.md)）。
 
 来源：https://www.anthropic.com/news/model-hardware-standard-research-preview
 
 ## 使用
 
 ```bash
-npm run voiceover    # 生成旁白
-npm run dev          # Remotion Studio 预览
+npm run voiceover    # 生成旁白并同步场景时间
+npm run dev          # HyperFrames Studio 预览
+npm run check        # lint、布局、对比度检查
 npm run render       # 渲染 out/claude-mhs-zh.mp4
 ```
 

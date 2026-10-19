@@ -1,6 +1,6 @@
 # Video Projects
 
-本仓库收录数据可视化、榜单与科普类视频项目，18 个项目均基于 **Remotion** 制作（框架选型见 [ADR 0001](./docs/decisions/0001-remotion-as-primary-framework.md)）。
+本仓库收录数据可视化、榜单与科普类视频项目。每个项目自由选择 **Remotion** 或 **HyperFrames**（见 [ADR 0002](./docs/decisions/0002-free-framework-choice.md)），在 `projects.json` 的 `framework` 字段中登记。
 
 项目按主题分类、项目名称与根目录路径见 [视频项目索引](./PROJECTS.md)；[`projects.json`](./projects.json) 是项目路径、名称、语言和发布 variant 的唯一机器可读清单。
 
@@ -26,6 +26,7 @@
 | [Southern Kurils JP](./history_society/southern_kurils_jp/) | 南千岛群岛介绍 | 日 | 随旁白生成 | Remotion | `out/southern-kurils-ja.mp4` |
 | [Imperial House Law JP](./history_society/imperial_house_law_jp/) | 皇室典范改正议题 | 日 | 随旁白生成 | Remotion | `out/imperial-house-law-ja.mp4` |
 | [Shandong Universities](./education/shandong_universities/) | 山东本科院校地图速览 | 中 | 随旁白生成 | Remotion | `out/shandong-atlas.mp4` |
+| [Claude MHS](./science_nature/claude_mhs/) | Anthropic Model Hardware Standard 介绍 | 中 | 随旁白生成 | HyperFrames | `out/claude-mhs-zh.mp4` |
 
 榜单和数据项目采用 `1080 × 1920` 竖屏画布；Kakeya Conjecture 使用 `1920 × 1080` 横屏画布。具体数据来源、内容结构和资源要求见各项目目录内的 README。
 
@@ -132,12 +133,12 @@ Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，可带 variant 单独发版，
 ## 仓库约定
 
 - 一个视频项目对应一个顶层目录。
-- Remotion 入口为 `src/index.ts`，composition 注册在 `src/Root.tsx`。
+- Remotion 项目入口为 `src/index.ts`，composition 注册在 `src/Root.tsx`；HyperFrames 项目入口为 `index.html`。
 - Remotion 多语言版本通过 composition 和语言参数注册，共享资源放在 `public/`。
 - 跨项目复用的代码放在 `packages/`：`@video/core`（时间轴、Remotion 配置）与 `packages/voiceover`（Edge TTS 旁白脚本）。
 - 渲染产物统一写入 `out/`，不要提交临时预览文件。
 - 数据、单位、统计年份和来源必须在项目 README 中说明。
-- 新增项目时应提供 `package.json`、README、Remotion 入口与配置和可执行的检查、预览、渲染脚本，并登记到根目录 `projects.json`；依赖锁统一维护在根目录。
+- 新增项目时应提供 `package.json`、README、框架入口和可执行的检查、预览、渲染脚本，并登记到根目录 `projects.json`；依赖锁统一维护在根目录。
 
 ## 常见问题
 
@@ -155,7 +156,8 @@ Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，可带 variant 单独发版，
 
 ## 文档
 
-- [ADR 0001：以 Remotion 作为主力视频框架](./docs/decisions/0001-remotion-as-primary-framework.md)：框架迁移历史、决定与重新评估条件。
+- [ADR 0002：按项目自由选择视频框架](./docs/decisions/0002-free-framework-choice.md)：Remotion 与 HyperFrames 并存的约定。
+- [ADR 0001：以 Remotion 作为主力视频框架](./docs/decisions/0001-remotion-as-primary-framework.md)（部分被 ADR 0002 取代）：框架迁移历史。
 - [按内容类型的技术选型](./docs/TECH_SELECTION.md)：榜单、时序数据、地图、叙事、3D、数学科普、品牌、多语言等类型的画面技术、数据流水线与参考项目。
 - [TTS 旁白方案](./docs/TTS.md)：旁白生成、文件约定、Remotion 接入与验证流程。
 - [音画同步方案](./docs/AUDIO_VIDEO_SYNC.md)：音频主时钟、时间数据、字幕与场景对齐、同步验证和漂移排查。
@@ -166,7 +168,7 @@ Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，可带 variant 单独发版，
 
 ## 新增项目
 
-新增 Remotion 项目时，提供 `src/index.ts`、`src/Root.tsx`、配置文件、依赖锁文件及检查、预览、渲染脚本。补充项目 README，并在上方“项目一览”中登记。提交前完成类型检查、人工布局检查和一次完整渲染。
+新增 Remotion 项目时，提供 `src/index.ts`、`src/Root.tsx`、配置文件及检查、预览、渲染脚本；新增 HyperFrames 项目时，提供 `index.html`、锁定版本的 `hyperframes` devDependency 及同名脚本，在 `projects.json` 中写 `"framework": "hyperframes"`。补充项目 README，并在上方“项目一览”中登记。提交前完成类型检查、人工布局检查和一次完整渲染。
 
 榜单数据更新与人口视频边界的回归检查（先安装 `population_cn` 依赖）：
 

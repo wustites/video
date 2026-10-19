@@ -41,6 +41,7 @@
 
 | 项目名 | 项目路径 | 内容简介 |
 | --- | --- | --- |
+| Claude MHS | [`science_nature/claude_mhs/`](./science_nature/claude_mhs/) | Anthropic Model Hardware Standard 介绍（HyperFrames） |
 | Kakeya Conjecture | [`science_nature/kakeya_conjecture/`](./science_nature/kakeya_conjecture/) | 挂谷猜想科普动画 |
 | Solar System | [`science_nature/solar/`](./science_nature/solar/) | 太阳系科普动画 |
 

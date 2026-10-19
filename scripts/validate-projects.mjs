@@ -12,18 +12,35 @@ const registeredPaths = new Set();
 const packageNames = new Set();
 const repositoryRemotionVersions = new Set();
 const requiredScripts = ['check', 'dev', 'render', 'render:draft'];
+const frameworks = ['remotion', 'hyperframes'];
 
 for (const [key, project] of Object.entries(manifest.projects)) {
   assert.match(key, /^[a-z0-9_]+$/, `Invalid project key: ${key}`);
   assert.ok(project.name, `${key}: name is required`);
   assert.ok(Array.isArray(project.languages) && project.languages.length > 0, `${key}: languages are required`);
   assert.ok(Array.isArray(project.variants), `${key}: variants must be an array`);
+  const framework = project.framework ?? 'remotion';
+  assert.ok(frameworks.includes(framework), `${key}: framework must be one of ${frameworks.join(', ')}`);
   assert.ok(!registeredPaths.has(project.path), `${key}: duplicate path ${project.path}`);
   registeredPaths.add(project.path);
 
   const projectDir = path.join(root, project.path);
   const packagePath = path.join(projectDir, 'package.json');
   assert.ok(existsSync(packagePath), `${key}: missing ${project.path}/package.json`);
+  const pkg = JSON.parse(readFileSync(packagePath, 'utf8'));
+  assert.ok(!packageNames.has(pkg.name), `${key}: duplicate package name ${pkg.name}`);
+  packageNames.add(pkg.name);
+  for (const script of requiredScripts) assert.ok(pkg.scripts?.[script], `${key}: missing npm script ${script}`);
+  for (const variant of project.variants) {
+    assert.ok(pkg.scripts?.[`render:${variant}`], `${key}: missing npm script render:${variant}`);
+  }
+  if (framework === 'hyperframes') {
+    assert.ok(existsSync(path.join(projectDir, 'index.html')), `${key}: missing index.html`);
+    const version = pkg.devDependencies?.hyperframes ?? pkg.dependencies?.hyperframes;
+    assert.match(version ?? '', /^\d+\.\d+\.\d+$/, `${key}: pin hyperframes version exactly`);
+    continue;
+  }
+
   assert.ok(existsSync(path.join(projectDir, 'src/index.ts')), `${key}: missing src/index.ts`);
   const rootPath = path.join(projectDir, 'src/Root.tsx');
   assert.ok(existsSync(rootPath), `${key}: missing src/Root.tsx`);
@@ -32,13 +49,6 @@ for (const [key, project] of Object.entries(manifest.projects)) {
   assert.ok(rootSource.includes('delayRender'), `${key}: Root.tsx must gate rendering while fonts load`);
   assert.ok(rootSource.includes('continueRender'), `${key}: Root.tsx must continue after fonts load`);
 
-  const pkg = JSON.parse(readFileSync(packagePath, 'utf8'));
-  assert.ok(!packageNames.has(pkg.name), `${key}: duplicate package name ${pkg.name}`);
-  packageNames.add(pkg.name);
-  for (const script of requiredScripts) assert.ok(pkg.scripts?.[script], `${key}: missing npm script ${script}`);
-  for (const variant of project.variants) {
-    assert.ok(pkg.scripts?.[`render:${variant}`], `${key}: missing npm script render:${variant}`);
-  }
   assert.ok(pkg.dependencies?.['@remotion/google-fonts'], `${key}: @remotion/google-fonts is required`);
 
   const remotionVersions = ['@remotion/cli', '@remotion/google-fonts', 'remotion']
@@ -51,7 +61,7 @@ for (const [key, project] of Object.entries(manifest.projects)) {
   }
 }
 
-assert.equal(repositoryRemotionVersions.size, 1, 'All projects must use the same Remotion version');
+assert.ok(repositoryRemotionVersions.size <= 1, 'All projects must use the same Remotion version');
 
 for (const category of ['creative_brand', 'data_visualization', 'education', 'geography_transport', 'history_society', 'science_nature']) {
   for (const entry of readdirSync(path.join(root, category), {withFileTypes: true})) {

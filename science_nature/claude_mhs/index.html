@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Claude MHS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #141413;
+        --panel: rgba(250, 249, 245, 0.05);
+        --text: #faf9f5;
+        --muted: #b0aea5;
+        --clay: #d97757;
+        --green: #788c5d;
+        --blue: #6a9bcc;
+        --line: rgba(217, 119, 87, 0.28);
+      }
+      body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Noto Sans SC', sans-serif; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--bg); }
+      .bg { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(circle at 80% 12%, rgba(217,119,87,.22), transparent 38%), radial-gradient(circle at 10% 92%, rgba(106,155,204,.12), transparent 40%), var(--bg); }
+      .dots { position: absolute; inset: -120px; background-image: radial-gradient(rgba(250,249,245,.18) 1.5px, transparent 1.5px); background-size: 60px 60px; opacity: .35; }
+      .ring { position: absolute; top: -280px; right: -240px; width: 760px; height: 760px; border-radius: 50%; border: 1px dashed rgba(217,119,87,.25); }
+      .scene { position: absolute; inset: 0; }
+      .inner { position: absolute; inset: 0; box-sizing: border-box; padding: 150px 78px 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      .kicker { color: var(--clay); font-size: 28px; letter-spacing: 8px; font-weight: 800; margin-bottom: 34px; }
+      .title { color: var(--text); font-size: 64px; line-height: 1.2; letter-spacing: -1px; font-weight: 900; }
+      .title div { display: block; }
+      .card { background: var(--panel); border: 1px solid var(--line); border-radius: 28px; padding: 30px 34px; text-align: left; box-sizing: border-box; }
+      .list { width: 100%; display: flex; flex-direction: column; gap: 26px; margin-top: 60px; }
+      .muted { color: var(--muted); }
+      .spark { display: block; }
+      .pill { font-size: 30px; font-weight: 700; color: var(--clay); border: 2px solid var(--line); border-radius: 999px; padding: 12px 30px; }
+      .bar-track { height: 70px; border-radius: 18px; background: rgba(250,249,245,.12); overflow: hidden; display: flex; align-items: center; }
+      .label { font-size: 30px; font-weight: 700; text-align: left; margin-bottom: 14px; }
+      .big { font-size: 86px; font-weight: 900; color: var(--clay); line-height: 1.15; }
+      .footer { position: absolute; left: 50px; bottom: 48px; color: #8f8d86; font-size: 20px; font-weight: 600; letter-spacing: 1px; }
+      #fade-out { position: absolute; inset: 0; background: #000; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <!-- 场景的 data-start / data-duration 由 sync-timing.mjs 按 segment-durations.json 写入，不要手改 -->
+    <div id="root" data-composition-id="claude-mhs" data-start="0" data-width="1080" data-height="1920" data-duration="149.792">
+      <div class="bg"><div class="dots" id="dots"></div><div class="ring" id="ring"></div></div>
+
+      <section id="intro" class="scene clip" data-scene="0" data-start="0" data-duration="16.508" data-track-index="1">
+        <div class="inner">
+          <div class="muted" style="position:absolute;top:120px;font-size:26px;font-weight:600" data-in="0.2">2026.08.27</div>
+          <svg class="spark" id="spark-intro" width="150" height="150" viewBox="-50 -50 100 100" style="margin-bottom:40px" data-in="0.2"></svg>
+          <div class="kicker" data-in="0.2">ANTHROPIC · RESEARCH PREVIEW</div>
+          <div data-in="0.9">
+            <div class="title" style="font-size:190px">MHS</div>
+            <div class="muted" style="font-size:40px;font-weight:700;margin-top:10px;letter-spacing:2px">Model Hardware Standard</div>
+          </div>
+          <div style="width:520px;height:4px;background:linear-gradient(90deg,transparent,var(--clay),transparent);margin:50px 0" data-in="3.5"></div>
+          <div style="font-size:42px;font-weight:700" data-in="3.5">让 AI 智能体安全操作实体设备</div>
+          <div style="display:flex;gap:22px;margin-top:40px">
+            <div class="pill" data-in="6">显微镜</div>
+            <div class="pill" data-in="6.8">移液工作站</div>
+            <div class="pill" data-in="7.6">机械臂</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="problem" class="scene clip" data-scene="1" data-start="15.748" data-duration="17.248" data-track-index="2">
+        <div class="inner">
+          <div class="kicker" data-in="0.4">THE INTEGRATION PROBLEM</div>
+          <div class="title" data-in="0.4"><div>接入一台仪器</div><div>要多久？</div></div>
+          <div style="width:100%;margin-top:80px;display:flex;flex-direction:column;gap:46px">
+            <div data-in="0.4">
+              <div class="label muted">传统定制开发</div>
+              <div class="bar-track"><div id="bar-old" style="width:0%;height:100%;background:var(--muted);display:flex;align-items:center;padding-left:26px;box-sizing:border-box;font-size:32px;font-weight:900;color:var(--bg);white-space:nowrap;overflow:hidden">数周 ～ 数月</div></div>
+            </div>
+            <div data-in="7.5">
+              <div class="label" style="color:var(--clay)">使用 MHS</div>
+              <div class="bar-track">
+                <div id="bar-new" style="width:100%;min-width:18px;height:100%;background:var(--clay)"></div>
+                <div id="bar-new-label" style="font-size:32px;font-weight:900;color:var(--clay);margin-left:22px;white-space:nowrap;opacity:0">数小时 ～ 数分钟</div>
+              </div>
+            </div>
+          </div>
+          <div class="muted" style="font-size:30px;font-weight:600;line-height:1.6;margin-top:80px" data-in="0.4">
+            <div>每家厂商一套软件、一套接口</div><div style="color:var(--text)">彼此互不兼容</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="how" class="scene clip" data-scene="2" data-start="32.236" data-duration="32.68" data-track-index="1">
+        <div class="inner">
+          <div class="kicker">HOW IT WORKS</div>
+          <div class="title">它是怎么做到的？</div>
+          <div class="list" style="gap:24px">
+            <div class="card" style="display:grid;grid-template-columns:110px 1fr;align-items:center" data-in="3.5"><div style="font-size:52px;font-weight:900;color:var(--clay)">01</div><div><div style="font-size:36px;font-weight:900">标准化驱动</div><div class="muted" style="font-size:26px;font-weight:600;margin-top:6px">读写原语：get / set temperature</div></div></div>
+            <div class="card" style="display:grid;grid-template-columns:110px 1fr;align-items:center" data-in="9.5"><div style="font-size:52px;font-weight:900;color:var(--blue)">02</div><div><div style="font-size:36px;font-weight:900">自动发现</div><div class="muted" style="font-size:26px;font-weight:600;margin-top:6px">统一格式，跨网络互相找到</div></div></div>
+            <div class="card" style="display:grid;grid-template-columns:110px 1fr;align-items:center" data-in="14"><div style="font-size:52px;font-weight:900;color:var(--green)">03</div><div><div style="font-size:36px;font-weight:900">参考文件</div><div class="muted" style="font-size:26px;font-weight:600;margin-top:6px">自然语言描述 → 能力与安全上限</div></div></div>
+            <div class="card" style="display:grid;grid-template-columns:110px 1fr;align-items:center" data-in="22"><div style="font-size:52px;font-weight:900;color:var(--clay)">04</div><div><div style="font-size:36px;font-weight:900">多种控制方式</div><div class="muted" style="font-size:26px;font-weight:600;margin-top:6px">MCP · 命令行 · 代码 API</div></div></div>
+          </div>
+          <div style="margin-top:44px;font-size:30px;font-weight:800;color:var(--bg);background:var(--clay);border-radius:999px;padding:14px 40px" data-in="27">与模型无关 · Model-agnostic</div>
+        </div>
+      </section>
+
+      <section id="labs" class="scene clip" data-scene="3" data-start="64.156" data-duration="21.184" data-track-index="2">
+        <div class="inner">
+          <div class="kicker">PARTNER LABS</div>
+          <div class="title">实验室里的成果</div>
+          <div class="list" style="gap:28px;margin-top:64px">
+            <div class="card" data-in="0.5"><div class="muted" style="font-size:28px;font-weight:700">卡内基梅隆大学</div><div class="big"><span id="cnt-cmu">0</span> 小时</div><div style="font-size:28px;font-weight:600">完成搭建（厂商方案需数周），实验快约 3 倍</div></div>
+            <div class="card" data-in="8.5"><div class="muted" style="font-size:28px;font-weight:700">华盛顿大学</div><div class="big"><span id="cnt-uw">0</span> 台</div><div style="font-size:28px;font-weight:600">仪器在一周内接入，含编写驱动</div></div>
+            <div class="card" data-in="12.5"><div class="muted" style="font-size:28px;font-weight:700">HHMI 珍利亚</div><div class="big">7 → 1</div><div style="font-size:28px;font-weight:600">七个厂商程序，统一为一键启动</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="quera" class="scene clip" data-scene="4" data-start="84.58" data-duration="20.008" data-track-index="1">
+        <div class="inner">
+          <div class="kicker" data-in="0.3">QUERA · QUANTUM COMPUTING</div>
+          <div class="title" style="font-size:60px">激光重锁控制器</div>
+          <div style="font-size:190px;font-weight:900;color:var(--clay);letter-spacing:-6px;margin-top:30px;line-height:1"><span id="cnt-rate">0.0</span><span style="font-size:80px">%</span></div>
+          <div class="muted" style="font-size:30px;font-weight:700;margin-top:10px">700 次测试中的恢复成功率</div>
+          <div style="width:100%;margin-top:70px;display:flex;flex-direction:column;gap:30px" data-in="9.5">
+            <div style="text-align:left">
+              <div style="display:flex;justify-content:space-between;font-size:28px;font-weight:700;margin-bottom:10px"><span>AI 控制器</span><span style="color:var(--clay)">99.3% · 约 6 秒</span></div>
+              <div style="height:34px;border-radius:12px;background:rgba(250,249,245,.1)"><div id="q-ai" style="width:0%;height:100%;border-radius:12px;background:var(--clay)"></div></div>
+            </div>
+            <div style="text-align:left">
+              <div style="display:flex;justify-content:space-between;font-size:28px;font-weight:700;margin-bottom:10px"><span>原有脚本</span><span class="muted">58% · 150 秒</span></div>
+              <div style="height:34px;border-radius:12px;background:rgba(250,249,245,.1)"><div id="q-old" style="width:0%;height:100%;border-radius:12px;background:var(--muted)"></div></div>
+            </div>
+            <div class="muted" style="font-size:28px;font-weight:600;text-align:left">人工处理：5～10 分钟</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="industry" class="scene clip" data-scene="5" data-start="103.828" data-duration="14.464" data-track-index="2">
+        <div class="inner">
+          <div class="kicker">INDUSTRY ADOPTION</div>
+          <div class="title">产业界正在跟进</div>
+          <div id="logos" style="margin-top:70px;display:flex;flex-wrap:wrap;gap:22px;justify-content:center"></div>
+          <div class="muted" style="font-size:30px;font-weight:600;margin-top:60px">测试中或计划支持 MHS</div>
+        </div>
+      </section>
+
+      <section id="limits" class="scene clip" data-scene="6" data-start="117.532" data-duration="18.448" data-track-index="1">
+        <div class="inner">
+          <div class="kicker">LIMITS &amp; SAFETY</div>
+          <div class="title">限制依然存在</div>
+          <div class="list" style="margin-top:64px">
+            <div class="card" style="border-left:8px solid var(--clay)" data-in="2"><div style="font-size:36px;font-weight:900">空间推理有限</div><div class="muted" style="font-size:27px;font-weight:600;margin-top:8px;line-height:1.5">通过文字和图像理解物理世界，需专家监督</div></div>
+            <div class="card" style="border-left:8px solid var(--clay)" data-in="8"><div style="font-size:36px;font-weight:900">需要编程接口</div><div class="muted" style="font-size:27px;font-weight:600;margin-top:8px;line-height:1.5">无编程接口的硬件暂时无法接入</div></div>
+            <div class="card" style="border-left:8px solid var(--green)" data-in="11.5"><div style="font-size:36px;font-weight:900">安全优先</div><div class="muted" style="font-size:27px;font-weight:600;margin-top:8px;line-height:1.5">与合作伙伴开展安全评估，制定物理安全路线图</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="outro" class="scene clip" data-scene="7" data-start="135.22" data-duration="14.572" data-track-index="2">
+        <div class="inner">
+          <svg class="spark" id="spark-outro" width="120" height="120" viewBox="-50 -50 100 100" data-in="0.3"></svg>
+          <div class="kicker" style="margin-top:40px" data-in="0.3">APPLY · THEN OPEN SOURCE</div>
+          <div class="title" style="font-size:56px" data-in="0.3"><div>申请开放预览</div><div>预览后计划开源</div></div>
+          <div style="width:110px;height:6px;background:var(--clay);margin:54px auto" data-in="5.5"></div>
+          <div class="title" style="font-size:72px" data-in="5.5"><div>当 AI 走出屏幕</div><div style="color:var(--clay)">走进实验室</div></div>
+          <div class="muted" style="font-size:28px;font-weight:600;margin-top:50px" data-in="0.3">modelhardwarestandard.com</div>
+        </div>
+      </section>
+
+      <div class="footer">CLAUDE · MODEL HARDWARE STANDARD</div>
+      <div id="fade-out"></div>
+      <audio id="narration" src="public/voiceover/narration.zh.mp3" data-start="0" data-duration="147.192" data-track-index="0"></audio>
+    </div>
+
+    <script>
+      const FADE = 0.38;
+      const ENTRANCE = {y: 36, scale: 0.88};
+      const sceneStart = (id) => Number(document.getElementById(id).dataset.start) + (id === 'intro' ? 0 : FADE);
+      const audioEnd = Number(document.getElementById('narration').dataset.duration);
+
+      // Claude 星形标志
+      for (const svg of document.querySelectorAll('.spark')) {
+        svg.innerHTML = Array.from({length: 12}, (_, i) => `<rect x="-4" y="-48" width="8" height="36" rx="4" fill="#d97757" transform="rotate(${i * 30})"/>`).join('');
+      }
+      const logos = ['AWS', 'Tecan', 'QIAGEN', 'Danaher', 'Universal Robots', '斗山机器人', 'Hugging Face', '树莓派', 'Automata', 'MBF Bioscience'];
+      document.getElementById('logos').innerHTML = logos.map((n, i) => `<div data-in="${1.5 + i * 0.6}" data-dur="0.5" style="font-size:36px;font-weight:800;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px 32px">${n}</div>`).join('');
+
+      const tl = gsap.timeline({paused: true});
+      const total = Number(document.getElementById('root').dataset.duration);
+
+      // 背景缓慢漂移
+      tl.fromTo('#dots', {y: 0}, {y: total * 6, duration: total, ease: 'none'}, 0);
+      tl.fromTo('#ring', {rotation: 0}, {rotation: total * 0.75, duration: total, ease: 'none'}, 0);
+      tl.fromTo('.spark', {rotation: 0}, {rotation: total * 10, duration: total, ease: 'none'}, 0);
+
+      // 场景交叉淡化：clip 窗口为 [start - FADE, end + FADE]
+      for (const scene of document.querySelectorAll('.scene')) {
+        const inner = scene.querySelector('.inner');
+        const start = Number(scene.dataset.start);
+        const end = start + Number(scene.dataset.duration);
+        if (scene.id !== 'intro') tl.fromTo(inner, {opacity: 0}, {opacity: 1, duration: FADE, ease: 'none'}, start);
+        if (scene.id !== 'outro') tl.to(inner, {opacity: 0, duration: FADE, ease: 'none'}, end - FADE);
+
+        // 入场动画：与 @video/core 的 entranceAt 一致（cubic ease-out）
+        const base = sceneStart(scene.id);
+        for (const el of scene.querySelectorAll('[data-in]')) {
+          tl.fromTo(el, {opacity: 0, y: ENTRANCE.y, scale: ENTRANCE.scale},
+            {opacity: 1, y: 0, scale: 1, duration: Number(el.dataset.dur || 0.8), ease: 'power2.out'}, base + Number(el.dataset.in));
+        }
+      }
+
+      const sceneLen = (id) => Number(document.getElementById(id).dataset.duration) - (id === 'intro' ? FADE : 2 * FADE);
+      const at = (id, p) => sceneStart(id) + sceneLen(id) * p;
+      const span = (id, a, b) => sceneLen(id) * (b - a);
+      const counter = (sel, id, a, b, to, digits = 0) => {
+        const obj = {v: 0};
+        tl.fromTo(obj, {v: 0}, {v: to, duration: span(id, a, b), ease: 'none', onUpdate: () => {
+          document.querySelector(sel).textContent = obj.v.toFixed(digits);
+        }}, at(id, a));
+      };
+
+      // problem：旧方案条形增长，MHS 条形收缩
+      tl.fromTo('#bar-old', {width: '0%'}, {width: '100%', duration: span('problem', 0.05, 0.4), ease: 'none'}, at('problem', 0.05));
+      tl.fromTo('#bar-new', {width: '100%'}, {width: '6%', duration: span('problem', 0.55, 0.8), ease: 'none'}, at('problem', 0.55));
+      tl.fromTo('#bar-new-label', {opacity: 0}, {opacity: 1, duration: 0.3}, at('problem', 0.75));
+
+      counter('#cnt-cmu', 'labs', 0.05, 0.3, 8);
+      counter('#cnt-uw', 'labs', 0.45, 0.6, 6);
+      counter('#cnt-rate', 'quera', 0.12, 0.4, 99.3, 1);
+      tl.fromTo('#q-ai', {width: '0%'}, {width: '99.3%', duration: span('quera', 0.5, 0.75), ease: 'none'}, at('quera', 0.5));
+      tl.fromTo('#q-old', {width: '0%'}, {width: '58%', duration: span('quera', 0.5, 0.75), ease: 'none'}, at('quera', 0.5));
+
+      // 旁白结束后淡出到黑
+      tl.fromTo('#fade-out', {opacity: 0}, {opacity: 1, duration: 1.9, ease: 'none'}, audioEnd + 0.5);
+
+      window.__timelines['claude-mhs'] = tl;
+    </script>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 # 按内容类型的技术选型
 
-本文档按视频的**内容类型**给出技术选型：用什么框架、画面怎么画、数据和素材怎么进来、旁白怎么同步，以及仓库里可参考的项目。框架层面的总体决定见 [ADR 0001](./decisions/0001-remotion-as-primary-framework.md)：monorepo 内一律使用 Remotion；本仓库之外的视频仓库如何分工，见[账号范围的框架分工](#账号范围的框架分工)。
+本文档按视频的**内容类型**给出技术选型：用什么框架、画面怎么画、数据和素材怎么进来、旁白怎么同步，以及仓库里可参考的项目。框架可以按项目自由选择（Remotion 或 HyperFrames），见 [ADR 0002](./decisions/0002-free-framework-choice.md)。下表中的“框架”一列是推荐值，不是硬性要求；各节的画面技术以 Remotion 写法为例，用 HyperFrames 时换成对应的 HTML/CSS + GSAP 写法即可。
 
 ## 速查表
 
@@ -18,30 +18,24 @@
 | [写实三维镜头](#10-写实三维镜头) | Blender → Remotion | Blender 渲染帧序列，Remotion 合成 | `.blend` + Python 脚本 | Remotion 主时间轴 | 同原项目 | 暂无（见 [Blender 文档](./BLENDER_PYTHON_VIDEO.md)） |
 | [封面与静帧](#11-封面与静帧) | `remotion still` 或独立 HTML | 同视频组件，或纯 HTML/CSS | 同视频 | 不适用 | 按平台规格 | `cover/`、imperial_house_law_jp 的 `render:still` |
 | [实拍素材与口播剪辑](#12-实拍素材与口播剪辑) | 剪辑软件为主；包装用 Remotion | `<OffthreadVideo>` + 叠加图层 | 素材文件不入库 | 以素材音轨为主时钟 | 按素材 | 暂无 |
-| [一次性 Agent 短片](#13-一次性-agent-短片) | HyperFrames（独立仓库） | HTML + GSAP | 随作品 | HyperFrames 时间轴 | 按需 | [wustites/anime](https://github.com/wustites/anime) |
+| [一次性 Agent 短片](#13-一次性-agent-短片) | HyperFrames | HTML + GSAP | 随作品 | 旁白驱动（`sync-timing.mjs` 写入 HTML） | 按需 | claude_mhs、[wustites/anime](https://github.com/wustites/anime) |
 
 ## 账号范围的框架分工
 
-本仓库之外，同一账号下还有多个视频仓库。框架按**生产方式**而不是按题材分工：
+框架按项目自由选择（[ADR 0002](./decisions/0002-free-framework-choice.md)），本仓库内 Remotion 与 HyperFrames 项目并存，在 `projects.json` 中用 `framework` 字段区分。下面的分工只是默认倾向：
 
-| 生产方式 | 框架 | 仓库形态 | 例子 |
-| --- | --- | --- | --- |
-| 模板化、批量、全自动（数据驱动、每期更新、每日生成、同一模板套用多个对象） | Remotion | monorepo 或单一模板仓库，共享组件和时间轴，统一发布流程 | 本仓库；[ZeroMarker/daily](https://github.com/ZeroMarker/daily)（全自动 AI 新闻日报） |
-| Agent 按作品生成（从文字、音乐或设计稿直接生成，每部作品视觉风格独立，较少复用代码） | HyperFrames | 独立仓库，一个仓库放一组同类作品（`videos/<name>/` 或 `<name>/`），自带 tag 发布流程 | [wustites/anime](https://github.com/wustites/anime)（寓言动态绘本）；论文科普、品牌片、MV 类作品 |
-| 逐帧精确复刻参考动画 | 自写 Canvas + FFmpeg 渲染器 | 独立仓库 | 产品官方动画复刻、卡牌影片 |
-
-判断方法：
-
-- 同一份代码要产出很多条视频，或者要在无人值守的情况下定时生产 → Remotion。
-- 每条视频都是单独设计的作品，主要由 Agent 根据 brief 和 storyboard 生成 → HyperFrames。
-- 两种都像时，看是否需要复用 `@video/core`、`packages/voiceover` 和本仓库的发布流程：需要就放进本仓库用 Remotion，不需要就建独立的 HyperFrames 仓库。
+| 生产方式 | 推荐框架 | 例子 |
+| --- | --- | --- |
+| 模板化、批量、全自动（数据驱动、每期更新、每日生成） | Remotion | 本仓库的榜单和数据项目；[ZeroMarker/daily](https://github.com/ZeroMarker/daily) |
+| Agent 按作品生成（从文章、音乐或设计稿生成，每条视频风格独立） | HyperFrames | 本仓库的 claude_mhs；[wustites/anime](https://github.com/wustites/anime) |
+| 逐帧精确复刻参考动画 | 自写 Canvas + FFmpeg 渲染器 | 产品官方动画复刻、卡牌影片 |
 
 约定：
 
-- 两类仓库之间不迁移已有作品；HyperFrames 作品需要长期维护时，在它自己的仓库里维护，不必重写成 Remotion。
-- 新选题前先查已有作品，避免同一题材在两个框架里各做一遍。
-- 各仓库各自锁定框架版本；升级 HyperFrames 或 Remotion 时逐个仓库回归。
-- 旁白统一使用 Edge TTS；HyperFrames 仓库可以直接调用本仓库的 [`packages/voiceover/edge_narration.py`](../packages/voiceover/README.md)，不必另写脚本。
+- 不论选哪个框架，项目都登记到 `projects.json`，提供 `check`、`dev`、`render`、`render:draft` 脚本，渲染结果写入 `out/`，就能使用统一的发布流程。
+- 旁白统一使用 Edge TTS（[`packages/voiceover`](../packages/voiceover/README.md)）。HyperFrames 项目在 `voiceover` 脚本后运行自己的时间同步脚本，把段落时长写进 HTML。
+- 已有项目可以迁移框架，迁移时同步更新 `projects.json` 和项目 README，并完整渲染一次。
+- 各框架版本精确锁定；升级时逐个项目回归。
 
 ## 通用规则
 
@@ -190,12 +184,13 @@
 
 **特点**：由 Agent 从一段文字生成、用一次就不再维护的短片，不需要复用组件，也不进入发布流程。
 
-- **框架**：可以使用 HyperFrames：HTML 源文件便于 Agent 直接生成和检查，不必遵守 monorepo 的结构。
-- **位置**：放在 monorepo 之外，或者一个不属于 workspaces、不登记到 `projects.json` 的目录中。
-- **升级为正式作品**：需要长期维护或发布时，放进同类 HyperFrames 作品仓库，使用它的发布流程（见[账号范围的框架分工](#账号范围的框架分工)）。只有需要变成模板、批量生产或复用本仓库共享层时，才用 Remotion 重写并纳入本仓库。
+- **框架**：推荐 HyperFrames：HTML 源文件便于 Agent 直接生成和检查。
+- **位置**：可以作为本仓库的正式项目（登记到 `projects.json`，`framework: "hyperframes"`，参考 claude_mhs），也可以放到独立的 HyperFrames 作品仓库。
+- **时间轴**：有旁白时用 `packages/voiceover` 生成，再用项目内的 `sync-timing.mjs` 把段落时长写进各场景的 `data-start` / `data-duration`。
 
 ## 新项目选型步骤
 
+1. **确定框架**：按[账号范围的框架分工](#账号范围的框架分工)的倾向选择 Remotion 或 HyperFrames，在 `projects.json` 的 `framework` 字段中登记。
 1. **确定内容类型**：在速查表中找到最接近的一行。同时属于多种类型时，以最主要的画面形式为准，比如“带地图的历史叙事”按第 5 节组织时间轴，地图部分按第 4 节处理。
 2. **确定是否有旁白**：有旁白就由音频驱动，用 `@video/core` 和 `packages/voiceover`；没有就用固定时长。
 3. **确定画布**：默认竖屏；以推导、讲解为主、需要横向空间时用横屏。

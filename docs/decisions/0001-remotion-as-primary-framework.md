@@ -1,6 +1,6 @@
 # ADR 0001：以 Remotion 作为主力视频框架
 
-- 状态：已采纳
+- 状态：部分被 [ADR 0002](./0002-free-framework-choice.md) 取代（第 1、3、4 条的框架限制已取消，每个项目可自由选择 Remotion 或 HyperFrames）
 - 日期：2026-10-14
 - 取代：[Remotion vs HyperFrames](../REMOTION_VS_HYPERFRAMES.md) 2026-07-20 版中“继续使用 HyperFrames”的结论
 
