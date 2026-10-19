@@ -7,6 +7,8 @@ const root = path.dirname(fileURLToPath(new URL('../package.json', import.meta.u
 const {projects} = JSON.parse(readFileSync(path.join(root, 'projects.json'), 'utf8'));
 const entries = Object.entries(projects);
 const concurrency = Math.min(3, entries.length);
+// 0.2 秒静音 MP3：旁白未生成时给 HyperFrames 检查用的占位文件
+const SILENT_MP3 = Buffer.from('SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMAAAAAAAAAAAAAAA//NwwAAAAAAAAAAAAEluZm8AAAAPAAAACgAAAsEAVFRUVFRUVFRUaGhoaGhoaGhoaHt7e3t7e3t7e3uNjY2NjY2NjY2NoKCgoKCgoKCgoLS0tLS0tLS0tLTGxsbGxsbGxsbG2dnZ2dnZ2dnZ2ezs7Ozs7Ozs7Oz/////////////AAAAAExhdmM2MC4zMQAAAAAAAAAAAAAAACQDBgAAAAAAAALBumiUJQAAAAAAAAAAAAAAAAD/8yDEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVMQU1FMy4xMDBVVVVVVVVVVVVV//MixCcAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuMTAwVVVVVVVVVVVVVVX/8yDETwAAA0gAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVV//MgxHYAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuMTAwVVVVVVVVVVVVVf/zIMSdAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/8yLExAAAA0gAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zIMTYAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/8yDE2AAAA0gAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//MgxNgAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zIsTXAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV', 'base64');
 
 const checkProject = async ([key, project]) => {
   const projectDir = path.join(root, project.path);
@@ -20,10 +22,17 @@ const checkProject = async ([key, project]) => {
     const generatedPath = path.resolve(path.dirname(sourcePath), match[1]);
     return existsSync(generatedPath) ? [] : [generatedPath];
   }))];
+  if (project.framework === 'hyperframes') {
+    const html = readFileSync(path.join(projectDir, 'index.html'), 'utf8');
+    for (const [, src] of html.matchAll(/<audio[^>]*\ssrc="(public\/voiceover\/[^"]+\.mp3)"/g)) {
+      const generatedPath = path.join(projectDir, src);
+      if (!existsSync(generatedPath)) generatedFixtures.push(generatedPath);
+    }
+  }
 
   const output = [];
   try {
-    for (const fixture of generatedFixtures) writeFileSync(fixture, '[1]\n');
+    for (const fixture of generatedFixtures) writeFileSync(fixture, fixture.endsWith('.mp3') ? SILENT_MP3 : '[1]\n');
     const status = await new Promise((resolve, reject) => {
       const child = spawn('npm', ['run', 'check'], {cwd: projectDir, stdio: ['ignore', 'pipe', 'pipe']});
       child.stdout.on('data', (chunk) => output.push(chunk));
