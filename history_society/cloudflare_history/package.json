@@ -1,26 +1,16 @@
 {
   "name": "cloudflare-history",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "remotion studio",
-    "check": "tsc --noEmit",
-    "voiceover": "python3 ../../packages/voiceover/edge_narration.py --voice zh-CN-YunjianNeural --lang zh --rate=+12% --durations-format starts",
-    "render": "remotion render CloudflareHistory out/video.mp4",
-    "render:draft": "remotion render CloudflareHistory out/preview.mp4 --log=error"
-  },
-  "dependencies": {
-    "@remotion/cli": "4.0.504",
-    "@remotion/google-fonts": "4.0.504",
-    "@video/core": "0.0.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "remotion": "4.0.504"
+    "dev": "hyperframes preview",
+    "check": "hyperframes check",
+    "voiceover": "python3 ../../packages/voiceover/edge_narration.py --voice zh-CN-YunjianNeural --lang zh --rate=+12% --expected 9 && node ../../packages/voiceover/sync_hyperframes_timing.mjs --fade 0.5 --tail 0.3",
+    "render": "hyperframes render --output out/video.mp4",
+    "render:draft": "hyperframes render --quality draft --output out/preview.mp4"
   },
   "devDependencies": {
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
-    "typescript": "^5.8.3"
+    "hyperframes": "0.8.174"
   }
 }

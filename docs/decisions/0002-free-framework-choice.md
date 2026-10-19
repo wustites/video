@@ -15,7 +15,7 @@ ADR 0001 把框架按仓库划分：本仓库只用 Remotion，Agent 按作品�
    - 目录、`projects.json` 登记、`package.json` 中的 `check`、`dev`、`render`、`render:draft` 脚本，渲染结果写入 `out/*.mp4`；
    - 旁白统一用 `packages/voiceover` 的 Edge TTS 脚本，由旁白时长驱动场景时间；
    - 框架版本精确锁定：Remotion 全仓库一个版本；HyperFrames 项目在 `devDependencies` 中锁定 `hyperframes` 版本。
-3. 只服务于 Remotion 的共享代码（`@video/core`、`remotion-config`）不强制 HyperFrames 项目使用。HyperFrames 项目用自己的脚本把 `segment-durations.json` 写进 HTML 的 `data-start` / `data-duration`（参考 `claude_mhs/sync-timing.mjs`）。
+3. 只服务于 Remotion 的共享代码（`@video/core`、`remotion-config`）不强制 HyperFrames 项目使用。HyperFrames 项目用共享脚本 `packages/voiceover/sync_hyperframes_timing.mjs` 把 `segment-durations.json` 写进 HTML 的 `data-start` / `data-duration`。
 4. 已有项目可以在两种框架之间迁移，但必须在同一提交中更新 `projects.json`、项目 README，并完成一次完整渲染。
 5. 账号内的独立 HyperFrames 仓库（如 [wustites/anime](https://github.com/wustites/anime)）照常保留；新作品放在哪里由作者决定。
 

@@ -11,7 +11,7 @@
 | [Metro de Lima](./geography_transport/metro_lima/) | 秘鲁利马地铁系统介绍 | 西 | 随旁白生成 | Remotion | `out/video.mp4` |
 | [Saint Petersburg Metro](./geography_transport/saint_petersburg_metro/) | 俄罗斯圣彼得堡地铁系统介绍（俄英双语字幕） | 俄 + 英字幕 | 随旁白生成 | Remotion | `out/video.mp4` |
 | [Sapporo Subway](./geography_transport/sapporo_subway/) | 日本札幌市营地铁介绍 | 日 | 随旁白生成 | Remotion | `out/video.mp4` |
-| [Cloudflare History](./history_society/cloudflare_history/) | Cloudflare 发展历程 | 中 | 90 秒 | Remotion | `out/video.mp4` |
+| [Cloudflare History](./history_society/cloudflare_history/) | Cloudflare 发展历程 | 中 | 随旁白生成 | HyperFrames | `out/video.mp4` |
 | [Japan Economy](./data_visualization/japan_economy/) | 日本 1985—2026 经济指标与日经指数 | 日 | 随旁白生成 | Remotion | `out/video.mp4` |
 | [AI Model Rankings](./data_visualization/ai_model_rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | Remotion | `out/video.mp4` |
 | [Apple](./creative_brand/apple/) | 水果苹果创意介绍 | 中 | 54 秒 | Remotion | `out/video.mp4` |

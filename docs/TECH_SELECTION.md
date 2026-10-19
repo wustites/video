@@ -18,7 +18,7 @@
 | [写实三维镜头](#10-写实三维镜头) | Blender → Remotion | Blender 渲染帧序列，Remotion 合成 | `.blend` + Python 脚本 | Remotion 主时间轴 | 同原项目 | 暂无（见 [Blender 文档](./BLENDER_PYTHON_VIDEO.md)） |
 | [封面与静帧](#11-封面与静帧) | `remotion still` 或独立 HTML | 同视频组件，或纯 HTML/CSS | 同视频 | 不适用 | 按平台规格 | `cover/`、imperial_house_law_jp 的 `render:still` |
 | [实拍素材与口播剪辑](#12-实拍素材与口播剪辑) | 剪辑软件为主；包装用 Remotion | `<OffthreadVideo>` + 叠加图层 | 素材文件不入库 | 以素材音轨为主时钟 | 按素材 | 暂无 |
-| [一次性 Agent 短片](#13-一次性-agent-短片) | HyperFrames | HTML + GSAP | 随作品 | 旁白驱动（`sync-timing.mjs` 写入 HTML） | 按需 | claude_mhs、[wustites/anime](https://github.com/wustites/anime) |
+| [一次性 Agent 短片](#13-一次性-agent-短片) | HyperFrames | HTML + GSAP | 随作品 | 旁白驱动（`packages/voiceover/sync_hyperframes_timing.mjs` 写入 HTML） | 按需 | claude_mhs、[wustites/anime](https://github.com/wustites/anime) |
 
 ## 账号范围的框架分工
 
@@ -186,7 +186,7 @@
 
 - **框架**：推荐 HyperFrames：HTML 源文件便于 Agent 直接生成和检查。
 - **位置**：可以作为本仓库的正式项目（登记到 `projects.json`，`framework: "hyperframes"`，参考 claude_mhs），也可以放到独立的 HyperFrames 作品仓库。
-- **时间轴**：有旁白时用 `packages/voiceover` 生成，再用项目内的 `sync-timing.mjs` 把段落时长写进各场景的 `data-start` / `data-duration`。
+- **时间轴**：有旁白时用 `packages/voiceover` 生成，再用共享脚本 `packages/voiceover/sync_hyperframes_timing.mjs` 把段落时长写进各场景的 `data-start` / `data-duration`。
 
 ## 新项目选型步骤
 

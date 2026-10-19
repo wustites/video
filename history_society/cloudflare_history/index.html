@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Cloudflare 发展历程</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #07090f;
+        --panel: rgba(18, 24, 38, 0.9);
+        --panel2: rgba(12, 17, 28, 0.92);
+        --border: #26304a;
+        --border-soft: rgba(52, 64, 96, 0.55);
+        --text: #f5f7fc;
+        --sub: #c3ccdc;
+        --muted: #8592ab;
+        --fine: #7a87a0;
+        --orange: #f6821f;
+        --green: #3ddc97;
+      }
+      body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Noto Sans SC', sans-serif; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--bg); }
+      .glow { position: absolute; border-radius: 50%; }
+      .ring { position: absolute; top: 50%; left: 50%; border-radius: 50%; }
+      .ring-dot { position: absolute; top: 50%; left: -5px; margin-top: -5px; width: 10px; height: 10px; border-radius: 50%; background: var(--orange); opacity: .8; }
+      .grid { position: absolute; inset: 0; opacity: .05; background-image: linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px); background-size: 90px 90px; }
+      .scene { position: absolute; inset: 0; }
+      .inner { position: absolute; inset: 0; box-sizing: border-box; padding: 120px 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      .kicker { font-size: 30px; font-weight: 800; letter-spacing: 6px; color: var(--orange); border: 1.5px solid var(--orange); border-radius: 999px; padding: 14px 40px; margin-bottom: 46px; }
+      .h { font-weight: 900; color: var(--text); letter-spacing: -1px; }
+      .card { background: var(--panel); border: 1px solid var(--border); border-radius: 30px; box-sizing: border-box; }
+      .chip { width: 430px; padding: 34px 26px; text-align: center; }
+      .chip .y { font-size: 52px; font-weight: 900; line-height: 1; }
+      .chip .t { font-size: 34px; font-weight: 800; margin-top: 16px; }
+      .chip .d { font-size: 25px; font-weight: 500; color: var(--muted); margin-top: 10px; line-height: 1.6; }
+      .row { display: flex; justify-content: center; }
+      .grad { color: transparent; -webkit-background-clip: text; background-clip: text; }
+      .pill { font-size: 28px; font-weight: 700; color: var(--orange); background: rgba(246,130,31,.1); border: 1px solid rgba(246,130,31,.4); border-radius: 999px; padding: 14px 34px; }
+      #fade-out { position: absolute; inset: 0; background: #000; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <!-- 场景的 data-start / data-duration 由 packages/voiceover/sync_hyperframes_timing.mjs 按 segment-durations.json 写入，不要手改。
+         data-in = 相对旁白段落开始的入场秒数；data-mode = fade | rise | scale；data-dur = 入场时长 -->
+    <div id="root" data-composition-id="cloudflare-history" data-start="0" data-width="1080" data-height="1920" data-duration="90.036">
+      <div class="glow" style="top:-420px;left:-260px;width:1300px;height:1300px;background:radial-gradient(circle, rgba(246,130,31,.16) 0%, rgba(246,130,31,.05) 45%, transparent 70%)"></div>
+      <div class="glow" style="bottom:-520px;right:-320px;width:1400px;height:1400px;background:radial-gradient(circle, rgba(61,220,151,.07) 0%, rgba(61,220,151,.02) 50%, transparent 70%)"></div>
+      <div class="ring" data-speed="6" style="width:1500px;height:1500px;margin:-750px 0 0 -750px;border:1px solid rgba(246,130,31,.10)"><div class="ring-dot"></div></div>
+      <div class="ring" data-speed="-9" style="width:1150px;height:1150px;margin:-575px 0 0 -575px;border:1px dashed rgba(100,120,170,.16)"><div class="ring-dot"></div></div>
+      <div class="ring" data-speed="14" style="width:800px;height:800px;margin:-400px 0 0 -400px;border:1px solid rgba(246,130,31,.14)"><div class="ring-dot"></div></div>
+      <div class="grid"></div>
+
+      <section id="intro" class="scene clip" data-scene="0" data-start="0" data-duration="11.468" data-track-index="1">
+        <div class="inner">
+          <div class="kicker" style="font-size:28px;font-weight:700;border-color:rgba(246,130,31,.55);margin-bottom:0" data-in="0.4" data-dur="0.6">企业史科普 · 2009 — 2026</div>
+          <div class="grad" style="margin-top:56px;font-size:148px;font-weight:900;letter-spacing:-4px;line-height:1;background-image:linear-gradient(180deg,#ffd9a0 0%,#f6821f 55%,#c75d0a 100%)" data-in="0.9" data-dur="0.9" data-mode="rise">CLOUDFLARE</div>
+          <div class="h" style="margin-top:46px;font-size:88px;letter-spacing:30px;text-indent:30px" data-in="1.7" data-dur="0.7">发展历程</div>
+          <div id="intro-line" style="width:0;height:7px;background:linear-gradient(90deg,transparent,#f6821f,transparent);border-radius:999px;margin-top:60px"></div>
+          <div style="margin-top:58px;font-size:46px;font-weight:700;color:var(--sub);line-height:1.6" data-in="2.9" data-dur="0.6"><div>从三位创始人</div><div>到全球网络平台</div></div>
+          <div style="position:absolute;bottom:120px;font-size:28px;font-weight:600;letter-spacing:3px;color:var(--fine)" data-in="3.8" data-dur="0.6">CONNECT · PROTECT · BUILD · Cloudflare · 2009—2026</div>
+        </div>
+      </section>
+
+      <section id="founding" class="scene clip" data-scene="1" data-start="10.468" data-duration="11.392" data-track-index="2">
+        <div class="inner">
+          <div class="kicker" data-in="0.2" data-dur="0.5">2009 · 创立</div>
+          <div class="h" style="font-size:66px;line-height:1.3" data-in="0.6" data-dur="0.6"><div>三位创始人</div><div>一间小公司</div></div>
+          <div class="row" style="gap:30px;margin-top:64px">
+            <div class="card" style="width:280px;padding:40px 16px" data-in="1.4" data-dur="0.55" data-mode="rise"><div style="font-size:24px;font-weight:800;color:var(--orange)">Matthew Prince</div><div style="font-size:28px;font-weight:700;margin-top:12px">马修·普林斯</div></div>
+            <div class="card" style="width:280px;padding:40px 16px" data-in="1.7" data-dur="0.55" data-mode="rise"><div style="font-size:24px;font-weight:800;color:var(--orange)">Michelle Zatlyn</div><div style="font-size:28px;font-weight:700;margin-top:12px">米歇尔·扎特林</div></div>
+            <div class="card" style="width:280px;padding:40px 16px" data-in="2.0" data-dur="0.55" data-mode="rise"><div style="font-size:24px;font-weight:800;color:var(--orange)">Lee Holloway</div><div style="font-size:28px;font-weight:700;margin-top:12px">李·霍洛韦</div></div>
+          </div>
+          <div style="margin-top:54px;font-size:40px;font-weight:800;background:rgba(246,130,31,.12);border:1px solid rgba(246,130,31,.5);border-radius:999px;padding:22px 44px" data-in="3.0" data-dur="0.6" data-mode="scale">最初构想：「云中的防火墙」</div>
+          <div class="row" style="gap:26px;margin-top:54px" data-in="3.9" data-dur="0.6">
+            <div class="card" style="font-size:27px;font-weight:700;color:var(--sub);border-color:var(--border-soft);border-radius:999px;padding:16px 30px">📍 美国 · 加州</div>
+            <div class="card" style="font-size:27px;font-weight:700;color:var(--sub);border-color:var(--border-soft);border-radius:999px;padding:16px 30px">🚀 亮相 TechCrunch Disrupt (2010.09)</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="fame" class="scene clip" data-scene="2" data-start="20.86" data-duration="13.072" data-track-index="1">
+        <div class="inner">
+          <div class="kicker" data-in="0.2" data-dur="0.5">2011 / 2013 · DDoS 防护</div>
+          <div style="position:relative;width:330px;height:330px" data-in="0.6" data-dur="0.7" data-mode="scale">
+            <div class="pulse-ring" data-i="1" style="position:absolute;inset:-34px;border-radius:50%;border:1.5px solid rgba(246,130,31,.28);opacity:.41"></div>
+            <div class="pulse-ring" data-i="2" style="position:absolute;inset:-68px;border-radius:50%;border:1.5px solid rgba(246,130,31,.28);opacity:.27"></div>
+            <div class="pulse-ring" data-i="3" style="position:absolute;inset:-102px;border-radius:50%;border:1.5px solid rgba(246,130,31,.28);opacity:.13"></div>
+            <div style="width:100%;height:100%;box-sizing:border-box;border-radius:50%;background:radial-gradient(circle at 35% 30%,#2a1c0e 0%,#1b1208 60%,#120b06 100%);border:3px solid #f6821f;display:flex;align-items:center;justify-content:center;flex-direction:column">
+              <div style="font-size:120px;line-height:1">🛡️</div>
+              <div style="font-size:30px;font-weight:900;color:var(--orange);margin-top:8px;letter-spacing:2px">DDoS ×</div>
+            </div>
+          </div>
+          <div class="h" style="margin-top:60px;font-size:54px;line-height:1.4;letter-spacing:0" data-in="1.5" data-dur="0.6"><div>替网站挡下</div><div>骇人的攻击洪流</div></div>
+          <div class="row" style="gap:34px;margin-top:60px">
+            <div class="card chip" style="width:400px" data-in="2.4" data-dur="0.55" data-mode="rise"><div class="y" style="color:var(--orange)">2011</div><div class="t">LulzSec 事件</div><div class="d"><div>网站接入后</div><div>防护受到关注</div></div></div>
+            <div class="card chip" style="width:400px" data-in="2.7" data-dur="0.55" data-mode="rise"><div class="y" style="color:var(--green)">2013</div><div class="t">Spamhaus 攻击</div><div class="d"><div>Spamhaus 攻击</div><div>峰值 300Gbps+</div></div></div>
+          </div>
+          <div class="card" style="margin-top:56px;font-size:38px;font-weight:800;color:#ffd9a0;border-color:var(--border-soft);border-radius:26px;padding:24px 42px" data-in="3.6" data-dur="0.6" data-mode="scale">⚡ 当时公开报道的最大 DDoS 攻击</div>
+        </div>
+      </section>
+
+      <section id="ssl" class="scene clip" data-scene="3" data-start="32.932" data-duration="12.832" data-track-index="2">
+        <div class="inner">
+          <div class="kicker" data-in="0.2" data-dur="0.5">2014 · 守护与普及</div>
+          <div class="h" style="font-size:60px;line-height:1.35" data-in="0.5" data-dur="0.6"><div>保护弱势群体</div><div>也守护每一个网站</div></div>
+          <div class="row" style="gap:34px;margin-top:64px">
+            <div class="card chip" data-in="1.5" data-dur="0.55" data-mode="rise"><div class="y" style="color:var(--green)">伽利略</div><div class="t">Project Galileo</div><div class="d"><div>免费保护</div><div>记者 · 艺术家 · 人权组织</div></div></div>
+            <div class="card chip" data-in="1.8" data-dur="0.55" data-mode="rise"><div class="y" style="color:var(--orange)">SSL</div><div class="t">Universal SSL</div><div class="d"><div>Cloudflare 用户</div><div>免费启用 HTTPS</div></div></div>
+          </div>
+          <div class="grad" style="margin-top:56px;font-size:96px;font-weight:900;letter-spacing:4px;background-image:linear-gradient(90deg,#f6821f,#ffd58f,#f6821f)" data-in="3.4" data-dur="0.7" data-mode="scale">🔒 HTTPS · FOR EVERY USER</div>
+          <div style="margin-top:24px;font-size:32px;font-weight:700;color:var(--sub)" data-in="3.4" data-dur="0.7">推动更多网站走向 HTTPS</div>
+        </div>
+      </section>
+
+      <section id="workers" class="scene clip" data-scene="4" data-start="44.764" data-duration="9.208" data-track-index="1">
+        <div class="inner">
+          <div class="kicker" data-in="0.2" data-dur="0.5">2017 · 边缘计算</div>
+          <div class="h" style="font-size:72px;line-height:1.3" data-in="0.5" data-dur="0.6">Cloudflare Workers</div>
+          <div id="net" style="position:relative;width:1000px;height:720px;margin-top:40px" data-in="0.9" data-dur="0.8" data-mode="scale">
+            <svg id="net-lines" viewBox="0 0 1000 720" style="position:absolute;inset:0;width:100%;height:100%"></svg>
+            <div style="position:absolute;left:472px;top:332px;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle,#ffd58f 0%,#f6821f 65%);box-shadow:0 0 40px rgba(246,130,31,.9);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:26px;color:#1a0e02">CF</div>
+          </div>
+          <div style="font-size:42px;font-weight:700;color:var(--sub);line-height:1.6" data-in="1.4" data-dur="0.6"><div>代码部署到离用户最近的边缘节点</div><div>推动边缘计算进一步发展</div></div>
+          <div class="row" style="gap:22px;margin-top:44px" data-in="2.6" data-dur="0.6"><div class="pill">Serverless</div><div class="pill">全球部署</div><div class="pill">毫秒响应</div></div>
+        </div>
+      </section>
+
+      <section id="dns" class="scene clip" data-scene="5" data-start="52.972" data-duration="9.904" data-track-index="2">
+        <div class="inner">
+          <div class="kicker" data-in="0.2" data-dur="0.5">2018 · 公共 DNS</div>
+          <div data-in="0.5" data-dur="0.8" data-mode="scale"><div id="dns-float" class="grad" style="font-size:220px;font-weight:900;letter-spacing:4px;line-height:1;background-image:linear-gradient(180deg,#fff3e0 0%,#f6821f 60%,#c75d0a 100%)">1.1.1.1</div></div>
+          <div style="font-size:40px;font-weight:700;margin-top:34px" data-in="1.8" data-dur="0.6">全球最快的公共 DNS 服务之一</div>
+          <div style="margin-top:26px;font-size:32px;font-weight:600;color:var(--sub)" data-in="1.8" data-dur="0.6">不只追求速度，更保护隐私</div>
+          <div class="row" style="gap:26px;margin-top:64px">
+            <div class="card" style="width:280px;padding:38px 18px;border-radius:28px" data-in="2.6" data-dur="0.5" data-mode="rise"><div style="font-size:54px;line-height:1">⚡</div><div style="font-size:30px;font-weight:800;color:var(--orange);margin-top:14px">快</div></div>
+            <div class="card" style="width:280px;padding:38px 18px;border-radius:28px" data-in="2.9" data-dur="0.5" data-mode="rise"><div style="font-size:54px;line-height:1">🔒</div><div style="font-size:30px;font-weight:800;color:var(--orange);margin-top:14px">隐私</div></div>
+            <div class="card" style="width:280px;padding:38px 18px;border-radius:28px" data-in="3.2" data-dur="0.5" data-mode="rise"><div style="font-size:54px;line-height:1">🛡️</div><div style="font-size:30px;font-weight:800;color:var(--orange);margin-top:14px">安全</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="ipo" class="scene clip" data-scene="6" data-start="61.876" data-duration="8.944" data-track-index="1">
+        <div class="inner">
+          <div class="kicker" data-in="0.2" data-dur="0.5">2019.9.13 · 纽交所上市</div>
+          <div class="h" style="font-size:58px;letter-spacing:0" data-in="0.5" data-dur="0.6">New York Stock Exchange</div>
+          <div class="grad" style="font-size:300px;font-weight:900;letter-spacing:-8px;line-height:1;margin-top:10px;background-image:linear-gradient(180deg,#fff3e0 0%,#f6821f 62%,#c75d0a 100%)" data-in="1.2" data-dur="0.7" data-mode="scale">NET</div>
+          <div class="row" style="gap:30px;margin-top:44px;align-items:center" data-in="2.6" data-dur="0.6">
+            <div style="font-size:34px;font-weight:800;color:#0a0d14;background:#3ddc97;border-radius:999px;padding:12px 30px">▲ 上市</div>
+            <div class="h" style="font-size:44px;letter-spacing:0">发行价 $15/股</div>
+          </div>
+          <div style="margin-top:60px;font-size:42px;font-weight:700;color:var(--sub);line-height:1.6" data-in="3.5" data-dur="0.6"><div>从创业公司到公众公司</div><div>完成上市</div></div>
+        </div>
+        <div style="position:absolute;left:0;right:0;top:1520px;height:110px;background:var(--panel2);border-top:1px solid rgba(246,130,31,.35);border-bottom:1px solid rgba(246,130,31,.35);overflow:hidden" data-in="2.6" data-dur="0.6">
+          <div id="marquee" style="display:flex;align-items:center;height:100%;white-space:nowrap"></div>
+        </div>
+      </section>
+
+      <section id="expansion" class="scene clip" data-scene="7" data-start="69.82" data-duration="9.352" data-track-index="2">
+        <div class="inner">
+          <div class="kicker" style="color:var(--green);border-color:var(--green)" data-in="0.2" data-dur="0.5">2022 → 2025 · 大步扩张</div>
+          <div class="h" style="font-size:60px;line-height:1.35;letter-spacing:0" data-in="0.4" data-dur="0.6"><div>从安全</div><div>走向 AI 基建</div></div>
+          <div style="display:flex;flex-direction:column;align-items:center;margin-top:60px">
+            <div class="card step" data-in="1.3" data-dur="0.55" data-mode="rise"><div class="sy" style="color:var(--green)">2022</div><div class="sep"></div><div><div class="st">收购 Area 1</div><div class="sd">邮件安全</div></div></div>
+            <div class="arrow" data-in="2.0" data-dur="0.35">↓</div>
+            <div class="card step" data-in="1.6" data-dur="0.55" data-mode="rise"><div class="sy" style="color:var(--green)">2023</div><div class="sep"></div><div><div class="st">Workers AI</div><div class="sd">AI 进入边缘</div></div></div>
+            <div class="arrow" data-in="2.3" data-dur="0.35">↓</div>
+            <div class="card step" data-in="1.9" data-dur="0.55" data-mode="rise"><div class="sy" style="color:var(--orange)">2025</div><div class="sep"></div><div><div class="st">收购 Replicate</div><div class="sd">开源模型平台</div></div></div>
+          </div>
+          <div style="margin-top:52px;font-size:34px;font-weight:600;color:var(--sub)" data-in="3.4" data-dur="0.6">一次次收购与创新，构筑完整的产品版图</div>
+        </div>
+        <style>
+          .step { width: 640px; display: flex; align-items: center; gap: 30px; padding: 28px 34px; }
+          .sy { font-size: 44px; font-weight: 900; min-width: 130px; text-align: left; }
+          .sep { width: 2px; height: 60px; background: rgba(255,255,255,.12); }
+          .step > div:last-child { text-align: left; }
+          .st { font-size: 38px; font-weight: 800; }
+          .sd { font-size: 26px; font-weight: 600; color: var(--muted); margin-top: 6px; }
+          .arrow { font-size: 40px; font-weight: 900; color: var(--orange); margin: 6px 0; }
+        </style>
+      </section>
+
+      <section id="today" class="scene clip" data-scene="8" data-start="78.172" data-duration="11.864" data-track-index="1">
+        <div class="inner">
+          <div class="kicker" data-in="0.3" data-dur="0.5">2026 · 如今</div>
+          <div style="display:flex;flex-direction:column;gap:30px;width:100%;align-items:center">
+            <div class="card stat" data-in="1.1" data-dur="0.6" data-mode="scale"><div class="sn">335<span>座城市</span></div><div class="sx">全球网络覆盖</div></div>
+            <div class="card stat" data-in="1.5" data-dur="0.6" data-mode="scale"><div class="sn">1.15 亿<span>次/秒</span></div><div class="sx">处理 HTTP 请求</div></div>
+            <div class="card stat" data-in="1.9" data-dur="0.6" data-mode="scale"><div class="sn">约 25%<span>全球网站</span></div><div class="sx">使用反向代理服务</div></div>
+          </div>
+          <div class="h" style="margin-top:72px;font-size:60px;line-height:1.4;letter-spacing:0" data-in="3.6" data-dur="0.7">从三位创始人，到全球网络平台</div>
+          <div class="grad" style="margin-top:30px;font-size:48px;font-weight:900;letter-spacing:2px;background-image:linear-gradient(90deg,#ffd9a0,#f6821f)" data-in="3.6" data-dur="0.7">CLOUDFLARE —— 故事，仍在继续</div>
+        </div>
+        <style>
+          .stat { width: 820px; display: flex; align-items: center; justify-content: space-between; padding: 34px 46px; border-radius: 32px; }
+          .sn { font-size: 76px; font-weight: 900; color: var(--orange); line-height: 1; }
+          .sn span { font-size: 34px; font-weight: 700; color: var(--sub); margin-left: 10px; }
+          .sx { font-size: 30px; font-weight: 700; color: var(--muted); }
+        </style>
+      </section>
+
+      <div id="fade-out"></div>
+      <audio id="narration" src="public/voiceover/narration.zh.mp3" data-start="0" data-duration="89.736" data-track-index="0"></audio>
+    </div>
+
+    <script>
+      const FADE = 0.5;
+      // 场景基准时间：旁白段落开始前 0.4 秒，与原 Remotion 版本的切换点一致
+      const LEAD = 0.4;
+      const ENTRANCE = {rise: {y: 44}, scale: {scale: 0.82}, fade: {}};
+      const root = document.getElementById('root');
+      const total = Number(root.dataset.duration);
+      const audioEnd = Number(document.getElementById('narration').dataset.duration);
+
+      // Workers 节点图
+      const nodes = [[170,150,0],[420,60,1.1],[660,130,2.0],[880,260,0.6],[110,400,1.6],[940,540,2.5],[220,560,0.3],[700,620,1.9]];
+      document.getElementById('net-lines').innerHTML = nodes.flatMap(([x1,y1], i) => nodes.slice(i + 1).map(([x2,y2]) =>
+        `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="rgba(246,130,31,0.16)" stroke-width="2"/>`)).join('');
+      const net = document.getElementById('net');
+      for (const [x, y] of nodes) {
+        net.insertAdjacentHTML('beforeend', `<div class="node" style="position:absolute;left:${x - 11}px;top:${y - 11}px;width:22px;height:22px">
+          <div class="node-core" style="position:absolute;inset:0;border-radius:50%;background:#f6821f;box-shadow:0 0 18px rgba(246,130,31,.8)"></div>
+          <div class="node-halo" style="position:absolute;inset:-14px;border-radius:50%;border:1.5px solid rgba(246,130,31,.5)"></div></div>`);
+      }
+      // IPO 行情条
+      const items = ['NET ▲', 'NYSE', 'NET', 'SEC', 'NYSE', 'NET ▲', 'IPO', 'NYSE'];
+      document.getElementById('marquee').innerHTML = Array.from({length: 6}).flatMap(() => items.map((it, i) =>
+        `<span style="font-size:40px;font-weight:900;color:${i % 2 === 0 ? '#3ddc97' : '#8592ab'};margin-right:90px;letter-spacing:2px">${it}</span>`)).join('');
+
+      const tl = gsap.timeline({paused: true});
+
+      for (const scene of document.querySelectorAll('.scene')) {
+        const inner = [...scene.children].filter((el) => el.tagName !== 'STYLE');
+        const start = Number(scene.dataset.start);
+        const end = start + Number(scene.dataset.duration);
+        if (scene.id !== 'intro') tl.fromTo(inner, {opacity: 0}, {opacity: 1, duration: FADE, ease: 'none'}, start);
+        if (scene.id !== 'today') tl.to(inner, {opacity: 0, duration: FADE, ease: 'none'}, end - FADE);
+        const base = scene.id === 'intro' ? 0 : start + FADE - LEAD;
+        for (const el of scene.querySelectorAll('[data-in]')) {
+          const from = {opacity: 0, ...ENTRANCE[el.dataset.mode || 'fade']};
+          const to = {opacity: 1, y: 0, scale: 1, duration: Number(el.dataset.dur || 0.6), ease: 'power1.inOut'};
+          tl.fromTo(el, from, to, base + Number(el.dataset.in));
+        }
+      }
+      tl.fromTo('#intro-line', {width: 0}, {width: 600, duration: 0.8, ease: 'power1.inOut'}, 2.3);
+
+      // 持续动画（旋转环、脉冲、浮动、行情滚动）都由同一个时钟按时间计算，保证可任意跳帧
+      const rings = [...document.querySelectorAll('.ring')];
+      const pulseRings = [...document.querySelectorAll('.pulse-ring')];
+      const nodeEls = [...document.querySelectorAll('.node')];
+      const dnsFloat = document.getElementById('dns-float');
+      const marquee = document.getElementById('marquee');
+      const clock = {t: 0};
+      const draw = () => {
+        const t = clock.t;
+        for (const r of rings) r.style.transform = `rotate(${t * Number(r.dataset.speed)}deg)`;
+        const pulse = 1 + 0.08 * Math.sin(t * 2.4);
+        for (const r of pulseRings) r.style.transform = `scale(${pulse * (1 - Number(r.dataset.i) * 0.06)})`;
+        nodeEls.forEach((n, i) => {
+          const p = 0.5 + 0.5 * Math.sin(t * 2.2 + nodes[i][2] * 2);
+          n.firstElementChild.style.transform = `scale(${0.6 + 0.4 * p})`;
+          n.lastElementChild.style.opacity = 0.7 - 0.5 * p;
+        });
+        dnsFloat.style.transform = `translateY(${Math.sin(t * 1.5) * 10}px)`;
+        marquee.style.transform = `translateX(${-t * 120}px)`;
+      };
+      tl.fromTo(clock, {t: 0}, {t: total, duration: total, ease: 'none', onUpdate: draw}, 0);
+
+      tl.fromTo('#fade-out', {opacity: 0}, {opacity: 1, duration: 0.8, ease: 'none'}, total - 0.8);
+
+      window.__timelines['cloudflare-history'] = tl;
+    </script>
+  </body>
+</html>
