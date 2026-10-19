@@ -1,0 +1,27 @@
+{
+  "name": "claude-mhs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "remotion studio",
+    "check": "tsc --noEmit",
+    "voiceover": "python3 ../../packages/voiceover/edge_narration.py --voice zh-CN-YunxiNeural --lang zh --rate=+6% --expected 8",
+    "render": "remotion render ClaudeMHS out/claude-mhs-zh.mp4",
+    "render:draft": "remotion render ClaudeMHS out/preview.mp4 --scale=0.5 --concurrency=4 --log=error",
+    "render:still": "remotion still ClaudeMHS out/cover.png --frame=75"
+  },
+  "dependencies": {
+    "@video/core": "0.0.0",
+    "@remotion/cli": "4.0.504",
+    "@remotion/google-fonts": "4.0.504",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "remotion": "4.0.504"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "typescript": "^5.8.3"
+  }
+}
