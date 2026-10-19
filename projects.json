@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "projects": {
     "ai_model_rankings": {"path": "data_visualization/ai_model_rankings", "name": "AI Model Rankings", "languages": ["en", "zh", "ja"], "variants": ["en", "zh", "ja"]},
-    "apple": {"path": "creative_brand/apple", "name": "Apple", "languages": ["zh"], "variants": []},
+    "apple": {"path": "creative_brand/apple", "name": "Apple", "framework": "hyperframes", "languages": ["zh"], "variants": []},
     "brexit_referendum": {"path": "history_society/brexit_referendum", "name": "Brexit Referendum", "languages": ["en"], "variants": []},
     "claude_mhs": {"path": "science_nature/claude_mhs", "name": "Claude MHS", "framework": "hyperframes", "languages": ["zh"], "variants": []},
     "cloudflare_history": {"path": "history_society/cloudflare_history", "name": "Cloudflare History", "framework": "hyperframes", "languages": ["zh"], "variants": []},

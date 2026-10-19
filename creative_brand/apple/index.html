@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>apple</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --text: #f5f5f7;
+        --sub: #d2d2d7;
+        --muted: #98989d;
+        --card: #161617;
+        --line: #2a2a2e;
+        --red: #fa5541;
+        --amber: #f5a623;
+        --rainbow: linear-gradient(90deg, #fa5541, #f5a623, #7cc144, #34c4a3, #2aa9e0, #8a6cf5);
+      }
+      body { margin: 0; background: #000; color: var(--text); font-family: 'Noto Sans SC', sans-serif; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; }
+      #spot { position: absolute; left: 50%; top: 42%; width: 1500px; height: 1500px; margin: -750px 0 0 -750px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.10) 0%, rgba(255,255,255,.03) 38%, transparent 66%); }
+      .scene { position: absolute; inset: 0; }
+      .inner { position: absolute; inset: 0; box-sizing: border-box; padding: 140px 90px 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      .kicker { font-size: 30px; font-weight: 700; letter-spacing: 6px; color: var(--muted); margin-bottom: 40px; }
+      .hero { font-weight: 900; letter-spacing: -2px; line-height: 1.12; }
+      .silver { color: transparent; -webkit-background-clip: text; background-clip: text; background-image: linear-gradient(180deg, #ffffff 0%, #a1a1a6 130%); }
+      .rainbow { color: transparent; -webkit-background-clip: text; background-clip: text; background-image: var(--rainbow); background-size: 200% 100%; }
+      .sub { font-size: 40px; font-weight: 600; color: var(--muted); line-height: 1.5; }
+      .card { background: var(--card); border: 1px solid var(--line); border-radius: 40px; box-sizing: border-box; }
+      .row { display: flex; justify-content: center; }
+      .num { font-weight: 900; letter-spacing: -2px; }
+      .unit { font-weight: 700; color: var(--sub); letter-spacing: 0; }
+      .footer { position: absolute; bottom: 64px; left: 0; right: 0; text-align: center; font-size: 22px; font-weight: 600; color: #8e8e93; }
+      #fade-out { position: absolute; inset: 0; background: #000; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <radialGradient id="g-red" cx="36%" cy="34%" r="72%"><stop offset="0" stop-color="#ff8a74"/><stop offset=".45" stop-color="#e2382a"/><stop offset="1" stop-color="#7d1410"/></radialGradient>
+        <radialGradient id="g-gold" cx="36%" cy="34%" r="72%"><stop offset="0" stop-color="#fff1b8"/><stop offset=".5" stop-color="#e3b22d"/><stop offset="1" stop-color="#8a5f08"/></radialGradient>
+        <radialGradient id="g-green" cx="36%" cy="34%" r="72%"><stop offset="0" stop-color="#e9f9c8"/><stop offset=".5" stop-color="#8fc04a"/><stop offset="1" stop-color="#3d6a16"/></radialGradient>
+        <linearGradient id="g-leaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9bd65a"/><stop offset="1" stop-color="#3f7d1d"/></linearGradient>
+        <symbol id="apple-body" viewBox="0 0 200 250">
+          <path d="M100 56 C 100 36, 108 22, 122 13" stroke="#5a3a1c" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <path d="M125 11 C 140 3, 162 6, 169 17 C 154 28, 134 25, 125 11 Z" fill="url(#g-leaf)"/>
+          <path d="M100 72 C 80 56, 34 54, 22 104 C 14 146, 34 198, 64 222 C 80 234, 92 230, 100 224 C 108 230, 120 234, 136 222 C 166 198, 186 146, 178 104 C 166 54, 120 56, 100 72 Z" fill="inherit"/>
+          <ellipse cx="66" cy="112" rx="16" ry="30" fill="#fff" opacity=".28" transform="rotate(-20 66 112)"/>
+        </symbol>
+        <symbol id="apple-mark" viewBox="0 0 200 250">
+          <path d="M100 56 C 100 36, 108 22, 122 13" stroke="currentColor" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <path d="M125 11 C 140 3, 162 6, 169 17 C 154 28, 134 25, 125 11 Z" fill="currentColor"/>
+          <path d="M100 96 C 86 78, 66 74, 53 84 C 39 96, 33 118, 41 140 C 51 166, 73 190, 92 199 C 96 201, 104 201, 108 199 C 127 190, 149 166, 159 140 C 167 118, 161 96, 147 84 C 134 74, 114 78, 100 96 Z" fill="currentColor"/>
+        </symbol>
+      </defs>
+    </svg>
+
+    <!-- 场景的 data-start / data-duration 由 packages/voiceover/sync_hyperframes_timing.mjs 按 segment-durations.json 写入，不要手改。
+         data-in = 相对场景开始的入场秒数；data-mode = rise | drop | scale | pop；data-dur = 入场时长 -->
+    <div id="root" data-composition-id="apple" data-start="0" data-width="1080" data-height="1920" data-duration="53.488">
+      <div id="spot"></div>
+
+      <section id="intro" class="scene clip" data-scene="0" data-start="0" data-duration="4.488" data-track-index="1">
+        <div class="inner">
+          <svg width="460" height="575" style="fill:url(#g-red);filter:drop-shadow(0 40px 90px rgba(250,85,65,.35))" data-in="0.1" data-dur="1.2" data-mode="pop"><use href="#apple-body"/></svg>
+          <div class="hero" style="margin-top:56px;font-size:96px;letter-spacing:-3px" data-in="2.0" data-dur="0.7">apple</div>
+          <div class="sub" style="margin-top:20px;font-size:36px" data-in="2.6" data-dur="0.6">全新一代 正式发布</div>
+        </div>
+      </section>
+
+      <section id="reveal" class="scene clip" data-scene="1" data-start="4.488" data-duration="3.528" data-track-index="2">
+        <div class="inner">
+          <div class="kicker" data-in="0.1" data-dur="0.5" data-mode="drop">NOW INTRODUCING</div>
+          <div id="reveal-name" class="hero rainbow" style="font-size:200px;letter-spacing:-6px;line-height:1.1;padding:0 20px" data-in="0.3" data-dur="0.9" data-mode="shrink">apple</div>
+          <div class="sub" style="margin-top:36px;font-size:46px" data-in="1.4" data-dur="0.6">苹果，重新定义。</div>
+        </div>
+      </section>
+
+      <section id="design" class="scene clip" data-scene="2" data-start="8.016" data-duration="8.328" data-track-index="1">
+        <div class="inner">
+          <div class="kicker" data-in="0.1" data-dur="0.5" data-mode="drop">设计</div>
+          <div class="hero silver" style="font-size:104px" data-in="0.3" data-dur="0.8"><div>恰到好处的</div><div>大小</div></div>
+          <div style="position:relative;width:640px;height:420px;margin-top:50px" data-in="0.8" data-dur="0.8" data-mode="scale">
+            <svg width="320" height="400" style="position:absolute;left:160px;top:0;fill:url(#g-red)"><use href="#apple-body"/></svg>
+            <svg width="640" height="420" style="position:absolute;inset:0" fill="none" stroke="#98989d" stroke-width="2">
+              <path id="dim-line" d="M178 396 H462" stroke-dasharray="284" stroke-dashoffset="284"/>
+              <path d="M178 382 V410 M462 382 V410"/>
+            </svg>
+          </div>
+          <div class="row" style="gap:36px;margin-top:40px">
+            <div class="card" style="width:400px;padding:40px 24px" data-in="0.9" data-dur="0.7"><div class="num" style="font-size:88px"><span id="cnt-dia">0.0</span><span class="unit" style="font-size:40px">cm</span></div><div class="sub" style="font-size:28px;margin-top:8px">机身直径</div></div>
+            <div class="card" style="width:400px;padding:40px 24px" data-in="2.3" data-dur="0.7"><div class="num" style="font-size:88px"><span id="cnt-wt">0</span><span class="unit" style="font-size:40px">g</span></div><div class="sub" style="font-size:28px;margin-top:8px">机身重量</div></div>
+          </div>
+          <div class="row" style="gap:46px;margin-top:56px;align-items:center">
+            <svg width="96" height="120" style="fill:url(#g-red)" data-in="4.4" data-dur="0.6" data-mode="pop"><use href="#apple-body"/></svg>
+            <svg width="96" height="120" style="fill:url(#g-gold)" data-in="4.7" data-dur="0.6" data-mode="pop"><use href="#apple-body"/></svg>
+            <svg width="96" height="120" style="fill:url(#g-green)" data-in="5.0" data-dur="0.6" data-mode="pop"><use href="#apple-body"/></svg>
+            <div class="sub" style="font-size:34px;text-align:left;margin-left:10px" data-in="5.6" data-dur="0.6"><div>三大配色</div><div style="color:var(--sub)">圆润一体成型</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="chip" class="scene clip" data-scene="3" data-start="16.344" data-duration="10.056" data-track-index="2">
+        <div class="inner">
+          <div style="position:relative;width:380px;height:380px" data-in="0.1" data-dur="1.0" data-mode="pop">
+            <svg width="380" height="380" viewBox="0 0 380 380" style="position:absolute;inset:0">
+              <g id="chip-pins" stroke="#3a3a3e" stroke-width="6" stroke-linecap="round"></g>
+              <rect x="50" y="50" width="280" height="280" rx="46" fill="#111113" stroke="url(#chip-edge)" stroke-width="5"/>
+              <defs><linearGradient id="chip-edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fa5541"/><stop offset=".5" stop-color="#f5a623"/><stop offset="1" stop-color="#8a6cf5"/></linearGradient></defs>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+              <svg width="64" height="80" style="color:#f5f5f7"><use href="#apple-mark"/></svg>
+              <div class="hero rainbow" style="font-size:96px;line-height:1;margin-top:6px">A1</div>
+            </div>
+          </div>
+          <div class="kicker" style="margin:46px 0 0;color:var(--sub);letter-spacing:8px" data-in="0.6" data-dur="0.6">全新 A1 仿生芯片 · 每 100g</div>
+          <div style="display:flex;flex-direction:column;gap:26px;width:100%;margin-top:56px">
+            <div class="card stat" data-in="2.4" data-dur="0.6" data-mode="rise"><div class="sname">低热量</div><div class="num" style="font-size:96px"><span id="cnt-kcal">0</span><span class="unit" style="font-size:44px"> kcal</span></div></div>
+            <div class="card stat" data-in="4.6" data-dur="0.6" data-mode="rise"><div class="sname">膳食纤维</div><div class="num" style="font-size:96px"><span id="cnt-fiber">0.0</span><span class="unit" style="font-size:44px">g</span></div></div>
+            <div class="card stat" data-in="6.8" data-dur="0.6" data-mode="rise"><div class="sname">维生素 C</div><div class="num" style="font-size:96px"><span id="cnt-vc">0.0</span><span class="unit" style="font-size:44px">mg</span></div></div>
+          </div>
+        </div>
+        <style>
+          .stat { display: flex; align-items: center; justify-content: space-between; padding: 30px 56px; background: linear-gradient(180deg, #1d1d20 0%, #101012 100%); }
+          .sname { font-size: 38px; font-weight: 700; color: var(--sub); }
+        </style>
+      </section>
+
+      <section id="market" class="scene clip" data-scene="4" data-start="26.4" data-duration="7.8" data-track-index="1">
+        <div class="inner">
+          <div class="kicker" data-in="0.1" data-dur="0.5" data-mode="drop">全球市场 · 2023</div>
+          <div class="num" style="font-size:190px;line-height:1.02;letter-spacing:-5px" data-in="0.2" data-dur="0.6"><span id="cnt-prod">0</span><span class="unit" style="font-size:68px;color:var(--text)"> 万吨</span></div>
+          <div class="sub" style="font-size:34px;margin-top:10px" data-in="0.2" data-dur="0.6">全球苹果年产量</div>
+          <div style="width:860px;margin-top:90px" data-in="2.3" data-dur="0.6">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px">
+              <div class="hero" style="font-size:60px;letter-spacing:0">中国 <span style="color:var(--amber)"><span id="cnt-cn">0</span>%</span></div>
+              <div class="sub" style="font-size:32px">其他地区 49%</div>
+            </div>
+            <div style="height:30px;border-radius:999px;background:#1d1d1f;overflow:hidden"><div id="bar-cn" style="height:100%;width:51%;transform-origin:left center;border-radius:999px;background:linear-gradient(90deg,#f5a623,#fa5541)"></div></div>
+          </div>
+          <div class="sub" style="margin-top:90px;font-size:42px;color:var(--sub)" data-in="4.4" data-dur="0.6">全球产量最高的水果之一。</div>
+          <div class="sub" style="margin-top:20px;font-size:26px" data-in="4.4" data-dur="0.6">数据：FAOSTAT 2023</div>
+        </div>
+      </section>
+
+      <section id="lineup" class="scene clip" data-scene="5" data-start="34.2" data-duration="7.056" data-track-index="2">
+        <div class="inner">
+          <div class="kicker" data-in="0.1" data-dur="0.5" data-mode="drop">三种型号</div>
+          <div class="hero" style="font-size:100px" data-in="0.2" data-dur="0.7"><div>总有一款</div><div>适合你</div></div>
+          <div class="row" style="gap:32px;margin-top:80px">
+            <div class="card model" data-in="0.6" data-dur="0.7" data-mode="rise"><svg class="float" width="170" height="212" style="fill:url(#g-red)"><use href="#apple-body"/></svg><div class="mname">红富士</div><div class="mtag rainbow">Pro</div><div class="mdesc"><div>脆甜多汁</div><div>中国第一大品种</div></div></div>
+            <div class="card model" data-in="2.6" data-dur="0.7" data-mode="rise"><svg class="float" width="150" height="188" style="fill:url(#g-gold);margin-top:12px"><use href="#apple-body"/></svg><div class="mname">嘎啦</div><div class="mtag rainbow">Air</div><div class="mdesc"><div>清爽不腻</div><div>轻巧便携</div></div></div>
+            <div class="card model" data-in="4.6" data-dur="0.7" data-mode="rise"><svg class="float" width="110" height="138" style="fill:url(#g-green);margin-top:37px"><use href="#apple-body"/></svg><div class="mname">小果</div><div class="mtag rainbow">mini</div><div class="mdesc"><div>一口一个</div><div>随身随享</div></div></div>
+          </div>
+        </div>
+        <style>
+          .model { width: 286px; padding: 44px 20px 46px; display: flex; flex-direction: column; align-items: center; }
+          .mname { font-size: 46px; font-weight: 900; margin-top: 26px; }
+          .mtag { font-size: 34px; font-weight: 800; margin-top: 6px; }
+          .mdesc { font-size: 28px; font-weight: 600; color: var(--muted); margin-top: 20px; line-height: 1.5; }
+        </style>
+      </section>
+
+      <section id="origin" class="scene clip" data-scene="6" data-start="41.256" data-duration="4.752" data-track-index="1">
+        <svg id="mountains" width="1080" height="760" viewBox="0 0 1080 760" style="position:absolute;left:0;bottom:0">
+          <defs>
+            <linearGradient id="m-far" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a40"/><stop offset="1" stop-color="#0d0d0f"/></linearGradient>
+            <linearGradient id="m-near" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26262b"/><stop offset="1" stop-color="#000"/></linearGradient>
+          </defs>
+          <path class="m-far" d="M0 420 L140 300 L230 360 L380 190 L470 290 L560 230 L700 120 L820 280 L930 220 L1080 330 V760 H0 Z" fill="url(#m-far)"/>
+          <path d="M380 190 L420 236 L398 232 L372 262 L350 226 Z M700 120 L748 178 L720 172 L694 206 L668 166 Z" fill="#e8e8ed" opacity=".55"/>
+          <path class="m-near" d="M0 560 L120 470 L260 540 L420 420 L560 520 L700 450 L860 540 L1000 470 L1080 520 V760 H0 Z" fill="url(#m-near)"/>
+        </svg>
+        <div class="inner" style="justify-content:flex-start;padding-top:420px">
+          <div class="kicker" data-in="0.1" data-dur="0.5" data-mode="drop">ORIGIN STORY</div>
+          <div class="hero" style="font-size:96px" data-in="0.2" data-dur="0.7">来自天山脚下</div>
+          <div class="sub" style="margin-top:40px" data-in="1.0" data-dur="0.6"><div>栽培苹果的祖先，</div><div>诞生于中亚的山谷之中。</div></div>
+          <div class="card" style="margin-top:60px;font-size:38px;font-weight:700;color:var(--sub);padding:28px 56px;border-radius:999px" data-in="2.2" data-dur="0.7" data-mode="pop">阿拉木图 · “苹果之城”</div>
+        </div>
+      </section>
+
+      <section id="outro" class="scene clip" data-scene="7" data-start="46.008" data-duration="7.48" data-track-index="2">
+        <div class="inner">
+          <div class="hero" style="font-size:76px;font-weight:800;color:var(--muted);letter-spacing:2px" data-in="0.1" data-dur="0.6">One more thing.</div>
+          <div id="outro-line" style="width:900px;height:3px;margin:60px 0;background:linear-gradient(90deg,transparent,#f5a623,#fa5541,#f5a623,transparent);transform:scaleX(0)"></div>
+          <div class="hero" style="font-size:96px;line-height:1.25" data-in="1.2" data-dur="0.8" data-mode="rise"><div>每天一 apple，</div><div>医生远离我。</div></div>
+          <div id="outro-think" style="margin-top:84px;font-size:48px;font-weight:800;letter-spacing:3px;opacity:0">Think different.</div>
+          <svg width="72" height="90" style="margin-top:70px;color:#f5f5f7" data-in="5.4" data-dur="0.8" data-mode="pop"><use href="#apple-mark"/></svg>
+        </div>
+      </section>
+
+      <div class="footer">本视频为创意演示，与 Apple Inc. 无关 | 数据来源：FAOSTAT 2023 / USDA FoodData Central</div>
+      <div id="fade-out"></div>
+      <audio id="narration" src="public/voiceover/narration.zh.mp3" data-start="0" data-duration="51.888" data-track-index="0"></audio>
+    </div>
+
+    <script>
+      // 场景之间先淡出、再淡入（不交叉），避免前后标题叠成重影；聚光背景常驻，切换时不会掉成纯黑
+      const FADE = 0.3;
+      const FROM = {
+        fade: {},
+        rise: {y: 60},
+        drop: {y: -24},
+        scale: {scale: 0.9},
+        pop: {scale: 0.6},
+        shrink: {scale: 1.3},
+      };
+      const EASE = {pop: 'back.out(1.5)'};
+      const root = document.getElementById('root');
+      const total = Number(root.dataset.duration);
+      const scene = (id) => document.getElementById(id);
+      const at = (id, offset) => Number(scene(id).dataset.start) + offset;
+
+      // A1 芯片引脚
+      document.getElementById('chip-pins').innerHTML = [90, 140, 190, 240, 290].flatMap((p) => [
+        `<line x1="${p}" y1="18" x2="${p}" y2="50"/>`, `<line x1="${p}" y1="330" x2="${p}" y2="362"/>`,
+        `<line x1="18" y1="${p}" x2="50" y2="${p}"/>`, `<line x1="330" y1="${p}" x2="362" y2="${p}"/>`,
+      ]).join('');
+
+      const tl = gsap.timeline({paused: true});
+
+      for (const el of document.querySelectorAll('.scene')) {
+        const parts = [...el.children].filter((c) => c.tagName !== 'STYLE');
+        const start = Number(el.dataset.start);
+        const end = start + Number(el.dataset.duration);
+        if (el.id !== 'intro') tl.fromTo(parts, {opacity: 0}, {opacity: 1, duration: FADE, ease: 'none'}, start);
+        if (el.id !== 'outro') tl.to(parts, {opacity: 0, duration: FADE, ease: 'none'}, end - FADE);
+        for (const item of el.querySelectorAll('[data-in]')) {
+          const mode = item.dataset.mode || 'rise';
+          tl.fromTo(item, {opacity: 0, y: 0, scale: 1, ...FROM[mode]},
+            {opacity: 1, y: 0, scale: 1, duration: Number(item.dataset.dur || 0.6), ease: EASE[mode] || 'power3.out'},
+            start + Number(item.dataset.in));
+        }
+      }
+
+      const counter = (sel, from, to, startAt, duration, format) => {
+        const obj = {v: from};
+        const node = document.querySelector(sel);
+        tl.fromTo(obj, {v: from}, {v: to, duration, ease: 'power2.out', onUpdate: () => { node.textContent = format(obj.v); }}, startAt);
+      };
+      const fixed1 = (v) => v.toFixed(1);
+      const int = (v) => Math.round(v).toLocaleString('en-US');
+
+      // 揭幕：彩虹字缓慢流动
+      tl.fromTo('#reveal-name', {backgroundPosition: '0% 50%'}, {backgroundPosition: '100% 50%', duration: Number(scene('reveal').dataset.duration), ease: 'none'}, at('reveal', 0));
+
+      // 设计：尺寸标注线 + 计数
+      tl.to('#dim-line', {strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut'}, at('design', 1.0));
+      counter('#cnt-dia', 0, 7.6, at('design', 1.0), 1.4, fixed1);
+      counter('#cnt-wt', 0, 182, at('design', 2.4), 1.4, int);
+
+      // 芯片：营养数据随旁白依次计数
+      counter('#cnt-kcal', 0, 52, at('chip', 2.5), 1.2, int);
+      counter('#cnt-fiber', 0, 2.4, at('chip', 4.7), 1.2, fixed1);
+      counter('#cnt-vc', 0, 4.6, at('chip', 6.9), 1.2, fixed1);
+
+      // 市场：产量计数、中国份额条
+      counter('#cnt-prod', 0, 9730, at('market', 0.2), 2.0, int);
+      counter('#cnt-cn', 0, 51, at('market', 2.5), 1.5, int);
+      tl.fromTo('#bar-cn', {scaleX: 0}, {scaleX: 1, duration: 1.5, ease: 'power2.out'}, at('market', 2.5));
+
+      // 系列：苹果轻微浮动
+      document.querySelectorAll('#lineup .float').forEach((el, i) => {
+        tl.fromTo(el, {y: 0}, {y: -14, duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: 3}, at('lineup', 0.6 + i * 0.4));
+      });
+
+      // 起源：山脉缓慢升起（视差）
+      tl.fromTo('#mountains .m-far', {y: 80}, {y: 0, duration: 4.5, ease: 'power2.out'}, at('origin', 0));
+      tl.fromTo('#mountains .m-near', {y: 140}, {y: 0, duration: 4.5, ease: 'power2.out'}, at('origin', 0));
+
+      // 结尾：分隔线展开、Think different. 字距收拢
+      tl.to('#outro-line', {scaleX: 1, duration: 0.9, ease: 'power2.out'}, at('outro', 0.7));
+      tl.fromTo('#outro-think', {opacity: 0, scaleX: 1.35}, {opacity: 1, scaleX: 1, duration: 1.0, ease: 'power2.out'}, at('outro', 4.3));
+
+      // 聚光：整片缓慢呼吸
+      tl.fromTo('#spot', {scale: 0.92, opacity: 0.8}, {scale: 1.08, opacity: 1, duration: total / 4, ease: 'sine.inOut', yoyo: true, repeat: 3}, 0);
+
+      tl.fromTo('#fade-out', {opacity: 0}, {opacity: 1, duration: 1.0, ease: 'none'}, total - 1.0);
+
+      window.__timelines['apple'] = tl;
+    </script>
+  </body>
+</html>

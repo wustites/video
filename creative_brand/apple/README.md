@@ -5,20 +5,32 @@
 用 Apple 的产品叙事方式(揭幕、设计、芯片、市场、系列、起源、"One more thing")
 讲一颗真实的苹果:它有多大、多重、含多少营养、占全球多少产量、来自哪里。
 
+- 框架:HyperFrames(HTML + GSAP),入口 `index.html`
 - 画布:`1080 × 1920` 竖屏
-- 语言:中文(zh-CN 旁白)
-- 时长:54 秒(旁白实测 52.3s;见 `src/data.ts` 的 `TOTAL_SECONDS` 常量)
+- 语言:中文(Edge TTS `zh-CN-XiaoxiaoNeural` 旁白)
+- 时长:随旁白生成(约 53 秒)
 - 默认输出:`out/video.mp4`
+
+## 2.0 改版(2026-10-19)
+
+- 从 Remotion 迁移到 HyperFrames(见 [ADR 0002](../../docs/decisions/0002-free-framework-choice.md))。
+- 旁白改为每段对应一个场景,由共享脚本按实测时长写入场景时间,不再依赖 VTT 和手写切换点。
+- 场景之间先淡出再淡入,常驻聚光背景,去掉 1.0 版场景交界处 0.4–1.1 秒的黑场,也避免前后标题叠影。
+- 新画面:写实红苹果插画与尺寸标注线、A1 芯片图形、数字计数、三色苹果、天山山脉剪影。
+- 核对文案:
+  - 尺寸改为 USDA 中等苹果的 7.6 cm / 182 g(1.0 版为 7 cm / 180 g);
+  - "七种配色"无出处,改为红、黄、绿三大色系;
+  - "世界上销量第一的水果,没有之一"不准确(香蕉、西瓜的产量和贸易量都更大),改为"全球产量最高的水果之一"。
 
 ## 内容结构
 
 | 场景 | 主题 | 要点 |
 | --- | --- | --- |
-| 1 开场 | 苹果剪影 + `apple` logo | "全新一代 正式发布" |
-| 2 揭幕 | 彩虹渐变 `apple` | "苹果,重新定义。" |
-| 3 设计 | 机身参数三卡 | 直径 7cm / 重 180g / 7 种配色 |
-| 4 芯片 | A1 仿生芯片三卡 | 每 100g:52 kcal / 膳食纤维 2.4g / 维生素 C 4.6mg |
-| 5 市场 | 全球产量 | 9,730 万吨,中国占 51%,销量第一的水果 |
+| 1 开场 | 红苹果 + `apple` | "全新一代 正式发布" |
+| 2 揭幕 | 流动彩虹字 `apple` | "苹果,重新定义。" |
+| 3 设计 | 尺寸标注 | 直径 7.6 cm / 重 182 g / 红黄绿三大配色 |
+| 4 芯片 | A1 仿生芯片 | 每 100g:52 kcal / 膳食纤维 2.4g / 维生素 C 4.6mg |
+| 5 市场 | 全球产量 | 9,730 万吨,中国占 51%,全球产量最高的水果之一 |
 | 6 系列 | 三种型号 | 红富士 Pro / 嘎啦 Air / mini 小果 |
 | 7 起源 | 天山脚下 | 栽培苹果祖先诞生于中亚,阿拉木图 "苹果之城" |
 | 8 结尾 | One more thing | "每天一 apple,医生远离我。" + "Think different." |
@@ -32,71 +44,16 @@
 > 本视频为创意演示,与 Apple Inc. 无任何关联;"apple"、"A1"、"Pro/Air/mini"、
 > "One more thing"、"Think different" 等均为戏仿梗,不构成对任何商标的误导。
 
-## 脚本
+## 使用
 
 ```bash
-npm run check      # TypeScript 类型检查
-npm run dev        # 本地预览(Studio)
-npm run voiceover  # 用 Edge TTS 重新生成旁白 MP3 + WebVTT
-npm run render     # 渲染 out/video.mp4
+npm run voiceover      # 生成旁白并同步场景时间(Edge TTS,需 Python、FFmpeg 和网络)
+npm run dev            # HyperFrames Studio 预览
+npm run check          # hyperframes check(lint、布局、对比度)
+npm run render         # 渲染 out/video.mp4
+npm run render:draft   # 草稿质量试渲染
 ```
 
-## 旁白与 TTS
-
-- 旁白文本:`public/voiceover/narration.zh.txt`(提交入库)。
-- 逐句时间戳:`public/voiceover/narration.zh.vtt`(Edge TTS WordBoundary,提交入库)。
-- 音频:`public/voiceover/narration.zh.mp3`(Edge TTS `zh-CN-XiaoxiaoNeural`,
-  不入库,见 `.gitignore`;重生成:`npm run voiceover`,前置 `pip install edge-tts==7.2.7`)。
-- 本机网络受限时,Edge TTS 需走代理,例如:
-  `python -m edge_tts --voice zh-CN-XiaoxiaoNeural --file public/voiceover/narration.zh.txt
-   --write-media public/voiceover/narration.zh.mp3 --proxy http://127.0.0.1:7890`。
-- CI(GitHub Actions)可直接访问 Edge TTS,无需代理。
-
-## 时长同步
-
-当前 Remotion 时间轴位于 `src/data.ts`：`TOTAL_SECONDS` 为 54 秒，`SCENES` 定义场景切换点。
-重新生成旁白后若时长变化，请根据 MP3 实测时长和 VTT cue 调整场景时间及总时长，并保留结尾余量。
-
-## Remotion 实现
-
-本项目最初用 HyperFrames 制作，已移植为 Remotion（`src/`），按相同 54s / 8 场景时间轴重放。
-HyperFrames 源文件已删除，背景见[框架决策记录](../../docs/decisions/0001-remotion-as-primary-framework.md)。
-
-```bash
-npm run dev            # Remotion Studio 预览
-npm run check          # tsc --noEmit
-npm run voiceover      # 重新生成旁白 MP3 + WebVTT
-npm run render         # 渲染 Apple 成片到 out/video.mp4
-npm run render:draft   # 预览渲染到 out/preview.mp4，仅更改输出路径与日志级别
-```
-
-### VTT → Sequence 映射
-
-`src/data.ts` 的 `SCENES` 表由原 HyperFrames 版 `index.html` 顶部 `SCENES` 数组逐项移植
-(秒,相邻场景重叠 0.5s 交叉淡入淡出);`cues` 列为该场景覆盖的
-`public/voiceover/narration.zh.vtt` 句子编号(共 20 句),与原版注释一致:
-
-| 场景 | 时间(秒) | VTT 句子 | 句子时间 |
-| --- | --- | --- | --- |
-| intro 开场 | 0.0–5.0 | 1–2 | 0.1–4.4s |
-| reveal 揭幕 | 4.4–8.5 | 3 | 4.44–7.86s |
-| design 设计 | 8.0–14.6 | 4–5 | 7.86–14.28s |
-| chip 芯片 | 14.2–25.3 | 6–9 | 14.28–24.84s |
-| market 市场 | 24.8–34.0 | 10–12 | 24.84–33.73s |
-| lineup 系列 | 33.7–42.0 | 13–15 | 33.73–41.48s |
-| origin 起源 | 41.5–47.5 | 16–17 | 41.48–46.45s |
-| outro 结尾 | 47.0–54.0 | 18–20 | 46.45–52.21s |
-
-### HyperFrames → Remotion 对应关系
-
-| 原 HyperFrames 版 | Remotion 版 |
-| --- | --- |
-| `SCENES` 表 + `sceneOpacity`/`applyScene`(含 `display:none` 切换) | 每场景一个 `<Sequence>` + `SceneShell`(0.4s 淡入/尾 0.5s 淡出,透明度为 0 时返回 `null`) |
-| `tl.from` 入场(`at` 绝对秒) | `easeAt(t, at-start, dur)` → `interpolate` + `Easing.out(Easing.cube)`(对应 `power3.out`),`stagger` 展开为按索引递增的 `at` |
-| `back.out(1.6)`(origin 引言章) | `spring({damping: 12})` 缩放回弹 |
-| `#market-bar-fill` width tween(0% → 51%) | `interpolate(t, [3.5, 5.1], [0, 51])` → `width: %` |
-| `#outro-line` scaleX tween | `interpolate(t, [1.0, 1.9], [0, 1])` → `scaleX` |
-| `#outro-think` letterSpacing tween | `interpolate(t, [3.9, 4.9], [18, 3])` → `letterSpacing` |
-| 内联 apple 剪影 SVG | `AppleMark` JSX 组件 |
-| `@font-face` Noto Sans SC 可变字体 | `@remotion/google-fonts/NotoSansSC` + `Root` 字体门控 |
-| 单条 `<audio>` 旁白 MP3 | 单个 `<Audio staticFile("voiceover/narration.zh.mp3")>`(无运行时 fetch,渲染时需 MP3 已生成) |
+- 旁白文本:`public/voiceover/narration.zh.txt`,空行分段,一段对应一个场景(共 8 段)。
+- `narration.zh.mp3` 与 `segment-durations.json` 是生成产物,不入库;CI 发版时自动生成。
+- 场景内元素的入场时间写在 `index.html` 的 `data-in`(相对场景开始的秒数)上;改了旁白文本后,如果句子节奏变化较大,需要相应调整这些值。

@@ -14,7 +14,7 @@
 | [Cloudflare History](./history_society/cloudflare_history/) | Cloudflare 发展历程 | 中 | 随旁白生成 | HyperFrames | `out/video.mp4` |
 | [Japan Economy](./data_visualization/japan_economy/) | 日本 1985—2026 经济指标与日经指数 | 日 | 随旁白生成 | Remotion | `out/video.mp4` |
 | [AI Model Rankings](./data_visualization/ai_model_rankings/) | AI 模型能力、速度与厂商分布 | 英、中、日 | 60 秒 | Remotion | `out/video.mp4` |
-| [Apple](./creative_brand/apple/) | 水果苹果创意介绍 | 中 | 54 秒 | Remotion | `out/video.mp4` |
+| [Apple](./creative_brand/apple/) | 水果苹果创意介绍 | 中 | 随旁白生成 | HyperFrames | `out/video.mp4` |
 | [OpenRouter Rankings](./data_visualization/openrouter_rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | Remotion | `out/video.mp4` |
 | [Population CN](./data_visualization/population_cn/) | 中国各省出生人口变化 | 中 | 40 秒 | Remotion | `out/video.mp4` |
 | [QS Universities](./data_visualization/qs_universities/) | QS 世界大学排名 | 中 | 52 秒 | Remotion | `out/video.mp4` |
@@ -164,6 +164,7 @@ Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，可带 variant 单独发版，
 - [发布流程](./docs/RELEASING.md)：tag 格式与 Release 工作流。
 - [Remotion vs HyperFrames](./docs/REMOTION_VS_HYPERFRAMES.md)：两种框架的编程模型、渲染部署与选型标准。
 - [使用 Blender Python 生成视频](./docs/BLENDER_PYTHON_VIDEO.md)：脚本化建模与动画、后台渲染、帧序列与 FFmpeg 编码。
+- [改版待办](./docs/REDESIGN_TODO.md)：各项目已知的质量问题与改版、迁移计划。
 - [HyperFrames 视频制作最佳实践](./docs/archive/HYPERFRAMES_BEST_PRACTICES.md)（历史文档）：HyperFrames 时期的制作规范。
 
 ## 新增项目
