@@ -5,7 +5,7 @@
 ## 严重：已发布版本有明显错误
 
 - [x] **cloudflare_history**：v1.0.1 中文全部显示为方框。已迁移到 HyperFrames 并修复字体（`cloudflare_history-1.1.0`）。
-- [x] **metro_lima**：v1.0.0 主标题深色字压在深色背景上，几乎看不见；32 秒处“27 km / 27 estaciones”压在卡片上。现有源码标题已正常；上移 Línea 2 特性卡片，并错开 Ate / Hermilio Valdizán 站名（`metro_lima-1.0.1`）。
+- [x] **metro_lima**：v1.0.0 主标题深色字压在深色背景上，几乎看不见；32 秒处“27 km / 27 estaciones”压在卡片上。现有源码标题已正常；上移 Línea 2 特性卡片，并错开 Ate / Hermilio Valdizán 站名；SVG 站名改用 Noto Sans（`metro_lima-1.0.2`）。
 - [ ] **solar**：地球贴图像带条纹的气态行星；金星中心有黑洞状瑕疵；字幕压在行星上（zh 17 秒）；土星标题与星球重叠。
 
 ## 中等

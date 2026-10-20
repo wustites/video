@@ -1,4 +1,5 @@
 import React from 'react';
+import {notoSans} from './fonts';
 
 /**
  * 利马地铁示意地图（schematic map）——手绘风格，非地理精确。
@@ -132,7 +133,7 @@ export const SchematicMap: React.FC<SchematicMapProps> = ({
   const l2PlanPts = L2_STATIONS.slice(6); // Mercado Santa Anita → Ate（规划延伸）
 
   return (
-    <svg width={1080} height={1920} viewBox="0 0 1080 1920">
+    <svg width={1080} height={1920} viewBox="0 0 1080 1920" fontFamily={notoSans.fontFamily}>
       <defs>
         <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={C.bgTop} />
