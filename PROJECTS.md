@@ -50,6 +50,7 @@
 | 项目名 | 项目路径 | 内容简介 |
 | --- | --- | --- |
 | Apple | [`creative_brand/apple/`](./creative_brand/apple/) | 水果苹果创意介绍 |
+| Shenzhen APEC | [`creative_brand/shenzhen_apec/`](./creative_brand/shenzhen_apec/) | 深圳 APEC 2026 宣传片（英文旁白，中英字幕） |
 
 ## 发布标签
 

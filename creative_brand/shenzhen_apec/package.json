@@ -1,0 +1,16 @@
+{
+  "name": "shenzhen-apec",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "hyperframes preview",
+    "check": "hyperframes check",
+    "voiceover": "python3 ../../packages/voiceover/edge_narration.py --voice en-US-AndrewNeural --lang en --rate=-2% --expected 7 --word-marks && node ../../packages/voiceover/sync_hyperframes_timing.mjs && node scripts/build_subtitles.mjs",
+    "render": "hyperframes render --output out/shenzhen-apec-en.mp4",
+    "render:draft": "hyperframes render --quality draft --output out/preview.mp4"
+  },
+  "devDependencies": {
+    "hyperframes": "0.8.174"
+  }
+}

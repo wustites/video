@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Shenzhen APEC 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500;600;700;800;900&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #071a33;
+        --panel: rgba(255, 255, 255, 0.05);
+        --text: #f5f8fc;
+        --muted: #9fb3cc;
+        --teal: #2fc6c0;
+        --gold: #f2b84b;
+        --red: #e5484d;
+        --line: rgba(47, 198, 192, 0.3);
+      }
+      body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Noto Sans', 'Noto Sans SC', sans-serif; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--bg); }
+      .zh { font-family: 'Noto Sans SC', sans-serif; }
+      .bg { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 75% 20%, rgba(47,198,192,.18), transparent 45%), radial-gradient(ellipse at 10% 90%, rgba(242,184,75,.10), transparent 45%), linear-gradient(180deg, #0a2344, var(--bg)); }
+      .grid { position: absolute; inset: -100px; background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 80px 80px; }
+      .arc { position: absolute; border-radius: 50%; border: 1px solid rgba(47,198,192,.16); }
+      .scene { position: absolute; inset: 0; }
+      .inner { position: absolute; left: 0; right: 0; top: 0; height: 860px; box-sizing: border-box; padding: 90px 140px 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      .kicker { color: var(--teal); font-size: 26px; letter-spacing: 8px; font-weight: 800; margin-bottom: 26px; }
+      .title { font-size: 76px; line-height: 1.15; font-weight: 900; letter-spacing: -1px; }
+      .muted { color: var(--muted); }
+      .card { background: var(--panel); border: 1px solid var(--line); border-radius: 26px; padding: 34px 38px; box-sizing: border-box; }
+      .stat { font-size: 96px; font-weight: 900; color: var(--gold); line-height: 1; letter-spacing: -2px; }
+      .stat-label { font-size: 26px; font-weight: 700; margin-top: 14px; }
+      .stat-zh { font-size: 22px; font-weight: 500; color: var(--muted); margin-top: 6px; }
+      .skyline { position: absolute; left: 0; bottom: 200px; width: 1920px; height: 420px; }
+      #subs { position: absolute; left: 0; right: 0; bottom: 0; height: 200px; background: linear-gradient(180deg, transparent, rgba(3,12,26,.85) 35%); }
+      .sub { position: absolute; left: 160px; right: 160px; bottom: 44px; text-align: center; opacity: 0; }
+      .sub-en { font-size: 38px; font-weight: 600; line-height: 1.3; text-shadow: 0 2px 8px rgba(0,0,0,.6); }
+      .sub-zh { font-family: 'Noto Sans SC', sans-serif; font-size: 34px; font-weight: 500; color: #ffe2a6; margin-top: 8px; text-shadow: 0 2px 8px rgba(0,0,0,.6); }
+      .badge { position: absolute; top: 44px; left: 60px; display: flex; align-items: center; gap: 14px; font-size: 22px; font-weight: 800; letter-spacing: 3px; color: var(--muted); }
+      .badge i { width: 12px; height: 12px; border-radius: 50%; background: var(--teal); display: block; }
+      #fade-out { position: absolute; inset: 0; background: #000; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <!-- 场景的 data-start / data-duration 由 sync_hyperframes_timing.mjs 写入；CUES 由 scripts/build_subtitles.mjs 写入，不要手改 -->
+    <div id="root" data-composition-id="shenzhen-apec" data-start="0" data-width="1920" data-height="1080" data-duration="85.232">
+      <div class="bg">
+        <div class="grid" id="grid"></div>
+        <div class="arc" id="arc1" style="width:1800px;height:1800px;left:600px;top:-900px"></div>
+        <div class="arc" id="arc2" style="width:1300px;height:1300px;left:850px;top:-650px;border-style:dashed"></div>
+      </div>
+
+      <section id="intro" class="scene clip" data-scene="0" data-start="0" data-duration="11.66" data-track-index="1">
+        <svg class="skyline" id="sky-intro" viewBox="0 0 1920 420" preserveAspectRatio="none" data-cue="0"></svg>
+        <div class="inner">
+          <div class="kicker" data-cue="0">APEC CHINA 2026 · 亚太经合组织</div>
+          <div class="title" style="font-size:200px;letter-spacing:-4px" data-cue="0">SHENZHEN</div>
+          <div class="zh" style="font-size:56px;font-weight:900;letter-spacing:24px;color:var(--gold);margin-top:6px" data-cue="0" data-off="0.6">中国 · 深圳</div>
+          <div style="display:flex;gap:28px;margin-top:56px">
+            <div class="card" style="padding:22px 36px" data-cue="1"><div style="font-size:44px;font-weight:900;color:var(--teal)">NOV 18–19, 2026</div><div class="zh muted" style="font-size:24px;margin-top:4px">2026年11月18日—19日</div></div>
+            <div class="card" style="padding:22px 36px" data-cue="2"><div style="font-size:44px;font-weight:900">33rd Economic Leaders' Meeting</div><div class="zh muted" style="font-size:24px;margin-top:4px">第三十三次领导人非正式会议</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="apec" class="scene clip" data-scene="1" data-start="10.9" data-duration="13.36" data-track-index="2">
+        <div class="inner" style="flex-direction:row;gap:120px">
+          <div style="position:relative;width:560px;height:560px;flex:none" data-cue="0">
+            <svg id="ring" width="560" height="560" viewBox="-280 -280 560 560" style="position:absolute;inset:0"></svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+              <div style="font-size:180px;font-weight:900;line-height:1;color:var(--gold)" id="cnt-econ">0</div>
+              <div style="font-size:30px;font-weight:800;letter-spacing:4px">ECONOMIES</div>
+              <div class="zh muted" style="font-size:24px">个成员经济体</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:30px;text-align:left;width:720px">
+            <div data-cue="0"><div class="kicker" style="margin-bottom:8px">SINCE</div><div style="font-size:110px;font-weight:900;line-height:1">1989</div><div class="zh muted" style="font-size:26px;margin-top:6px">成立于 1989 年 · 环太平洋</div></div>
+            <div style="display:flex;gap:30px">
+              <div class="card" style="flex:1" data-cue="2"><div class="stat">~<span id="cnt-pop">0</span>%</div><div class="stat-label">of world population</div><div class="stat-zh zh">全球人口</div></div>
+              <div class="card" style="flex:1" data-cue="3"><div class="stat"><span id="cnt-gdp">0</span>%+</div><div class="stat-label">of world GDP</div><div class="stat-zh zh">全球经济总量</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="host" class="scene clip" data-scene="2" data-start="23.5" data-duration="12.688" data-track-index="1">
+        <div class="inner">
+          <div class="kicker" data-cue="0">CHINA HOSTS APEC · 第三次担任东道主</div>
+          <div style="position:relative;width:1400px;height:240px;margin-top:20px">
+            <div style="position:absolute;left:100px;right:100px;top:60px;height:4px;background:rgba(255,255,255,.15)"></div>
+            <div id="tl-fill" style="position:absolute;left:100px;top:60px;height:4px;width:0;background:var(--teal)"></div>
+            <div style="position:absolute;left:0;width:200px;top:36px" data-cue="1"><div style="width:52px;height:52px;margin:0 auto;border-radius:50%;background:var(--bg);border:4px solid var(--teal)"></div><div style="font-size:52px;font-weight:900;margin-top:18px">2001</div><div style="font-size:28px;font-weight:700" class="muted">Shanghai <span class="zh">上海</span></div></div>
+            <div style="position:absolute;left:600px;width:200px;top:36px" data-cue="1" data-off="2"><div style="width:52px;height:52px;margin:0 auto;border-radius:50%;background:var(--bg);border:4px solid var(--teal)"></div><div style="font-size:52px;font-weight:900;margin-top:18px">2014</div><div style="font-size:28px;font-weight:700" class="muted">Beijing <span class="zh">北京</span></div></div>
+            <div style="position:absolute;left:1200px;width:200px;top:26px" data-cue="2"><div style="width:72px;height:72px;margin:0 auto;border-radius:50%;background:var(--gold);box-shadow:0 0 40px rgba(242,184,75,.6)"></div><div style="font-size:52px;font-weight:900;margin-top:8px;color:var(--gold)">2026</div><div style="font-size:28px;font-weight:700;white-space:nowrap">Shenzhen <span class="zh">深圳</span></div></div>
+          </div>
+          <div class="card" style="margin-top:50px;width:1400px;border-color:rgba(242,184,75,.4)" data-cue="3">
+            <div class="kicker" style="color:var(--gold);margin-bottom:14px">THEME · 年度主题</div>
+            <div style="font-size:54px;font-weight:900;line-height:1.2">Building an Asia-Pacific Community<br />to Prosper Together</div>
+            <div class="zh" style="font-size:36px;font-weight:700;color:var(--gold);margin-top:16px">携手构建亚太共同体，共促繁荣</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="priorities" class="scene clip" data-scene="3" data-start="35.428" data-duration="12.352" data-track-index="2">
+        <div class="inner">
+          <div class="kicker" data-cue="0">THREE PRIORITIES · 三大重点</div>
+          <div class="title" data-cue="0">Guiding the Agenda</div>
+          <div style="display:flex;gap:40px;margin-top:70px;width:100%">
+            <div class="card prio" style="flex:1;border-top:8px solid var(--teal)" data-cue="1"><div style="font-size:84px;font-weight:900;color:var(--teal)">01</div><div style="font-size:54px;font-weight:900">Openness</div><div class="zh" style="font-size:40px;font-weight:900;color:var(--teal)">开放</div><div class="muted" style="font-size:26px;font-weight:600;margin-top:16px">Trade &amp; investment flowing</div></div>
+            <div class="card prio" style="flex:1;border-top:8px solid var(--gold)" data-cue="2"><div style="font-size:84px;font-weight:900;color:var(--gold)">02</div><div style="font-size:54px;font-weight:900">Innovation</div><div class="zh" style="font-size:40px;font-weight:900;color:var(--gold)">创新</div><div class="muted" style="font-size:26px;font-weight:600;margin-top:16px">Unlocking new growth</div></div>
+            <div class="card prio" style="flex:1;border-top:8px solid var(--red)" data-cue="3"><div style="font-size:84px;font-weight:900;color:var(--red)">03</div><div style="font-size:54px;font-weight:900">Cooperation</div><div class="zh" style="font-size:40px;font-weight:900;color:var(--red)">合作</div><div class="muted" style="font-size:26px;font-weight:600;margin-top:16px">Shared benefits for the region</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="why" class="scene clip" data-scene="4" data-start="47.02" data-duration="13.024" data-track-index="1">
+        <svg class="skyline" id="sky-why" viewBox="0 0 1920 420" preserveAspectRatio="none"></svg>
+        <div class="inner" style="justify-content:flex-start;padding-top:110px">
+          <div class="kicker" data-cue="0">WHY SHENZHEN? · 为什么是深圳？</div>
+          <div style="display:flex;align-items:baseline;gap:40px" data-cue="1">
+            <div style="font-size:150px;font-weight:900;line-height:1"><span id="cnt-year">1980</span></div>
+          </div>
+          <div id="why-label" class="zh" style="font-size:36px;font-weight:700;color:var(--gold);margin-top:14px" data-cue="2">经济特区 · Special Economic Zone</div>
+        </div>
+      </section>
+
+      <section id="today" class="scene clip" data-scene="5" data-start="59.284" data-duration="15.424" data-track-index="2">
+        <div class="inner" style="flex-direction:row;gap:90px;text-align:left">
+          <div style="width:760px;flex:none">
+            <div class="kicker" data-cue="0">SHENZHEN TODAY · 今日深圳</div>
+            <div data-cue="0"><div class="stat" style="font-size:170px"><span id="cnt-people">0</span>M+</div><div class="stat-label" style="font-size:32px">residents <span class="zh muted">常住人口</span></div></div>
+            <div style="display:flex;flex-wrap:wrap;gap:18px;margin-top:50px">
+              <div class="card" style="padding:18px 28px;font-size:30px;font-weight:800" data-cue="1">Electronics <span class="zh muted">电子</span></div>
+              <div class="card" style="padding:18px 28px;font-size:30px;font-weight:800" data-cue="1" data-off="2">Telecom <span class="zh muted">通信</span></div>
+              <div class="card" style="padding:18px 28px;font-size:30px;font-weight:800" data-cue="1" data-off="3.5">Electric Vehicles <span class="zh muted">新能源汽车</span></div>
+            </div>
+          </div>
+          <div style="position:relative;width:640px;height:600px" data-cue="2">
+            <svg id="gba" width="640" height="600" viewBox="0 0 640 600"></svg>
+          </div>
+        </div>
+      </section>
+
+      <section id="outro" class="scene clip" data-scene="6" data-start="73.948" data-duration="11.284" data-track-index="1">
+        <svg class="skyline" id="sky-outro" viewBox="0 0 1920 420" preserveAspectRatio="none"></svg>
+        <div class="inner">
+          <div class="kicker" data-cue="0">WELCOME TO SHENZHEN · 欢迎来到深圳</div>
+          <div class="title" style="font-size:150px;letter-spacing:-3px" data-cue="1">SHENZHEN <span style="color:var(--gold)">2026</span></div>
+          <div class="zh" style="font-size:48px;font-weight:900;letter-spacing:12px;margin-top:10px" data-cue="1" data-off="0.5">APEC 中国年 · 深圳</div>
+          <div style="width:140px;height:6px;background:var(--teal);margin:44px auto" data-cue="2"></div>
+          <div style="font-size:40px;font-weight:700" data-cue="2">Together, toward a shared future</div>
+          <div class="zh" style="font-size:34px;font-weight:700;color:var(--gold);margin-top:10px" data-cue="2">携手同行 · 共创未来</div>
+        </div>
+      </section>
+
+      <div class="badge"><i></i>APEC 2026 · SHENZHEN</div>
+      <div id="subs" data-layout-allow-overlap></div>
+      <div id="fade-out"></div>
+      <audio id="narration" src="public/voiceover/narration.en.mp3" data-start="0" data-duration="82.632" data-track-index="0"></audio>
+    </div>
+
+    <script>
+      const CUES = /* CUES:BEGIN */ [{"p":0,"c":0,"start":0.102,"end":3.789,"en":"This November, the Asia-Pacific comes together in Shenzhen.","zh":"今年十一月，亚太汇聚深圳。"},{"p":0,"c":1,"start":3.839,"end":7.31,"en":"From November eighteenth to nineteenth, twenty twenty-six,","zh":"2026年11月18日至19日，"},{"p":0,"c":2,"start":7.36,"end":11.18,"en":"the city hosts the thirty-third APEC Economic Leaders' Meeting.","zh":"深圳将举办亚太经合组织第三十三次领导人非正式会议。"},{"p":1,"c":0,"start":11.446,"end":13.22,"en":"Founded in nineteen eighty-nine,","zh":"亚太经合组织成立于1989年，"},{"p":1,"c":1,"start":13.27,"end":17.225,"en":"APEC brings together twenty-one economies around the Pacific Rim.","zh":"汇聚环太平洋的21个经济体。"},{"p":1,"c":2,"start":17.275,"end":20.58,"en":"They are home to nearly forty percent of the world's people,","zh":"这些经济体拥有全球近四成人口，"},{"p":1,"c":3,"start":20.63,"end":23.78,"en":"and more than sixty percent of its economic output.","zh":"经济总量超过全球六成。"},{"p":2,"c":0,"start":23.982,"end":26.662,"en":"China hosts APEC for the third time,","zh":"中国第三次担任APEC东道主，"},{"p":2,"c":1,"start":26.712,"end":30.986,"en":"after Shanghai in two thousand one and Beijing in twenty fourteen.","zh":"此前曾在2001年上海、2014年北京举办。"},{"p":2,"c":2,"start":31.036,"end":32.172,"en":"The theme of the year is","zh":"本年度主题是："},{"p":2,"c":3,"start":32.222,"end":35.708,"en":"Building an Asia-Pacific Community to Prosper Together.","zh":"携手构建亚太共同体，共促繁荣。"},{"p":3,"c":0,"start":35.974,"end":38.207,"en":"Three priorities guide the agenda.","zh":"三大重点引领议程。"},{"p":3,"c":1,"start":38.257,"end":41.37,"en":"Openness, to keep trade and investment flowing.","zh":"开放，让贸易与投资畅通流动。"},{"p":3,"c":2,"start":41.42,"end":43.858,"en":"Innovation, to unlock new growth.","zh":"创新，释放新的增长动能。"},{"p":3,"c":3,"start":43.908,"end":47.3,"en":"And cooperation, to share the benefits across the region.","zh":"合作，让发展成果惠及整个地区。"},{"p":4,"c":0,"start":47.502,"end":48.6,"en":"Why Shenzhen?","zh":"为什么是深圳？"},{"p":4,"c":1,"start":48.65,"end":51.712,"en":"Forty-six years ago, it was a small border town.","zh":"四十六年前，这里还是一座边陲小镇。"},{"p":4,"c":2,"start":51.762,"end":54.812,"en":"As one of China's first special economic zones,","zh":"作为中国第一批经济特区之一，"},{"p":4,"c":3,"start":54.862,"end":59.564,"en":"it grew into a global hub of technology, manufacturing and trade.","zh":"它成长为全球科技、制造与贸易中心。"},{"p":5,"c":0,"start":59.779,"end":63.912,"en":"Today, Shenzhen is a city of more than seventeen million people,","zh":"如今，深圳常住人口超过1700万，"},{"p":5,"c":1,"start":63.962,"end":69.742,"en":"home to world-leading companies in electronics, telecommunications and electric vehicles.","zh":"汇聚电子、通信和新能源汽车领域的世界领先企业。"},{"p":5,"c":2,"start":69.792,"end":72.076,"en":"It sits at the heart of the Greater Bay Area,","zh":"它位于粤港澳大湾区的核心，"},{"p":5,"c":3,"start":72.126,"end":74.228,"en":"linked to Hong Kong and Macao.","zh":"与香港、澳门紧密相连。"},{"p":6,"c":0,"start":74.43,"end":78.041,"en":"A city built on openness now welcomes the Asia-Pacific.","zh":"一座因开放而生的城市，如今迎接亚太。"},{"p":6,"c":1,"start":78.091,"end":80.298,"en":"Shenzhen, twenty twenty-six.","zh":"深圳，2026。"},{"p":6,"c":2,"start":80.348,"end":82.532,"en":"Together, toward a shared future.","zh":"携手同行，共创未来。"}] /* CUES:END */;
+      const FADE = 0.38;
+      const audioEnd = Number(document.getElementById('narration').dataset.duration);
+      const total = Number(document.getElementById('root').dataset.duration);
+      const scenes = [...document.querySelectorAll('.scene')];
+      const cueAt = (p, c) => CUES.find((q) => q.p === p && q.c === c);
+
+      // 确定性伪随机，生成天际线
+      let seed = 7;
+      const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+      const towers = Array.from({length: 64}, (_, i) => {
+        const w = 18 + rand() * 30, center = 1 - Math.abs(i - 34) / 40;
+        return {x: i * 30 + rand() * 8, w, h: 60 + rand() * 180 + center * 200 * rand()};
+      });
+      const skyline = (svg, color, opacity) => {
+        svg.innerHTML = towers.map((t, i) => `<rect class="tower" x="${t.x}" y="${420 - t.h}" width="${t.w}" height="${t.h}" fill="${color}" opacity="${opacity}"/>`).join('')
+          + `<rect x="0" y="414" width="1920" height="6" fill="${color}" opacity="${opacity * 1.5}"/>`;
+      };
+      skyline(document.getElementById('sky-intro'), '#2fc6c0', 0.12);
+      skyline(document.getElementById('sky-why'), '#2fc6c0', 0.35);
+      skyline(document.getElementById('sky-outro'), '#f2b84b', 0.16);
+
+      // 21 个经济体环
+      document.getElementById('ring').innerHTML = '<circle r="250" fill="none" stroke="rgba(47,198,192,.25)" stroke-width="2" stroke-dasharray="4 10"/>'
+        + Array.from({length: 21}, (_, i) => {
+          const a = (i / 21) * Math.PI * 2 - Math.PI / 2;
+          return `<circle class="eco" cx="${(250 * Math.cos(a)).toFixed(1)}" cy="${(250 * Math.sin(a)).toFixed(1)}" r="13" fill="${i === 0 ? '#f2b84b' : '#2fc6c0'}"/>`;
+        }).join('');
+
+      // 粤港澳大湾区示意图
+      const cities = [
+        ['Guangzhou', '广州', 250, 120, false], ['Dongguan', '东莞', 400, 190, false], ['Shenzhen', '深圳', 420, 330, true],
+        ['Hong Kong', '香港', 460, 450, false], ['Zhuhai', '珠海', 210, 430, false], ['Macao', '澳门', 180, 500, false],
+      ];
+      document.getElementById('gba').innerHTML =
+        '<path d="M290 150 C 300 260, 330 340, 350 560 L 250 560 C 260 420, 270 280, 290 150 Z" fill="rgba(47,198,192,.12)"/>'
+        + '<path class="link" d="M420 330 L460 450 M460 450 L180 500 M420 330 L210 430" stroke="#f2b84b" stroke-width="3" fill="none" stroke-dasharray="8 8"/>'
+        + cities.map(([en, zh, x, y, hi]) => `<g class="city"><circle cx="${x}" cy="${y}" r="${hi ? 22 : 11}" fill="${hi ? '#f2b84b' : '#2fc6c0'}"/>${hi ? `<circle cx="${x}" cy="${y}" r="40" fill="none" stroke="#f2b84b" stroke-width="2" opacity=".5"/>` : ''}<text x="${x + (hi ? 50 : 22)}" y="${y + 8}" fill="#f5f8fc" font-size="${hi ? 30 : 24}" font-weight="800">${en}</text><text x="${x + (hi ? 50 : 22)}" y="${y + 38}" fill="#9fb3cc" font-size="22" font-family="Noto Sans SC">${zh}</text></g>`).join('')
+        + '<text x="20" y="40" fill="#2fc6c0" font-size="22" font-weight="800" letter-spacing="4">GREATER BAY AREA · 粤港澳大湾区</text>';
+
+      // 双语字幕
+      document.getElementById('subs').innerHTML = CUES.map((q, i) => `<div class="sub" id="sub-${i}"><div class="sub-en">${q.en}</div><div class="sub-zh">${q.zh}</div></div>`).join('');
+
+      const tl = gsap.timeline({paused: true});
+      tl.fromTo('#grid', {x: 0}, {x: -total * 3, duration: total, ease: 'none'}, 0);
+      tl.fromTo('#arc1', {rotation: 0}, {rotation: total * 0.6, duration: total, ease: 'none'}, 0);
+      tl.fromTo('#arc2', {rotation: 0}, {rotation: -total * 0.9, duration: total, ease: 'none'}, 0);
+
+      CUES.forEach((q, i) => {
+        const el = `#sub-${i}`;
+        tl.fromTo(el, {opacity: 0, y: 10}, {opacity: 1, y: 0, duration: 0.2, ease: 'power1.out'}, q.start);
+        tl.to(el, {opacity: 0, duration: 0.15, ease: 'none'}, q.end - 0.15);
+      });
+
+      // 场景淡入淡出：先淡出当前场景，再淡入下一场景
+      scenes.forEach((scene, p) => {
+        const start = Number(scene.dataset.start);
+        const end = start + Number(scene.dataset.duration);
+        const kids = scene.children;
+        if (p > 0) tl.fromTo(kids, {opacity: 0}, {opacity: 1, duration: FADE, ease: 'none'}, start + FADE);
+        if (p < scenes.length - 1) tl.to(kids, {opacity: 0, duration: FADE, ease: 'none'}, end - 2 * FADE);
+        for (const el of scene.querySelectorAll('[data-cue]')) {
+          const t = Math.max(cueAt(p, Number(el.dataset.cue)).start + Number(el.dataset.off || 0), p > 0 ? start + FADE : 0);
+          tl.fromTo(el, {opacity: 0, y: 30}, {opacity: 1, y: 0, duration: 0.7, ease: 'power2.out'}, t);
+        }
+      });
+
+      const counter = (sel, from, to, t, dur, digits = 0) => {
+        const obj = {v: from};
+        tl.fromTo(obj, {v: from}, {v: to, duration: dur, ease: 'power1.out', onUpdate: () => {
+          document.querySelector(sel).textContent = obj.v.toFixed(digits);
+        }}, t);
+      };
+
+      // apec：21 个点依次亮起
+      const ecoT = cueAt(1, 1).start;
+      tl.fromTo('#ring .eco', {scale: 0, transformOrigin: '50% 50%'}, {scale: 1, duration: 0.3, stagger: 0.07, ease: 'back.out(2)'}, cueAt(1, 0).start + 0.3);
+      counter('#cnt-econ', 0, 21, ecoT, 1.6);
+      counter('#cnt-pop', 0, 40, cueAt(1, 2).start + 0.3, 1.2);
+      counter('#cnt-gdp', 0, 60, cueAt(1, 3).start + 0.3, 1.2);
+
+      // host：时间线推进
+      tl.fromTo('#tl-fill', {width: 0}, {width: 600, duration: 2.2, ease: 'none'}, cueAt(2, 1).start);
+      tl.to('#tl-fill', {width: 1200, duration: 1.2, ease: 'power1.inOut'}, cueAt(2, 2).start);
+
+      // why：从边陲小镇到天际线
+      tl.fromTo('#sky-why .tower', {scaleY: 0.08, transformOrigin: '50% 100%'}, {scaleY: 1, duration: 3.2, stagger: {each: 0.03, from: 'center'}, ease: 'power2.out'}, cueAt(4, 3).start - 0.3);
+      counter('#cnt-year', 1980, 2026, cueAt(4, 3).start - 0.3, 3.4);
+
+      // today
+      counter('#cnt-people', 0, 17, cueAt(5, 0).start + 0.8, 1.8);
+      tl.fromTo('#gba .city', {opacity: 0, scale: 0.6, transformOrigin: '50% 50%'}, {opacity: 1, scale: 1, duration: 0.4, stagger: 0.2}, cueAt(5, 2).start + 0.2);
+      tl.fromTo('#gba .link', {opacity: 0}, {opacity: 1, duration: 0.8}, cueAt(5, 3).start);
+
+      // outro：天际线升起
+      tl.fromTo('#sky-outro .tower', {scaleY: 0, transformOrigin: '50% 100%'}, {scaleY: 1, duration: 2.4, stagger: {each: 0.02, from: 'edges'}, ease: 'power2.out'}, Number(document.getElementById('outro').dataset.start) + FADE);
+
+      tl.fromTo('#fade-out', {opacity: 0}, {opacity: 1, duration: 1.8, ease: 'none'}, audioEnd + 0.6);
+
+      window.__timelines['shenzhen-apec'] = tl;
+    </script>
+  </body>
+</html>

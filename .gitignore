@@ -151,3 +151,6 @@ vite.config.ts.timestamp-*
 *.jpg
 
 .reasonix/
+
+# HyperFrames 本地检查/渲染状态
+.hyperframes/

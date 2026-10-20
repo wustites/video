@@ -27,6 +27,7 @@
 | [Imperial House Law JP](./history_society/imperial_house_law_jp/) | 皇室典范改正议题 | 日 | 随旁白生成 | Remotion | `out/imperial-house-law-ja.mp4` |
 | [Shandong Universities](./education/shandong_universities/) | 山东本科院校地图速览 | 中 | 随旁白生成 | Remotion | `out/shandong-atlas.mp4` |
 | [Claude MHS](./science_nature/claude_mhs/) | Anthropic Model Hardware Standard 介绍 | 中 | 随旁白生成 | HyperFrames | `out/claude-mhs-zh.mp4` |
+| [Shenzhen APEC](./creative_brand/shenzhen_apec/) | 深圳 APEC 2026 宣传片 | 英 + 中英字幕 | 随旁白生成 | HyperFrames | `out/shenzhen-apec-en.mp4` |
 
 榜单和数据项目采用 `1080 × 1920` 竖屏画布；Kakeya Conjecture 使用 `1920 × 1080` 横屏画布。具体数据来源、内容结构和资源要求见各项目目录内的 README。
 
