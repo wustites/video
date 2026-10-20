@@ -28,6 +28,8 @@ interface Station {
   x: number;
   y: number;
   labelSide: 'left' | 'right' | 'top' | 'bottom';
+  /** 额外的纵向偏移，用于错开相邻站名 */
+  dy?: number;
   interchange?: boolean;
   anchor?: 'start' | 'middle' | 'end'; // 标签锚点覆盖
 }
@@ -58,7 +60,7 @@ const L2_STATIONS: Station[] = [
   {name: 'Colectora Industrial', x: 750, y: 950, labelSide: 'bottom'},
   {name: 'Hermilio Valdizán', x: 845, y: 950, labelSide: 'top'},
   {name: 'Mercado Santa Anita', x: 940, y: 950, labelSide: 'bottom'},
-  {name: 'Ate (proyectado)', x: 1000, y: 950, labelSide: 'top', anchor: 'end'},
+  {name: 'Ate (proyectado)', x: 1000, y: 950, labelSide: 'top', anchor: 'end', dy: -30},
 ];
 
 /** 由站点数组生成折线 path */
@@ -268,7 +270,7 @@ export const SchematicMap: React.FC<SchematicMapProps> = ({
           const tx =
             s.labelSide === 'left' ? s.x - 22 : s.labelSide === 'right' ? s.x + 22 : s.x;
           const ty =
-            s.labelSide === 'top' ? s.y - 26 : s.labelSide === 'bottom' ? s.y + 36 : s.y + 6;
+            (s.labelSide === 'top' ? s.y - 26 : s.labelSide === 'bottom' ? s.y + 36 : s.y + 6) + (s.dy ?? 0);
           const anchor = s.anchor ?? (s.labelSide === 'left' ? 'end' : s.labelSide === 'right' ? 'start' : 'middle');
           return (
             <text

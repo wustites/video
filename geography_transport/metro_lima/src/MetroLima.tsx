@@ -486,7 +486,7 @@ const MapL2: React.FC = () => {
         <br />
         subterráneo del país
       </div>
-      <div style={{position: 'absolute', bottom: 210, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 44, opacity: features.opacity}}>
+      <div style={{position: 'absolute', bottom: 330, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 44, opacity: features.opacity}}>
         {[
           {icon: '🚇', t: 'Bajo tierra', d: '100% subterráneo'},
           {icon: '🤖', t: 'Sin conductor', d: 'Automático, autónomo'},
