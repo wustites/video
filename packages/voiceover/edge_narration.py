@@ -12,6 +12,7 @@ import argparse
 import json
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 
@@ -36,6 +37,19 @@ async def synthesize_with_marks(text: str, voice: str, rate: str, out: Path) -> 
             elif chunk["type"] == "WordBoundary":
                 words.append({"text": chunk["text"], "start": round(chunk["offset"] / 1e7, 3)})
     return words
+
+
+def with_retries(fn, attempts: int = 5):
+    """Edge TTS occasionally returns no audio (NoAudioReceived) on CI runners; retry with backoff."""
+    for attempt in range(1, attempts + 1):
+        try:
+            return fn()
+        except Exception as error:  # noqa: BLE001 - edge_tts raises several transient error types
+            if attempt == attempts:
+                raise
+            delay = 3 * attempt
+            print(f"  edge-tts failed ({type(error).__name__}: {error}); retry {attempt}/{attempts - 1} in {delay}s")
+            time.sleep(delay)
 
 
 def main() -> None:
@@ -67,13 +81,13 @@ def main() -> None:
     marks = []
     for segment, paragraph in zip(segments, paragraphs):
         if args.word_marks:
-            marks.append(asyncio.run(synthesize_with_marks(paragraph, args.voice, args.rate, segment)))
+            marks.append(with_retries(lambda: asyncio.run(synthesize_with_marks(paragraph, args.voice, args.rate, segment))))
         else:
-            subprocess.run(
+            with_retries(lambda: subprocess.run(
                 [sys.executable, "-m", "edge_tts", "--voice", args.voice, f"--rate={args.rate}",
                  "--text", paragraph, "--write-media", str(segment)],
                 check=True,
-            )
+            ))
         durations.append(probe_duration(segment))
         print(f"{segment.stem}: {durations[-1]:.3f}s | {paragraph[:40]}...")
 
