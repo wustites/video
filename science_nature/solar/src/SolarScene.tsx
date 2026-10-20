@@ -36,8 +36,130 @@ function createRandom(seed: number): () => number {
   };
 }
 
-function makePlanetTexture(base: string, accent: string, seed: number): THREE.CanvasTexture {
+/** Seeded 2D value noise, tileable horizontally so the texture wraps
+ * around the sphere without a seam. */
+function makeNoise(seed: number, period: number): (x: number, y: number) => number {
   const random = createRandom(seed);
+  const size = 256;
+  const table = Array.from({length: size * size}, () => random());
+  const at = (ix: number, iy: number) => table[(((iy % size) + size) % size) * size + (((ix % period) + period) % period)];
+  const fade = (t: number) => t * t * (3 - 2 * t);
+  return (x, y) => {
+    const ix = Math.floor(x);
+    const iy = Math.floor(y);
+    const fx = fade(x - ix);
+    const fy = fade(y - iy);
+    const a = at(ix, iy) + (at(ix + 1, iy) - at(ix, iy)) * fx;
+    const b = at(ix, iy + 1) + (at(ix + 1, iy + 1) - at(ix, iy + 1)) * fx;
+    return a + (b - a) * fy;
+  };
+}
+
+/** Fractal noise in [0, 1]; u, v are texture coords in [0, 1). */
+function makeFbm(seed: number, baseFreq: number, octaves = 5): (u: number, v: number) => number {
+  const layers = Array.from({length: octaves}, (_, o) => ({
+    noise: makeNoise(seed + o * 7919, baseFreq * 2 ** o),
+    freq: baseFreq * 2 ** o,
+    amp: 0.5 ** o,
+  }));
+  const norm = layers.reduce((sum, l) => sum + l.amp, 0);
+  return (u, v) => layers.reduce((sum, l) => sum + l.noise(u * l.freq, v * l.freq * 0.5) * l.amp, 0) / norm;
+}
+
+type RGB = [number, number, number];
+const hex = (h: string): RGB => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)) as RGB;
+const mix = (a: RGB, b: RGB, t: number): RGB => {
+  const c = Math.min(1, Math.max(0, t));
+  return [a[0] + (b[0] - a[0]) * c, a[1] + (b[1] - a[1]) * c, a[2] + (b[2] - a[2]) * c];
+};
+/** Piecewise-linear colour ramp over [0, 1]. */
+const ramp = (stops: [number, string][]) => {
+  const parsed = stops.map(([t, c]) => [t, hex(c)] as const);
+  return (t: number): RGB => {
+    for (let i = 1; i < parsed.length; i++) {
+      if (t <= parsed[i][0]) {
+        const [t0, c0] = parsed[i - 1];
+        const [t1, c1] = parsed[i];
+        return mix(c0, c1, (t - t0) / (t1 - t0));
+      }
+    }
+    return parsed[parsed.length - 1][1];
+  };
+};
+
+type Painter = (u: number, v: number) => RGB;
+
+/** Per-planet surface painters: rocky worlds get mottled terrain, Earth gets
+ * oceans, continents, ice caps and clouds, gas and ice giants get bands. */
+function makePainter(name: string, seed: number): Painter {
+  const terrain = makeFbm(seed, 6);
+  const detail = makeFbm(seed + 101, 24, 3);
+  const warp = makeFbm(seed + 202, 3, 3);
+  switch (name) {
+    case 'Mercury': {
+      const color = ramp([[0, '#5e5852'], [0.45, '#8f877d'], [0.7, '#b3aa9e'], [1, '#d4ccc0']]);
+      return (u, v) => color(terrain(u, v) * 0.7 + detail(u, v) * 0.3);
+    }
+    case 'Venus': {
+      const color = ramp([[0, '#b9864a'], [0.5, '#e0b878'], [1, '#f6e2b4']]);
+      return (u, v) => color(terrain(u + warp(u, v) * 0.35, v) * 0.85 + Math.sin(v * Math.PI * 5 + warp(u, v) * 6) * 0.08 + 0.05);
+    }
+    case 'Earth': {
+      const clouds = makeFbm(seed + 303, 8, 5);
+      return (u, v) => {
+        const lat = Math.abs(v - 0.5) * 2;
+        const h = terrain(u, v) + (detail(u, v) - 0.5) * 0.15;
+        let c: RGB = h < 0.53 ? mix(hex('#0b2c66'), hex('#1f6fb8'), (h - 0.3) / 0.23) : mix(hex('#3f8a3a'), hex('#a08a55'), (h - 0.53) / 0.2);
+        if (lat > 0.82 || (lat > 0.7 && h > 0.5)) c = hex('#eef4fa');
+        const cl = Math.max(0, clouds(u, v) - 0.55) * 2.6;
+        return mix(c, [255, 255, 255], cl);
+      };
+    }
+    case 'Mars': {
+      const color = ramp([[0, '#5a2414'], [0.4, '#9a4325'], [0.65, '#c8693d'], [1, '#e2a070']]);
+      return (u, v) => {
+        const lat = Math.abs(v - 0.5) * 2;
+        const c = color(terrain(u, v) * 0.75 + detail(u, v) * 0.25);
+        return lat > 0.9 ? mix(c, hex('#f2ece4'), (lat - 0.9) * 10) : c;
+      };
+    }
+    case 'Jupiter': {
+      const color = ramp([[0, '#8a5a3a'], [0.3, '#c99a6a'], [0.55, '#efdcbc'], [0.75, '#b9773f'], [1, '#f3e6cf']]);
+      return (u, v) => {
+        const band = 0.5 + 0.5 * Math.sin(v * Math.PI * 14 + warp(u, v) * 2.2);
+        let c = color(band * 0.8 + terrain(u, v) * 0.2);
+        // Great Red Spot
+        const du = (u - 0.3) / 0.07;
+        const dv = (v - 0.64) / 0.04;
+        const d = du * du + dv * dv;
+        if (d < 1) c = mix(c, hex('#b8462c'), (1 - d) * 1.4);
+        return c;
+      };
+    }
+    case 'Saturn': {
+      const color = ramp([[0, '#b99a5e'], [0.5, '#e4cf96'], [1, '#f5e8c4']]);
+      return (u, v) => color(0.5 + 0.35 * Math.sin(v * Math.PI * 11 + warp(u, v) * 1.2) + (terrain(u, v) - 0.5) * 0.12);
+    }
+    case 'Uranus': {
+      const color = ramp([[0, '#79c4cf'], [1, '#bdeef0']]);
+      return (u, v) => color(0.55 + 0.12 * Math.sin(v * Math.PI * 6) + (terrain(u, v) - 0.5) * 0.2);
+    }
+    default: {
+      // Neptune
+      const color = ramp([[0, '#1d3c9e'], [0.6, '#3d6ee0'], [1, '#8fb4f5']]);
+      return (u, v) => {
+        let c = color(0.5 + 0.18 * Math.sin(v * Math.PI * 8 + warp(u, v) * 3) + (terrain(u, v) - 0.5) * 0.4);
+        const du = (u - 0.6) / 0.06;
+        const dv = (v - 0.62) / 0.035;
+        const d = du * du + dv * dv;
+        if (d < 1) c = mix(c, hex('#11205a'), 1 - d);
+        return c;
+      };
+    }
+  }
+}
+
+function makePlanetTexture(name: string, seed: number): THREE.CanvasTexture {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 256;
@@ -45,16 +167,19 @@ function makePlanetTexture(base: string, accent: string, seed: number): THREE.Ca
   if (!ctx) {
     throw new Error('2D canvas context is unavailable');
   }
-  ctx.fillStyle = base;
-  ctx.fillRect(0, 0, 512, 256);
-  for (let i = 0; i < 36; i++) {
-    const y = random() * 256;
-    const h = 3 + random() * 16;
-    ctx.globalAlpha = 0.18 + random() * 0.25;
-    ctx.fillStyle = i % 2 === 0 ? accent : '#ffffff';
-    ctx.fillRect(0, y, 512, h);
+  const paint = makePainter(name, seed);
+  const img = ctx.createImageData(512, 256);
+  for (let y = 0; y < 256; y++) {
+    for (let x = 0; x < 512; x++) {
+      const [r, g, b] = paint(x / 512, y / 256);
+      const i = (y * 512 + x) * 4;
+      img.data[i] = r;
+      img.data[i + 1] = g;
+      img.data[i + 2] = b;
+      img.data[i + 3] = 255;
+    }
   }
-  ctx.globalAlpha = 1;
+  ctx.putImageData(img, 0, 0);
   const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
   return tex;
@@ -220,9 +345,9 @@ function buildSolarWorld(): SolarWorld {
     root.add(group);
     const orbit = createOrbitRing(spec.distance);
     group.add(orbit);
-    const tex = makePlanetTexture(spec.color, spec.name === 'Earth' ? '#70c779' : '#3a3a4a', 112358 + idx * 97);
+    const tex = makePlanetTexture(spec.name, 112358 + idx * 97);
     const mat = new THREE.MeshStandardMaterial({
-      color: spec.color,
+      color: '#ffffff',
       map: tex,
       roughness: 0.55,
       metalness: spec.name === 'Mercury' ? 0.15 : 0.06,
@@ -250,7 +375,14 @@ function buildSolarWorld(): SolarWorld {
     if (spec.name === 'Saturn') {
       const ring = new THREE.Mesh(
         new THREE.RingGeometry(spec.radius * 1.35, spec.radius * 2.1, 96),
-        new THREE.MeshStandardMaterial({color: '#e5d49b', side: THREE.DoubleSide, transparent: true, opacity: 0.62}),
+        new THREE.MeshStandardMaterial({
+          color: '#e5d49b',
+          emissive: '#8a7448',
+          emissiveIntensity: 0.6,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0.75,
+        }),
       );
       ring.rotation.x = Math.PI / 2.4;
       mesh.add(ring);
@@ -306,7 +438,12 @@ function applySolarFrame(
     const angle = frame * 0.008 * spec.speed + idx * 0.52;
     mesh.position.set(Math.cos(angle) * spec.distance, 0, Math.sin(angle) * spec.distance);
     mesh.rotation.y = frame * 0.04 * (1.2 + idx * 0.08);
-    planetPositions.set(spec.name, mesh.position.clone());
+    // Orbits are tilted, so the camera must aim at the world position,
+    // not the position inside the tilted group.
+    group.rotation.y = Math.sin(frame * 0.003 + idx) * 0.04;
+    group.updateMatrixWorld(true);
+    const worldPos = mesh.getWorldPosition(new THREE.Vector3());
+    planetPositions.set(spec.name, worldPos);
 
     const b = 1 + Math.sin(frame * 0.06) * 0.04 + Math.sin(frame * 0.15) * 0.015;
     mesh.scale.setScalar(planetIsActive ? 1.4 * b : 1);
@@ -318,10 +455,10 @@ function applySolarFrame(
     orbit.material.color.set(planetIsActive ? spec.color : '#6e7ea0');
     orbit.material.opacity = planetIsActive ? 0.85 : 0.2;
     mesh.material.emissive.set(planetIsActive ? spec.color : '#000000');
-    mesh.material.emissiveIntensity = planetIsActive ? 0.3 : 0;
+    mesh.material.emissiveIntensity = planetIsActive ? 0.12 : 0;
 
     if (spec.name === active.name) {
-      target.copy(mesh.position);
+      target.copy(worldPos);
       activeRadius = spec.radius;
     }
 
@@ -334,7 +471,6 @@ function applySolarFrame(
         mesh.position.z + Math.sin(ma) * md,
       );
     });
-    group.rotation.y = Math.sin(frame * 0.003 + idx) * 0.04;
   });
 
   const prevSeg = activeIdx > 0 ? segments[activeIdx - 1] : active;

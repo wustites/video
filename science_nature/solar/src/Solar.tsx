@@ -73,10 +73,15 @@ const CueOverlay: React.FC<{cue: SolarCue}> = ({cue}) => {
           left: '50%',
           transform: 'translateX(-50%)',
           width: 900,
+          boxSizing: 'border-box',
+          padding: '24px 36px',
+          borderRadius: 24,
+          background: 'rgba(2,4,11,0.62)',
           textAlign: 'center',
           color: '#fff',
-          fontSize: 32,
+          fontSize: 34,
           lineHeight: 1.5,
+          wordBreak: 'keep-all',
           textShadow: '0 2px 10px rgba(0,0,0,0.8)',
         }}
       >
@@ -95,6 +100,13 @@ export const Solar: React.FC<{locale: SolarLocale}> = ({locale}) => {
   return (
     <AbsoluteFill style={{backgroundColor: '#02040b', fontFamily: fontFamilyForLocale(locale)}}>
       <SolarScene frame={frame} totalFrames={totalFrames} segments={segments} />
+      {/* Darken the title and caption bands so text never sits on a bright planet. */}
+      <AbsoluteFill
+        style={{
+          background:
+            'linear-gradient(to bottom, rgba(2,4,11,0.75) 0%, rgba(2,4,11,0) 12%, rgba(2,4,11,0) 72%, rgba(2,4,11,0.7) 100%)',
+        }}
+      />
       {voiceover.cues.map((cue) => (
         <Sequence
           key={cue.id}
