@@ -2,7 +2,7 @@ import React from 'react';
 import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {notoSans} from './fonts';
 import {SchematicMap} from './SchematicMap';
-import {FADE_OUT, useEntrance, useSceneOpacity} from './timing';
+import {FADE_OUT, useEntrance, useSceneOpacity, cue, sceneStart} from './timing';
 
 const W = 1080;
 const H = 1920;
@@ -96,7 +96,7 @@ const Intro: React.FC = () => {
   const badge = useEntrance('intro', 0.4, 0.6);
   const title = useEntrance('intro', 0.8, 0.8, 'rise');
   const line = useEntrance('intro', 1.6, 0.7);
-  const sub = useEntrance('intro', 2.4, 0.6);
+  const sub = useEntrance('intro', cue('intro', 'sistema'), 0.6);
   return (
     <Scene id="intro">
       <div style={{opacity: badge.opacity, transform: `translateY(${(1 - badge.opacity) * -24}px)`}}>
@@ -164,10 +164,10 @@ const Intro: React.FC = () => {
 /* ---------------- 场景 2：客流 ---------------- */
 const Ridership: React.FC = () => {
   const kicker = useEntrance('ridership', 0.3, 0.5);
-  const num = useEntrance('ridership', 0.7, 0.7, 'scale');
-  const unit = useEntrance('ridership', 1.5, 0.5);
+  const num = useEntrance('ridership', cue('ridership', 'medio') - 0.2, 0.7, 'scale');
+  const unit = useEntrance('ridership', cue('ridership', 'pasajeros'), 0.5);
   const bar = useEntrance('ridership', 2.1, 1.4);
-  const sub = useEntrance('ridership', 3.3, 0.5);
+  const sub = useEntrance('ridership', cue('ridership', 'distritos'), 0.5);
   const fillWidth = 78 * bar.opacity;
   return (
     <Scene id="ridership">
@@ -234,12 +234,14 @@ const MapL1: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = frame / fps;
-  // 线路绘制进度：场景开始(9.98s)后 0.8s 起画，1.6s 内完成
-  const draw = interpolate(t, [10.8, 12.4], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // 线路从场景开头 0.3s 起绘制，在旁白念到起止站时画完
+  const l1Start = sceneStart('map-l1');
+  const draw = interpolate(t, [l1Start + 0.3, l1Start + cue('map-l1', 'Lurigancho')], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const chip = useEntrance('map-l1', 0, 0.5, 'scale');
   const title = useEntrance('map-l1', 0.5, 0.6);
-  const stats = useEntrance('map-l1', 1.8, 0.6);
-  const desc = useEntrance('map-l1', 2.8, 0.5);
+  const km = useEntrance('map-l1', cue('map-l1', 'kilómetros'), 0.5, 'scale');
+  const stations = useEntrance('map-l1', cue('map-l1', 'estaciones'), 0.5, 'scale');
+  const desc = useEntrance('map-l1', cue('map-l1', 'Villa'), 0.5);
   return (
     <Scene id="map-l1" style={{padding: 0}}>
       {/* 示意地图铺满背景 */}
@@ -310,14 +312,13 @@ const MapL1: React.FC = () => {
           display: 'flex',
           justifyContent: 'center',
           gap: 120,
-          opacity: stats.opacity,
         }}
       >
         {[
-          {num: '34,6', label: 'km'},
-          {num: '26', label: 'estaciones'},
+          {num: '34,6', label: 'km', e: km},
+          {num: '26', label: 'estaciones', e: stations},
         ].map((s) => (
-          <div key={s.label} style={{textAlign: 'center'}}>
+          <div key={s.label} style={{textAlign: 'center', opacity: s.e.opacity, transform: s.e.transform}}>
             <div style={{...font, fontSize: 92, fontWeight: 900, color: C.red, lineHeight: 1}}>{s.num}</div>
             <div
               style={{
@@ -359,16 +360,16 @@ const MapL1: React.FC = () => {
 const L1Record: React.FC = () => {
   const kicker = useEntrance('l1record', 0.2, 0.5);
   const title = useEntrance('l1record', 0.6, 0.7);
-  const y1 = useEntrance('l1record', 1.4, 0.6);
-  const y2 = useEntrance('l1record', 1.7, 0.6);
-  const rec = useEntrance('l1record', 2.6, 0.6, 'scale');
+  const y1 = useEntrance('l1record', cue('l1record', '2011') - 0.1, 0.6);
+  const y2 = useEntrance('l1record', cue('l1record', '2014') - 0.1, 0.6);
+  const rec = useEntrance('l1record', cue('l1record', 'once'), 0.6, 'scale');
   return (
     <Scene id="l1record">
       <Kicker sceneId="l1record" offsetSec={0.2}>Línea 1</Kicker>
       <div style={{...font, fontSize: 76, fontWeight: 900, lineHeight: 1.2, letterSpacing: -2, color: C.text, opacity: title.opacity, transform: title.transform}}>
-        Un viaducto elevado
+        Un viaducto
         <br />
-        que hizo historia
+        sobre la ciudad
       </div>
       <div style={{display: 'flex', gap: 60, marginTop: 64}}>
         <div
@@ -416,9 +417,9 @@ const L1Record: React.FC = () => {
           transform: rec.transform,
         }}
       >
-        El viaducto elevado
+        Cruza <span style={{color: C.accent, fontWeight: 900}}>11 distritos</span>
         <br />
-        más largo de América Latina
+        de sur a norte
       </div>
     </Scene>
   );
@@ -429,11 +430,13 @@ const MapL2: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = frame / fps;
-  const l2Draw = interpolate(t, [26.2, 27.8], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const l2Start = sceneStart('map-l2');
+  const l2Draw = interpolate(t, [l2Start + 0.3, l2Start + cue('map-l2', 'Ate')], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const chip = useEntrance('map-l2', 0, 0.5, 'scale');
   const title = useEntrance('map-l2', 0.5, 0.6);
-  const features = useEntrance('map-l2', 1.0, 0.6);
-  const stats = useEntrance('map-l2', 1.8, 0.6);
+  const under = useEntrance('map-l2', cue('map-l2', 'subterráneo'), 0.5, 'rise');
+  const driverless = useEntrance('map-l2', cue('map-l2', 'sin'), 0.5, 'rise');
+  const stats = useEntrance('map-l2', cue('map-l2', 'kilómetros'), 0.6);
   return (
     <Scene id="map-l2" style={{padding: 0}}>
       <div style={{position: 'absolute', inset: 0}}>
@@ -486,14 +489,16 @@ const MapL2: React.FC = () => {
         <br />
         subterráneo del país
       </div>
-      <div style={{position: 'absolute', bottom: 330, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 44, opacity: features.opacity}}>
+      <div style={{position: 'absolute', bottom: 330, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 44}}>
         {[
-          {icon: '🚇', t: 'Bajo tierra', d: '100% subterráneo'},
-          {icon: '🤖', t: 'Sin conductor', d: 'Automático, autónomo'},
+          {icon: '🚇', t: 'Bajo tierra', d: '100% subterráneo', e: under},
+          {icon: '🤖', t: 'Sin conductor', d: 'Trenes automáticos', e: driverless},
         ].map((f) => (
           <div
             key={f.t}
             style={{
+              opacity: f.e.opacity,
+              transform: f.e.transform,
               width: 400,
               padding: '44px 24px',
               background: C.card,
@@ -527,10 +532,10 @@ const MapL2: React.FC = () => {
 const L2Progress: React.FC = () => {
   const kicker = useEntrance('l2progress', 0.2, 0.5);
   const title = useEntrance('l2progress', 0.6, 0.6);
-  const s1 = useEntrance('l2progress', 1.4, 0.6);
-  const arrow = useEntrance('l2progress', 2.0, 0.4);
-  const s2 = useEntrance('l2progress', 1.7, 0.6);
-  const desc = useEntrance('l2progress', 2.8, 0.5);
+  const s1 = useEntrance('l2progress', cue('l2progress', '2023') - 0.1, 0.6);
+  const arrow = useEntrance('l2progress', cue('l2progress', 'línea'), 0.4);
+  const s2 = useEntrance('l2progress', cue('l2progress', '2030') - 0.1, 0.6);
+  const desc = useEntrance('l2progress', cue('l2progress', 'cinco'), 0.5);
   return (
     <Scene id="l2progress">
       <Kicker sceneId="l2progress" offsetSec={0.2}>Línea 2 · Callao → Ate</Kicker>
@@ -545,12 +550,12 @@ const L2Progress: React.FC = () => {
           <div style={{...font, fontSize: 26, fontWeight: 700, color: C.muted, marginTop: 14, lineHeight: 1.4}}>
             Primer tramo
             <br />
-            operativo
+            en servicio
           </div>
         </div>
         <div style={{...font, fontSize: 64, color: C.accent, fontWeight: 900, padding: '0 8px', opacity: arrow.opacity}}>→</div>
         <div style={{width: 360, textAlign: 'center', opacity: s2.opacity, transform: s2.transform}}>
-          <div style={{...font, fontSize: 72, fontWeight: 900, color: C.accent}}>2028</div>
+          <div style={{...font, fontSize: 72, fontWeight: 900, color: C.accent}}>2030</div>
           <div style={{...font, fontSize: 26, fontWeight: 700, color: C.muted, marginTop: 14, lineHeight: 1.4}}>
             Línea completa
             <br />
@@ -559,9 +564,9 @@ const L2Progress: React.FC = () => {
         </div>
       </div>
       <div style={{...font, marginTop: 56, fontSize: 34, fontWeight: 600, color: C.sub, lineHeight: 1.6, opacity: desc.opacity}}>
-        Conectará Callao con Ate,
+        Hoy operan <span style={{color: C.green, fontWeight: 900}}>5 estaciones</span>
         <br />
-        de oeste a este de la metrópoli
+        de las 27 previstas
       </div>
     </Scene>
   );
@@ -571,9 +576,9 @@ const L2Progress: React.FC = () => {
 const Future: React.FC = () => {
   const kicker = useEntrance('future', 0.2, 0.5);
   const title = useEntrance('future', 0.6, 0.6);
-  const card1 = useEntrance('future', 1.5, 0.6);
-  const card2 = useEntrance('future', 1.8, 0.6);
-  const airport = useEntrance('future', 2.7, 0.6);
+  const card1 = useEntrance('future', cue('future', '3'), 0.6);
+  const card2 = useEntrance('future', cue('future', '4'), 0.6);
+  const airport = useEntrance('future', cue('future', 'aeropuerto'), 0.6);
   return (
     <Scene id="future">
       <Kicker sceneId="future" offsetSec={0.2}>El futuro</Kicker>
@@ -631,10 +636,10 @@ const Future: React.FC = () => {
 /* ---------------- 场景 8：结尾 ---------------- */
 const Fare: React.FC = () => {
   const title = useEntrance('fare', 0.2, 0.7);
-  const price = useEntrance('fare', 0.9, 0.7, 'scale');
-  const sub = useEntrance('fare', 1.8, 0.5);
-  const card = useEntrance('fare', 2.4, 0.6);
-  const outro = useEntrance('fare', 3.2, 0.9);
+  const price = useEntrance('fare', cue('fare', '1,50') - 0.1, 0.7, 'scale');
+  const sub = useEntrance('fare', cue('fare', 'única'), 0.5);
+  const card = useEntrance('fare', cue('fare', 'distancia') - 0.3, 0.6);
+  const outro = useEntrance('fare', cue('fare', 'transforma'), 0.9);
   return (
     <Scene id="fare">
       <div style={{...font, fontSize: 66, fontWeight: 900, lineHeight: 1.25, letterSpacing: -2, color: C.text, opacity: title.opacity, transform: title.transform}}>
@@ -676,7 +681,7 @@ const Fare: React.FC = () => {
           opacity: card.opacity,
         }}
       >
-        💳 Pago sin contacto · Tarjeta única
+        🚉 Mismo precio, sin importar la distancia
       </div>
       <div
         style={{

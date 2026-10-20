@@ -1,5 +1,6 @@
 import {useCurrentFrame, useVideoConfig} from 'remotion';
 import segDurations from '../public/voiceover/segment-durations.json';
+import wordMarks from '../public/voiceover/word-marks.json';
 
 export const FPS = 30;
 
@@ -32,30 +33,44 @@ for (let i = 0; i < SCENE_IDS.length; i++) {
 
 const LAST_END = SCENES[SCENES.length - 1].end;
 
-/** 结尾黑场淡出窗口（秒）：旁白结束后 0.5s 起，持续 2.5s */
+/** 结尾黑场淡出窗口（秒）：旁白结束后先停留 1s 让结尾画面落定，再用 1.5s 淡出 */
 export const FADE_OUT = {
-  start: LAST_END + 0.5,
-  end: LAST_END + 3.0,
+  start: LAST_END + 1.0,
+  end: LAST_END + 2.5,
 };
 
-/**
- * 总时长（秒）：旁白结束后留出结尾黑场淡出（FADE_OUT）+ 尾帧余量；
- * 若旁白变长则自动延长，避免截断旁白。
- */
-export const TOTAL_SECONDS = Math.max(56, Math.ceil(LAST_END + 3.8));
+/** 总时长（秒）：完全由旁白长度决定，淡出结束后立即收尾，不留长黑场 */
+export const TOTAL_SECONDS = Math.ceil(LAST_END + 2.6);
 
-/** 场景整体不透明度（含场景边界的淡入淡出） */
+/** 旁白念到 `word`（第 nth 次出现）时，相对场景 `sceneId` 开头的秒数；来自 Edge TTS WordBoundary */
+export function cue(sceneId: (typeof SCENE_IDS)[number], word: string, nth = 0): number {
+  const words = (wordMarks as {text: string; start: number}[][])[SCENE_IDS.indexOf(sceneId)];
+  const hits = words.filter((w) => w.text.includes(word));
+  if (!hits[nth]) throw new Error(`旁白中找不到「${word}」（${sceneId}）`);
+  return hits[nth].start;
+}
+
+/** 场景开始时间（秒） */
+export const sceneStart = (sceneId: string) => SCENES.find((s) => s.id === sceneId)!.start;
+
+/**
+ * 场景整体不透明度：先出后进。场景在自身窗口内开头 0.35s 淡入、结尾 0.35s 淡出，
+ * 相邻场景不会同时出现；第一个场景开场即可见，最后一个场景保持到黑场淡出。
+ */
 export function useSceneOpacity(sceneId: string): number {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = frame / fps;
-  const scene = SCENES.find((s) => s.id === sceneId)!;
-  const fade = 0.5;
-  const {start, end} = scene;
-  if (t >= start && t <= end) return 1;
-  if (t > start - fade && t < start) return (t - (start - fade)) / fade;
-  if (t > end && t < end + fade) return 1 - (t - end) / fade;
-  return 0;
+  const index = SCENES.findIndex((s) => s.id === sceneId);
+  const {start, end} = SCENES[index];
+  const fade = 0.35;
+  const isFirst = index === 0;
+  const isLast = index === SCENES.length - 1;
+  if (t < start) return 0;
+  if (t > end && !isLast) return 0;
+  const fadeIn = isFirst ? 1 : Math.min(1, (t - start) / fade);
+  const fadeOut = isLast ? 1 : Math.min(1, (end - t) / fade);
+  return Math.max(0, Math.min(fadeIn, fadeOut));
 }
 
 /** 场景内元素的入场动画：offsetSec 为相对场景开始的秒数 */
