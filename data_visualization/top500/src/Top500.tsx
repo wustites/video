@@ -2,23 +2,21 @@ import React from 'react';
 import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
 import {
   COMPANIES,
-  COUNTRY_COUNTS,
-  COUNTRY_TOTAL,
-  DOT_COUNT,
+  COUNTRY_SPLIT,
   DURATION_IN_FRAMES,
-  INDUSTRY_MIX,
-  MAX_COUNTRY,
-  MAX_INDUSTRY,
   MAX_REVENUE,
   PROFIT_LEADERS,
   SCENES,
-  formatProfit,
-  formatRevenue,
+  SECTORS,
+  SECTOR_OTHER,
+  TOTALS,
+  yi,
 } from './data';
 import {fontFamily} from './fonts';
 
 const INK = '#0F172A';
 const MUTED = '#64748B';
+const GREY = '#CBD5E1';
 
 /** Scenes overlap by ~30 frames. Fade the outgoing scene out in the first
  * half of the overlap and the incoming one in during the second half, so two
@@ -35,7 +33,7 @@ function sceneOpacity(frame: number, start: number, end: number): number {
   );
 }
 
-/** GSAP clamp((frame - start) / duration): staggered per-item entrances. */
+/** 0 → 1 over `duration` frames starting at `start`. */
 function enterAt(frame: number, start: number, duration: number): number {
   return interpolate(frame, [start, start + duration], [0, 1], {
     extrapolateLeft: 'clamp',
@@ -52,8 +50,6 @@ const BgGrid: React.FC = () => (
       backgroundImage:
         'linear-gradient(rgba(15,23,42,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,.08) 1px, transparent 1px)',
       backgroundSize: '72px 72px',
-      // INTEGRATION SMOKE-TEST: mask-image must render in headless Chromium.
-      // If it silently fails, fall back to a plain grid with no mask.
       WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 10%, black 88%, transparent)',
       maskImage: 'linear-gradient(to bottom, transparent, black 10%, black 88%, transparent)',
     }}
@@ -71,7 +67,7 @@ const Kicker: React.FC<{children: React.ReactNode}> = ({children}) => (
       borderRadius: 8,
       background: 'rgba(255,255,255,.76)',
       color: MUTED,
-      fontSize: 28,
+      fontSize: 30,
       fontWeight: 800,
       alignSelf: 'flex-start',
     }}
@@ -81,25 +77,53 @@ const Kicker: React.FC<{children: React.ReactNode}> = ({children}) => (
   </div>
 );
 
+const Title: React.FC<{children: React.ReactNode; size?: number}> = ({children, size = 80}) => (
+  <div style={{fontSize: size, lineHeight: 1.1, fontWeight: 900, marginTop: 30}}>{children}</div>
+);
+
+const Sub: React.FC<{children: React.ReactNode; style?: React.CSSProperties}> = ({children, style}) => (
+  <div style={{fontSize: 34, lineHeight: 1.45, color: MUTED, fontWeight: 700, marginTop: 22, ...style}}>{children}</div>
+);
+
+/** A takeaway pill that appears once the chart has landed. */
+const Takeaway: React.FC<{p: number; color: string; children: React.ReactNode}> = ({p, color, children}) => (
+  <div
+    style={{
+      alignSelf: 'flex-start',
+      marginTop: 40,
+      padding: '18px 30px',
+      borderRadius: 999,
+      background: `${color}1F`,
+      border: `3px solid ${color}`,
+      fontSize: 38,
+      fontWeight: 900,
+      opacity: p,
+      transform: `translateY(${(1 - p) * 24}px)`,
+    }}
+  >
+    {children}
+  </div>
+);
+
 const SceneShell: React.FC<{
   frame: number;
   start: number;
   end: number;
   children: React.ReactNode;
-  style?: React.CSSProperties;
-}> = ({frame, start, end, children, style}) => {
+  center?: boolean;
+}> = ({frame, start, end, children, center = false}) => {
   const opacity = sceneOpacity(frame, start, end);
   return (
     <div
       style={{
         position: 'absolute',
         inset: 0,
-        padding: '72px 64px 112px',
+        padding: '96px 64px 140px',
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: center ? 'center' : 'flex-start',
         opacity,
         visibility: opacity > 0 ? 'visible' : 'hidden',
-        ...style,
       }}
     >
       {children}
@@ -107,248 +131,194 @@ const SceneShell: React.FC<{
   );
 };
 
-/* ---------------- Scene 1: intro (0–150) ---------------- */
+/** 500 squares, one per company, filled in order. */
+const COLS = 25;
+const Waffle: React.FC<{local: number; colors: string[]; dim?: (i: number) => boolean; dimP?: number}> = ({local, colors, dim, dimP = 0}) => (
+  <div style={{display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gap: 7, marginTop: 44}}>
+    {colors.map((c, i) => {
+      const e = enterAt(local, (i / colors.length) * 40, 12);
+      return (
+        <div
+          key={i}
+          style={{
+            aspectRatio: '1/1',
+            borderRadius: 4,
+            background: c,
+            opacity: e * (dim?.(i) ? 1 - dimP * 0.75 : 1),
+            transform: `scale(${0.4 + e * 0.6})`,
+          }}
+        />
+      );
+    })}
+  </div>
+);
+
+const expand = (groups: {count: number; color: string}[]) => groups.flatMap((g) => Array(g.count).fill(g.color) as string[]);
+
+/* ---------------- Scene 1: intro ---------------- */
 const IntroScene: React.FC<{frame: number}> = ({frame}) => {
   const enter = enterAt(frame, 0, 36);
+  const count = interpolate(frame, [10, 60], [30, TOTALS.revenueTrillion], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const metrics = [
+    {label: '总收入', value: `$${TOTALS.revenueTrillion}万亿`, accent: '#2563EB'},
+    {label: '总利润', value: `$${TOTALS.profitTrillion}万亿`, accent: '#10B981'},
+    {label: '员工', value: `${(TOTALS.employeesMillion * 100).toLocaleString('en-US')}万`, accent: '#F59E0B'},
+    {label: '女性 CEO', value: `${TOTALS.womenCeos} 位`, accent: '#EC4899'},
+  ];
   return (
-    <SceneShell frame={frame} start={SCENES[0].start} end={SCENES[0].end} style={{paddingTop: 82}}>
-      <Kicker>2025 财富世界500强</Kicker>
-      <div style={{marginTop: 146, opacity: enter, transform: `translateY(${(1 - enter) * 76}px)`}}>
-        <div style={{fontSize: 116, lineHeight: 1.02, fontWeight: 950}}>
+    <SceneShell frame={frame} start={SCENES[0].start} end={SCENES[0].end}>
+      <Kicker>2025《财富》世界500强</Kicker>
+      <div style={{marginTop: 140, opacity: enter, transform: `translateY(${(1 - enter) * 76}px)`}}>
+        <div style={{fontSize: 120, lineHeight: 1.04, fontWeight: 900}}>
           谁在驱动全球
           <br />
-          <span style={{color: '#2563EB'}}>41.7 万亿美元</span>
+          <span style={{color: '#2563EB'}}>{count.toFixed(1)} 万亿美元</span>
         </div>
-        <div style={{marginTop: 42, width: 820, fontSize: 40, lineHeight: 1.48, color: MUTED, fontWeight: 700}}>
-          从收入冠军到国家版图，快速看懂世界最大企业的权力结构。
-        </div>
+        <Sub style={{marginTop: 40, fontSize: 40}}>500 家最大企业的合计收入。<br />从冠军、国家到行业，看懂这份榜单。</Sub>
       </div>
-      <div style={{marginTop: 'auto', display: 'grid', gap: 24}}>
-        {[
-          {label: '总收入', value: '$41.7万亿', accent: '#2563EB'},
-          {label: '覆盖员工', value: '约7,000万', accent: '#10B981'},
-          {label: '女性CEO', value: '32位', accent: '#EC4899'},
-        ].map((m) => (
-          <div
-            key={m.label}
-            style={{
-              borderTop: `8px solid ${m.accent}`,
-              padding: '24px 28px',
-              background: 'rgba(255,255,255,.82)',
-              boxShadow: '0 22px 70px rgba(15,23,42,.10)',
-            }}
-          >
-            <div style={{fontSize: 28, color: MUTED, fontWeight: 800}}>{m.label}</div>
-            <div style={{fontSize: 60, fontWeight: 950, marginTop: 8}}>{m.value}</div>
-          </div>
-        ))}
+      <div style={{marginTop: 'auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24}}>
+        {metrics.map((m, i) => {
+          const e = enterAt(frame, 30 + i * 8, 24);
+          return (
+            <div key={m.label} style={{borderTop: `8px solid ${m.accent}`, padding: '28px 30px', background: 'rgba(255,255,255,.86)', boxShadow: '0 22px 70px rgba(15,23,42,.10)', opacity: e, transform: `translateY(${(1 - e) * 30}px)`}}>
+              <div style={{fontSize: 30, color: MUTED, fontWeight: 800}}>{m.label}</div>
+              <div style={{fontSize: 62, fontWeight: 900, marginTop: 8}}>{m.value}</div>
+            </div>
+          );
+        })}
       </div>
     </SceneShell>
   );
 };
 
-/* ---------------- Scene 2: revenue Top 10 bars (120–330) ---------------- */
+/* ---------------- Scene 2: revenue Top 10 ---------------- */
 const TopbarsScene: React.FC<{frame: number}> = ({frame}) => {
-  const local = frame - 130;
+  const local = frame - SCENES[1].start;
+  const focus = enterAt(local, 170, 24);
+  const byCountry = (c: string) => COMPANIES.filter((x) => x.country === c).length;
   return (
     <SceneShell frame={frame} start={SCENES[1].start} end={SCENES[1].end}>
       <Kicker>收入排行 Top 10</Kicker>
-      <div style={{fontSize: 72, lineHeight: 1.08, fontWeight: 950, marginTop: 30}}>
-        沃尔玛继续领跑，
-        <br />
-        科技与能源贴身追赶
-      </div>
-      <div style={{fontSize: 24, color: MUTED, fontWeight: 800, marginTop: 18}}>单位：百万美元</div>
-      <div style={{marginTop: 52, display: 'grid', gap: 20}}>
+      <Title>沃尔玛连续 {TOTALS.walmartStreak} 年<br />位居榜首</Title>
+      <Sub>2024 财年营业收入（美元）</Sub>
+      <div style={{marginTop: 44, display: 'grid', gap: 22}}>
         {COMPANIES.map((item, i) => {
-          const enter = enterAt(local, i * 4, 30);
+          const enter = enterAt(local, 20 + i * 5, 30);
           return (
-            <div
-              key={item.rank}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '62px 1fr 132px',
-                gap: 18,
-                alignItems: 'center',
-                opacity: enter,
-                transform: `translateX(${(1 - enter) * -60}px)`,
-              }}
-            >
-              <div
-                style={{
-                  width: 54,
-                  height: 54,
-                  display: 'grid',
-                  placeItems: 'center',
-                  color: INK,
-                  fontSize: 27,
-                  fontWeight: 950,
-                  background: '#E2E8F0',
-                  borderLeft: `8px solid ${item.color}`,
-                }}
-              >
-                {item.rank}
-              </div>
+            <div key={item.rank} style={{display: 'grid', gridTemplateColumns: '62px 1fr 190px', gap: 18, alignItems: 'center', opacity: enter, transform: `translateX(${(1 - enter) * -60}px)`}}>
+              <div style={{width: 58, height: 58, display: 'grid', placeItems: 'center', fontSize: 28, fontWeight: 900, background: '#E2E8F0', borderLeft: `8px solid ${item.color}`}}>{item.rank}</div>
               <div>
-                <div style={{display: 'flex', justifyContent: 'space-between', gap: 20}}>
-                  <div style={{fontSize: 31, fontWeight: 950}}>{item.nameZh}</div>
-                  <div style={{fontSize: 26, color: MUTED, fontWeight: 850}}>{item.country}</div>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline'}}>
+                  <div style={{fontSize: 36, fontWeight: 900}}>{item.nameZh}</div>
+                  <div style={{fontSize: 26, color: item.color, fontWeight: 900}}>{item.country}</div>
                 </div>
-                <div style={{height: 35, background: 'rgba(15,23,42,.08)', marginTop: 9, overflow: 'hidden'}}>
-                  <div
-                    style={{
-                      height: '100%',
-                      width: `${enter * (item.revenue / MAX_REVENUE) * 100}%`,
-                      background: `linear-gradient(90deg, ${item.color}, ${item.color}B8)`,
-                    }}
-                  />
+                <div style={{height: 34, background: 'rgba(15,23,42,.08)', marginTop: 8, overflow: 'hidden'}}>
+                  <div style={{height: '100%', width: `${enter * (item.revenue / MAX_REVENUE) * 100}%`, background: `linear-gradient(90deg, ${item.color}, ${item.color}B8)`}} />
                 </div>
               </div>
-              <div style={{fontSize: 28, fontWeight: 950, textAlign: 'right'}}>{formatRevenue(item.revenue)}</div>
+              <div style={{fontSize: 34, fontWeight: 900, textAlign: 'right', fontVariantNumeric: 'tabular-nums'}}>{yi(item.revenue)}</div>
             </div>
           );
         })}
       </div>
+      <Takeaway p={focus} color="#2563EB">
+        前十：美国 {byCountry('美国')} 家 · 中国 {byCountry('中国')} 家 · 沙特 {byCountry('沙特')} 家
+      </Takeaway>
     </SceneShell>
   );
 };
 
-/* ---------------- Scene 3: country distribution (300–500) ---------------- */
+/* ---------------- Scene 3: country split ---------------- */
 const CountryScene: React.FC<{frame: number}> = ({frame}) => {
-  const local = frame - 290;
+  const local = frame - SCENES[2].start;
+  const focus = enterAt(local, 110, 24);
   return (
-    <SceneShell frame={frame} start={SCENES[2].start} end={SCENES[2].end} style={{paddingTop: 58}}>
+    <SceneShell frame={frame} start={SCENES[2].start} end={SCENES[2].end}>
       <Kicker>国家与地区分布</Kicker>
-      <div style={{fontSize: 72, lineHeight: 1.08, fontWeight: 950, marginTop: 30}}>
-        美国 138 家，
-        <br />
-        中国 130 家。
-      </div>
-      <div style={{fontSize: 28, lineHeight: 1.42, color: MUTED, marginTop: 22}}>
-        两个最大经济体合计占据榜单过半席位，收入结构也开始呈现更分散的多极格局。
-      </div>
-      <div style={{height: 68, display: 'flex', overflow: 'hidden', marginTop: 38}}>
-        {COUNTRY_COUNTS.map((item, i) => {
-          const enter = enterAt(local, i * 8, 30);
+      <Title>美国 138 家，<br />中国 130 家</Title>
+      <Sub>每个方块代表一家上榜公司</Sub>
+      <Waffle local={local - 15} colors={expand(COUNTRY_SPLIT)} dim={(i) => i >= 268} dimP={focus} />
+      <div style={{display: 'grid', gap: 18, marginTop: 44}}>
+        {COUNTRY_SPLIT.map((c, i) => {
+          const e = enterAt(local, 40 + i * 10, 24);
           return (
-            <div
-              key={item.country}
-              style={{width: `${enter * (item.count / COUNTRY_TOTAL) * 100}%`, background: item.color, height: '100%'}}
-            />
-          );
-        })}
-      </div>
-      <div style={{display: 'grid', gap: 22, marginTop: 44}}>
-        {COUNTRY_COUNTS.map((item, i) => {
-          const enter = enterAt(local, i * 8, 30);
-          return (
-            <div key={item.country} style={{opacity: enter, transform: `translateY(${(1 - enter) * 36}px)`}}>
-              <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <div style={{fontSize: 32, fontWeight: 950}}>{item.country}</div>
-                <div style={{fontSize: 36, fontWeight: 950}}>{Math.round(item.count * enter)}</div>
-              </div>
-              <div style={{height: 30, background: 'rgba(15,23,42,.08)', marginTop: 10}}>
-                <div
-                  style={{
-                    height: '100%',
-                    width: `${enter * (item.count / MAX_COUNTRY) * 100}%`,
-                    background: item.color,
-                  }}
-                />
-              </div>
+            <div key={c.name} style={{display: 'flex', alignItems: 'center', gap: 18, opacity: e}}>
+              <span style={{width: 30, height: 30, borderRadius: 6, background: c.color}} />
+              <span style={{fontSize: 38, fontWeight: 900, flex: 1}}>{c.name}{c.note && <span style={{fontSize: 26, color: MUTED, fontWeight: 700}}>（{c.note}）</span>}</span>
+              <span style={{fontSize: 44, fontWeight: 900}}>{c.count}</span>
             </div>
           );
         })}
       </div>
+      <Takeaway p={focus} color="#EF4444">两国合计 268 家，占榜单 54%</Takeaway>
     </SceneShell>
   );
 };
 
-/* ---------------- Scene 4: industry mix (470–650) ---------------- */
+/* ---------------- Scene 4: sectors ---------------- */
 const IndustryScene: React.FC<{frame: number}> = ({frame}) => {
-  const local = frame - 470;
+  const local = frame - SCENES[3].start;
+  const focus = enterAt(local, 110, 24);
+  const big5 = SECTORS.reduce((s, x) => s + x.count, 0);
   return (
     <SceneShell frame={frame} start={SCENES[3].start} end={SCENES[3].end}>
       <Kicker>行业结构</Kicker>
-      <div style={{fontSize: 70, lineHeight: 1.12, fontWeight: 950, marginTop: 34}}>
-        资本密集型产业仍是底盘，科技贡献最高利润弹性
-      </div>
-      <div style={{marginTop: 36, display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: 10}}>
-        {Array.from({length: DOT_COUNT}).map((_, d) => {
-          const enter = enterAt(local, d * 0.6, 30);
-          const bucket = INDUSTRY_MIX[d % INDUSTRY_MIX.length];
+      <Title>五大行业，<br />撑起六成席位</Title>
+      <Sub>按上榜公司数量排序的前五个行业</Sub>
+      <Waffle local={local - 15} colors={[...expand(SECTORS), ...Array(SECTOR_OTHER).fill(GREY)]} />
+      <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 40px', marginTop: 40}}>
+        {SECTORS.map((x, i) => {
+          const e = enterAt(local, 40 + i * 8, 24);
           return (
-            <div
-              key={d}
-              style={{
-                aspectRatio: '1/1',
-                background: bucket.color,
-                opacity: 0.18 + enter * 0.72,
-                transform: `scale(${0.28 + enter * 0.72})`,
-              }}
-            />
-          );
-        })}
-      </div>
-      <div style={{display: 'grid', gap: 18, marginTop: 36}}>
-        {INDUSTRY_MIX.map((item, i) => {
-          const enter = enterAt(local, i * 9, 30);
-          return (
-            <div key={item.name} style={{opacity: enter, transform: `translateY(${(1 - enter) * 36}px)`}}>
-              <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <div style={{fontSize: 30, fontWeight: 950}}>{item.name}</div>
-                <div style={{fontSize: 23, color: MUTED, fontWeight: 850}}>{item.label}</div>
-              </div>
-              <div style={{height: 24, background: 'rgba(15,23,42,.08)', marginTop: 8, overflow: 'hidden'}}>
-                <div
-                  style={{
-                    height: '100%',
-                    width: `${enter * (item.value / MAX_INDUSTRY) * 100}%`,
-                    background: item.color,
-                  }}
-                />
-              </div>
+            <div key={x.name} style={{display: 'flex', alignItems: 'center', gap: 14, opacity: e}}>
+              <span style={{width: 28, height: 28, borderRadius: 6, background: x.color}} />
+              <span style={{fontSize: 34, fontWeight: 900, flex: 1}}>{x.name}</span>
+              <span style={{fontSize: 40, fontWeight: 900}}>{x.count}</span>
             </div>
           );
         })}
       </div>
+      <Takeaway p={focus} color="#8B5CF6">合计 {big5} 家，贡献约三分之二收入</Takeaway>
     </SceneShell>
   );
 };
 
-/* ---------------- Scene 5: profit leaders (620–780) ---------------- */
+/* ---------------- Scene 5: profit ---------------- */
 const ProfitScene: React.FC<{frame: number}> = ({frame}) => {
-  const local = frame - 640;
+  const local = frame - SCENES[4].start;
+  const walmart = COMPANIES[0];
+  const maxProfit = PROFIT_LEADERS[0].profit;
+  const compare = enterAt(local, 20, 26);
   return (
-    <SceneShell frame={frame} start={SCENES[4].start} end={SCENES[4].end}>
+    <SceneShell frame={frame} start={SCENES[4].start} end={SCENES[4].end} center>
       <Kicker>利润视角</Kicker>
-      <div style={{fontSize: 82, lineHeight: 1.08, fontWeight: 950, marginTop: 42}}>
-        收入第一，
-        <br />
-        不一定利润第一。
+      <Title size={86}>收入第一，<br />不一定利润第一</Title>
+      <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginTop: 56, opacity: compare, transform: `translateY(${(1 - compare) * 30}px)`}}>
+        {[
+          {tag: '收入第 1', name: walmart.nameZh, value: yi(walmart.profit), color: '#2563EB'},
+          {tag: '利润第 1', name: PROFIT_LEADERS[0].nameZh, value: yi(PROFIT_LEADERS[0].profit), color: '#10B981'},
+        ].map((c) => (
+          <div key={c.tag} style={{padding: '30px 30px', background: 'rgba(255,255,255,.9)', borderTop: `8px solid ${c.color}`, boxShadow: '0 20px 64px rgba(15,23,42,.10)'}}>
+            <div style={{fontSize: 30, color: c.color, fontWeight: 900}}>{c.tag}</div>
+            <div style={{fontSize: 44, fontWeight: 900, marginTop: 12}}>{c.name}</div>
+            <div style={{fontSize: 28, color: MUTED, fontWeight: 800, marginTop: 18}}>净利润</div>
+            <div style={{fontSize: 60, fontWeight: 900}}>${c.value}</div>
+          </div>
+        ))}
       </div>
-      <div style={{fontSize: 32, lineHeight: 1.48, color: MUTED, marginTop: 32}}>
-        资源、硬件生态、资本配置与平台规模，构成了完全不同的盈利模型。
-      </div>
-      <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24, marginTop: 66}}>
-        {PROFIT_LEADERS.map((item, i) => {
-          const enter = enterAt(local, i * 12, 30);
+      <Sub style={{marginTop: 56}}>利润最高的四家公司（美元）</Sub>
+      <div style={{display: 'grid', gap: 22, marginTop: 24}}>
+        {PROFIT_LEADERS.map((p, i) => {
+          const e = enterAt(local, 60 + i * 10, 28);
           return (
-            <div
-              key={item.nameEn}
-              style={{
-                minHeight: 255,
-                padding: 24,
-                background: 'rgba(255,255,255,.84)',
-                boxShadow: '0 20px 64px rgba(15,23,42,.10)',
-                borderTop: `8px solid ${item.color}`,
-                opacity: enter,
-                transform: `translateY(${(1 - enter) * 44}px)`,
-              }}
-            >
-              <div style={{fontSize: 28, color: MUTED, fontWeight: 850}}>#{i + 1} 利润</div>
-              <div style={{fontSize: 40, fontWeight: 950, marginTop: 22}}>{item.nameZh}</div>
-              <div style={{fontSize: 48, fontWeight: 950, marginTop: 30}}>{formatProfit(item.profit)}</div>
+            <div key={p.nameZh} style={{opacity: e}}>
+              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline'}}>
+                <span style={{fontSize: 36, fontWeight: 900}}>{i + 1}. {p.nameZh}</span>
+                <span style={{fontSize: 36, fontWeight: 900, fontVariantNumeric: 'tabular-nums'}}>{yi(p.profit)}</span>
+              </div>
+              <div style={{height: 30, background: 'rgba(15,23,42,.08)', marginTop: 8}}>
+                <div style={{height: '100%', width: `${e * (p.profit / maxProfit) * 100}%`, background: p.color}} />
+              </div>
             </div>
           );
         })}
@@ -357,47 +327,34 @@ const ProfitScene: React.FC<{frame: number}> = ({frame}) => {
   );
 };
 
-/* ---------------- Scene 6: outro (748–870) ---------------- */
+/* ---------------- Scene 6: outro ---------------- */
 const OutroScene: React.FC<{frame: number}> = ({frame}) => {
-  const local = frame - 760;
-  const reveal = enterAt(local, 0, 24);
-  const lineW = interpolate(local, [12, 34], [0, 100], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  const local = frame - SCENES[5].start;
+  const reveal = enterAt(local, 10, 24);
+  const lineW = interpolate(local, [22, 44], [0, 100], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const facts = [
+    `500 家公司 · ${TOTALS.countries} 个国家和地区`,
+    `${TOTALS.revenueTrillion} 万亿美元收入`,
+    `${TOTALS.profitTrillion} 万亿美元利润`,
+  ];
   return (
-    <SceneShell frame={frame} start={SCENES[5].start} end={SCENES[5].end} style={{paddingTop: 82}}>
-      <div style={{marginTop: 130, opacity: reveal, transform: `translateY(${(1 - reveal) * 54}px)`}}>
+    <SceneShell frame={frame} start={SCENES[5].start} end={SCENES[5].end} center>
+      <div style={{opacity: reveal, transform: `translateY(${(1 - reveal) * 54}px)`}}>
         <Kicker>可视化结论</Kicker>
-        <div style={{fontSize: 90, lineHeight: 1.1, fontWeight: 950, marginTop: 58}}>
+        <div style={{fontSize: 96, lineHeight: 1.12, fontWeight: 900, marginTop: 56}}>
           世界500强，
           <br />
-          是全球供应链、
+          全球经济的
           <br />
-          能源、金融与科技的年度体检。
+          年度体检表。
         </div>
-        <div
-          style={{
-            height: 12,
-            marginTop: 58,
-            width: `${lineW}%`,
-            background: 'linear-gradient(90deg, #2563EB, #10B981, #F59E0B)',
-          }}
-        />
-        <div
-          style={{
-            marginTop: 58,
-            display: 'grid',
-            gap: 20,
-            fontSize: 38,
-            color: MUTED,
-            fontWeight: 850,
-          }}
-        >
-          <span>500 家公司</span>
-          <span>291 家国有企业</span>
-          <span>41.7 万亿美元收入</span>
+        <div style={{height: 12, marginTop: 56, width: `${lineW}%`, background: 'linear-gradient(90deg, #2563EB, #10B981, #F59E0B)'}} />
+        <div style={{marginTop: 56, display: 'grid', gap: 24, fontSize: 46, fontWeight: 900}}>
+          {facts.map((f, i) => (
+            <span key={f} style={{opacity: enterAt(local, 34 + i * 8, 20)}}>{f}</span>
+          ))}
         </div>
+        <div style={{marginTop: 64, fontSize: 26, color: MUTED, fontWeight: 700}}>数据：《财富》2025 年世界500强（按 2024 财年收入排名）</div>
       </div>
     </SceneShell>
   );
@@ -407,13 +364,7 @@ export const Top500: React.FC = () => {
   const frame = useCurrentFrame();
   const progress = (frame / DURATION_IN_FRAMES) * 100;
   return (
-    <AbsoluteFill
-      style={{
-        backgroundColor: '#F8FAFC',
-        fontFamily,
-        color: INK,
-      }}
-    >
+    <AbsoluteFill style={{backgroundColor: '#F8FAFC', fontFamily, color: INK}}>
       <BgGrid />
       <IntroScene frame={frame} />
       <TopbarsScene frame={frame} />
@@ -421,18 +372,10 @@ export const Top500: React.FC = () => {
       <IndustryScene frame={frame} />
       <ProfitScene frame={frame} />
       <OutroScene frame={frame} />
-      <div
-        style={{
-          position: 'absolute',
-          left: 64,
-          right: 64,
-          bottom: 48,
-          height: 7,
-          background: 'rgba(15,23,42,.12)',
-        }}
-      >
+      <div style={{position: 'absolute', left: 64, right: 64, bottom: 48, height: 7, background: 'rgba(15,23,42,.12)'}}>
         <div style={{height: '100%', background: INK, width: `${progress}%`}} />
       </div>
     </AbsoluteFill>
   );
 };
+
