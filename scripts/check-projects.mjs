@@ -10,6 +10,13 @@ const concurrency = Math.min(3, entries.length);
 // 0.2 秒静音 MP3：旁白未生成时给 HyperFrames 检查用的占位文件
 const SILENT_MP3 = Buffer.from('SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMAAAAAAAAAAAAAAA//NwwAAAAAAAAAAAAEluZm8AAAAPAAAACgAAAsEAVFRUVFRUVFRUaGhoaGhoaGhoaHt7e3t7e3t7e3uNjY2NjY2NjY2NoKCgoKCgoKCgoLS0tLS0tLS0tLTGxsbGxsbGxsbG2dnZ2dnZ2dnZ2ezs7Ozs7Ozs7Oz/////////////AAAAAExhdmM2MC4zMQAAAAAAAAAAAAAAACQDBgAAAAAAAALBumiUJQAAAAAAAAAAAAAAAAD/8yDEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVMQU1FMy4xMDBVVVVVVVVVVVVV//MixCcAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuMTAwVVVVVVVVVVVVVVX/8yDETwAAA0gAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVV//MgxHYAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuMTAwVVVVVVVVVVVVVf/zIMSdAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/8yLExAAAA0gAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zIMTYAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/8yDE2AAAA0gAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//MgxNgAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zIsTXAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV', 'base64');
 
+// 占位内容需与真实文件的 JSON 形状一致，tsc 才能通过类型检查
+const fixtureContent = (file) => {
+  if (file.endsWith('.mp3')) return SILENT_MP3;
+  if (file.endsWith('word-marks.json')) return '[[]]\n';
+  return '[1]\n';
+};
+
 const checkProject = async ([key, project]) => {
   const projectDir = path.join(root, project.path);
   const timingCandidates = ['src/timing.ts', 'src/cues.ts'];
@@ -17,10 +24,9 @@ const checkProject = async ([key, project]) => {
     const sourcePath = path.join(projectDir, candidate);
     if (!existsSync(sourcePath)) return [];
     const source = readFileSync(sourcePath, 'utf8');
-    const match = source.match(/from ['"](\.\.\/public\/voiceover\/[^'"]+\.json)['"]/);
-    if (!match) return [];
-    const generatedPath = path.resolve(path.dirname(sourcePath), match[1]);
-    return existsSync(generatedPath) ? [] : [generatedPath];
+    return [...source.matchAll(/from ['"](\.\.\/public\/voiceover\/[^'"]+\.json)['"]/g)]
+      .map((match) => path.resolve(path.dirname(sourcePath), match[1]))
+      .filter((generatedPath) => !existsSync(generatedPath));
   }))];
   if (project.framework === 'hyperframes') {
     const html = readFileSync(path.join(projectDir, 'index.html'), 'utf8');
@@ -32,7 +38,7 @@ const checkProject = async ([key, project]) => {
 
   const output = [];
   try {
-    for (const fixture of generatedFixtures) writeFileSync(fixture, fixture.endsWith('.mp3') ? SILENT_MP3 : '[1]\n');
+    for (const fixture of generatedFixtures) writeFileSync(fixture, fixtureContent(fixture));
     const status = await new Promise((resolve, reject) => {
       const child = spawn('npm', ['run', 'check'], {cwd: projectDir, stdio: ['ignore', 'pipe', 'pipe']});
       child.stdout.on('data', (chunk) => output.push(chunk));
