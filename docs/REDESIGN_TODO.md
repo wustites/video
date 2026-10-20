@@ -12,14 +12,15 @@
 
 - [x] **场景转场重影**：前后场景的标题在同一位置同时淡入淡出，中间帧文字叠在一起。见 top500 16 秒、openrouter_rankings 25 秒、southern_kurils_jp 49 秒。三者都改为先出后进；`@video/core` 的 `sceneOpacityAt` 一并修改，red_army_jp、imperial_house_law_jp 下次发版时生效（`top500-1.0.1`、`openrouter_rankings-1.0.1-*`、`southern_kurils_jp-1.0.1`）。
 - [ ] **openrouter_rankings**：环形图中心“73.9万亿”折行，“亿”掉到下一行。
-- [ ] **ai_model_rankings**：19 秒“速度 vs 智能”散点图的点和标签全挤在左上角，坐标比例有问题。
+- [x] **ai_model_rankings**：19 秒“速度 vs 智能”散点图的点和标签全挤在左上角，坐标比例有问题。坐标轴改为按数据范围取整并加刻度网格，重合的点合并标签，标签做碰撞避让；图表加高；转场也改为先出后进（`ai_model_rankings-1.0.1-*`）。
+- [ ] **ai_model_rankings**：前 15 名列表的第 15 行贴着底部进度条。
 - [ ] **无声视频**：ai_model_rankings、openrouter_rankings、kakeya_conjecture、population_cn、qs_universities、top500 的音轨为空（−70 LUFS）。加背景音乐或旁白。
 - [ ] **响度不统一**：各视频从 −16.5 到 −23.2 LUFS 不等。在发布流程中加响度归一化（目标约 −14 LUFS），cloudflare_history（−20.2）和 brexit_referendum（−21.4）偏小。
 
 ## 较轻
 
 - [ ] **竖屏正文字号偏小**（约 20–26px）：brexit_referendum、japan_economy、qs_universities、population_cn、red_army_jp。
-- [ ] **画面下半部分空**：brexit_referendum、ai_model_rankings 内容集中在上方约 55%。
+- [ ] **画面下半部分空**：brexit_referendum、ai_model_rankings 内容集中在上方约 55%（ai_model_rankings 散点图场景已加高，其余场景未处理）。
 - [ ] **长时间静止**：brexit_referendum 128 秒中约 94 秒几乎不动；japan_economy、red_army_jp 也超过 60 秒。
 - [ ] **shandong_universities**：30 秒东营地图左上角有一条多余的直线。
 - [ ] **southern_kurils_jp**：开场岛屿图形被裁掉一半。

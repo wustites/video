@@ -17,7 +17,6 @@ const SCENES = [
   {start: 1530, end: 1800},
 ] as const;
 
-const FADE = 18;
 const TOP_SCORE = MODELS[0].score;
 const TIER_MAX = Math.max(...TIER_COUNTS);
 const PROVIDER_MAX = Math.max(...PROVIDER_COUNTS.map((p) => p.count));
@@ -28,13 +27,14 @@ const prog = (frame: number, start: number, len: number) =>
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
+/** Scenes overlap by 30 frames: fade out in the first half of the overlap
+ * and in during the second half, so two titles are never visible together. */
+const HALF_OVERLAP = 15;
+const LAST_FRAME = SCENES[SCENES.length - 1].end;
 const sceneOpacity = (frame: number, start: number, end: number) =>
   Math.min(
-    prog(frame, start, FADE),
-    interpolate(frame, [end - FADE, end], [1, 0], {
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-    }),
+    start === 0 ? 1 : prog(frame, start + HALF_OVERLAP, HALF_OVERLAP),
+    end >= LAST_FRAME ? 1 : 1 - prog(frame, end - 2 * HALF_OVERLAP, HALF_OVERLAP),
   );
 
 const CSS = `
@@ -204,25 +204,45 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
         <Kicker text={s.scatter.kicker} />
         <div className="scene-title">{s.scatter.title}</div>
         <div className="scene-subtitle small">{s.scatter.subtitle}</div>
-        <div className="scatter-container" style={{width: SCATTER_W, height: SCATTER_H, flex: '0 0 auto'}}>
+        <div className="scatter-container" style={{width: SCATTER_W, height: SCATTER_H, flex: '0 0 auto', marginTop: 72}}>
           <div style={{position: 'absolute', inset: 0}}>
+            {SCATTER_POS.yTicks.map((t) => (
+              <React.Fragment key={`y${t.value}`}>
+                <div style={{position: 'absolute', left: 0, right: 0, top: t.pos, height: 1, background: 'rgba(248,250,252,.07)'}} />
+                <div style={{position: 'absolute', left: -14, top: t.pos, transform: 'translate(-100%,-50%)', fontSize: 16, color: '#64748B', fontWeight: 600}}>{t.value}</div>
+              </React.Fragment>
+            ))}
+            {SCATTER_POS.xTicks.map((t) => (
+              <React.Fragment key={`x${t.value}`}>
+                <div style={{position: 'absolute', top: 0, bottom: 0, left: t.pos, width: 1, background: 'rgba(248,250,252,.07)'}} />
+                <div style={{position: 'absolute', bottom: -10, left: t.pos, transform: 'translate(-50%,100%)', fontSize: 16, color: '#64748B', fontWeight: 600}}>{t.value}</div>
+              </React.Fragment>
+            ))}
             <div style={{position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: 'rgba(248,250,252,.2)'}} />
             <div style={{position: 'absolute', top: 0, bottom: 0, left: 0, width: 2, background: 'rgba(248,250,252,.2)'}} />
-            <div style={{position: 'absolute', bottom: -32, left: '50%', transform: 'translateX(-50%)', fontSize: 20, color: '#94A3B8', fontWeight: 600}}>{s.scatter.xAxis}</div>
-            <div style={{position: 'absolute', left: -48, top: '50%', transform: 'rotate(-90deg) translateX(-50%)', fontSize: 20, color: '#94A3B8', fontWeight: 600, whiteSpace: 'nowrap'}}>{s.scatter.yAxis}</div>
+            <div style={{position: 'absolute', bottom: -60, left: '50%', transform: 'translateX(-50%)', fontSize: 20, color: '#94A3B8', fontWeight: 600}}>{s.scatter.xAxis}</div>
+            <div style={{position: 'absolute', left: 0, top: -40, fontSize: 20, color: '#94A3B8', fontWeight: 600, whiteSpace: 'nowrap'}}>{s.scatter.yAxis}</div>
           </div>
           {SCATTER_POINTS.map((item, i) => {
             const enter = prog(scatterLocal - i * 6, 0, 30);
-            const {x, y, labelLeft, labelWidth, labelOnLeft} = SCATTER_POS[i];
+            const {x, y, labelLeft, labelWidth, labelOnLeft, labelY, label, hidden} = SCATTER_POS[i];
+            if (hidden) return null;
+            const labelEdge = labelOnLeft ? labelLeft + labelWidth : labelLeft;
+            const moved = Math.abs(labelY - y) > 2;
             return (
               <React.Fragment key={`${item.name}-${i}`}>
+                {moved && (
+                  <svg style={{position: 'absolute', left: 0, top: 0, overflow: 'visible', opacity: enter * 0.5}} width={1} height={1}>
+                    <line x1={x + (labelOnLeft ? -12 : 12)} y1={y} x2={labelEdge + (labelOnLeft ? 4 : -4)} y2={labelY} stroke={item.color} strokeWidth={1.5} />
+                  </svg>
+                )}
                 <div className="scatter-dot" style={{left: x, top: y, width: 24, height: 24, background: item.color, opacity: enter * 0.85, transform: `translate(-50%,-50%) scale(${enter})`}} />
-                <div className="scatter-label" style={{left: labelLeft, top: y - 8, width: labelWidth, textAlign: labelOnLeft ? 'right' : 'left', whiteSpace: 'normal', overflowWrap: 'anywhere', color: item.color, opacity: enter}}>{item.name}</div>
+                <div className="scatter-label" style={{left: labelLeft, top: labelY, width: labelWidth, transform: 'translateY(-50%)', textAlign: labelOnLeft ? 'right' : 'left', color: item.color, opacity: enter}}>{label}</div>
               </React.Fragment>
             );
           })}
         </div>
-        <div className="legend">
+        <div className="legend" style={{marginTop: 88}}>
           {[...legendSeen.entries()].map(([name, color]) => (
             <div key={name} className="legend-item">
               <div className="legend-dot" style={{background: color}} />
