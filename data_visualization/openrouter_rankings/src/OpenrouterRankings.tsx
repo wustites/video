@@ -14,9 +14,13 @@ const SCENES = [
   {start: 1050, end: 1350},
 ];
 
+/** Scenes overlap by 30 frames: fade out in the first half, fade in in the
+ * second half, so two titles are never visible at the same time. */
+const HALF_OVERLAP = 15;
+const LAST_FRAME = SCENES[SCENES.length - 1].end;
 function sceneOpacity(frame: number, start: number, end: number): number {
-  const fadeIn = interpolate(frame, [start, start + 18], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const fadeOut = interpolate(frame, [end - 18, end], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const fadeIn = start === 0 ? 1 : interpolate(frame, [start + HALF_OVERLAP, start + 2 * HALF_OVERLAP], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const fadeOut = end >= LAST_FRAME ? 1 : interpolate(frame, [end - 2 * HALF_OVERLAP, end - HALF_OVERLAP], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return Math.min(fadeIn, fadeOut);
 }
 

@@ -32,7 +32,14 @@ export const createRemotionTimeline = <Id extends string>(
     ...timeline,
     sceneById: scene,
     useSceneProgress: (id: Id) => sceneProgressAt(scene(id), useTime()),
-    useSceneOpacity: (id: Id) => sceneOpacityAt(scene(id), useTime(), fadeSeconds),
+    useSceneOpacity: (id: Id) => {
+      const value = scene(id);
+      const index = timeline.scenes.indexOf(value);
+      return sceneOpacityAt(value, useTime(), fadeSeconds, {
+        fadeIn: index > 0,
+        fadeOut: index < timeline.scenes.length - 1,
+      });
+    },
     useEntrance: (id: Id, offset = 0, duration = 0.65) =>
       entranceAt(scene(id), useTime(), offset, duration, entranceDistance, entranceScale),
   };

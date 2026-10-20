@@ -10,7 +10,8 @@
 
 ## 中等
 
-- [ ] **场景转场重影**：前后场景的标题在同一位置同时淡入淡出，中间帧文字叠在一起。见 top500 16 秒、openrouter_rankings 25 秒、southern_kurils_jp 49 秒。改为先出后进，或错开标题位置。
+- [x] **场景转场重影**：前后场景的标题在同一位置同时淡入淡出，中间帧文字叠在一起。见 top500 16 秒、openrouter_rankings 25 秒、southern_kurils_jp 49 秒。三者都改为先出后进；`@video/core` 的 `sceneOpacityAt` 一并修改，red_army_jp、imperial_house_law_jp 下次发版时生效（`top500-1.0.1`、`openrouter_rankings-1.0.1-*`、`southern_kurils_jp-1.0.1`）。
+- [ ] **openrouter_rankings**：环形图中心“73.9万亿”折行，“亿”掉到下一行。
 - [ ] **ai_model_rankings**：19 秒“速度 vs 智能”散点图的点和标签全挤在左上角，坐标比例有问题。
 - [ ] **无声视频**：ai_model_rankings、openrouter_rankings、kakeya_conjecture、population_cn、qs_universities、top500 的音轨为空（−70 LUFS）。加背景音乐或旁白。
 - [ ] **响度不统一**：各视频从 −16.5 到 −23.2 LUFS 不等。在发布流程中加响度归一化（目标约 −14 LUFS），cloudflare_history（−20.2）和 brexit_referendum（−21.4）偏小。

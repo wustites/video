@@ -20,12 +20,19 @@ import {fontFamily} from './fonts';
 const INK = '#0F172A';
 const MUTED = '#64748B';
 
-/** GSAP clamp((frame - start) / 18) + clamp((end - frame) / 18), min of both. */
+/** Scenes overlap by ~30 frames. Fade the outgoing scene out in the first
+ * half of the overlap and the incoming one in during the second half, so two
+ * titles are never visible at the same time. */
+const HALF_OVERLAP = 15;
 function sceneOpacity(frame: number, start: number, end: number): number {
-  return interpolate(frame, [start, start + 18, end - 18, end], [0, 1, 1, 0], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  const fadeIn = start === 0 ? 0 : HALF_OVERLAP;
+  const fadeOut = end >= DURATION_IN_FRAMES ? 0 : HALF_OVERLAP;
+  return interpolate(
+    frame,
+    [start + fadeIn, start + fadeIn + HALF_OVERLAP, end - fadeOut - HALF_OVERLAP, end - fadeOut],
+    [start === 0 ? 1 : 0, 1, 1, end >= DURATION_IN_FRAMES ? 1 : 0],
+    {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'},
+  );
 }
 
 /** GSAP clamp((frame - start) / duration): staggered per-item entrances. */

@@ -41,8 +41,16 @@ test('video core builds deterministic sequential timelines and animation values'
   assert.equal(core.sceneProgressAt(timeline.scenes[1], 0), 0);
   assert.equal(core.sceneProgressAt(timeline.scenes[1], 2.5), 0.5);
   assert.equal(core.sceneProgressAt(timeline.scenes[1], 10), 1);
-  assert.ok(Math.abs(core.sceneOpacityAt(timeline.scenes[0], -0.19, 0.38) - 0.5) < 1e-9);
-  assert.ok(Math.abs(core.sceneOpacityAt(timeline.scenes[0], 1.44, 0.38) - 0.5) < 1e-9);
+  // Out-then-in: neighbouring scenes never overlap.
+  const [first, second] = timeline.scenes;
+  assert.equal(core.sceneOpacityAt(second, first.end - 0.01, 0.38), 0);
+  assert.ok(Math.abs(core.sceneOpacityAt(first, first.end - 0.19, 0.38) - 0.5) < 1e-9);
+  assert.ok(Math.abs(core.sceneOpacityAt(second, second.start + 0.19, 0.38) - 0.5) < 1e-9);
+  for (let t = 0; t < second.end; t += 0.01) {
+    assert.ok(Math.min(core.sceneOpacityAt(first, t, 0.38), core.sceneOpacityAt(second, t, 0.38)) === 0);
+  }
+  assert.equal(core.sceneOpacityAt(first, 0, 0.38, {fadeIn: false}), 1);
+  assert.equal(core.sceneOpacityAt(second, second.end + 1, 0.38, {fadeOut: false}), 1);
   assert.deepEqual(core.entranceAt(timeline.scenes[0], 0, 0, 0.65, 36, 0.88), {
     opacity: 0,
     y: 36,

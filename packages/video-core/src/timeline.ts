@@ -49,16 +49,26 @@ export const buildSequentialTimeline = <Id extends string>(
 export const sceneProgressAt = <Id extends string>(scene: TimelineScene<Id>, time: number) =>
   clamp01((time - scene.start) / (scene.end - scene.start));
 
-export const sceneOpacityAt = <Id extends string>(scene: TimelineScene<Id>, time: number, fadeSeconds: number) => {
+/**
+ * Sequential (out-then-in) scene fades: a scene fades in over the first
+ * `fadeSeconds` after its start and out over the last `fadeSeconds` before its
+ * end, so neighbouring scenes are never visible at the same time. Pass
+ * `fadeIn: false` for the first scene and `fadeOut: false` for the last.
+ */
+export const sceneOpacityAt = <Id extends string>(
+  scene: TimelineScene<Id>,
+  time: number,
+  fadeSeconds: number,
+  {fadeIn = true, fadeOut = true}: {fadeIn?: boolean; fadeOut?: boolean} = {},
+) => {
   if (!Number.isFinite(fadeSeconds) || fadeSeconds < 0) throw new Error('fadeSeconds must be non-negative');
-  if (time >= scene.start && time <= scene.end) return 1;
-  if (time >= scene.start - fadeSeconds && time < scene.start) {
-    return (time - scene.start + fadeSeconds) / fadeSeconds;
-  }
-  if (time > scene.end && time <= scene.end + fadeSeconds) {
-    return 1 - (time - scene.end) / fadeSeconds;
-  }
-  return 0;
+  if (time < scene.start) return 0;
+  if (time > scene.end) return fadeOut ? 0 : 1;
+  if (fadeSeconds === 0) return 1;
+  const half = Math.min(fadeSeconds, (scene.end - scene.start) / 2);
+  const inOpacity = fadeIn ? clamp01((time - scene.start) / half) : 1;
+  const outOpacity = fadeOut ? clamp01((scene.end - time) / half) : 1;
+  return Math.min(inOpacity, outOpacity);
 };
 
 export const entranceAt = <Id extends string>(
