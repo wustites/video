@@ -484,9 +484,13 @@ function applySolarFrame(
   }
 
   const activeIsPlanet = active.name !== 'Sun' && active.name !== 'Finale';
-  const camRadius = activeIsPlanet
+  let camRadius = activeIsPlanet
     ? Math.max(7.5, activeRadius * 8.5)
     : 26 + (frame / totalFrames) * 2 - Math.sin((frame / totalFrames) * Math.PI) * 6;
+  // While the narration is about the Sun, push in slowly so the opening is not static.
+  if (active.name === 'Sun' && activeIdx > 0) {
+    camRadius *= 1 - 0.42 * smoothstep((frame - active.start) / (active.end - active.start));
+  }
   const wideOffset = active.name === 'Finale' ? 16 : 0;
   const progress = frame / totalFrames;
   const camSweep = progress * Math.PI * 2;
