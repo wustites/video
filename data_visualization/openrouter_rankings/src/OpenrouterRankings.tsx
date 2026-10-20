@@ -64,12 +64,17 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
   // Ranking bars
   const local = frame - 220;
   const maxTokens = DATA.models[0].tokens;
+  // After the bars land, spotlight the Chinese models and state the takeaway.
+  const cnFocus = interpolate(local, [140, 162], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
   // Providers donut
   const plocal = frame - 520;
   const donutEnter = interpolate(plocal, [0, 20], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const dEnter = interpolate(plocal, [14, 40], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const donutTotal = (DATA.totalTokens * dEnter).toFixed(1);
+  // Walk through the providers one by one once the donut is drawn.
+  const PROV_STEP = 26;
+  const provActive = plocal < 50 ? -1 : Math.min(DATA.providers.length - 1, Math.floor((plocal - 50) / PROV_STEP));
   let acc = 0;
   const segments = DATA.providers.map((p) => {
     const from = acc;
@@ -80,6 +85,8 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
   // Growth
   const glocal = frame - 760;
   const maxGrowth = DATA.growthModels[0].growth;
+  const GROW_STEP = 40;
+  const growActive = glocal < 70 ? -1 : Math.min(DATA.growthModels.length - 1, Math.floor((glocal - 70) / GROW_STEP));
 
   // Outro
   const olocal = frame - 1060;
@@ -127,10 +134,16 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
       <div style={{position: 'absolute', inset: 0, padding: '76px 68px 128px', display: 'flex', flexDirection: 'column', opacity: sceneOpacity(frame, SCENES[1].start, SCENES[1].end)}}>
         <div style={kickerStyle}><span style={dotStyle} />{copy.kickerRanking}</div>
         <div style={{fontSize: 74, lineHeight: 1.08, fontWeight: 900, marginTop: 34}}>{DATA.topModel}<br /><span style={accentStyle}>{copy.rankTitleB}</span></div>
-        <div style={{fontSize: 30, lineHeight: 1.45, color: '#94a3b8', fontWeight: 600, marginTop: 22}}>
+        <div style={{position: 'relative', marginTop: 22, height: 64}}>
+        <div style={{position: 'absolute', left: 0, top: 0, fontSize: 30, lineHeight: 1.45, color: '#94a3b8', fontWeight: 600, opacity: 1 - cnFocus}}>
           {copy.rankSubPrefix}
           <span style={cnChipStyle}>{copy.cnChip}</span> <span style={usChipStyle}>{copy.usChip}</span>
           {copy.rankSubSuffix}
+        </div>
+        <div style={{position: 'absolute', left: 0, top: -6, display: 'inline-flex', alignItems: 'center', gap: 16, padding: '12px 28px', borderRadius: 999, background: 'rgba(244,63,94,.16)', border: '2px solid rgba(244,63,94,.6)', opacity: cnFocus, transform: `translateY(${(1 - cnFocus) * 16}px)`}}>
+          <span style={cnChipStyle}>{copy.cnChip}</span>
+          <span style={{fontSize: 34, fontWeight: 900}}>{insights[0].text}</span>
+        </div>
         </div>
         <div style={{marginTop: 36, display: 'grid', gap: 6}}>
           {DATA.models.map((item, i) => {
@@ -138,7 +151,7 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
             const valEnter = interpolate(local - i * 5 - 4, [0, 22], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
             const badge = growthBadge(item.growth);
             return (
-              <div key={item.rank} style={{display: 'grid', gridTemplateColumns: '64px 1fr 170px', gap: 20, alignItems: 'center', padding: '6px 18px', borderRadius: 16, background: 'rgba(255,255,255,.035)', opacity: enter, transform: `translateX(${(1 - enter) * -60}px)`, boxShadow: i === 0 ? '0 0 0 1px rgba(96,165,250,.35), 0 18px 50px rgba(59,130,246,.18)' : undefined}}>
+              <div key={item.rank} style={{display: 'grid', gridTemplateColumns: '64px 1fr 170px', gap: 20, alignItems: 'center', padding: '6px 18px', borderRadius: 16, background: item.country === 'cn' ? `rgba(244,63,94,${0.035 + cnFocus * 0.1})` : 'rgba(255,255,255,.035)', opacity: enter * (item.country === 'cn' ? 1 : 1 - cnFocus * 0.6), transform: `translateX(${(1 - enter) * -60}px)`, boxShadow: i === 0 && cnFocus === 0 ? '0 0 0 1px rgba(96,165,250,.35), 0 18px 50px rgba(59,130,246,.18)' : undefined}}>
                 <div style={{width: 58, height: 58, display: 'grid', placeItems: 'center', color: '#f8fafc', fontSize: 28, fontWeight: 900, borderRadius: 14, background: '#1e293b', borderLeft: `8px solid ${item.color}`}}>{item.rank}</div>
                 <div>
                   <div style={{display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center'}}>
@@ -162,9 +175,9 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
         <div style={kickerStyle}><span style={dotStyle} />{copy.kickerProviders}</div>
         <div style={{fontSize: 68, lineHeight: 1.08, fontWeight: 900, marginTop: 34}}>{displayProvider(DATA.providers[0].name, locale)} {locale === 'zh' ? '领先' : 'Leads'}<br /><span style={accentStyle}>{locale === 'zh' ? `占全部 Token ${DATA.providers[0].pct}%` : `${DATA.providers[0].pct}% of all tokens`}</span></div>
         <div style={{fontSize: 30, lineHeight: 1.45, color: '#94a3b8', fontWeight: 600, marginTop: 22}}>{copy.provSub}</div>
-        <div style={{display: 'flex', alignItems: 'center', gap: 56, marginTop: 56, opacity: donutEnter, transform: `scale(${0.92 + 0.08 * donutEnter})`}}>
-          <div style={{position: 'relative', width: 520, height: 520, flex: '0 0 auto'}}>
-            <svg width={520} height={520} viewBox="0 0 520 520">
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 50, marginTop: 50, opacity: donutEnter, transform: `scale(${0.92 + 0.08 * donutEnter})`}}>
+          <div style={{position: 'relative', width: 600, height: 600, flex: '0 0 auto'}}>
+            <svg width={600} height={600} viewBox="-40 -40 600 600" style={{overflow: 'visible'}}>
               <circle cx={260} cy={260} r={DONUT_R} fill="none" stroke="rgba(255,255,255,.07)" strokeWidth={130} />
               {segments.map((s) => {
                 const len = (s.provider.pct / 100) * DONUT_C * dEnter;
@@ -177,7 +190,8 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
                     r={DONUT_R}
                     fill="none"
                     stroke={s.provider.color}
-                    strokeWidth={130}
+                    strokeWidth={s.provider === DATA.providers[provActive] ? 170 : 130}
+                    opacity={provActive < 0 || s.provider === DATA.providers[provActive] ? 1 : 0.4}
                     strokeDasharray={`${Math.max(len - 2, 0.1)} ${DONUT_C}`}
                     strokeDashoffset={-offset}
                     transform="rotate(-90 260 260)"
@@ -186,27 +200,30 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
                 );
               })}
             </svg>
-            <div style={{position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: 258, height: 258, borderRadius: '50%', background: '#0a0e16', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,.08)'}}>
-              <div style={{fontSize: 62, fontWeight: 900, fontVariantNumeric: 'tabular-nums'}}>{donutTotal}{copy.tokenUnit}</div>
+            <div style={{position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: 262, height: 262, borderRadius: '50%', background: '#0a0e16', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,.08)'}}>
+              <div style={{fontSize: 66, fontWeight: 900, lineHeight: 1, fontVariantNumeric: 'tabular-nums'}}>{donutTotal}</div>
+              <div style={{fontSize: 30, fontWeight: 800, marginTop: 6}}>{copy.tokenUnit}</div>
               <div style={{fontSize: 24, color: '#94a3b8', fontWeight: 700, marginTop: 6}}>{copy.donutLabel}</div>
             </div>
           </div>
-          <div style={{display: 'grid', gap: 20, flex: 1}}>
+          <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 40, rowGap: 22, width: '100%'}}>
             {DATA.providers.map((item, i) => {
               const enter = interpolate(plocal - i * 5, [0, 24], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
               const valEnter = interpolate(plocal - i * 5 - 4, [0, 20], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
               return (
-                <div key={item.name} style={{display: 'flex', alignItems: 'center', gap: 18, opacity: enter, transform: `translateX(${(1 - enter) * 40}px)`}}>
+                <div key={item.name} style={{display: 'flex', alignItems: 'center', gap: 16, padding: '16px 20px', borderRadius: 16, background: i === provActive ? 'rgba(255,255,255,.09)' : 'rgba(255,255,255,.03)', border: `2px solid ${i === provActive ? item.color : 'transparent'}`, opacity: enter * (provActive < 0 || i === provActive ? 1 : 0.6), transform: `translateX(${(1 - enter) * 40}px)`}}>
                   <span style={{width: 26, height: 26, borderRadius: 8, flex: '0 0 auto', background: item.color}} />
-                  <span style={{fontSize: 29, fontWeight: 800, flex: 1}}>{displayProvider(item.name, locale)}</span>
-                  <span style={{fontSize: 27, fontWeight: 800, color: '#94a3b8', fontVariantNumeric: 'tabular-nums'}}>{(item.tokens * valEnter).toFixed(1)}{copy.tokenUnit}</span>
-                  <span style={{fontSize: 27, fontWeight: 900, width: 74, textAlign: 'right', fontVariantNumeric: 'tabular-nums'}}>{item.pct}%</span>
+                  <span style={{display: 'flex', flexDirection: 'column', flex: 1}}>
+                    <span style={{fontSize: 32, fontWeight: 900}}>{displayProvider(item.name, locale)}</span>
+                    <span style={{fontSize: 24, fontWeight: 700, color: '#94a3b8', fontVariantNumeric: 'tabular-nums'}}>{(item.tokens * valEnter).toFixed(1)} {copy.tokenUnit}</span>
+                  </span>
+                  <span style={{fontSize: 38, fontWeight: 900, textAlign: 'right', fontVariantNumeric: 'tabular-nums'}}>{item.pct}%</span>
                 </div>
               );
             })}
           </div>
         </div>
-        <div style={{marginTop: 34, fontSize: 26, color: '#94a3b8', fontWeight: 700}}>
+        <div style={{marginTop: 40, fontSize: 32, color: '#94a3b8', fontWeight: 700, textAlign: 'center'}}>
           {copy.provFooterA} <span style={{color: '#f8fafc', fontWeight: 900}}>{DATA.top6Pct}%</span> {copy.provFooterB}
         </div>
       </div>
@@ -216,20 +233,20 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
         <div style={kickerStyle}><span style={dotStyle} />{copy.kickerGrowth}</div>
         <div style={{fontSize: 74, lineHeight: 1.08, fontWeight: 900, marginTop: 34}}>{copy.growthTitleA}<br /><span style={accentStyle}>{copy.growthTitleB}</span></div>
         <div style={{fontSize: 30, lineHeight: 1.45, color: '#94a3b8', fontWeight: 600, marginTop: 22}}>{copy.growthSub}</div>
-        <div style={{marginTop: 40, display: 'grid', gap: 18}}>
+        <div style={{marginTop: 60, display: 'grid', gap: 28}}>
           {DATA.growthModels.map((item, i) => {
             const enter = interpolate(glocal - i * 6, [0, 26], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
             const valEnter = interpolate(glocal - i * 6 - 4, [0, 20], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
             return (
-              <div key={item.name} style={{padding: '20px 22px', borderRadius: 18, background: 'rgba(255,255,255,.035)', opacity: enter, transform: `translateY(${(1 - enter) * 34}px)`}}>
+              <div key={item.name} style={{padding: '34px 32px', borderRadius: 22, background: i === growActive ? 'rgba(74,222,128,.1)' : 'rgba(255,255,255,.035)', border: `2px solid ${i === growActive ? 'rgba(74,222,128,.6)' : 'transparent'}`, opacity: enter * (growActive < 0 || i === growActive ? 1 : 0.55), transform: `translateY(${(1 - enter) * 34}px) scale(${i === growActive ? 1.02 : 1})`}}>
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                   <div>
-                    <div style={{fontSize: 31, fontWeight: 800}}>{item.name}</div>
-                    <div style={{fontSize: 22, color: '#94a3b8', fontWeight: 600, marginTop: 4}}>{displayProvider(item.provider, locale)}</div>
+                    <div style={{fontSize: 40, fontWeight: 900}}>{item.name}</div>
+                    <div style={{fontSize: 27, color: '#94a3b8', fontWeight: 700, marginTop: 6}}>{displayProvider(item.provider, locale)}</div>
                   </div>
-                  <div style={{fontSize: 38, fontWeight: 900, color: '#4ade80', fontVariantNumeric: 'tabular-nums'}}>{(item.growth * valEnter).toFixed(1)}%</div>
+                  <div style={{fontSize: 54, fontWeight: 900, color: '#4ade80', fontVariantNumeric: 'tabular-nums'}}>+{(item.growth * valEnter).toFixed(1)}%</div>
                 </div>
-                <div style={{height: 22, background: 'rgba(255,255,255,.07)', marginTop: 14, borderRadius: 999, overflow: 'hidden'}}>
+                <div style={{height: 28, background: 'rgba(255,255,255,.07)', marginTop: 20, borderRadius: 999, overflow: 'hidden'}}>
                   <div style={{height: '100%', borderRadius: 999, width: `${enter * (item.growth / maxGrowth) * 100}%`, background: `linear-gradient(90deg,${item.color},#4ade80)`}} />
                 </div>
               </div>
@@ -240,19 +257,19 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
 
       {/* Scene 4: outro insights stagger */}
       <div style={{position: 'absolute', inset: 0, padding: '76px 68px 128px', display: 'flex', flexDirection: 'column', opacity: sceneOpacity(frame, SCENES[4].start, SCENES[4].end)}}>
-        <div style={{marginTop: 60, opacity: reveal, transform: `translateY(${(1 - reveal) * 54}px)`}}>
+        <div style={{margin: 'auto 0', opacity: reveal, transform: `translateY(${(1 - reveal) * 54}px)`}}>
           <div style={kickerStyle}><span style={dotStyle} />{copy.kickerOutro}</div>
-          <div style={{fontSize: 86, marginTop: 48, lineHeight: 1.08, fontWeight: 900}}>{copy.outroTitleA}<br />{copy.outroTitleB}</div>
+          <div style={{fontSize: 100, marginTop: 48, lineHeight: 1.08, fontWeight: 900}}>{copy.outroTitleA}<br />{copy.outroTitleB}</div>
           <div style={{height: 12, borderRadius: 99, background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #EC4899)', marginTop: 52, width: `${lineW}%`}} />
-          <div style={{marginTop: 52, display: 'grid', gap: 22}}>
+          <div style={{marginTop: 60, display: 'grid', gap: 28}}>
             {insights.map((item, i) => {
               const enter = interpolate(olocal - 24 - i * 8, [0, 22], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
               return (
-                <div key={i} style={{display: 'flex', alignItems: 'center', gap: 24, padding: '26px 30px', borderRadius: 18, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)', opacity: enter, transform: `translateX(${(1 - enter) * -46}px)`}}>
-                  <div style={{width: 56, height: 56, borderRadius: 16, display: 'grid', placeItems: 'center', fontSize: 30, fontWeight: 900, color: '#f8fafc', flex: '0 0 auto', background: '#1e293b', borderLeft: `8px solid ${item.color}`}}>{item.ic}</div>
+                <div key={i} style={{display: 'flex', alignItems: 'center', gap: 28, padding: '36px 34px', borderRadius: 22, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)', opacity: enter, transform: `translateX(${(1 - enter) * -46}px)`}}>
+                  <div style={{width: 72, height: 72, borderRadius: 18, display: 'grid', placeItems: 'center', fontSize: 36, fontWeight: 900, color: '#f8fafc', flex: '0 0 auto', background: '#1e293b', borderLeft: `8px solid ${item.color}`}}>{item.ic}</div>
                   <div>
-                    <div style={{fontSize: 36, fontWeight: 800, lineHeight: 1.2}}>{item.text}</div>
-                    <div style={{fontSize: 25, color: '#94a3b8', fontWeight: 600, marginTop: 6}}>{item.sub}</div>
+                    <div style={{fontSize: 42, fontWeight: 900, lineHeight: 1.2}}>{item.text}</div>
+                    <div style={{fontSize: 30, color: '#94a3b8', fontWeight: 600, marginTop: 6}}>{item.sub}</div>
                   </div>
                 </div>
               );
