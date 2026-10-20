@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1920, height=1080" />
+    <meta name="viewport" content="width=1080, height=1920" />
     <title>Shenzhen APEC 2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,48 +26,48 @@
       .grid { position: absolute; inset: -100px; background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 80px 80px; }
       .arc { position: absolute; border-radius: 50%; border: 1px solid rgba(47,198,192,.16); }
       .scene { position: absolute; inset: 0; }
-      .inner { position: absolute; left: 0; right: 0; top: 0; height: 860px; box-sizing: border-box; padding: 90px 140px 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-      .kicker { color: var(--teal); font-size: 26px; letter-spacing: 8px; font-weight: 800; margin-bottom: 26px; }
+      .inner { position: absolute; left: 0; right: 0; top: 0; height: 1540px; box-sizing: border-box; padding: 180px 70px 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      .kicker { color: var(--teal); font-size: 28px; letter-spacing: 8px; font-weight: 800; margin-bottom: 26px; }
       .title { font-size: 76px; line-height: 1.15; font-weight: 900; letter-spacing: -1px; }
       .muted { color: var(--muted); }
       .card { background: var(--panel); border: 1px solid var(--line); border-radius: 26px; padding: 34px 38px; box-sizing: border-box; }
       .stat { font-size: 96px; font-weight: 900; color: var(--gold); line-height: 1; letter-spacing: -2px; }
       .stat-label { font-size: 26px; font-weight: 700; margin-top: 14px; }
       .stat-zh { font-size: 22px; font-weight: 500; color: var(--muted); margin-top: 6px; }
-      .skyline { position: absolute; left: 0; bottom: 200px; width: 1920px; height: 420px; }
-      #subs { position: absolute; left: 0; right: 0; bottom: 0; height: 200px; background: linear-gradient(180deg, transparent, rgba(3,12,26,.85) 35%); }
-      .sub { position: absolute; left: 160px; right: 160px; bottom: 44px; text-align: center; opacity: 0; }
-      .sub-en { font-size: 38px; font-weight: 600; line-height: 1.3; text-shadow: 0 2px 8px rgba(0,0,0,.6); }
-      .sub-zh { font-family: 'Noto Sans SC', sans-serif; font-size: 34px; font-weight: 500; color: #ffe2a6; margin-top: 8px; text-shadow: 0 2px 8px rgba(0,0,0,.6); }
-      .badge { position: absolute; top: 44px; left: 60px; display: flex; align-items: center; gap: 14px; font-size: 22px; font-weight: 800; letter-spacing: 3px; color: var(--muted); }
+      .skyline { position: absolute; left: 0; bottom: 380px; width: 1080px; height: 560px; }
+      #subs { position: absolute; left: 0; right: 0; bottom: 0; height: 400px; background: linear-gradient(180deg, transparent, rgba(3,12,26,.85) 30%); }
+      .sub { position: absolute; left: 60px; right: 60px; bottom: 130px; text-align: center; opacity: 0; }
+      .sub-en { font-size: 42px; font-weight: 600; line-height: 1.3; text-shadow: 0 2px 8px rgba(0,0,0,.6); }
+      .sub-zh { font-family: 'Noto Sans SC', sans-serif; font-size: 40px; font-weight: 500; color: #ffe2a6; margin-top: 12px; text-shadow: 0 2px 8px rgba(0,0,0,.6); }
+      .badge { position: absolute; top: 80px; left: 60px; display: flex; align-items: center; gap: 14px; font-size: 22px; font-weight: 800; letter-spacing: 3px; color: var(--muted); }
       .badge i { width: 12px; height: 12px; border-radius: 50%; background: var(--teal); display: block; }
       #fade-out { position: absolute; inset: 0; background: #000; opacity: 0; }
     </style>
   </head>
   <body>
     <!-- 场景的 data-start / data-duration 由 sync_hyperframes_timing.mjs 写入；CUES 由 scripts/build_subtitles.mjs 写入，不要手改 -->
-    <div id="root" data-composition-id="shenzhen-apec" data-start="0" data-width="1920" data-height="1080" data-duration="85.232">
+    <div id="root" data-composition-id="shenzhen-apec" data-start="0" data-width="1080" data-height="1920" data-duration="85.232">
       <div class="bg">
         <div class="grid" id="grid"></div>
-        <div class="arc" id="arc1" style="width:1800px;height:1800px;left:600px;top:-900px"></div>
-        <div class="arc" id="arc2" style="width:1300px;height:1300px;left:850px;top:-650px;border-style:dashed"></div>
+        <div class="arc" id="arc1" style="width:1600px;height:1600px;left:200px;top:-1000px"></div>
+        <div class="arc" id="arc2" style="width:1100px;height:1100px;left:450px;top:-750px;border-style:dashed"></div>
       </div>
 
       <section id="intro" class="scene clip" data-scene="0" data-start="0" data-duration="11.66" data-track-index="1">
-        <svg class="skyline" id="sky-intro" viewBox="0 0 1920 420" preserveAspectRatio="none" data-cue="0"></svg>
+        <svg class="skyline" id="sky-intro" viewBox="0 0 1080 420" preserveAspectRatio="none" data-cue="0"></svg>
         <div class="inner">
           <div class="kicker" data-cue="0">APEC CHINA 2026 · 亚太经合组织</div>
-          <div class="title" style="font-size:200px;letter-spacing:-4px" data-cue="0">SHENZHEN</div>
+          <div class="title" style="font-size:170px;letter-spacing:-4px" data-cue="0">SHENZHEN</div>
           <div class="zh" style="font-size:56px;font-weight:900;letter-spacing:24px;color:var(--gold);margin-top:6px" data-cue="0" data-off="0.6">中国 · 深圳</div>
-          <div style="display:flex;gap:28px;margin-top:56px">
+          <div style="display:flex;flex-direction:column;gap:28px;margin-top:70px;width:100%">
             <div class="card" style="padding:22px 36px" data-cue="1"><div style="font-size:44px;font-weight:900;color:var(--teal)">NOV 18–19, 2026</div><div class="zh muted" style="font-size:24px;margin-top:4px">2026年11月18日—19日</div></div>
-            <div class="card" style="padding:22px 36px" data-cue="2"><div style="font-size:44px;font-weight:900">33rd Economic Leaders' Meeting</div><div class="zh muted" style="font-size:24px;margin-top:4px">第三十三次领导人非正式会议</div></div>
+            <div class="card" style="padding:22px 36px" data-cue="2"><div style="font-size:44px;font-weight:900">33rd APEC Economic<br />Leaders' Meeting</div><div class="zh muted" style="font-size:24px;margin-top:4px">第三十三次领导人非正式会议</div></div>
           </div>
         </div>
       </section>
 
       <section id="apec" class="scene clip" data-scene="1" data-start="10.9" data-duration="13.36" data-track-index="2">
-        <div class="inner" style="flex-direction:row;gap:120px">
+        <div class="inner" style="gap:60px">
           <div style="position:relative;width:560px;height:560px;flex:none" data-cue="0">
             <svg id="ring" width="560" height="560" viewBox="-280 -280 560 560" style="position:absolute;inset:0"></svg>
             <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
@@ -76,7 +76,7 @@
               <div class="zh muted" style="font-size:24px">个成员经济体</div>
             </div>
           </div>
-          <div style="display:flex;flex-direction:column;gap:30px;text-align:left;width:720px">
+          <div style="display:flex;flex-direction:column;gap:40px;text-align:center;width:940px">
             <div data-cue="0"><div class="kicker" style="margin-bottom:8px">SINCE</div><div style="font-size:110px;font-weight:900;line-height:1">1989</div><div class="zh muted" style="font-size:26px;margin-top:6px">成立于 1989 年 · 环太平洋</div></div>
             <div style="display:flex;gap:30px">
               <div class="card" style="flex:1" data-cue="2"><div class="stat">~<span id="cnt-pop">0</span>%</div><div class="stat-label">of world population</div><div class="stat-zh zh">全球人口</div></div>
@@ -89,16 +89,16 @@
       <section id="host" class="scene clip" data-scene="2" data-start="23.5" data-duration="12.688" data-track-index="1">
         <div class="inner">
           <div class="kicker" data-cue="0">CHINA HOSTS APEC · 第三次担任东道主</div>
-          <div style="position:relative;width:1400px;height:240px;margin-top:20px">
+          <div style="position:relative;width:940px;height:240px;margin-top:40px">
             <div style="position:absolute;left:100px;right:100px;top:60px;height:4px;background:rgba(255,255,255,.15)"></div>
             <div id="tl-fill" style="position:absolute;left:100px;top:60px;height:4px;width:0;background:var(--teal)"></div>
             <div style="position:absolute;left:0;width:200px;top:36px" data-cue="1"><div style="width:52px;height:52px;margin:0 auto;border-radius:50%;background:var(--bg);border:4px solid var(--teal)"></div><div style="font-size:52px;font-weight:900;margin-top:18px">2001</div><div style="font-size:28px;font-weight:700" class="muted">Shanghai <span class="zh">上海</span></div></div>
-            <div style="position:absolute;left:600px;width:200px;top:36px" data-cue="1" data-off="2"><div style="width:52px;height:52px;margin:0 auto;border-radius:50%;background:var(--bg);border:4px solid var(--teal)"></div><div style="font-size:52px;font-weight:900;margin-top:18px">2014</div><div style="font-size:28px;font-weight:700" class="muted">Beijing <span class="zh">北京</span></div></div>
-            <div style="position:absolute;left:1200px;width:200px;top:26px" data-cue="2"><div style="width:72px;height:72px;margin:0 auto;border-radius:50%;background:var(--gold);box-shadow:0 0 40px rgba(242,184,75,.6)"></div><div style="font-size:52px;font-weight:900;margin-top:8px;color:var(--gold)">2026</div><div style="font-size:28px;font-weight:700;white-space:nowrap">Shenzhen <span class="zh">深圳</span></div></div>
+            <div style="position:absolute;left:370px;width:200px;top:36px" data-cue="1" data-off="2"><div style="width:52px;height:52px;margin:0 auto;border-radius:50%;background:var(--bg);border:4px solid var(--teal)"></div><div style="font-size:52px;font-weight:900;margin-top:18px">2014</div><div style="font-size:28px;font-weight:700" class="muted">Beijing <span class="zh">北京</span></div></div>
+            <div style="position:absolute;left:740px;width:200px;top:26px" data-cue="2"><div style="width:72px;height:72px;margin:0 auto;border-radius:50%;background:var(--gold);box-shadow:0 0 40px rgba(242,184,75,.6)"></div><div style="font-size:52px;font-weight:900;margin-top:8px;color:var(--gold)">2026</div><div style="font-size:28px;font-weight:700;white-space:nowrap">Shenzhen <span class="zh">深圳</span></div></div>
           </div>
-          <div class="card" style="margin-top:50px;width:1400px;border-color:rgba(242,184,75,.4)" data-cue="3">
+          <div class="card" style="margin-top:80px;width:940px;border-color:rgba(242,184,75,.4)" data-cue="3">
             <div class="kicker" style="color:var(--gold);margin-bottom:14px">THEME · 年度主题</div>
-            <div style="font-size:54px;font-weight:900;line-height:1.2">Building an Asia-Pacific Community<br />to Prosper Together</div>
+            <div style="font-size:56px;font-weight:900;line-height:1.2">Building an Asia-Pacific Community to Prosper Together</div>
             <div class="zh" style="font-size:36px;font-weight:700;color:var(--gold);margin-top:16px">携手构建亚太共同体，共促繁荣</div>
           </div>
         </div>
@@ -108,47 +108,47 @@
         <div class="inner">
           <div class="kicker" data-cue="0">THREE PRIORITIES · 三大重点</div>
           <div class="title" data-cue="0">Guiding the Agenda</div>
-          <div style="display:flex;gap:40px;margin-top:70px;width:100%">
-            <div class="card prio" style="flex:1;border-top:8px solid var(--teal)" data-cue="1"><div style="font-size:84px;font-weight:900;color:var(--teal)">01</div><div style="font-size:54px;font-weight:900">Openness</div><div class="zh" style="font-size:40px;font-weight:900;color:var(--teal)">开放</div><div class="muted" style="font-size:26px;font-weight:600;margin-top:16px">Trade &amp; investment flowing</div></div>
-            <div class="card prio" style="flex:1;border-top:8px solid var(--gold)" data-cue="2"><div style="font-size:84px;font-weight:900;color:var(--gold)">02</div><div style="font-size:54px;font-weight:900">Innovation</div><div class="zh" style="font-size:40px;font-weight:900;color:var(--gold)">创新</div><div class="muted" style="font-size:26px;font-weight:600;margin-top:16px">Unlocking new growth</div></div>
-            <div class="card prio" style="flex:1;border-top:8px solid var(--red)" data-cue="3"><div style="font-size:84px;font-weight:900;color:var(--red)">03</div><div style="font-size:54px;font-weight:900">Cooperation</div><div class="zh" style="font-size:40px;font-weight:900;color:var(--red)">合作</div><div class="muted" style="font-size:26px;font-weight:600;margin-top:16px">Shared benefits for the region</div></div>
+          <div style="display:flex;flex-direction:column;gap:32px;margin-top:70px;width:100%">
+            <div class="card prio" style="display:flex;align-items:center;gap:40px;text-align:left;border-left:10px solid var(--teal)" data-cue="1"><div style="font-size:96px;font-weight:900;color:var(--teal);width:130px">01</div><div><div style="font-size:60px;font-weight:900;line-height:1.1">Openness <span class="zh" style="color:var(--teal)">开放</span></div><div class="muted" style="font-size:30px;font-weight:600;margin-top:10px">Trade &amp; investment flowing</div></div></div>
+            <div class="card prio" style="display:flex;align-items:center;gap:40px;text-align:left;border-left:10px solid var(--gold)" data-cue="2"><div style="font-size:96px;font-weight:900;color:var(--gold);width:130px">02</div><div><div style="font-size:60px;font-weight:900;line-height:1.1">Innovation <span class="zh" style="color:var(--gold)">创新</span></div><div class="muted" style="font-size:30px;font-weight:600;margin-top:10px">Unlocking new growth</div></div></div>
+            <div class="card prio" style="display:flex;align-items:center;gap:40px;text-align:left;border-left:10px solid var(--red)" data-cue="3"><div style="font-size:96px;font-weight:900;color:var(--red);width:130px">03</div><div><div style="font-size:60px;font-weight:900;line-height:1.1">Cooperation <span class="zh" style="color:var(--red)">合作</span></div><div class="muted" style="font-size:30px;font-weight:600;margin-top:10px">Shared benefits for the region</div></div></div>
           </div>
         </div>
       </section>
 
       <section id="why" class="scene clip" data-scene="4" data-start="47.02" data-duration="13.024" data-track-index="1">
-        <svg class="skyline" id="sky-why" viewBox="0 0 1920 420" preserveAspectRatio="none"></svg>
-        <div class="inner" style="justify-content:flex-start;padding-top:110px">
+        <svg class="skyline" id="sky-why" viewBox="0 0 1080 420" preserveAspectRatio="none"></svg>
+        <div class="inner" style="justify-content:flex-start;padding-top:260px">
           <div class="kicker" data-cue="0">WHY SHENZHEN? · 为什么是深圳？</div>
           <div style="display:flex;align-items:baseline;gap:40px" data-cue="1">
-            <div style="font-size:150px;font-weight:900;line-height:1"><span id="cnt-year">1980</span></div>
+            <div style="font-size:200px;font-weight:900;line-height:1"><span id="cnt-year">1980</span></div>
           </div>
-          <div id="why-label" class="zh" style="font-size:36px;font-weight:700;color:var(--gold);margin-top:14px" data-cue="2">经济特区 · Special Economic Zone</div>
+          <div id="why-label" class="zh" style="font-size:40px;font-weight:700;color:var(--gold);margin-top:20px;line-height:1.5" data-cue="2">经济特区<br />Special Economic Zone</div>
         </div>
       </section>
 
       <section id="today" class="scene clip" data-scene="5" data-start="59.284" data-duration="15.424" data-track-index="2">
-        <div class="inner" style="flex-direction:row;gap:90px;text-align:left">
-          <div style="width:760px;flex:none">
+        <div class="inner" style="gap:40px">
+          <div style="width:940px">
             <div class="kicker" data-cue="0">SHENZHEN TODAY · 今日深圳</div>
             <div data-cue="0"><div class="stat" style="font-size:170px"><span id="cnt-people">0</span>M+</div><div class="stat-label" style="font-size:32px">residents <span class="zh muted">常住人口</span></div></div>
-            <div style="display:flex;flex-wrap:wrap;gap:18px;margin-top:50px">
+            <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:18px;margin-top:44px">
               <div class="card" style="padding:18px 28px;font-size:30px;font-weight:800" data-cue="1">Electronics <span class="zh muted">电子</span></div>
               <div class="card" style="padding:18px 28px;font-size:30px;font-weight:800" data-cue="1" data-off="2">Telecom <span class="zh muted">通信</span></div>
               <div class="card" style="padding:18px 28px;font-size:30px;font-weight:800" data-cue="1" data-off="3.5">Electric Vehicles <span class="zh muted">新能源汽车</span></div>
             </div>
           </div>
-          <div style="position:relative;width:640px;height:600px" data-cue="2">
-            <svg id="gba" width="640" height="600" viewBox="0 0 640 600"></svg>
+          <div style="position:relative;width:860px;height:806px" data-cue="2">
+            <svg id="gba" width="860" height="806" viewBox="0 0 640 600"></svg>
           </div>
         </div>
       </section>
 
       <section id="outro" class="scene clip" data-scene="6" data-start="73.948" data-duration="11.284" data-track-index="1">
-        <svg class="skyline" id="sky-outro" viewBox="0 0 1920 420" preserveAspectRatio="none"></svg>
+        <svg class="skyline" id="sky-outro" viewBox="0 0 1080 420" preserveAspectRatio="none"></svg>
         <div class="inner">
           <div class="kicker" data-cue="0">WELCOME TO SHENZHEN · 欢迎来到深圳</div>
-          <div class="title" style="font-size:150px;letter-spacing:-3px" data-cue="1">SHENZHEN <span style="color:var(--gold)">2026</span></div>
+          <div class="title" style="font-size:150px;letter-spacing:-3px" data-cue="1">SHENZHEN<br /><span style="color:var(--gold)">2026</span></div>
           <div class="zh" style="font-size:48px;font-weight:900;letter-spacing:12px;margin-top:10px" data-cue="1" data-off="0.5">APEC 中国年 · 深圳</div>
           <div style="width:140px;height:6px;background:var(--teal);margin:44px auto" data-cue="2"></div>
           <div style="font-size:40px;font-weight:700" data-cue="2">Together, toward a shared future</div>
@@ -173,13 +173,13 @@
       // 确定性伪随机，生成天际线
       let seed = 7;
       const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-      const towers = Array.from({length: 64}, (_, i) => {
-        const w = 18 + rand() * 30, center = 1 - Math.abs(i - 34) / 40;
+      const towers = Array.from({length: 36}, (_, i) => {
+        const w = 18 + rand() * 30, center = 1 - Math.abs(i - 18) / 22;
         return {x: i * 30 + rand() * 8, w, h: 60 + rand() * 180 + center * 200 * rand()};
       });
       const skyline = (svg, color, opacity) => {
         svg.innerHTML = towers.map((t, i) => `<rect class="tower" x="${t.x}" y="${420 - t.h}" width="${t.w}" height="${t.h}" fill="${color}" opacity="${opacity}"/>`).join('')
-          + `<rect x="0" y="414" width="1920" height="6" fill="${color}" opacity="${opacity * 1.5}"/>`;
+          + `<rect x="0" y="414" width="1080" height="6" fill="${color}" opacity="${opacity * 1.5}"/>`;
       };
       skyline(document.getElementById('sky-intro'), '#2fc6c0', 0.12);
       skyline(document.getElementById('sky-why'), '#2fc6c0', 0.35);
@@ -245,8 +245,8 @@
       counter('#cnt-gdp', 0, 60, cueAt(1, 3).start + 0.3, 1.2);
 
       // host：时间线推进
-      tl.fromTo('#tl-fill', {width: 0}, {width: 600, duration: 2.2, ease: 'none'}, cueAt(2, 1).start);
-      tl.to('#tl-fill', {width: 1200, duration: 1.2, ease: 'power1.inOut'}, cueAt(2, 2).start);
+      tl.fromTo('#tl-fill', {width: 0}, {width: 370, duration: 2.2, ease: 'none'}, cueAt(2, 1).start);
+      tl.to('#tl-fill', {width: 740, duration: 1.2, ease: 'power1.inOut'}, cueAt(2, 2).start);
 
       // why：从边陲小镇到天际线
       tl.fromTo('#sky-why .tower', {scaleY: 0.08, transformOrigin: '50% 100%'}, {scaleY: 1, duration: 3.2, stagger: {each: 0.03, from: 'center'}, ease: 'power2.out'}, cueAt(4, 3).start - 0.3);
