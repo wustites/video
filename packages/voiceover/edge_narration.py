@@ -3,7 +3,11 @@
 
 Run from a project root (npm run voiceover). Reads public/voiceover/narration.<lang>.txt,
 writes public/voiceover/narration.<lang>.mp3 and public/voiceover/segment-durations.json.
+With --word-marks, also writes public/voiceover/word-marks.json: per paragraph, the Edge TTS
+WordBoundary events as [{"text", "start"}] in seconds from the paragraph start, so scenes can
+reveal elements exactly when the narration names them.
 """
+import asyncio
 import argparse
 import json
 import subprocess
@@ -20,6 +24,20 @@ def probe_duration(path: Path) -> float:
     return float(result.stdout.strip())
 
 
+async def synthesize_with_marks(text: str, voice: str, rate: str, out: Path) -> list:
+    import edge_tts
+
+    communicate = edge_tts.Communicate(text, voice, rate=rate, boundary="WordBoundary")
+    words = []
+    with out.open("wb") as audio:
+        async for chunk in communicate.stream():
+            if chunk["type"] == "audio":
+                audio.write(chunk["data"])
+            elif chunk["type"] == "WordBoundary":
+                words.append({"text": chunk["text"], "start": round(chunk["offset"] / 1e7, 3)})
+    return words
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--voice", required=True, help="Edge TTS voice, e.g. ja-JP-NanamiNeural")
@@ -28,6 +46,8 @@ def main() -> None:
     parser.add_argument("--expected", type=int, help="required paragraph count (SCENE_IDS in src/timing.ts)")
     parser.add_argument("--durations-format", choices=["list", "starts"], default="list",
                         help="list: [d1, ...]; starts: {durations, starts, total}")
+    parser.add_argument("--word-marks", action="store_true",
+                        help="also write word-marks.json from Edge TTS WordBoundary events")
     parser.add_argument("--root", type=Path, default=Path.cwd(), help="project root (default: cwd)")
     args = parser.parse_args()
 
@@ -44,12 +64,16 @@ def main() -> None:
 
     segments = [vo / f"seg{i}.mp3" for i in range(1, len(paragraphs) + 1)]
     durations = []
+    marks = []
     for segment, paragraph in zip(segments, paragraphs):
-        subprocess.run(
-            [sys.executable, "-m", "edge_tts", "--voice", args.voice, f"--rate={args.rate}",
-             "--text", paragraph, "--write-media", str(segment)],
-            check=True,
-        )
+        if args.word_marks:
+            marks.append(asyncio.run(synthesize_with_marks(paragraph, args.voice, args.rate, segment)))
+        else:
+            subprocess.run(
+                [sys.executable, "-m", "edge_tts", "--voice", args.voice, f"--rate={args.rate}",
+                 "--text", paragraph, "--write-media", str(segment)],
+                check=True,
+            )
         durations.append(probe_duration(segment))
         print(f"{segment.stem}: {durations[-1]:.3f}s | {paragraph[:40]}...")
 
@@ -71,6 +95,9 @@ def main() -> None:
         payload = durations
     (vo / "segment-durations.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    if args.word_marks:
+        (vo / "word-marks.json").write_text(json.dumps(marks, ensure_ascii=False, indent=1), encoding="utf-8")
 
     for segment in segments:
         segment.unlink()

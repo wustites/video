@@ -22,3 +22,7 @@ HyperFrames 的场景时间写在 HTML 的 `data-start` / `data-duration` 里，
 ```
 
 场景元素需带相邻的 `data-scene="<序号>" data-start data-duration`，根节点 `id="root"`，旁白 `<audio id="narration">`。`--fade` 为场景前后交叉淡化的重叠秒数，`--tail` 为旁白结束后保留的秒数。
+
+## 词级时间（`--word-marks`）
+
+加上 `--word-marks` 时，额外输出 `public/voiceover/word-marks.json`：每段一个数组，元素为 Edge TTS WordBoundary 的 `{text, start}`（秒，相对该段开头）。用于让画面元素在旁白念到对应词时出现。

@@ -23,7 +23,7 @@
 - [ ] **画面下半部分空**：brexit_referendum、ai_model_rankings 内容集中在上方约 55%（ai_model_rankings 散点图场景已加高，其余场景未处理）。
 - [ ] **长时间静止**：brexit_referendum 128 秒中约 94 秒几乎不动；japan_economy、red_army_jp 也超过 60 秒。
 - [ ] **shandong_universities**：30 秒东营地图左上角有一条多余的直线。
-- [ ] **southern_kurils_jp**：开场岛屿图形被裁掉一半。
+- [x] **southern_kurils_jp**：开场岛屿图形被裁掉一半。随内容优化一并修复（`southern_kurils_jp-1.1.0`）。
 
 ## 框架迁移（改版时顺带）
 

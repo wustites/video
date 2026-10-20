@@ -15,13 +15,14 @@ npm run render:draft
 npm run render
 ```
 
-音声生成には Python の `edge-tts` と `ffmpeg` / `ffprobe` が必要です。ナレーション原稿を変更した場合、`npm run voiceover` を再実行すると、実測した各段落の長さに合わせてシーン尺が自動調整されます。
+音声生成には Python の `edge-tts` と `ffmpeg` / `ffprobe` が必要です。ナレーション原稿を変更した場合、`npm run voiceover` を再実行すると、実測した各段落の長さに合わせてシーン尺が自動調整されます。各要素の表示タイミングは Edge TTS の WordBoundary（`word-marks.json`）から取り、ナレーションが島名・年号・立場を読み上げた瞬間に表示されます（`src/timing.ts` の `cue()`）。
 
 ## 主な参照資料
 
 - [日本国外務省「北方領土データ」](https://www.mofa.go.jp/mofaj/erp/rss/hoppo/page1w_000024.html) — 四島の面積、1945年時点の人口・産業
 - [日本国外務省「北方領土問題に関するQ&A」](https://www.mofa.go.jp/mofaj/area/hoppo/mondai_qa.html) — 日本政府の立場、1855年条約、1956年共同宣言
 - [Reuters](https://www.investing.com/news/world-news/russia-sees-no-reason-to-discuss-peace-with-japan-the-kremlin-says-3973090) — 現在の実効支配、ロシア側の立場、未締結の平和条約
+- [国土地理院「全国都道府県市区町村別面積調」](https://www.gsi.go.jp/KOKUJYOHO/MENCHO-title.htm) — 東京都の面積（約2,194 km²、比較用）
 - [UNESCO World Heritage Centre「Shiretoko」](https://whc.unesco.org/en/list/1193/) — オホーツク海周辺の流氷と海洋・陸上生態系
 
 数値の基準日と出典は上記資料に準拠しています。映像内の面積は四捨五入した値です。

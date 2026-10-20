@@ -3,6 +3,7 @@ logs
 *.log
 *.mp3
 **/public/voiceover/segment-durations.json
+**/public/voiceover/word-marks.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
