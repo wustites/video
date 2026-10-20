@@ -37,12 +37,24 @@ const sceneOpacity = (frame: number, start: number, end: number) =>
     end >= LAST_FRAME ? 1 : 1 - prog(frame, end - 2 * HALF_OVERLAP, HALF_OVERLAP),
   );
 
+/** Index of the item in focus when items are spotlighted one after another; -1 before it starts. */
+/** Split a snapshot card value ("63 index", "940 tok/s", "57 · 122") into [intelligence, speed]. */
+const cardStats = (value: string): [string, string] => {
+  const [a, b] = value.split(' · ');
+  if (b !== undefined) return [a, b];
+  return /tok\/s/.test(a) ? ['', a.replace(/\s*tok\/s/, '')] : [a.replace(/\s*index/, ''), ''];
+};
+
+const spotlight = (local: number, start: number, step: number, count: number) =>
+  local < start ? -1 : Math.min(count - 1, Math.floor((local - start) / step));
+
 const CSS = `
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .bg-grid { position: absolute; inset: 0; opacity: 0.15;
   background-image: linear-gradient(rgba(248,250,252,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(248,250,252,.06) 1px, transparent 1px);
   background-size: 72px 72px; }
 .scene { position: absolute; inset: 0; padding: 72px 64px 112px; display: flex; flex-direction: column; }
+.scene.centered { justify-content: center; }
 .scene-intro, .scene-outro { padding-top: 82px; }
 .scene-providers { padding-top: 58px; }
 .kicker { display: inline-flex; align-items: center; gap: 12px; align-self: flex-start; padding: 12px 18px;
@@ -60,12 +72,12 @@ const CSS = `
 .scene-title { font-size: 68px; line-height: 1.08; font-weight: 900; margin-top: 30px; }
 .scene-title.wide { font-size: 70px; }
 .provider-title { font-size: 72px; }
-.scene-subtitle { font-size: 28px; line-height: 1.42; color: #94A3B8; margin-top: 22px; font-weight: 650; }
+.scene-subtitle { font-size: 32px; line-height: 1.42; color: #94A3B8; margin-top: 22px; font-weight: 650; }
 .scene-subtitle.small { font-size: 24px; font-weight: 700; margin-top: 18px; }
-.bars-container { margin-top: 42px; display: grid; gap: 16px; }
+.bars-container { margin-top: 36px; display: grid; gap: 12px; }
 .bar-row { display: grid; grid-template-columns: 62px 1fr 132px; gap: 18px; align-items: center; }
 .bar-rank { width: 54px; height: 54px; display: grid; place-items: center; color: white; font-size: 27px; font-weight: 900; }
-.bar-track { height: 35px; background: rgba(248,250,252,.08); margin-top: 9px; overflow: hidden; }
+.bar-track { height: 30px; background: rgba(248,250,252,.08); margin-top: 9px; overflow: hidden; }
 .bar-fill { height: 100%; }
 .bar-name { font-size: 28px; font-weight: 800; }
 .bar-provider { font-size: 22px; color: #94A3B8; font-weight: 600; }
@@ -76,26 +88,30 @@ const CSS = `
 .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 24px; }
 .legend-item { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 600; color: #94A3B8; }
 .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
-.insight-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; margin-top: 58px; }
-.insight-card { min-height: 196px; padding: 24px; background: rgba(248,250,252,.07); border: 1px solid rgba(248,250,252,.12); }
-.insight-label { font-size: 22px; color: #94A3B8; font-weight: 700; }
-.insight-title { font-size: 34px; line-height: 1.1; font-weight: 900; margin-top: 18px; }
+.insight-grid { display: grid; grid-template-columns: 1fr; gap: 26px; margin-top: 64px; }
+.insight-card { padding: 30px 34px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px 24px; background: rgba(248,250,252,.07); border: 1px solid rgba(248,250,252,.12); }
+.insight-label { grid-column: 1 / -1; font-size: 26px; color: #94A3B8; font-weight: 700; }
+.insight-title { font-size: 44px; line-height: 1.1; font-weight: 900; }
+.insight-stats { display: flex; gap: 30px; }
+.insight-stat { text-align: right; }
+.insight-stat-value { font-size: 56px; font-weight: 900; line-height: 1; }
+.insight-stat-label { font-size: 22px; color: #94A3B8; font-weight: 700; margin-top: 8px; }
 .insight-value { font-size: 46px; font-weight: 900; margin-top: 22px; }
-.tier-list { display: grid; gap: 30px; margin-top: 64px; }
-.tier-row { display: grid; grid-template-columns: 138px 1fr 92px; gap: 18px; align-items: center; }
-.tier-label { font-size: 30px; font-weight: 900; }
-.tier-note { font-size: 21px; color: #94A3B8; font-weight: 650; margin-top: 6px; }
-.tier-track { height: 34px; background: rgba(248,250,252,.08); overflow: hidden; }
+.tier-list { display: grid; gap: 54px; margin-top: 80px; }
+.tier-row { display: grid; grid-template-columns: 220px 1fr 110px; gap: 18px; align-items: center; }
+.tier-label { font-size: 40px; font-weight: 900; }
+.tier-note { font-size: 26px; color: #94A3B8; font-weight: 650; margin-top: 6px; }
+.tier-track { height: 56px; background: rgba(248,250,252,.08); overflow: hidden; }
 .tier-fill { height: 100%; }
-.tier-count { font-size: 34px; font-weight: 900; text-align: right; }
-.provider-list { display: grid; gap: 22px; margin-top: 44px; }
-.provider-bar { height: 30px; background: rgba(248,250,252,.08); margin-top: 10px; }
+.tier-count { font-size: 52px; font-weight: 900; text-align: right; }
+.provider-list { display: grid; gap: 30px; margin-top: 64px; }
+.provider-bar { height: 38px; background: rgba(248,250,252,.08); margin-top: 10px; }
 .provider-fill { height: 100%; }
-.provider-row-label { font-size: 32px; font-weight: 800; }
-.provider-row-value { font-size: 36px; font-weight: 800; }
-.outro-content { margin-top: 130px; }
-.outro-title { font-size: 86px; line-height: 1.1; font-weight: 900; margin-top: 58px; }
-.outro-bullets { margin-top: 58px; display: grid; gap: 20px; font-size: 36px; color: #94A3B8; font-weight: 700; }
+.provider-row-label { font-size: 38px; font-weight: 800; }
+.provider-row-value { font-size: 42px; font-weight: 800; }
+.outro-content { }
+.outro-title { font-size: 100px; line-height: 1.1; font-weight: 900; margin-top: 58px; }
+.outro-bullets { margin-top: 64px; display: grid; gap: 26px; font-size: 44px; color: #94A3B8; font-weight: 700; }
 .gradient-line { height: 12px; margin-top: 58px; background: linear-gradient(90deg, #3B82F6, #10B981, #F59E0B); }
 .timeline-bar { position: absolute; left: 64px; right: 64px; bottom: 48px; height: 7px; background: rgba(248,250,252,.12); }
 .timeline-fill { height: 100%; background: #10B981; }
@@ -137,14 +153,19 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
 
   // Ranking bars (stagger: per-index 5-frame delay, 30-frame enter)
   const barLocal = frame - 220;
+  const frontierCount = MODELS.filter((m) => m.score >= 60).length;
+  const frontierFocus = prog(barLocal, 150, 22);
   // Scatter (stagger: 6-frame delay, 30-frame enter)
   const scatterLocal = frame - 520;
   // Efficiency cards (translateY stagger: 12-frame delay, 32-frame enter)
   const effLocal = frame - 770;
+  const effActive = spotlight(effLocal, 70, 50, 4);
   // Tiers (12-frame delay, 34-frame enter, Math.round counters)
   const tierLocal = frame - 1040;
+  const tierActive = spotlight(tierLocal, 80, 45, 4);
   // Providers (8-frame delay, 30-frame enter, Math.round counters)
   const provLocal = frame - 1310;
+  const provFocus = prog(provLocal, 110, 20);
   // Outro
   const outroLocal = frame - 1540;
   const reveal = prog(outroLocal, 0, 24);
@@ -160,7 +181,7 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
         <Kicker text={s.intro.kicker} />
         <div className="intro-title" style={{opacity: titleEnter, transform: `translateY(${(1 - titleEnter) * 76}px)`}}>
           <div className="hero-title" dangerouslySetInnerHTML={{__html: s.intro.title}} />
-          <div className="hero-subtitle">{s.intro.subtitle}</div>
+          <div className="hero-subtitle">{s.intro.subtitle.replace('{{totalModels}}', METRICS.totalModels)}</div>
         </div>
         <div className="intro-metrics" style={{opacity: metricsOpacity}}>
           {s.intro.metrics.map((m, i) => (
@@ -176,12 +197,15 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
       <div className="scene" style={{opacity: sceneOpacity(frame, SCENES[1].start, SCENES[1].end)}}>
         <Kicker text={s.ranking.kicker} />
         <div className="scene-title" dangerouslySetInnerHTML={{__html: s.ranking.title}} />
-        <div className="scene-subtitle small">{s.ranking.subtitle}</div>
+        <div style={{position: 'relative', height: 52, marginTop: 18}}>
+          <div className="scene-subtitle small" style={{position: 'absolute', margin: 0, opacity: 1 - frontierFocus}}>{s.ranking.subtitle}</div>
+          <div style={{position: 'absolute', top: -4, display: 'inline-flex', padding: '8px 22px', borderRadius: 999, background: 'rgba(16,185,129,.16)', border: '2px solid rgba(16,185,129,.7)', fontSize: 30, fontWeight: 900, opacity: frontierFocus, whiteSpace: 'nowrap'}}>{s.ranking.highlight.replace('{{n}}', String(frontierCount))}</div>
+        </div>
         <div className="bars-container">
           {MODELS.map((item, i) => {
             const enter = prog(barLocal - i * 5, 0, 30);
             return (
-              <div key={item.rank} className="bar-row" style={{opacity: enter, transform: `translateX(${(1 - enter) * -60}px)`}}>
+              <div key={item.rank} className="bar-row" style={{opacity: enter * (item.score >= 60 ? 1 : 1 - frontierFocus * 0.6), transform: `translateX(${(1 - enter) * -60}px)`}}>
                 <div className="bar-rank" style={{background: item.color}}>{item.rank}</div>
                 <div>
                   <div style={{display: 'flex', justifyContent: 'space-between', gap: 20}}>
@@ -253,18 +277,27 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
       </div>
 
       {/* 4 — Efficiency cards */}
-      <div className="scene" style={{opacity: sceneOpacity(frame, SCENES[3].start, SCENES[3].end)}}>
+      <div className="scene centered" style={{opacity: sceneOpacity(frame, SCENES[3].start, SCENES[3].end)}}>
         <Kicker text={s.efficiency.kicker} />
         <div className="scene-title wide" dangerouslySetInnerHTML={{__html: s.efficiency.title}} />
         <div className="scene-subtitle">{s.efficiency.subtitle}</div>
         <div className="insight-grid">
           {effCards.map((item, i) => {
             const enter = prog(effLocal - i * 12, 0, 32);
+            const active = effActive < 0 || effActive === i;
+            const [score, speed] = cardStats(item.value);
             return (
-              <div key={item.label} className="insight-card" style={{borderTop: `8px solid ${item.color}`, opacity: enter, transform: `translateY(${(1 - enter) * 42}px)`}}>
+              <div key={item.label} className="insight-card" style={{borderLeft: `10px solid ${item.color}`, opacity: enter * (active ? 1 : 0.45), transform: `translateY(${(1 - enter) * 42}px) scale(${effActive === i ? 1.03 : 1})`, boxShadow: effActive === i ? `0 0 40px ${item.color}40` : undefined}}>
                 <div className="insight-label">{item.label}</div>
                 <div className="insight-title">{item.title}</div>
-                <div className="insight-value" style={{color: item.color}}>{item.value}</div>
+                <div className="insight-stats">
+                  {[score, speed].map((v, k) => v && (
+                    <div key={k} className="insight-stat">
+                      <div className="insight-stat-value" style={{color: item.color}}>{v}</div>
+                      <div className="insight-stat-label">{s.efficiency.statLabels[k]}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             );
           })}
@@ -272,7 +305,7 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
       </div>
 
       {/* 5 — Tiers */}
-      <div className="scene" style={{opacity: sceneOpacity(frame, SCENES[4].start, SCENES[4].end)}}>
+      <div className="scene centered" style={{opacity: sceneOpacity(frame, SCENES[4].start, SCENES[4].end)}}>
         <Kicker text={s.tiers.kicker} />
         <div className="scene-title wide" dangerouslySetInnerHTML={{__html: s.tiers.title}} />
         <div className="scene-subtitle">{s.tiers.subtitle}</div>
@@ -280,7 +313,7 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
           {tiers.map((item, i) => {
             const enter = prog(tierLocal - i * 12, 0, 34);
             return (
-              <div key={item.label} className="tier-row" style={{opacity: enter, transform: `translateX(${(1 - enter) * -50}px)`}}>
+              <div key={item.label} className="tier-row" style={{opacity: enter * (tierActive < 0 || tierActive === i ? 1 : 0.45), transform: `translateX(${(1 - enter) * -50}px)`}}>
                 <div>
                   <div className="tier-label">{item.label}</div>
                   <div className="tier-note">{item.note}</div>
@@ -293,10 +326,11 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
             );
           })}
         </div>
+        <div style={{marginTop: 60, fontSize: 34, color: '#94A3B8', fontWeight: 800, opacity: prog(tierLocal, 60, 20)}}>{s.tiers.total.replace('{{total}}', String(TIER_COUNTS.reduce((a, b) => a + b, 0)))}</div>
       </div>
 
       {/* 6 — Providers */}
-      <div className="scene scene-providers" style={{opacity: sceneOpacity(frame, SCENES[5].start, SCENES[5].end)}}>
+      <div className="scene scene-providers centered" style={{opacity: sceneOpacity(frame, SCENES[5].start, SCENES[5].end)}}>
         <Kicker text={s.providers.kicker} />
         <div className="scene-title provider-title" dangerouslySetInnerHTML={{__html: s.providers.title}} />
         <div className="scene-subtitle">{s.providers.subtitle}</div>
@@ -304,7 +338,7 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
           {providers.map((item, i) => {
             const enter = prog(provLocal - i * 8, 0, 30);
             return (
-              <div key={item.providerKey} style={{opacity: enter, transform: `translateY(${(1 - enter) * 36}px)`}}>
+              <div key={item.providerKey} style={{opacity: enter * (i < 2 ? 1 : 1 - provFocus * 0.55), transform: `translateY(${(1 - enter) * 36}px)`}}>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                   <div className="provider-row-label">{item.name}</div>
                   <div className="provider-row-value">{Math.round(item.count * enter)}</div>
@@ -319,7 +353,7 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
       </div>
 
       {/* 7 — Outro + timeline fill */}
-      <div className="scene scene-outro" style={{opacity: sceneOpacity(frame, SCENES[6].start, SCENES[6].end)}}>
+      <div className="scene scene-outro centered" style={{opacity: sceneOpacity(frame, SCENES[6].start, SCENES[6].end)}}>
         <div className="outro-content" style={{opacity: reveal, transform: `translateY(${(1 - reveal) * 54}px)`}}>
           <Kicker text={s.outro.kicker} />
           <div className="outro-title" dangerouslySetInnerHTML={{__html: s.outro.title}} />

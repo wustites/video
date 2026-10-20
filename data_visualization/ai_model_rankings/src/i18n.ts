@@ -11,10 +11,10 @@ export type Locale = {
   providers: Record<string, string>;
   scenes: {
     intro: {kicker: string; title: string; subtitle: string; metrics: MetricCopy[]};
-    ranking: {kicker: string; title: string; subtitle: string};
+    ranking: {kicker: string; title: string; subtitle: string; highlight: string};
     scatter: {kicker: string; title: string; subtitle: string; xAxis: string; yAxis: string};
-    efficiency: {kicker: string; title: string; subtitle: string; cards: EffCardCopy[]};
-    tiers: {kicker: string; title: string; subtitle: string; rows: TierRowCopy[]};
+    efficiency: {kicker: string; title: string; subtitle: string; statLabels: [string, string]; cards: EffCardCopy[]};
+    tiers: {kicker: string; title: string; subtitle: string; total: string; rows: TierRowCopy[]};
     providers: {kicker: string; title: string; subtitle: string};
     outro: {kicker: string; title: string; bullets: string[]};
   };
@@ -31,7 +31,7 @@ const en: Locale = {
     intro: {
       kicker: '2026 AI Model Rankings',
       title: 'Who Leads the<br/><span>AI Race?</span>',
-      subtitle: 'Intelligence, speed, and cost compared across 100+ frontier models from OpenAI, Anthropic, Google, and more.',
+      subtitle: 'Intelligence and speed compared across {{totalModels}} models from OpenAI, Anthropic, Google, and more.',
       metrics: [
         {label: 'Models Analyzed', value: '{{totalModels}}', color: '#3B82F6'},
         {label: 'Top Intelligence', value: '{{topModel}}', color: '#10B981'},
@@ -42,6 +42,7 @@ const en: Locale = {
       kicker: 'Intelligence Index Top 15',
       title: 'Intelligence Index<br/>Top 15 Models',
       subtitle: 'Intelligence Index Score (higher is better)',
+      highlight: '{{n}} models reach the 60+ frontier',
     },
     scatter: {
       kicker: 'Speed vs Intelligence',
@@ -54,6 +55,7 @@ const en: Locale = {
       kicker: 'Efficiency Watchlist',
       title: 'The best model<br/>depends on the job',
       subtitle: 'Different leaders emerge when you optimize for intelligence, throughput, or balance.',
+      statLabels: ['Intelligence', 'Speed (tok/s)'],
       cards: [
         {label: 'Highest Intelligence', title: '{{card0}}', value: '', color: '#D97706'},
         {label: 'Fastest Throughput', title: '{{card1}}', value: '', color: '#F43F5E'},
@@ -64,12 +66,13 @@ const en: Locale = {
     tiers: {
       kicker: 'Capability Tiers',
       title: 'Frontier quality is<br/>no longer one cluster',
-      subtitle: 'Top models separate into a small frontier group, a dense challenger band, and a fast utility layer.',
+      subtitle: 'Scores split into a small frontier group, a dense challenger band, and a long tail.',
+      total: '{{total}} models in total',
       rows: [
         {label: 'Frontier', note: 'Score 60+', color: '#10B981'},
         {label: 'Challenger', note: 'Score 50-59', color: '#3B82F6'},
         {label: 'Production', note: 'Score 40-49', color: '#F59E0B'},
-        {label: 'Speed-first', note: 'Sub-40, high throughput', color: '#F43F5E'},
+        {label: 'Entry', note: 'Score below 40', color: '#F43F5E'},
       ],
     },
     providers: {
@@ -96,7 +99,7 @@ const zh: Locale = {
     intro: {
       kicker: '2026 AI 模型排名',
       title: '谁在领跑<br/><span>AI 竞赛？</span>',
-      subtitle: '对比 100+ 前沿模型在智能、速度和成本方面的表现，涵盖 OpenAI、Anthropic、Google 等厂商。',
+      subtitle: '对比 {{totalModels}} 个模型的智能与速度，涵盖 OpenAI、Anthropic、Google 等厂商。',
       metrics: [
         {label: '分析模型数', value: '{{totalModels}}', color: '#3B82F6'},
         {label: '最高智能', value: '{{topModel}}', color: '#10B981'},
@@ -107,6 +110,7 @@ const zh: Locale = {
       kicker: '智能指数前 15 名',
       title: '智能指数<br/>前 15 名模型',
       subtitle: '智能指数评分（越高越好）',
+      highlight: '{{n}} 个模型达到 60 分以上的前沿层',
     },
     scatter: {
       kicker: '速度 vs 智能',
@@ -119,6 +123,7 @@ const zh: Locale = {
       kicker: '效率观察',
       title: '最佳模型<br/>取决于任务',
       subtitle: '当目标从智能切换到吞吐或平衡性时，领先者会变得完全不同。',
+      statLabels: ['智能指数', '速度（tok/s）'],
       cards: [
         {label: '最高智能', title: '{{card0}}', value: '', color: '#D97706'},
         {label: '最快吞吐', title: '{{card1}}', value: '', color: '#F43F5E'},
@@ -129,12 +134,13 @@ const zh: Locale = {
     tiers: {
       kicker: '能力分层',
       title: '前沿模型<br/>不再挤成一团',
-      subtitle: '头部模型分成少数前沿层、密集挑战层，以及面向速度的实用层。',
+      subtitle: '分数分成少数前沿层、密集的挑战层，以及长尾。',
+      total: '共 {{total}} 个模型',
       rows: [
         {label: '前沿层', note: '60 分以上', color: '#10B981'},
         {label: '挑战层', note: '50-59 分', color: '#3B82F6'},
         {label: '生产层', note: '40-49 分', color: '#F59E0B'},
-        {label: '速度层', note: '低分高吞吐', color: '#F43F5E'},
+        {label: '入门层', note: '40 分以下', color: '#F43F5E'},
       ],
     },
     providers: {
@@ -161,7 +167,7 @@ const ja: Locale = {
     intro: {
       kicker: '2026 AIモデルランキング',
       title: 'AI競争を<br/><span>リードするのは？</span>',
-      subtitle: 'OpenAI、Anthropic、Google などの100以上のフロンティアモデルを、知能・速度・コストで比較します。',
+      subtitle: 'OpenAI、Anthropic、Google など{{totalModels}}のモデルを、知能と速度で比較します。',
       metrics: [
         {label: '分析モデル数', value: '{{totalModels}}', color: '#3B82F6'},
         {label: '最高知能', value: '{{topModel}}', color: '#10B981'},
@@ -172,6 +178,7 @@ const ja: Locale = {
       kicker: '知能指数トップ15',
       title: '知能指数<br/>上位15モデル',
       subtitle: '知能指数スコア（高いほど優秀）',
+      highlight: '{{n}}モデルが60点以上のフロンティア層',
     },
     scatter: {
       kicker: '速度 vs 知能',
@@ -184,6 +191,7 @@ const ja: Locale = {
       kicker: '効率ウォッチ',
       title: '最適なモデルは<br/>用途で変わる',
       subtitle: '知能、スループット、バランスのどれを重視するかで、勝者は変わります。',
+      statLabels: ['知能指数', '速度（tok/s）'],
       cards: [
         {label: '最高知能', title: '{{card0}}', value: '', color: '#D97706'},
         {label: '最高スループット', title: '{{card1}}', value: '', color: '#F43F5E'},
@@ -194,12 +202,13 @@ const ja: Locale = {
     tiers: {
       kicker: '能力レイヤー',
       title: '最上位モデルは<br/>一枚岩ではない',
-      subtitle: 'トップモデルは、少数のフロンティア層、厚いチャレンジャー層、速度重視の実用層に分かれます。',
+      subtitle: 'スコアは、少数のフロンティア層、厚いチャレンジャー層、そしてロングテールに分かれます。',
+      total: '計{{total}}モデル',
       rows: [
         {label: '最前線', note: '60点以上', color: '#10B981'},
         {label: '挑戦層', note: '50-59点', color: '#3B82F6'},
         {label: '実用層', note: '40-49点', color: '#F59E0B'},
-        {label: '速度層', note: '低スコア高吞吐', color: '#F43F5E'},
+        {label: 'エントリー層', note: '40点未満', color: '#F43F5E'},
       ],
     },
     providers: {
