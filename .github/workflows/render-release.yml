@@ -172,6 +172,15 @@ jobs:
             fi
           done
 
+      - name: Normalize loudness
+        env:
+          PROJECT_DIR: ${{ steps.release.outputs.project_dir }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -d '' videos < <(find "$PROJECT_DIR/out" -maxdepth 1 -type f -name '*.mp4' -print0)
+          scripts/normalize-loudness.sh "${videos[@]}"
+
       - name: Prepare release assets
         id: assets
         env:
