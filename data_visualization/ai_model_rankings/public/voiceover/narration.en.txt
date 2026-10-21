@@ -1,0 +1,13 @@
+Who leads the AI race? We compared 134 models on intelligence and speed, using data from Artificial Analysis.
+
+On the Intelligence Index, Claude Opus 5.5 ranks first with a score of 58. 9 models reach the frontier tier, at 53 points or more.
+
+Plot speed against intelligence, and the leaders spread out. The highest scorer is not the fastest.
+
+So the best model depends on the job. Mercury 2.5 is the fastest, at 781 tokens per second, while Claude Sonnet 5.5 pairs a score of 56 with 137 tokens per second.
+
+Across all 134 models, only 9 sit in the frontier tier. 13 are challengers, and the long tail holds 80.
+
+In the top twenty, Anthropic has 10 models, followed by OpenAI with 7.
+
+The AI race is more competitive than ever.

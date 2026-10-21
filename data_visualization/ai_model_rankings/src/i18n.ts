@@ -42,7 +42,7 @@ const en: Locale = {
       kicker: 'Intelligence Index Top 15',
       title: 'Intelligence Index<br/>Top 15 Models',
       subtitle: 'Intelligence Index Score (higher is better)',
-      highlight: '{{n}} models reach the 60+ frontier',
+      highlight: '{{n}} models reach the frontier ({{min}}+)',
     },
     scatter: {
       kicker: 'Speed vs Intelligence',
@@ -69,10 +69,10 @@ const en: Locale = {
       subtitle: 'Scores split into a small frontier group, a dense challenger band, and a long tail.',
       total: '{{total}} models in total',
       rows: [
-        {label: 'Frontier', note: 'Score 60+', color: '#10B981'},
-        {label: 'Challenger', note: 'Score 50-59', color: '#3B82F6'},
-        {label: 'Production', note: 'Score 40-49', color: '#F59E0B'},
-        {label: 'Entry', note: 'Score below 40', color: '#F43F5E'},
+        {label: 'Frontier', note: 'Score {{lo}}+', color: '#10B981'},
+        {label: 'Challenger', note: 'Score {{lo}}–{{hi}}', color: '#3B82F6'},
+        {label: 'Production', note: 'Score {{lo}}–{{hi}}', color: '#F59E0B'},
+        {label: 'Entry', note: 'Score below {{next}}', color: '#F43F5E'},
       ],
     },
     providers: {
@@ -110,7 +110,7 @@ const zh: Locale = {
       kicker: '智能指数前 15 名',
       title: '智能指数<br/>前 15 名模型',
       subtitle: '智能指数评分（越高越好）',
-      highlight: '{{n}} 个模型达到 60 分以上的前沿层',
+      highlight: '{{n}} 个模型进入前沿层（{{min}} 分以上）',
     },
     scatter: {
       kicker: '速度 vs 智能',
@@ -137,10 +137,10 @@ const zh: Locale = {
       subtitle: '分数分成少数前沿层、密集的挑战层，以及长尾。',
       total: '共 {{total}} 个模型',
       rows: [
-        {label: '前沿层', note: '60 分以上', color: '#10B981'},
-        {label: '挑战层', note: '50-59 分', color: '#3B82F6'},
-        {label: '生产层', note: '40-49 分', color: '#F59E0B'},
-        {label: '入门层', note: '40 分以下', color: '#F43F5E'},
+        {label: '前沿层', note: '{{lo}} 分以上', color: '#10B981'},
+        {label: '挑战层', note: '{{lo}}–{{hi}} 分', color: '#3B82F6'},
+        {label: '生产层', note: '{{lo}}–{{hi}} 分', color: '#F59E0B'},
+        {label: '入门层', note: '低于 {{next}} 分', color: '#F43F5E'},
       ],
     },
     providers: {
@@ -178,7 +178,7 @@ const ja: Locale = {
       kicker: '知能指数トップ15',
       title: '知能指数<br/>上位15モデル',
       subtitle: '知能指数スコア（高いほど優秀）',
-      highlight: '{{n}}モデルが60点以上のフロンティア層',
+      highlight: '{{n}}モデルがフロンティア層（{{min}}点以上）',
     },
     scatter: {
       kicker: '速度 vs 知能',
@@ -205,10 +205,10 @@ const ja: Locale = {
       subtitle: 'スコアは、少数のフロンティア層、厚いチャレンジャー層、そしてロングテールに分かれます。',
       total: '計{{total}}モデル',
       rows: [
-        {label: '最前線', note: '60点以上', color: '#10B981'},
-        {label: '挑戦層', note: '50-59点', color: '#3B82F6'},
-        {label: '実用層', note: '40-49点', color: '#F59E0B'},
-        {label: 'エントリー層', note: '40点未満', color: '#F43F5E'},
+        {label: '最前線', note: '{{lo}}点以上', color: '#10B981'},
+        {label: '挑戦層', note: '{{lo}}–{{hi}}点', color: '#3B82F6'},
+        {label: '実用層', note: '{{lo}}–{{hi}}点', color: '#F59E0B'},
+        {label: 'エントリー層', note: '{{next}}点未満', color: '#F43F5E'},
       ],
     },
     providers: {

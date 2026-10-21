@@ -1,6 +1,6 @@
 {
   "name": "ai-model-rankings",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,7 +11,8 @@
     "render:zh": "remotion render AiModelRankingsZh out/ai-model-rankings-zh.mp4",
     "render:ja": "remotion render AiModelRankingsJa out/ai-model-rankings-ja.mp4",
     "render:draft": "remotion render AiModelRankingsEn out/preview.mp4 --log=error",
-    "data:update": "node scripts/setup.mjs"
+    "data:update": "node scripts/setup.mjs",
+    "voiceover": "node scripts/voiceover.mjs"
   },
   "dependencies": {
     "@remotion/cli": "4.0.504",

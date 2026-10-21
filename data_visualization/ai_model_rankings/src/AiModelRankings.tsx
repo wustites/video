@@ -1,21 +1,10 @@
-import React from 'react';
-import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
-import {CARDS, METRICS, MODELS, PROVIDER_COUNTS, SCATTER_POINTS, TIER_COUNTS} from './data';
+import React, {useMemo} from 'react';
+import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame} from 'remotion';
+import {CARDS, METRICS, MODELS, PROVIDER_COUNTS, SCATTER_POINTS, TIER_COUNTS, TIER_MINS} from './data';
 import {LOCALES, type LocaleKey} from './i18n';
 import {layoutScatter, SCATTER_W, SCATTER_H} from './scatter';
 
-export const FPS = 30;
-export const DURATION_IN_FRAMES = 1800;
-
-const SCENES = [
-  {start: 0, end: 240},
-  {start: 210, end: 510},
-  {start: 480, end: 780},
-  {start: 750, end: 1050},
-  {start: 1020, end: 1320},
-  {start: 1290, end: 1560},
-  {start: 1530, end: 1800},
-] as const;
+import {getTimeline} from './timing';
 
 const TOP_SCORE = MODELS[0].score;
 const TIER_MAX = Math.max(...TIER_COUNTS);
@@ -27,17 +16,20 @@ const prog = (frame: number, start: number, len: number) =>
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
-/** Scenes overlap by 30 frames: fade out in the first half of the overlap
- * and in during the second half, so two titles are never visible together. */
-const HALF_OVERLAP = 15;
-const LAST_FRAME = SCENES[SCENES.length - 1].end;
-const sceneOpacity = (frame: number, start: number, end: number) =>
-  Math.min(
-    start === 0 ? 1 : prog(frame, start + HALF_OVERLAP, HALF_OVERLAP),
-    end >= LAST_FRAME ? 1 : 1 - prog(frame, end - 2 * HALF_OVERLAP, HALF_OVERLAP),
-  );
+type Window = {start: number; end: number};
 
-/** Index of the item in focus when items are spotlighted one after another; -1 before it starts. */
+/** Out-then-in fades inside each scene window: the first scene starts visible and the last
+ * one holds to the end, so two titles are never on screen together. */
+const FADE = 10;
+const sceneOpacity = (frame: number, w: Window, scenes: Window[]) => {
+  const isFirst = w.start === 0;
+  const isLast = w === scenes[scenes.length - 1];
+  if (frame < w.start || (!isLast && frame > w.end)) return 0;
+  const fadeIn = isFirst ? 1 : Math.min(1, (frame - w.start) / FADE);
+  const fadeOut = isLast ? 1 : Math.min(1, (w.end - frame) / FADE);
+  return Math.max(0, Math.min(fadeIn, fadeOut));
+};
+
 /** Split a snapshot card value ("63 index", "940 tok/s", "57 · 122") into [intelligence, speed]. */
 const cardStats = (value: string): [string, string] => {
   const [a, b] = value.split(' · ');
@@ -127,6 +119,12 @@ const Kicker: React.FC<{text: string}> = ({text}) => (
 export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeKey = 'en'}) => {
   const frame = useCurrentFrame();
   const loc = LOCALES[localeKey];
+  const tl = useMemo(() => getTimeline(localeKey), [localeKey]);
+  const SCENES = tl.scenes;
+  const {cue} = tl;
+  /** Spotlight `count` items evenly over the rest of scene `i`, starting `from` frames in. */
+  const spreadSpotlight = (local: number, i: number, from: number, count: number) =>
+    spotlight(local, from, Math.max(20, Math.floor((SCENES[i].end - SCENES[i].start - from - 30) / count)), count);
   const s = loc.scenes;
   const providerName = (key: string, label: string) => loc.providers[key] || label || key;
 
@@ -139,7 +137,14 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
     value: CARDS[i]?.value || c.value,
     color: CARDS[i]?.color || c.color,
   }));
-  const tiers = s.tiers.rows.map((row, i) => ({...row, count: TIER_COUNTS[i] || 0}));
+  const tiers = s.tiers.rows.map((row, i) => ({
+    ...row,
+    note: row.note
+      .replace('{{lo}}', String(TIER_MINS[i]))
+      .replace('{{hi}}', String((TIER_MINS[i - 1] ?? 0) - 1))
+      .replace('{{next}}', String(TIER_MINS[2])),
+    count: TIER_COUNTS[i] || 0,
+  }));
   const providers = PROVIDER_COUNTS.map((p) => ({...p, name: providerName(p.providerKey, p.label)}));
   const legendSeen = new Map<string, string>();
   SCATTER_POINTS.forEach((p) => {
@@ -152,22 +157,22 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
   const metricsOpacity = prog(frame, 24, 24);
 
   // Ranking bars (stagger: per-index 5-frame delay, 30-frame enter)
-  const barLocal = frame - 220;
-  const frontierCount = MODELS.filter((m) => m.score >= 60).length;
-  const frontierFocus = prog(barLocal, 150, 22);
+  const barLocal = frame - SCENES[1].start;
+  const frontierCount = MODELS.filter((m) => m.score >= TIER_MINS[0]).length;
+  const frontierFocus = prog(barLocal, cue('ranking', {en: 'frontier', zh: '前沿', ja: 'フロンティア'}[localeKey]) - 10, 22);
   // Scatter (stagger: 6-frame delay, 30-frame enter)
-  const scatterLocal = frame - 520;
+  const scatterLocal = frame - SCENES[2].start;
   // Efficiency cards (translateY stagger: 12-frame delay, 32-frame enter)
-  const effLocal = frame - 770;
-  const effActive = spotlight(effLocal, 70, 50, 4);
+  const effLocal = frame - SCENES[3].start;
+  const effActive = spreadSpotlight(effLocal, 3, 40, 4);
   // Tiers (12-frame delay, 34-frame enter, Math.round counters)
-  const tierLocal = frame - 1040;
-  const tierActive = spotlight(tierLocal, 80, 45, 4);
+  const tierLocal = frame - SCENES[4].start;
+  const tierActive = spreadSpotlight(tierLocal, 4, 50, 4);
   // Providers (8-frame delay, 30-frame enter, Math.round counters)
-  const provLocal = frame - 1310;
-  const provFocus = prog(provLocal, 110, 20);
+  const provLocal = frame - SCENES[5].start;
+  const provFocus = prog(provLocal, cue('providers', PROVIDER_COUNTS[0].label), 20);
   // Outro
-  const outroLocal = frame - 1540;
+  const outroLocal = frame - SCENES[6].start;
   const reveal = prog(outroLocal, 0, 24);
   const lineW = interpolate(outroLocal, [12, 34], [0, 100], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
@@ -177,7 +182,7 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
       <div className="bg-grid" />
 
       {/* 1 — Intro */}
-      <div className="scene scene-intro" style={{opacity: sceneOpacity(frame, SCENES[0].start, SCENES[0].end)}}>
+      <div className="scene scene-intro" style={{opacity: sceneOpacity(frame, SCENES[0], SCENES)}}>
         <Kicker text={s.intro.kicker} />
         <div className="intro-title" style={{opacity: titleEnter, transform: `translateY(${(1 - titleEnter) * 76}px)`}}>
           <div className="hero-title" dangerouslySetInnerHTML={{__html: s.intro.title}} />
@@ -194,18 +199,18 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
       </div>
 
       {/* 2 — Ranking bars x15 */}
-      <div className="scene" style={{opacity: sceneOpacity(frame, SCENES[1].start, SCENES[1].end)}}>
+      <div className="scene" style={{opacity: sceneOpacity(frame, SCENES[1], SCENES)}}>
         <Kicker text={s.ranking.kicker} />
         <div className="scene-title" dangerouslySetInnerHTML={{__html: s.ranking.title}} />
         <div style={{position: 'relative', height: 52, marginTop: 18}}>
           <div className="scene-subtitle small" style={{position: 'absolute', margin: 0, opacity: 1 - frontierFocus}}>{s.ranking.subtitle}</div>
-          <div style={{position: 'absolute', top: -4, display: 'inline-flex', padding: '8px 22px', borderRadius: 999, background: 'rgba(16,185,129,.16)', border: '2px solid rgba(16,185,129,.7)', fontSize: 30, fontWeight: 900, opacity: frontierFocus, whiteSpace: 'nowrap'}}>{s.ranking.highlight.replace('{{n}}', String(frontierCount))}</div>
+          <div style={{position: 'absolute', top: -4, display: 'inline-flex', padding: '8px 22px', borderRadius: 999, background: 'rgba(16,185,129,.16)', border: '2px solid rgba(16,185,129,.7)', fontSize: 30, fontWeight: 900, opacity: frontierFocus, whiteSpace: 'nowrap'}}>{s.ranking.highlight.replace('{{n}}', String(frontierCount)).replace('{{min}}', String(TIER_MINS[0]))}</div>
         </div>
         <div className="bars-container">
           {MODELS.map((item, i) => {
             const enter = prog(barLocal - i * 5, 0, 30);
             return (
-              <div key={item.rank} className="bar-row" style={{opacity: enter * (item.score >= 60 ? 1 : 1 - frontierFocus * 0.6), transform: `translateX(${(1 - enter) * -60}px)`}}>
+              <div key={item.rank} className="bar-row" style={{opacity: enter * (item.score >= TIER_MINS[0] ? 1 : 1 - frontierFocus * 0.6), transform: `translateX(${(1 - enter) * -60}px)`}}>
                 <div className="bar-rank" style={{background: item.color}}>{item.rank}</div>
                 <div>
                   <div style={{display: 'flex', justifyContent: 'space-between', gap: 20}}>
@@ -224,7 +229,7 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
       </div>
 
       {/* 3 — Scatter: speed/score scales → absolute divs */}
-      <div className="scene" style={{opacity: sceneOpacity(frame, SCENES[2].start, SCENES[2].end)}}>
+      <div className="scene" style={{opacity: sceneOpacity(frame, SCENES[2], SCENES)}}>
         <Kicker text={s.scatter.kicker} />
         <div className="scene-title">{s.scatter.title}</div>
         <div className="scene-subtitle small">{s.scatter.subtitle}</div>
@@ -277,7 +282,7 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
       </div>
 
       {/* 4 — Efficiency cards */}
-      <div className="scene centered" style={{opacity: sceneOpacity(frame, SCENES[3].start, SCENES[3].end)}}>
+      <div className="scene centered" style={{opacity: sceneOpacity(frame, SCENES[3], SCENES)}}>
         <Kicker text={s.efficiency.kicker} />
         <div className="scene-title wide" dangerouslySetInnerHTML={{__html: s.efficiency.title}} />
         <div className="scene-subtitle">{s.efficiency.subtitle}</div>
@@ -305,7 +310,7 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
       </div>
 
       {/* 5 — Tiers */}
-      <div className="scene centered" style={{opacity: sceneOpacity(frame, SCENES[4].start, SCENES[4].end)}}>
+      <div className="scene centered" style={{opacity: sceneOpacity(frame, SCENES[4], SCENES)}}>
         <Kicker text={s.tiers.kicker} />
         <div className="scene-title wide" dangerouslySetInnerHTML={{__html: s.tiers.title}} />
         <div className="scene-subtitle">{s.tiers.subtitle}</div>
@@ -330,7 +335,7 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
       </div>
 
       {/* 6 — Providers */}
-      <div className="scene scene-providers centered" style={{opacity: sceneOpacity(frame, SCENES[5].start, SCENES[5].end)}}>
+      <div className="scene scene-providers centered" style={{opacity: sceneOpacity(frame, SCENES[5], SCENES)}}>
         <Kicker text={s.providers.kicker} />
         <div className="scene-title provider-title" dangerouslySetInnerHTML={{__html: s.providers.title}} />
         <div className="scene-subtitle">{s.providers.subtitle}</div>
@@ -353,7 +358,7 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
       </div>
 
       {/* 7 — Outro + timeline fill */}
-      <div className="scene scene-outro centered" style={{opacity: sceneOpacity(frame, SCENES[6].start, SCENES[6].end)}}>
+      <div className="scene scene-outro centered" style={{opacity: sceneOpacity(frame, SCENES[6], SCENES)}}>
         <div className="outro-content" style={{opacity: reveal, transform: `translateY(${(1 - reveal) * 54}px)`}}>
           <Kicker text={s.outro.kicker} />
           <div className="outro-title" dangerouslySetInnerHTML={{__html: s.outro.title}} />
@@ -366,8 +371,9 @@ export const AiModelRankings: React.FC<{locale?: LocaleKey}> = ({locale: localeK
         </div>
       </div>
 
+      <Audio src={staticFile(`voiceover/narration.${localeKey}.mp3`)} />
       <div className="timeline-bar">
-        <div className="timeline-fill" style={{width: `${(frame / DURATION_IN_FRAMES) * 100}%`}} />
+        <div className="timeline-fill" style={{width: `${(frame / tl.duration) * 100}%`}} />
       </div>
     </AbsoluteFill>
   );

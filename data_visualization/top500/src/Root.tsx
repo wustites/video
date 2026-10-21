@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Composition, continueRender, delayRender} from 'remotion';
 import {Top500} from './Top500';
-import {DURATION_IN_FRAMES, FPS} from './data';
+import {DURATION_IN_FRAMES, FPS} from './timing';
 import {loadFonts} from './fonts';
 
 export const RemotionRoot: React.FC = () => {

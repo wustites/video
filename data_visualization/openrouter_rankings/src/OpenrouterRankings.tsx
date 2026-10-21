@@ -1,37 +1,35 @@
-import React from 'react';
-import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
+import React, {useMemo} from 'react';
+import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import {DATA} from './data';
 import {displayProvider, getCopy, getInsights, type Locale} from './i18n';
 
-export const FPS = 30;
-export const DURATION_IN_FRAMES = 1350;
+import {getTimeline} from './timing';
 
-const SCENES = [
-  {start: 0, end: 240},
-  {start: 210, end: 540},
-  {start: 510, end: 780},
-  {start: 750, end: 1080},
-  {start: 1050, end: 1350},
-];
+type Window = {start: number; end: number};
 
-/** Scenes overlap by 30 frames: fade out in the first half, fade in in the
- * second half, so two titles are never visible at the same time. */
-const HALF_OVERLAP = 15;
-const LAST_FRAME = SCENES[SCENES.length - 1].end;
-function sceneOpacity(frame: number, start: number, end: number): number {
-  const fadeIn = start === 0 ? 1 : interpolate(frame, [start + HALF_OVERLAP, start + 2 * HALF_OVERLAP], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const fadeOut = end >= LAST_FRAME ? 1 : interpolate(frame, [end - 2 * HALF_OVERLAP, end - HALF_OVERLAP], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  return Math.min(fadeIn, fadeOut);
+/** Out-then-in fades inside each scene window: the first scene starts visible and the last
+ * one holds to the end, so two titles are never on screen together. */
+const FADE = 10;
+function sceneOpacity(frame: number, w: Window, scenes: Window[]): number {
+  const isFirst = w.start === 0;
+  const isLast = w === scenes[scenes.length - 1];
+  if (frame < w.start || (!isLast && frame > w.end)) return 0;
+  const fadeIn = isFirst ? 1 : Math.min(1, (frame - w.start) / FADE);
+  const fadeOut = isLast ? 1 : Math.min(1, (w.end - frame) / FADE);
+  return Math.max(0, Math.min(fadeIn, fadeOut));
 }
 
-function currentScene(frame: number): number {
-  for (let i = SCENES.length - 1; i > 0; i--) {
-    if (frame >= SCENES[i].start) {
+function currentScene(frame: number, scenes: Window[]): number {
+  for (let i = scenes.length - 1; i > 0; i--) {
+    if (frame >= scenes[i].start) {
       return i;
     }
   }
   return 0;
 }
+
+/** First word of a model name, for finding it in the narration. */
+const firstWord = (name: string) => name.split(' ')[0];
 
 const DONUT_R = 200;
 const DONUT_C = 2 * Math.PI * DONUT_R;
@@ -50,31 +48,37 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
   const frame = useCurrentFrame();
   const copy = getCopy(locale);
   const insights = getInsights(locale);
-  const progress = frame / DURATION_IN_FRAMES;
-  const cur = currentScene(frame);
+  const tl = useMemo(() => getTimeline(locale), [locale]);
+  const SCENES = tl.scenes;
+  const {cue} = tl;
+  const progress = frame / tl.duration;
+  const cur = currentScene(frame, SCENES);
 
   // Intro
   const titleEnter = interpolate(frame, [0, 36], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const mEnter = interpolate(frame, [20, 42], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const totalEnter = interpolate(frame, [26, 60], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const tTotal = cue('intro', String(DATA.totalTokens));
+  const totalEnter = interpolate(frame, [tTotal - 20, tTotal + 10], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const totalVal = (DATA.totalTokens * totalEnter).toFixed(1);
   const riserColor = DATA.topGrowth.growth >= 0 ? '#4ade80' : '#f87171';
   const riserSign = DATA.topGrowth.growth >= 0 ? '+' : '';
 
   // Ranking bars
-  const local = frame - 220;
+  const local = frame - SCENES[1].start;
   const maxTokens = DATA.models[0].tokens;
   // After the bars land, spotlight the Chinese models and state the takeaway.
-  const cnFocus = interpolate(local, [140, 162], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const tCn = cue('ranking', locale === 'zh' ? '中国' : 'China');
+  const cnFocus = interpolate(local, [tCn - 10, tCn + 12], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
   // Providers donut
-  const plocal = frame - 520;
+  const plocal = frame - SCENES[2].start;
   const donutEnter = interpolate(plocal, [0, 20], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const dEnter = interpolate(plocal, [14, 40], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const donutTotal = (DATA.totalTokens * dEnter).toFixed(1);
   // Walk through the providers one by one once the donut is drawn.
-  const PROV_STEP = 26;
-  const provActive = plocal < 50 ? -1 : Math.min(DATA.providers.length - 1, Math.floor((plocal - 50) / PROV_STEP));
+  const provFrom = cue('providers', firstWord(DATA.providers[0].name));
+  const PROV_STEP = Math.max(18, Math.floor((SCENES[2].end - SCENES[2].start - provFrom - 20) / DATA.providers.length));
+  const provActive = plocal < provFrom ? -1 : Math.min(DATA.providers.length - 1, Math.floor((plocal - provFrom) / PROV_STEP));
   let acc = 0;
   const segments = DATA.providers.map((p) => {
     const from = acc;
@@ -83,13 +87,14 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
   });
 
   // Growth
-  const glocal = frame - 760;
+  const glocal = frame - SCENES[3].start;
   const maxGrowth = DATA.growthModels[0].growth;
-  const GROW_STEP = 40;
-  const growActive = glocal < 70 ? -1 : Math.min(DATA.growthModels.length - 1, Math.floor((glocal - 70) / GROW_STEP));
+  const growFrom = cue('growth', firstWord(DATA.topGrowth.model));
+  const GROW_STEP = Math.max(20, Math.floor((SCENES[3].end - SCENES[3].start - growFrom - 20) / DATA.growthModels.length));
+  const growActive = glocal < growFrom ? -1 : Math.min(DATA.growthModels.length - 1, Math.floor((glocal - growFrom) / GROW_STEP));
 
   // Outro
-  const olocal = frame - 1060;
+  const olocal = frame - SCENES[4].start;
   const reveal = interpolate(olocal, [0, 24], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const lineW = interpolate(olocal, [12, 34], [0, 100], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
@@ -100,7 +105,7 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
       <div style={{position: 'absolute', top: 84, right: 68, fontSize: 24, fontWeight: 700, color: '#94a3b8'}}>openrouter.ai/rankings</div>
 
       {/* Scene 0: intro */}
-      <div style={{position: 'absolute', inset: 0, padding: '76px 68px 128px', display: 'flex', flexDirection: 'column', opacity: sceneOpacity(frame, SCENES[0].start, SCENES[0].end)}}>
+      <div style={{position: 'absolute', inset: 0, padding: '76px 68px 128px', display: 'flex', flexDirection: 'column', opacity: sceneOpacity(frame, SCENES[0], SCENES)}}>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
           <div style={kickerStyle}><span style={dotStyle} />{copy.kickerIntro}</div>
         </div>
@@ -131,9 +136,9 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
       </div>
 
       {/* Scene 1: ranking bars */}
-      <div style={{position: 'absolute', inset: 0, padding: '76px 68px 128px', display: 'flex', flexDirection: 'column', opacity: sceneOpacity(frame, SCENES[1].start, SCENES[1].end)}}>
+      <div style={{position: 'absolute', inset: 0, padding: '76px 68px 128px', display: 'flex', flexDirection: 'column', opacity: sceneOpacity(frame, SCENES[1], SCENES)}}>
         <div style={kickerStyle}><span style={dotStyle} />{copy.kickerRanking}</div>
-        <div style={{fontSize: 74, lineHeight: 1.08, fontWeight: 900, marginTop: 34}}>{DATA.topModel}<br /><span style={accentStyle}>{copy.rankTitleB}</span></div>
+        <div style={{fontSize: DATA.topModel.length > 18 ? 60 : 74, lineHeight: 1.08, fontWeight: 900, marginTop: 34}}>{DATA.topModel}<br /><span style={accentStyle}>{copy.rankTitleB}</span></div>
         <div style={{position: 'relative', marginTop: 22, height: 64}}>
         <div style={{position: 'absolute', left: 0, top: 0, fontSize: 30, lineHeight: 1.45, color: '#94a3b8', fontWeight: 600, opacity: 1 - cnFocus}}>
           {copy.rankSubPrefix}
@@ -171,7 +176,7 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
       </div>
 
       {/* Scene 2: providers donut (SVG stroke-dasharray) */}
-      <div style={{position: 'absolute', inset: 0, padding: '76px 68px 128px', display: 'flex', flexDirection: 'column', opacity: sceneOpacity(frame, SCENES[2].start, SCENES[2].end)}}>
+      <div style={{position: 'absolute', inset: 0, padding: '76px 68px 128px', display: 'flex', flexDirection: 'column', opacity: sceneOpacity(frame, SCENES[2], SCENES)}}>
         <div style={kickerStyle}><span style={dotStyle} />{copy.kickerProviders}</div>
         <div style={{fontSize: 68, lineHeight: 1.08, fontWeight: 900, marginTop: 34}}>{displayProvider(DATA.providers[0].name, locale)} {locale === 'zh' ? '领先' : 'Leads'}<br /><span style={accentStyle}>{locale === 'zh' ? `占全部 Token ${DATA.providers[0].pct}%` : `${DATA.providers[0].pct}% of all tokens`}</span></div>
         <div style={{fontSize: 30, lineHeight: 1.45, color: '#94a3b8', fontWeight: 600, marginTop: 22}}>{copy.provSub}</div>
@@ -229,7 +234,7 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
       </div>
 
       {/* Scene 3: growth rows normalized */}
-      <div style={{position: 'absolute', inset: 0, padding: '76px 68px 128px', display: 'flex', flexDirection: 'column', opacity: sceneOpacity(frame, SCENES[3].start, SCENES[3].end)}}>
+      <div style={{position: 'absolute', inset: 0, padding: '76px 68px 128px', display: 'flex', flexDirection: 'column', opacity: sceneOpacity(frame, SCENES[3], SCENES)}}>
         <div style={kickerStyle}><span style={dotStyle} />{copy.kickerGrowth}</div>
         <div style={{fontSize: 74, lineHeight: 1.08, fontWeight: 900, marginTop: 34}}>{copy.growthTitleA}<br /><span style={accentStyle}>{copy.growthTitleB}</span></div>
         <div style={{fontSize: 30, lineHeight: 1.45, color: '#94a3b8', fontWeight: 600, marginTop: 22}}>{copy.growthSub}</div>
@@ -256,7 +261,7 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
       </div>
 
       {/* Scene 4: outro insights stagger */}
-      <div style={{position: 'absolute', inset: 0, padding: '76px 68px 128px', display: 'flex', flexDirection: 'column', opacity: sceneOpacity(frame, SCENES[4].start, SCENES[4].end)}}>
+      <div style={{position: 'absolute', inset: 0, padding: '76px 68px 128px', display: 'flex', flexDirection: 'column', opacity: sceneOpacity(frame, SCENES[4], SCENES)}}>
         <div style={{margin: 'auto 0', opacity: reveal, transform: `translateY(${(1 - reveal) * 54}px)`}}>
           <div style={kickerStyle}><span style={dotStyle} />{copy.kickerOutro}</div>
           <div style={{fontSize: 100, marginTop: 48, lineHeight: 1.08, fontWeight: 900}}>{copy.outroTitleA}<br />{copy.outroTitleB}</div>
@@ -277,6 +282,8 @@ export const OpenrouterRankings: React.FC<{locale?: Locale}> = ({locale = 'en'})
           </div>
         </div>
       </div>
+
+      <Audio src={staticFile(`voiceover/narration.${locale}.mp3`)} />
 
       {/* Dots nav + timeline */}
       <div style={{position: 'absolute', bottom: 78, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 16}}>

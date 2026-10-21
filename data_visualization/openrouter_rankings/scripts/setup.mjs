@@ -79,7 +79,8 @@ function prettyGeneric(slug) {
   return name
     .split("-")
     .map((w) => KNOWN_WORDS[w] || (w[0] || "").toUpperCase() + w.slice(1))
-    .join(" ");
+    .join(" ")
+    .replace(/^GPT (\d)/, "GPT-$1");
 }
 
 function prettyName(slug) {
@@ -95,6 +96,22 @@ function orgInfo(slug) {
   const info = ORGS[org];
   if (info) return { ...info, key: org };
   return { name: org[0].toUpperCase() + org.slice(1), country: "us", key: org };
+}
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/** Pretty names for every slug; versions that would share a name get their release month appended. */
+function nameAll(slugs) {
+  const base = new Map(slugs.map((s) => [s, prettyName(s)]));
+  const counts = new Map();
+  for (const n of base.values()) counts.set(n, (counts.get(n) || 0) + 1);
+  return new Map(
+    slugs.map((s) => {
+      const n = base.get(s);
+      const d = s.match(/-(\d{4})(\d{2})\d{2}$/);
+      return [s, counts.get(n) > 1 && d ? `${n} (${MONTHS[+d[2] - 1]})` : n];
+    }),
+  );
 }
 
 function buildData(rows) {
@@ -113,6 +130,7 @@ function buildData(rows) {
 
   const ranked = [...bySlug.entries()].sort((a, b) => b[1].tokens - a[1].tokens);
   const totalTokens = ranked.reduce((s, [, v]) => s + v.tokens, 0);
+  const names = nameAll(ranked.map(([slug]) => slug));
 
   const withGrowth = ranked.map(([slug, v]) => ({
     slug,
@@ -124,7 +142,7 @@ function buildData(rows) {
     const info = orgInfo(m.slug);
     return {
       rank: i + 1,
-      name: prettyName(m.slug),
+      name: names.get(m.slug),
       provider: info.name,
       country: info.country,
       tokens: +(m.tokens / 1e12).toFixed(2),
@@ -164,7 +182,7 @@ function buildData(rows) {
     .map((m) => {
       const info = orgInfo(m.slug);
       return {
-        name: prettyName(m.slug),
+        name: names.get(m.slug),
         provider: info.name,
         growth: +m.growth.toFixed(1),
         color: m.growth >= 0 ? "#10B981" : "#F43F5E",

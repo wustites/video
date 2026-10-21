@@ -1,6 +1,7 @@
 import React from 'react';
 import {Composition, continueRender, delayRender} from 'remotion';
-import {AiModelRankings, DURATION_IN_FRAMES, FPS} from './AiModelRankings';
+import {AiModelRankings} from './AiModelRankings';
+import {FPS, getTimeline} from './timing';
 import {notoSansJPInfo, notoSansSCInfo} from './fonts';
 
 const fontHandle = delayRender('Loading Noto Sans SC + JP');
@@ -14,7 +15,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="AiModelRankingsEn"
         component={AiModelRankings}
-        durationInFrames={DURATION_IN_FRAMES}
+        durationInFrames={getTimeline('en').duration}
         fps={FPS}
         width={1080}
         height={1920}
@@ -23,7 +24,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="AiModelRankingsZh"
         component={AiModelRankings}
-        durationInFrames={DURATION_IN_FRAMES}
+        durationInFrames={getTimeline('zh').duration}
         fps={FPS}
         width={1080}
         height={1920}
@@ -32,7 +33,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="AiModelRankingsJa"
         component={AiModelRankings}
-        durationInFrames={DURATION_IN_FRAMES}
+        durationInFrames={getTimeline('ja').duration}
         fps={FPS}
         width={1080}
         height={1920}

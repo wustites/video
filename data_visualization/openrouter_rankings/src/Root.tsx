@@ -1,6 +1,7 @@
 import React from 'react';
 import {Composition, continueRender, delayRender} from 'remotion';
-import {DURATION_IN_FRAMES, FPS, OpenrouterRankings} from './OpenrouterRankings';
+import {OpenrouterRankings} from './OpenrouterRankings';
+import {FPS, getTimeline} from './timing';
 import {fontFamily, notoSansSC} from './fonts';
 
 const fontHandle = delayRender('Loading Noto Sans SC');
@@ -15,7 +16,7 @@ export const RemotionRoot: React.FC = () => {
         id="OpenrouterRankingsEn"
         component={OpenrouterRankings}
         defaultProps={{locale: 'en' as const}}
-        durationInFrames={DURATION_IN_FRAMES}
+        durationInFrames={getTimeline('en').duration}
         fps={FPS}
         width={1080}
         height={1920}
@@ -24,7 +25,7 @@ export const RemotionRoot: React.FC = () => {
         id="OpenrouterRankingsZh"
         component={OpenrouterRankings}
         defaultProps={{locale: 'zh' as const}}
-        durationInFrames={DURATION_IN_FRAMES}
+        durationInFrames={getTimeline('zh').duration}
         fps={FPS}
         width={1080}
         height={1920}

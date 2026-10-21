@@ -1,36 +1,32 @@
 import React from 'react';
-import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import {
   COMPANIES,
   COUNTRY_SPLIT,
-  DURATION_IN_FRAMES,
   MAX_REVENUE,
   PROFIT_LEADERS,
-  SCENES,
   SECTORS,
   SECTOR_OTHER,
   TOTALS,
   yi,
 } from './data';
 import {fontFamily} from './fonts';
+import {DURATION_IN_FRAMES, SCENES, cue} from './timing';
 
 const INK = '#0F172A';
 const MUTED = '#64748B';
 const GREY = '#CBD5E1';
 
-/** Scenes overlap by ~30 frames. Fade the outgoing scene out in the first
- * half of the overlap and the incoming one in during the second half, so two
- * titles are never visible at the same time. */
-const HALF_OVERLAP = 15;
+/** Out-then-in fades inside each scene window: the first scene starts visible and the
+ * last one holds to the end, so two titles are never on screen together. */
+const FADE = 10;
 function sceneOpacity(frame: number, start: number, end: number): number {
-  const fadeIn = start === 0 ? 0 : HALF_OVERLAP;
-  const fadeOut = end >= DURATION_IN_FRAMES ? 0 : HALF_OVERLAP;
-  return interpolate(
-    frame,
-    [start + fadeIn, start + fadeIn + HALF_OVERLAP, end - fadeOut - HALF_OVERLAP, end - fadeOut],
-    [start === 0 ? 1 : 0, 1, 1, end >= DURATION_IN_FRAMES ? 1 : 0],
-    {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'},
-  );
+  const isFirst = start === 0;
+  const isLast = end === SCENES[SCENES.length - 1].end;
+  if (frame < start || (!isLast && frame > end)) return 0;
+  const fadeIn = isFirst ? 1 : Math.min(1, (frame - start) / FADE);
+  const fadeOut = isLast ? 1 : Math.min(1, (end - frame) / FADE);
+  return Math.max(0, Math.min(fadeIn, fadeOut));
 }
 
 /** 0 → 1 over `duration` frames starting at `start`. */
@@ -158,7 +154,7 @@ const expand = (groups: {count: number; color: string}[]) => groups.flatMap((g) 
 /* ---------------- Scene 1: intro ---------------- */
 const IntroScene: React.FC<{frame: number}> = ({frame}) => {
   const enter = enterAt(frame, 0, 36);
-  const count = interpolate(frame, [10, 60], [30, TOTALS.revenueTrillion], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const count = interpolate(frame, [cue('intro', '43.1') - 20, cue('intro', '43.1') + 15], [30, TOTALS.revenueTrillion], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const metrics = [
     {label: '总收入', value: `$${TOTALS.revenueTrillion}万亿`, accent: '#2563EB'},
     {label: '总利润', value: `$${TOTALS.profitTrillion}万亿`, accent: '#10B981'},
@@ -167,18 +163,18 @@ const IntroScene: React.FC<{frame: number}> = ({frame}) => {
   ];
   return (
     <SceneShell frame={frame} start={SCENES[0].start} end={SCENES[0].end}>
-      <Kicker>2025《财富》世界500强</Kicker>
+      <Kicker>2026《财富》世界500强</Kicker>
       <div style={{marginTop: 140, opacity: enter, transform: `translateY(${(1 - enter) * 76}px)`}}>
         <div style={{fontSize: 120, lineHeight: 1.04, fontWeight: 900}}>
           谁在驱动全球
           <br />
           <span style={{color: '#2563EB'}}>{count.toFixed(1)} 万亿美元</span>
         </div>
-        <Sub style={{marginTop: 40, fontSize: 40}}>500 家最大企业的合计收入。<br />从冠军、国家到行业，看懂这份榜单。</Sub>
+        <Sub style={{marginTop: 40, fontSize: 40, opacity: enterAt(frame, cue('intro', '相当于'), 15)}}>500 家最大企业的合计收入，<br />相当于全球 GDP 的三分之二。</Sub>
       </div>
       <div style={{marginTop: 'auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24}}>
         {metrics.map((m, i) => {
-          const e = enterAt(frame, 30 + i * 8, 24);
+          const e = enterAt(frame, cue('intro', '500家') + i * 8, 20);
           return (
             <div key={m.label} style={{borderTop: `8px solid ${m.accent}`, padding: '28px 30px', background: 'rgba(255,255,255,.86)', boxShadow: '0 22px 70px rgba(15,23,42,.10)', opacity: e, transform: `translateY(${(1 - e) * 30}px)`}}>
               <div style={{fontSize: 30, color: MUTED, fontWeight: 800}}>{m.label}</div>
@@ -194,16 +190,16 @@ const IntroScene: React.FC<{frame: number}> = ({frame}) => {
 /* ---------------- Scene 2: revenue Top 10 ---------------- */
 const TopbarsScene: React.FC<{frame: number}> = ({frame}) => {
   const local = frame - SCENES[1].start;
-  const focus = enterAt(local, 170, 24);
+  const focus = enterAt(local, cue('topbars', '前'), 18);
   const byCountry = (c: string) => COMPANIES.filter((x) => x.country === c).length;
   return (
     <SceneShell frame={frame} start={SCENES[1].start} end={SCENES[1].end}>
       <Kicker>收入排行 Top 10</Kicker>
-      <Title>沃尔玛连续 {TOTALS.walmartStreak} 年<br />位居榜首</Title>
-      <Sub>2024 财年营业收入（美元）</Sub>
+      <Title>亚马逊登顶，<br />终结沃尔玛 {TOTALS.walmartStreak} 年连冠</Title>
+      <Sub>最近一个财年的营业收入（美元）</Sub>
       <div style={{marginTop: 44, display: 'grid', gap: 22}}>
         {COMPANIES.map((item, i) => {
-          const enter = enterAt(local, 20 + i * 5, 30);
+          const enter = enterAt(local, 10 + i * 5, 30);
           return (
             <div key={item.rank} style={{display: 'grid', gridTemplateColumns: '62px 1fr 190px', gap: 18, alignItems: 'center', opacity: enter, transform: `translateX(${(1 - enter) * -60}px)`}}>
               <div style={{width: 58, height: 58, display: 'grid', placeItems: 'center', fontSize: 28, fontWeight: 900, background: '#E2E8F0', borderLeft: `8px solid ${item.color}`}}>{item.rank}</div>
@@ -231,16 +227,16 @@ const TopbarsScene: React.FC<{frame: number}> = ({frame}) => {
 /* ---------------- Scene 3: country split ---------------- */
 const CountryScene: React.FC<{frame: number}> = ({frame}) => {
   const local = frame - SCENES[2].start;
-  const focus = enterAt(local, 110, 24);
+  const focus = enterAt(local, cue('country', '减少'), 18);
   return (
     <SceneShell frame={frame} start={SCENES[2].start} end={SCENES[2].end}>
       <Kicker>国家与地区分布</Kicker>
-      <Title>美国 138 家，<br />中国 130 家</Title>
+      <Title>美国 141 家，<br />中国 122 家</Title>
       <Sub>每个方块代表一家上榜公司</Sub>
-      <Waffle local={local - 15} colors={expand(COUNTRY_SPLIT)} dim={(i) => i >= 268} dimP={focus} />
+      <Waffle local={local - 15} colors={expand(COUNTRY_SPLIT)} dim={(i) => i >= 263} dimP={focus} />
       <div style={{display: 'grid', gap: 18, marginTop: 44}}>
         {COUNTRY_SPLIT.map((c, i) => {
-          const e = enterAt(local, 40 + i * 10, 24);
+          const e = enterAt(local, [cue('country', '141'), cue('country', '122'), cue('country', '122') + 30][i], 18);
           return (
             <div key={c.name} style={{display: 'flex', alignItems: 'center', gap: 18, opacity: e}}>
               <span style={{width: 30, height: 30, borderRadius: 6, background: c.color}} />
@@ -250,7 +246,7 @@ const CountryScene: React.FC<{frame: number}> = ({frame}) => {
           );
         })}
       </div>
-      <Takeaway p={focus} color="#EF4444">两国合计 268 家，占榜单 54%</Takeaway>
+      <Takeaway p={focus} color="#EF4444">两国合计 263 家，占榜单 53%</Takeaway>
     </SceneShell>
   );
 };
@@ -258,7 +254,7 @@ const CountryScene: React.FC<{frame: number}> = ({frame}) => {
 /* ---------------- Scene 4: sectors ---------------- */
 const IndustryScene: React.FC<{frame: number}> = ({frame}) => {
   const local = frame - SCENES[3].start;
-  const focus = enterAt(local, 110, 24);
+  const focus = enterAt(local, cue('industry', '贡献'), 18);
   const big5 = SECTORS.reduce((s, x) => s + x.count, 0);
   return (
     <SceneShell frame={frame} start={SCENES[3].start} end={SCENES[3].end}>
@@ -268,7 +264,7 @@ const IndustryScene: React.FC<{frame: number}> = ({frame}) => {
       <Waffle local={local - 15} colors={[...expand(SECTORS), ...Array(SECTOR_OTHER).fill(GREY)]} />
       <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 40px', marginTop: 40}}>
         {SECTORS.map((x, i) => {
-          const e = enterAt(local, 40 + i * 8, 24);
+          const e = enterAt(local, cue('industry', ['金融', '能源', '科技', '汽车', '医疗'][i]), 15);
           return (
             <div key={x.name} style={{display: 'flex', alignItems: 'center', gap: 14, opacity: e}}>
               <span style={{width: 28, height: 28, borderRadius: 6, background: x.color}} />
@@ -286,16 +282,16 @@ const IndustryScene: React.FC<{frame: number}> = ({frame}) => {
 /* ---------------- Scene 5: profit ---------------- */
 const ProfitScene: React.FC<{frame: number}> = ({frame}) => {
   const local = frame - SCENES[4].start;
-  const walmart = COMPANIES[0];
+  const revenueLeader = COMPANIES[0];
   const maxProfit = PROFIT_LEADERS[0].profit;
-  const compare = enterAt(local, 20, 26);
+  const compare = enterAt(local, cue('profit', '亚马逊'), 20);
   return (
     <SceneShell frame={frame} start={SCENES[4].start} end={SCENES[4].end} center>
       <Kicker>利润视角</Kicker>
       <Title size={86}>收入第一，<br />不一定利润第一</Title>
       <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginTop: 56, opacity: compare, transform: `translateY(${(1 - compare) * 30}px)`}}>
         {[
-          {tag: '收入第 1', name: walmart.nameZh, value: yi(walmart.profit), color: '#2563EB'},
+          {tag: '收入第 1', name: revenueLeader.nameZh, value: yi(revenueLeader.profit), color: '#2563EB'},
           {tag: '利润第 1', name: PROFIT_LEADERS[0].nameZh, value: yi(PROFIT_LEADERS[0].profit), color: '#10B981'},
         ].map((c) => (
           <div key={c.tag} style={{padding: '30px 30px', background: 'rgba(255,255,255,.9)', borderTop: `8px solid ${c.color}`, boxShadow: '0 20px 64px rgba(15,23,42,.10)'}}>
@@ -309,7 +305,7 @@ const ProfitScene: React.FC<{frame: number}> = ({frame}) => {
       <Sub style={{marginTop: 56}}>利润最高的四家公司（美元）</Sub>
       <div style={{display: 'grid', gap: 22, marginTop: 24}}>
         {PROFIT_LEADERS.map((p, i) => {
-          const e = enterAt(local, 60 + i * 10, 28);
+          const e = enterAt(local, cue('profit', 'Alphabet') + i * 10, 24);
           return (
             <div key={p.nameZh} style={{opacity: e}}>
               <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline'}}>
@@ -330,7 +326,7 @@ const ProfitScene: React.FC<{frame: number}> = ({frame}) => {
 /* ---------------- Scene 6: outro ---------------- */
 const OutroScene: React.FC<{frame: number}> = ({frame}) => {
   const local = frame - SCENES[5].start;
-  const reveal = enterAt(local, 10, 24);
+  const reveal = enterAt(local, 0, 20);
   const lineW = interpolate(local, [22, 44], [0, 100], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const facts = [
     `500 家公司 · ${TOTALS.countries} 个国家和地区`,
@@ -351,10 +347,10 @@ const OutroScene: React.FC<{frame: number}> = ({frame}) => {
         <div style={{height: 12, marginTop: 56, width: `${lineW}%`, background: 'linear-gradient(90deg, #2563EB, #10B981, #F59E0B)'}} />
         <div style={{marginTop: 56, display: 'grid', gap: 24, fontSize: 46, fontWeight: 900}}>
           {facts.map((f, i) => (
-            <span key={f} style={{opacity: enterAt(local, 34 + i * 8, 20)}}>{f}</span>
+            <span key={f} style={{opacity: enterAt(local, [cue('outro', '500'), cue('outro', '36'), cue('outro', '3.4')][i], 15)}}>{f}</span>
           ))}
         </div>
-        <div style={{marginTop: 64, fontSize: 26, color: MUTED, fontWeight: 700}}>数据：《财富》2025 年世界500强（按 2024 财年收入排名）</div>
+        <div style={{marginTop: 64, fontSize: 26, color: MUTED, fontWeight: 700}}>数据：《财富》2026 年世界500强（2026 年 7 月发布）</div>
       </div>
     </SceneShell>
   );
@@ -372,6 +368,7 @@ export const Top500: React.FC = () => {
       <IndustryScene frame={frame} />
       <ProfitScene frame={frame} />
       <OutroScene frame={frame} />
+      <Audio src={staticFile('voiceover/narration.zh.mp3')} />
       <div style={{position: 'absolute', left: 64, right: 64, bottom: 48, height: 7, background: 'rgba(15,23,42,.12)'}}>
         <div style={{height: '100%', background: INK, width: `${progress}%`}} />
       </div>

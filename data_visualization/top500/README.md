@@ -1,10 +1,11 @@
 # 世界五百强 Remotion 可视化视频
 
-一个中文竖屏数据可视化短片，基于 Remotion 制作，主题为 2025 年《财富》世界500强。
+一个中文竖屏数据可视化短片，基于 Remotion 制作，主题为 2026 年《财富》世界500强，带中文旁白。
 
 ## 使用
 
 ```bash
+npm run voiceover   # 生成旁白（需要 edge-tts 与 ffmpeg）
 npm run dev
 ```
 
@@ -18,7 +19,7 @@ npm run render
 
 ## 内容
 
-- 36 秒、1080x1920、30fps
+- 约 66 秒、1080x1920、30fps，中文旁白（edge-tts `zh-CN-XiaoxiaoNeural`）
 - 开场：总收入、总利润、员工数、女性 CEO
 - 前 10 名收入排行（按国家着色）
 - 国家和地区分布（500 格方块图）
@@ -26,15 +27,16 @@ npm run render
 - 利润视角：收入冠军与利润冠军对比、利润前四
 - 结论页
 
+场景时长由旁白各段实测时长决定，画面元素在旁白念到对应数字时出现（`src/timing.ts` 的 `cue()`，来自 Edge TTS WordBoundary）。修改 `public/voiceover/narration.zh.txt` 后运行 `npm run voiceover` 即可重新对齐。
+
 ## 数据说明
 
-榜单口径为 2025 年《财富》世界500强，按 2024 财年收入排名。
+榜单口径为 2026 年《财富》世界500强（2026 年 7 月 28 日发布，按截至 2026 年 3 月 31 日的财年收入排名）。
 
-- 总收入 41.7 万亿美元、总利润 2.98 万亿美元、员工 7,010 万、女性 CEO 33 位、36 个国家和地区、五大行业公司数（金融 121、能源 79、汽车及零部件 35、科技 34、医疗 33，合计约六成公司、三分之二收入）、沃尔玛连续 12 年居首、前十合计 4.7 万亿美元：[Fortune 2025 Global 500 新闻稿](https://www.prnewswire.com/news-releases/fortune-announces-2025-fortune-global-500-list-302515397.html)
-- 前十名收入与利润、利润前四：[新浪财经 2025 年《财富》世界500强专题](https://finance.sina.com.cn/zt_d/2025cfsj500qphb)
-- 美国 138 家、中国 130 家（大陆含香港 124 家、台湾地区 6 家）：同上，以及 [Global Times](https://www.globaltimes.cn/page/202507/1339626.shtml)
+- 总收入 43.1 万亿美元（约为全球 GDP 的三分之二）、总利润 3.4 万亿美元、员工 7,020 万、女性 CEO 34 位、36 个国家和地区、美国 141 家（2008 年以来最多）、中国 122 家（含台湾地区，比上年少 8 家）、五大行业公司数（金融 123、能源 77、科技 38、汽车及零部件 35、医疗 31，合计约六成公司、三分之二收入）、亚马逊终结沃尔玛 12 年连冠：[Fortune 2026 Global 500 新闻稿](https://finance.yahoo.com/markets/stocks/articles/fortune-announces-2026-fortune-global-100100477.html)
+- 前十名收入与利润、利润前四：[新浪财经 2026 年《财富》世界500强专题](https://finance.sina.com.cn/zt_d/subject-1785232688)
 
-其他国家的上榜数量未能从 2025 年的公开资料中逐一核实，因此片中合并为“其他 34 个国家和地区”。
+其他国家的上榜数量未逐一核实，片中合并为“其他 34 个国家和地区”。
 
 ## GitHub Actions 发布
 

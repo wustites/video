@@ -1,294 +1,294 @@
 {
   "source": "https://artificialanalysis.ai/leaderboards/models",
-  "fetchedAt": "2026-08-16T16:57:09.047Z",
-  "totalEvaluated": 110,
+  "fetchedAt": "2026-10-21T03:48:34.633Z",
+  "totalEvaluated": 134,
   "metrics": {
-    "totalModels": "110+",
-    "topModel": "Claude Opus 5 (max)",
-    "topScore": 63,
-    "fastestModel": "Mercury 2",
-    "fastestSpeed": 940
+    "totalModels": "134+",
+    "topModel": "Claude Opus 5.5 (max with fallback)",
+    "topScore": 58,
+    "fastestModel": "Mercury 2.5",
+    "fastestSpeed": 781
   },
   "models": [
     {
       "rank": 1,
-      "name": "Claude Opus 5 (max)",
+      "name": "Claude Opus 5.5 (max with fallback)",
       "providerKey": "anthropic",
       "providerLabel": "Anthropic",
-      "score": 63,
-      "speed": 57,
+      "score": 58,
+      "speed": 95,
       "color": "#D97706"
     },
     {
       "rank": 2,
-      "name": "Claude Opus 5 (xhigh)",
+      "name": "Claude Sonnet 5.5 (max with fallback)",
       "providerKey": "anthropic",
       "providerLabel": "Anthropic",
-      "score": 63,
-      "speed": 57,
+      "score": 56,
+      "speed": 137,
       "color": "#D97706"
     },
     {
       "rank": 3,
-      "name": "Claude Fable 5 (with fallback)",
+      "name": "Claude Opus 5.5 (xhigh with fallback)",
       "providerKey": "anthropic",
       "providerLabel": "Anthropic",
-      "score": 62,
-      "speed": 68,
+      "score": 56,
+      "speed": 85,
       "color": "#D97706"
     },
     {
       "rank": 4,
-      "name": "GPT-5.6 Sol (max)",
-      "providerKey": "openai",
-      "providerLabel": "OpenAI",
-      "score": 61,
-      "speed": 74,
-      "color": "#10B981"
-    },
-    {
-      "rank": 5,
-      "name": "Grok 4.6 (high)",
-      "providerKey": "xai",
-      "providerLabel": "SpaceXAI",
-      "score": 61,
-      "speed": 61,
-      "color": "#A855F7"
-    },
-    {
-      "rank": 6,
-      "name": "Claude Opus 5 (high)",
-      "providerKey": "anthropic",
-      "providerLabel": "Anthropic",
-      "score": 61,
-      "speed": 58,
-      "color": "#D97706"
-    },
-    {
-      "rank": 7,
-      "name": "Kimi K3 (max)",
-      "providerKey": "kimi",
-      "providerLabel": "Kimi",
-      "score": 60,
-      "speed": 39,
-      "color": "#EF4444"
-    },
-    {
-      "rank": 8,
-      "name": "GPT-5.6 Sol (xhigh)",
-      "providerKey": "openai",
-      "providerLabel": "OpenAI",
-      "score": 59,
-      "speed": 69,
-      "color": "#10B981"
-    },
-    {
-      "rank": 9,
-      "name": "Claude Opus 5 (medium)",
-      "providerKey": "anthropic",
-      "providerLabel": "Anthropic",
-      "score": 59,
-      "speed": 58,
-      "color": "#D97706"
-    },
-    {
-      "rank": 10,
-      "name": "Qwen3.8 2.4T A95B",
-      "providerKey": "alibaba",
-      "providerLabel": "Alibaba",
-      "score": 58,
-      "speed": 48,
-      "color": "#EC4899"
-    },
-    {
-      "rank": 11,
-      "name": "Qwen3.8 Max",
-      "providerKey": "alibaba",
-      "providerLabel": "Alibaba",
-      "score": 58,
-      "speed": 47,
-      "color": "#EC4899"
-    },
-    {
-      "rank": 12,
-      "name": "GPT-5.6 Terra (max)",
-      "providerKey": "openai",
-      "providerLabel": "OpenAI",
-      "score": 57,
-      "speed": 122,
-      "color": "#10B981"
-    },
-    {
-      "rank": 13,
-      "name": "GPT-5.6 Sol (high)",
-      "providerKey": "openai",
-      "providerLabel": "OpenAI",
-      "score": 57,
-      "speed": 70,
-      "color": "#10B981"
-    },
-    {
-      "rank": 14,
-      "name": "Muse Spark 1.2 (xhigh)",
+      "name": "Muse Wonder Full (max)",
       "providerKey": "meta",
       "providerLabel": "Meta",
-      "score": 57,
+      "score": 56,
       "speed": null,
       "color": "#6366F1"
     },
     {
-      "rank": 15,
-      "name": "GPT-5.6 Sol (medium)",
+      "rank": 5,
+      "name": "Claude Opus 5.5 (high with fallback)",
+      "providerKey": "anthropic",
+      "providerLabel": "Anthropic",
+      "score": 54,
+      "speed": 80,
+      "color": "#D97706"
+    },
+    {
+      "rank": 6,
+      "name": "Gemini 4 Argon (high)",
+      "providerKey": "google",
+      "providerLabel": "Google",
+      "score": 53,
+      "speed": 83,
+      "color": "#3B82F6"
+    },
+    {
+      "rank": 7,
+      "name": "Claude Fable 5.1 (max with fallback)",
+      "providerKey": "anthropic",
+      "providerLabel": "Anthropic",
+      "score": 53,
+      "speed": 69,
+      "color": "#D97706"
+    },
+    {
+      "rank": 8,
+      "name": "Claude Fable 5.1 (xhigh with fallback)",
+      "providerKey": "anthropic",
+      "providerLabel": "Anthropic",
+      "score": 53,
+      "speed": 64,
+      "color": "#D97706"
+    },
+    {
+      "rank": 9,
+      "name": "GPT-6 Astra (max)",
       "providerKey": "openai",
       "providerLabel": "OpenAI",
-      "score": 56,
-      "speed": 67,
+      "score": 53,
+      "speed": 62,
       "color": "#10B981"
+    },
+    {
+      "rank": 10,
+      "name": "Muse Wonder (max)",
+      "providerKey": "meta",
+      "providerLabel": "Meta",
+      "score": 52,
+      "speed": 161,
+      "color": "#6366F1"
+    },
+    {
+      "rank": 11,
+      "name": "Claude Sonnet 5.5 (xhigh with fallback)",
+      "providerKey": "anthropic",
+      "providerLabel": "Anthropic",
+      "score": 52,
+      "speed": 110,
+      "color": "#D97706"
+    },
+    {
+      "rank": 12,
+      "name": "GPT-6 Astra (xhigh)",
+      "providerKey": "openai",
+      "providerLabel": "OpenAI",
+      "score": 52,
+      "speed": 56,
+      "color": "#10B981"
+    },
+    {
+      "rank": 13,
+      "name": "GPT-6.1 Sol (max)",
+      "providerKey": "openai",
+      "providerLabel": "OpenAI",
+      "score": 52,
+      "speed": 55,
+      "color": "#10B981"
+    },
+    {
+      "rank": 14,
+      "name": "Claude Opus 5.5 (medium with fallback)",
+      "providerKey": "anthropic",
+      "providerLabel": "Anthropic",
+      "score": 51,
+      "speed": 81,
+      "color": "#D97706"
+    },
+    {
+      "rank": 15,
+      "name": "Claude Fable 5.1 (high with fallback)",
+      "providerKey": "anthropic",
+      "providerLabel": "Anthropic",
+      "score": 51,
+      "speed": 58,
+      "color": "#D97706"
     }
   ],
   "scatterPoints": [
     {
-      "name": "Claude Opus 5 (max)",
+      "name": "Claude Opus 5.5 (max with fallback)",
       "providerKey": "anthropic",
       "providerLabel": "Anthropic",
-      "score": 63,
-      "speed": 57,
+      "score": 58,
+      "speed": 95,
       "color": "#D97706",
       "inTop15": true
     },
     {
-      "name": "Claude Opus 5 (xhigh)",
+      "name": "Claude Sonnet 5.5 (max with fallback)",
       "providerKey": "anthropic",
       "providerLabel": "Anthropic",
-      "score": 63,
-      "speed": 57,
+      "score": 56,
+      "speed": 137,
       "color": "#D97706",
       "inTop15": true
     },
     {
-      "name": "Claude Fable 5 (with fallback)",
+      "name": "Claude Opus 5.5 (xhigh with fallback)",
       "providerKey": "anthropic",
       "providerLabel": "Anthropic",
-      "score": 62,
-      "speed": 68,
+      "score": 56,
+      "speed": 85,
       "color": "#D97706",
       "inTop15": true
     },
     {
-      "name": "GPT-5.6 Sol (max)",
-      "providerKey": "openai",
-      "providerLabel": "OpenAI",
-      "score": 61,
-      "speed": 74,
-      "color": "#10B981",
-      "inTop15": true
-    },
-    {
-      "name": "Grok 4.6 (high)",
-      "providerKey": "xai",
-      "providerLabel": "SpaceXAI",
-      "score": 61,
-      "speed": 61,
-      "color": "#A855F7",
-      "inTop15": true
-    },
-    {
-      "name": "Claude Opus 5 (high)",
+      "name": "Claude Opus 5.5 (high with fallback)",
       "providerKey": "anthropic",
       "providerLabel": "Anthropic",
-      "score": 61,
-      "speed": 58,
+      "score": 54,
+      "speed": 80,
       "color": "#D97706",
       "inTop15": true
     },
     {
-      "name": "Kimi K3 (max)",
-      "providerKey": "kimi",
-      "providerLabel": "Kimi",
-      "score": 60,
-      "speed": 39,
-      "color": "#EF4444",
+      "name": "Gemini 4 Argon (high)",
+      "providerKey": "google",
+      "providerLabel": "Google",
+      "score": 53,
+      "speed": 83,
+      "color": "#3B82F6",
       "inTop15": true
     },
     {
-      "name": "GPT-5.6 Sol (xhigh)",
-      "providerKey": "openai",
-      "providerLabel": "OpenAI",
-      "score": 59,
+      "name": "Claude Fable 5.1 (max with fallback)",
+      "providerKey": "anthropic",
+      "providerLabel": "Anthropic",
+      "score": 53,
       "speed": 69,
+      "color": "#D97706",
+      "inTop15": true
+    },
+    {
+      "name": "Claude Fable 5.1 (xhigh with fallback)",
+      "providerKey": "anthropic",
+      "providerLabel": "Anthropic",
+      "score": 53,
+      "speed": 64,
+      "color": "#D97706",
+      "inTop15": true
+    },
+    {
+      "name": "GPT-6 Astra (max)",
+      "providerKey": "openai",
+      "providerLabel": "OpenAI",
+      "score": 53,
+      "speed": 62,
       "color": "#10B981",
       "inTop15": true
     },
     {
-      "name": "Claude Opus 5 (medium)",
+      "name": "Muse Wonder (max)",
+      "providerKey": "meta",
+      "providerLabel": "Meta",
+      "score": 52,
+      "speed": 161,
+      "color": "#6366F1",
+      "inTop15": true
+    },
+    {
+      "name": "Claude Sonnet 5.5 (xhigh with fallback)",
       "providerKey": "anthropic",
       "providerLabel": "Anthropic",
-      "score": 59,
+      "score": 52,
+      "speed": 110,
+      "color": "#D97706",
+      "inTop15": true
+    },
+    {
+      "name": "GPT-6 Astra (xhigh)",
+      "providerKey": "openai",
+      "providerLabel": "OpenAI",
+      "score": 52,
+      "speed": 56,
+      "color": "#10B981",
+      "inTop15": true
+    },
+    {
+      "name": "GPT-6.1 Sol (max)",
+      "providerKey": "openai",
+      "providerLabel": "OpenAI",
+      "score": 52,
+      "speed": 55,
+      "color": "#10B981",
+      "inTop15": true
+    },
+    {
+      "name": "Claude Opus 5.5 (medium with fallback)",
+      "providerKey": "anthropic",
+      "providerLabel": "Anthropic",
+      "score": 51,
+      "speed": 81,
+      "color": "#D97706",
+      "inTop15": true
+    },
+    {
+      "name": "Claude Fable 5.1 (high with fallback)",
+      "providerKey": "anthropic",
+      "providerLabel": "Anthropic",
+      "score": 51,
       "speed": 58,
       "color": "#D97706",
       "inTop15": true
     },
     {
-      "name": "Qwen3.8 2.4T A95B",
-      "providerKey": "alibaba",
-      "providerLabel": "Alibaba",
-      "score": 58,
-      "speed": 48,
-      "color": "#EC4899",
-      "inTop15": true
-    },
-    {
-      "name": "Qwen3.8 Max",
-      "providerKey": "alibaba",
-      "providerLabel": "Alibaba",
-      "score": 58,
-      "speed": 47,
-      "color": "#EC4899",
-      "inTop15": true
-    },
-    {
-      "name": "GPT-5.6 Terra (max)",
+      "name": "GPT-6 Astra (high)",
       "providerKey": "openai",
       "providerLabel": "OpenAI",
-      "score": 57,
-      "speed": 122,
+      "score": 51,
+      "speed": 54,
       "color": "#10B981",
-      "inTop15": true
-    },
-    {
-      "name": "GPT-5.6 Sol (high)",
-      "providerKey": "openai",
-      "providerLabel": "OpenAI",
-      "score": 57,
-      "speed": 70,
-      "color": "#10B981",
-      "inTop15": true
-    },
-    {
-      "name": "GPT-5.6 Sol (medium)",
-      "providerKey": "openai",
-      "providerLabel": "OpenAI",
-      "score": 56,
-      "speed": 67,
-      "color": "#10B981",
-      "inTop15": true
-    },
-    {
-      "name": "Grok 4.5 (high)",
-      "providerKey": "xai",
-      "providerLabel": "SpaceXAI",
-      "score": 56,
-      "speed": 66,
-      "color": "#A855F7",
       "inTop15": false
     },
     {
-      "name": "Claude Sonnet 5 (max)",
-      "providerKey": "anthropic",
-      "providerLabel": "Anthropic",
-      "score": 55,
-      "speed": 69,
-      "color": "#D97706",
+      "name": "GPT-6.1 Sol (xhigh)",
+      "providerKey": "openai",
+      "providerLabel": "OpenAI",
+      "score": 51,
+      "speed": 50,
+      "color": "#10B981",
       "inTop15": false
     }
   ],
@@ -296,37 +296,19 @@
     {
       "providerKey": "anthropic",
       "label": "Anthropic",
-      "count": 6,
+      "count": 10,
       "color": "#D97706"
     },
     {
       "providerKey": "openai",
       "label": "OpenAI",
-      "count": 6,
+      "count": 7,
       "color": "#10B981"
-    },
-    {
-      "providerKey": "xai",
-      "label": "SpaceXAI",
-      "count": 2,
-      "color": "#A855F7"
-    },
-    {
-      "providerKey": "alibaba",
-      "label": "Alibaba",
-      "count": 2,
-      "color": "#EC4899"
-    },
-    {
-      "providerKey": "kimi",
-      "label": "Kimi",
-      "count": 1,
-      "color": "#EF4444"
     },
     {
       "providerKey": "meta",
       "label": "Meta",
-      "count": 1,
+      "count": 2,
       "color": "#6366F1"
     },
     {
@@ -334,40 +316,39 @@
       "label": "Google",
       "count": 1,
       "color": "#3B82F6"
-    },
-    {
-      "providerKey": "zai",
-      "label": "Z AI",
-      "count": 1,
-      "color": "#8B5CF6"
     }
   ],
   "tierCounts": [
-    7,
-    23,
-    19,
-    61
+    9,
+    13,
+    32,
+    80
+  ],
+  "tierMins": [
+    53,
+    48,
+    38
   ],
   "cards": [
     {
-      "name": "Claude Opus 5 (max)",
-      "value": "63 index",
+      "name": "Claude Opus 5.5 (max with fallback)",
+      "value": "58 index",
       "color": "#D97706"
     },
     {
-      "name": "Mercury 2",
-      "value": "940 tok/s",
+      "name": "Mercury 2.5",
+      "value": "781 tok/s",
       "color": "#FB7185"
     },
     {
-      "name": "GPT-5.6 Terra (max)",
-      "value": "57 · 122",
-      "color": "#10B981"
+      "name": "Claude Sonnet 5.5 (max with fallback)",
+      "value": "56 · 137",
+      "color": "#D97706"
     },
     {
-      "name": "GLM-5.2 (max)",
-      "value": "53 · 136",
-      "color": "#8B5CF6"
+      "name": "Muse Wonder (max)",
+      "value": "52 · 161",
+      "color": "#6366F1"
     }
   ]
 }

@@ -1,0 +1,9 @@
+These are the most used AI models on OpenRouter this week. Developers sent 163.7 trillion tokens through the platform.
+
+DeepSeek V4.1 Flash leads with 27.34 trillion tokens. 8 of the top ten come from China.
+
+By provider, DeepSeek takes 29.6 percent of all tokens. The top six providers together account for 71.8 percent.
+
+The fastest riser is GLM 5.3 from Z AI, up 27.3 percent from last week.
+
+The rankings keep reshuffling. Data from openrouter dot A I.

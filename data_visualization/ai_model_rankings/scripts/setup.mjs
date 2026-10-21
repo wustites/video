@@ -113,12 +113,15 @@ function buildData(models) {
     .sort((a, b) => b.count - a.count)
     .map((p) => ({ ...p, color: COLORS[p.providerKey] || COLORS.other }));
 
-  // Capability tiers over the full leaderboard
+  // Capability tiers over the full leaderboard, relative to the current top score so they
+  // survive Artificial Analysis re-scaling the index: within 5, 10 and 20 points of the top.
+  const topScore = Math.max(...models.map((m) => m.score));
+  const tierMins = [topScore - 5, topScore - 10, topScore - 20];
   const tierRanges = [
-    { label: "frontier", min: 60 },
-    { label: "challenger", min: 50 },
-    { label: "production", min: 40 },
-    { label: "speed", min: 0 },
+    { label: "frontier", min: tierMins[0] },
+    { label: "challenger", min: tierMins[1] },
+    { label: "production", min: tierMins[2] },
+    { label: "entry", min: -Infinity },
   ];
   const tierCounts = tierRanges.map((t, i) => {
     const max = i > 0 ? tierRanges[i - 1].min : Infinity;
@@ -129,10 +132,10 @@ function buildData(models) {
   const topModel = top15[0];
   const fastest = withSpeed.reduce((a, b) => (b.speed > a.speed ? b : a));
   const fastFrontier = top20
-    .filter((m) => m.speed && m.score >= 55)
+    .filter((m) => m.speed && m.score >= tierMins[0])
     .sort((a, b) => b.speed - a.speed)[0];
   const denseChallenger = top20
-    .filter((m) => m.speed && m.score >= 50 && m.name !== fastFrontier.name)
+    .filter((m) => m.speed && m.score >= tierMins[1] && m.name !== fastFrontier.name)
     .sort((a, b) => b.speed - a.speed)[0];
 
   const cards = [
@@ -173,6 +176,7 @@ function buildData(models) {
     })),
     providerCounts,
     tierCounts,
+    tierMins,
     cards,
   };
 }

@@ -26,3 +26,5 @@ HyperFrames 的场景时间写在 HTML 的 `data-start` / `data-duration` 里，
 ## 词级时间（`--word-marks`）
 
 加上 `--word-marks` 时，额外输出 `public/voiceover/word-marks.json`：每段一个数组，元素为 Edge TTS WordBoundary 的 `{text, start}`（秒，相对该段开头）。用于让画面元素在旁白念到对应词时出现。
+
+加上 `--per-language-outputs` 时，时长和词级时间文件名带语言后缀（`segment-durations.<lang>.json`、`word-marks.<lang>.json`），同一项目的多个语言版本可以并存。

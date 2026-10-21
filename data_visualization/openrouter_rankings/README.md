@@ -23,6 +23,14 @@ npm run check
 npm run render
 ```
 
+## Narration
+
+Each locale has an Edge TTS voiceover: English and Chinese (en-US-AriaNeural, zh-CN-XiaoxiaoNeural). `npm run voiceover` writes the narration for every
+locale from `src/snapshot.json` (`scripts/voiceover.mjs`), so the spoken numbers always match the
+snapshot, then synthesizes it with `packages/voiceover/edge_narration.py`. Scene lengths come from
+the measured paragraphs, and elements appear when the narration names them (`src/timing.ts`,
+Edge TTS WordBoundary). Re-run `npm run voiceover` after `npm run data:update`.
+
 ## Data Source
 
 - Source: [OpenRouter Rankings](https://openrouter.ai/rankings)

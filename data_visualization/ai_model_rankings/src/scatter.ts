@@ -109,14 +109,14 @@ export function layoutScatter(points: readonly Point[]) {
     if (owner === undefined) firstAt.set(key, i);
     const labelOnLeft = x > SCATTER_W / 2;
     const labelLeft = labelOnLeft ? Math.max(0, x - LABEL_GAP - LABEL_WIDTH) : Math.min(SCATTER_W - LABEL_WIDTH, x + LABEL_GAP);
-    return {x, y, labelLeft, labelWidth: LABEL_WIDTH, labelOnLeft, labelY: y, label: point.name ?? '', hidden: owner !== undefined};
+    return {x, y, labelLeft, labelWidth: LABEL_WIDTH, labelOnLeft, labelY: y, label: (point.name ?? '').replace(' with fallback', ''), hidden: owner !== undefined};
   });
 
   // Merge names of coincident models into the visible point's label.
   points.forEach((point, i) => {
     if (!layout[i].hidden) return;
     const owner = layout[firstAt.get(`${point.speed ?? 0}|${point.score}`)!];
-    owner.label = mergeNames(owner.label, point.name ?? '');
+    owner.label = mergeNames(owner.label, (point.name ?? '').replace(' with fallback', ''));
   });
 
   placeLabels(layout);

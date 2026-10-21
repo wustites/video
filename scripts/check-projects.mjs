@@ -13,7 +13,7 @@ const SILENT_MP3 = Buffer.from('SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMAAA
 // 占位内容需与真实文件的 JSON 形状一致，tsc 才能通过类型检查
 const fixtureContent = (file) => {
   if (file.endsWith('.mp3')) return SILENT_MP3;
-  if (file.endsWith('word-marks.json')) return '[[]]\n';
+  if (/word-marks(\.[a-z]+)?\.json$/.test(file)) return '[[]]\n';
   return '[1]\n';
 };
 

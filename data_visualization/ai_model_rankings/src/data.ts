@@ -33,4 +33,6 @@ export const SCATTER_POINTS: ScatterPoint[] = snapshot.scatterPoints.map((point)
 }));
 export const PROVIDER_COUNTS: ProviderCount[] = snapshot.providerCounts;
 export const TIER_COUNTS: number[] = snapshot.tierCounts;
+/** Lower score bound of the frontier, challenger and production tiers. */
+export const TIER_MINS: number[] = snapshot.tierMins;
 export const CARDS: InsightCard[] = snapshot.cards;

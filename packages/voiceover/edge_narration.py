@@ -62,6 +62,9 @@ def main() -> None:
                         help="list: [d1, ...]; starts: {durations, starts, total}")
     parser.add_argument("--word-marks", action="store_true",
                         help="also write word-marks.json from Edge TTS WordBoundary events")
+    parser.add_argument("--per-language-outputs", action="store_true",
+                        help="name outputs segment-durations.<lang>.json / word-marks.<lang>.json "
+                             "so several languages can coexist in one project")
     parser.add_argument("--root", type=Path, default=Path.cwd(), help="project root (default: cwd)")
     args = parser.parse_args()
 
@@ -107,11 +110,12 @@ def main() -> None:
         payload = {"durations": durations, "starts": starts, "total": total}
     else:
         payload = durations
-    (vo / "segment-durations.json").write_text(
+    suffix = f".{args.lang}" if args.per_language_outputs else ""
+    (vo / f"segment-durations{suffix}.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
     if args.word_marks:
-        (vo / "word-marks.json").write_text(json.dumps(marks, ensure_ascii=False, indent=1), encoding="utf-8")
+        (vo / f"word-marks{suffix}.json").write_text(json.dumps(marks, ensure_ascii=False, indent=1), encoding="utf-8")
 
     for segment in segments:
         segment.unlink()
