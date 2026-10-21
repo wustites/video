@@ -1,13 +1,14 @@
 {
   "name": "kakeya-conjecture",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "remotion studio",
     "check": "tsc --noEmit",
     "render": "remotion render Kakeya out/video.mp4",
-    "render:draft": "remotion render Kakeya out/preview.mp4 --log=error"
+    "render:draft": "remotion render Kakeya out/preview.mp4 --log=error",
+    "voiceover": "python3 ../../packages/voiceover/edge_narration.py --voice zh-CN-YunxiNeural --lang zh --expected 6 --word-marks"
   },
   "dependencies": {
     "@remotion/cli": "4.0.504",

@@ -14,7 +14,7 @@
 - [x] **openrouter_rankings**：环形图中心“73.9万亿”折行，“亿”掉到下一行。数字和单位分两行（`openrouter_rankings-1.1.0-*`）。
 - [x] **ai_model_rankings**：19 秒“速度 vs 智能”散点图的点和标签全挤在左上角，坐标比例有问题。坐标轴改为按数据范围取整并加刻度网格，重合的点合并标签，标签做碰撞避让；图表加高；转场也改为先出后进（`ai_model_rankings-1.0.1-*`）。
 - [x] **ai_model_rankings**：前 15 名列表的第 15 行贴着底部进度条（`ai_model_rankings-1.1.0-*`）。
-- [ ] **无声视频**：ai_model_rankings、openrouter_rankings、kakeya_conjecture、population_cn、qs_universities、top500 的音轨为空（−70 LUFS）。加背景音乐或旁白。ai_model_rankings、openrouter_rankings、top500 已加 edge-tts 旁白并更新数据（2.0.0）；剩 kakeya_conjecture、population_cn、qs_universities。
+- [x] **无声视频**：ai_model_rankings、openrouter_rankings、kakeya_conjecture、population_cn、qs_universities、top500 的音轨为空（−70 LUFS）。加背景音乐或旁白。ai_model_rankings、openrouter_rankings、top500 已加 edge-tts 旁白并更新数据（2.0.0）；kakeya_conjecture、population_cn、qs_universities 也已加旁白并改版（2.0.0）。
 - [x] **响度不统一**：各视频从 −16.5 到 −23.2 LUFS 不等。在发布流程中加响度归一化（目标约 −14 LUFS），cloudflare_history（−20.2）和 brexit_referendum（−21.4）偏小。 发布流程已加入 `scripts/normalize-loudness.sh`（两遍 loudnorm，−14 LUFS / −1.5 dBTP），之后的每次发版自动生效；旧 Release 需要重新发版才会更新。
 
 ## 较轻

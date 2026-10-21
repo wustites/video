@@ -1,10 +1,10 @@
 import React from 'react';
-import {interpolate, Sequence, useCurrentFrame} from 'remotion';
+import {Audio, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import {FAN_LINES, MANY_LINES, TRIANGLES, TUBES} from './data';
 import {SANS, SERIF} from './fonts';
+import {DURATION_IN_FRAMES, SCENES, cue} from './timing';
 
 export const FPS = 30;
-export const DURATION_SECONDS = 42;
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
 
@@ -456,30 +456,69 @@ const Iris: React.FC<{t: number}> = ({t}) => {
   );
 };
 
+/* ================= Status: where the conjecture stands ================= */
+const StatusScene: React.FC<{frame: number}> = ({frame}) => {
+  const sc = SCENES[4];
+  const f = frame - sc.start;
+  const fade = Math.min(prog(f, 0, 12), 1 - prog(f, sc.end - sc.start - 12, 12));
+  const p = (word: string) => prog(f, cue('status', word) - 6, 18, power3Out);
+  const rows = [
+    {dim: '二维', state: '已证明', who: '早已解决', color: TEAL, at: p('二维')},
+    {dim: '三维', state: '2025 年证明', who: '王虹 · 约书亚·扎尔', color: YELLOW, at: p('2025')},
+    {dim: '四维及以上', state: '仍未解决', who: '开放问题', color: RED, at: p('四维')},
+  ];
+  const fields = p('菲尔兹');
+  return (
+    <div style={{position: 'absolute', inset: 0, opacity: f < 0 || frame > sc.end ? 0 : fade}}>
+      <div style={{width: '100%', height: '100%', padding: '88px 120px', display: 'flex', flexDirection: 'column', gap: 34}}>
+        <Topline t={f / FPS} base={0} no="05" label="猜想走到了哪一步" />
+        <div style={{flex: 1, display: 'flex', alignItems: 'center', gap: 40}}>
+          {rows.map((r) => (
+            <div key={r.dim} style={{flex: 1, padding: '48px 40px', borderTop: `6px solid ${r.color}`, background: 'rgba(231,232,209,.04)', opacity: r.at, transform: `translateY(${(30 * (1 - r.at)).toFixed(1)}px)`}}>
+              <div style={{fontFamily: SERIF, fontSize: 64, color: INK}}>{r.dim}</div>
+              <div style={{fontFamily: SANS, fontSize: 48, fontWeight: 700, color: r.color, marginTop: 24}}>{r.state}</div>
+              <div style={{fontFamily: SANS, fontSize: 30, color: MUTED, marginTop: 16}}>{r.who}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{alignSelf: 'center', fontFamily: SANS, fontSize: 34, color: YELLOW, padding: '16px 36px', border: `2px solid ${YELLOW}`, borderRadius: 999, opacity: fields}}>
+          王虹因这项工作获得 2026 年菲尔兹奖
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * The five original scenes keep their hand-tuned schedules in "original seconds". Each is
+ * mapped linearly onto its narration window, so entrances and exits stretch to fit the voice.
+ */
+const ORIGINAL: [number, number][] = [[0, 8.1], [8.1, 16.2], [16.2, 24.55], [24.55, 33.2], [33.2, 42]];
+const NARRATED = [0, 1, 2, 3, 5]; // SCENES index of each original scene (4 is the new status scene)
+const virtualTime = (t: number, i: number): number => {
+  const [o0, o1] = ORIGINAL[i];
+  const sc = SCENES[NARRATED[i]];
+  const n0 = sc.start / FPS;
+  const n1 = (i === ORIGINAL.length - 1 ? DURATION_IN_FRAMES : sc.end) / FPS;
+  return o0 + ((t - n0) * (o1 - o0)) / (n1 - n0);
+};
+
 export const Kakeya: React.FC = () => {
   const frame = useCurrentFrame();
   const t = frame / FPS;
+  const v = ORIGINAL.map((_, i) => virtualTime(t, i));
   return (
     <div style={{width: WIDTH, height: HEIGHT, background: BG, color: INK,
       fontFamily: SANS, position: 'relative', overflow: 'hidden'}}>
-      <Ambient t={t} />
-      {/* Overlapping mount windows let the blur crossfades blend */}
-      <Sequence from={0} durationInFrames={264} name="scene-1">
-        <Scene1 t={t} />
-      </Sequence>
-      <Sequence from={243} durationInFrames={264} name="scene-2">
-        <Scene2 t={t} />
-      </Sequence>
-      <Sequence from={486} durationInFrames={252} name="scene-3">
-        <Scene3 t={t} />
-      </Sequence>
-      <Sequence from={736} durationInFrames={280} name="scene-4">
-        <Scene4 t={t} />
-      </Sequence>
-      <Sequence from={996} durationInFrames={264} name="scene-5">
-        <Scene5 t={t} />
-      </Sequence>
-      <Iris t={t} />
+      <Ambient t={v[4]} />
+      <Scene1 t={v[0]} />
+      <Scene2 t={v[1]} />
+      <Scene3 t={v[2]} />
+      <Scene4 t={v[3]} />
+      <StatusScene frame={frame} />
+      <Scene5 t={v[4]} />
+      <Iris t={v[3]} />
+      <Audio src={staticFile('voiceover/narration.zh.mp3')} />
     </div>
   );
 };

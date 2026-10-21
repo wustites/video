@@ -18,3 +18,11 @@ Remotion 实现（`src/`，42s，1920×1080 横屏），由早期 HyperFrames �
 - 几何坐标（扇形线、针云、tube 图）收录于 `src/data.ts`；渲染时无 fetch、无 DOM 查询。
 
 **本片保持静默——是否配音是产品决策，移植层不预埋音频。**
+
+## 旁白（2.0.0）
+
+中文旁白（edge-tts `zh-CN-YunxiNeural`），`npm run voiceover` 生成。六段旁白对应六个场景：转针问题 → 圆盘方案 → 贝西科维奇的任意小面积 → 维数版本的挂谷猜想 → 现状 → 结语。
+
+原有五个场景的动画保留手工调好的“原始秒数”时间表，按比例映射到各自的旁白时段（`src/Kakeya.tsx` 的 `virtualTime`）；新增的“现状”场景按 Edge TTS WordBoundary 在旁白念到时显示（`src/timing.ts` 的 `cue()`）。
+
+现状一段的依据：三维挂谷猜想由王虹与 Joshua Zahl 于 2025 年证明（[Quanta Magazine](https://www.quantamagazine.org/once-in-a-century-proof-settles-maths-kakeya-conjecture-20250314/)、[UBC](https://www.math.ubc.ca/node/3896)）；王虹于 2026 年 7 月 23 日在费城国际数学家大会获得菲尔兹奖，获奖工作包括这一证明（[CNRS INSMI](https://www.insmi.cnrs.fr/en/cnrsinfo/mathematicienne-hong-wang-medaille-fields-2026)）。四维及以上仍未解决。

@@ -1,6 +1,6 @@
 {
   "name": "qs-universities",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "QS世界大学排名前100动画视频",
   "private": true,
   "type": "module",
@@ -8,7 +8,8 @@
     "dev": "remotion studio",
     "check": "tsc --noEmit",
     "render": "remotion render QsUniversities out/video.mp4",
-    "render:draft": "remotion render QsUniversities out/preview.mp4 --log=error"
+    "render:draft": "remotion render QsUniversities out/preview.mp4 --log=error",
+    "voiceover": "python3 ../../packages/voiceover/edge_narration.py --voice zh-CN-XiaoxiaoNeural --lang zh --expected 6 --word-marks"
   },
   "dependencies": {
     "@remotion/cli": "4.0.504",

@@ -6,8 +6,6 @@ export type University = {
   score: number;
 };
 
-export const PER_PAGE = 10;
-
 export const UNIVERSITIES: University[] = [
   { rank: 1, name: '麻省理工学院', nameEn: 'Massachusetts Institute of Technology (MIT)', country: '美国', score: 100 },
   { rank: 2, name: '帝国理工学院', nameEn: 'Imperial College London', country: '英国', score: 99.2 },
@@ -109,25 +107,4 @@ export const UNIVERSITIES: University[] = [
   { rank: 97, name: '诺丁汉大学', nameEn: 'University of Nottingham', country: '英国', score: 69.2 },
   { rank: 98, name: '柏林自由大学', nameEn: 'Freie Universitaet Berlin', country: '德国', score: 69 },
   { rank: 98, name: '苏黎世大学', nameEn: 'University of Zurich', country: '瑞士', score: 69 },
-];
-
-export const PAGES: University[][] = Array.from(
-  {length: Math.ceil(UNIVERSITIES.length / PER_PAGE)},
-  (_, p) => UNIVERSITIES.slice(p * PER_PAGE, p * PER_PAGE + PER_PAGE),
-);
-
-export type PageAccent = {color: string; glow: string};
-
-/** Per-page accent colors, mirroring the `.page-N` CSS variables in index.html. */
-export const PAGE_COLORS: PageAccent[] = [
-  {color: '#e94560', glow: 'rgba(233, 69, 96, 0.3)'},
-  {color: '#3498db', glow: 'rgba(52, 152, 219, 0.3)'},
-  {color: '#2ecc71', glow: 'rgba(46, 204, 113, 0.3)'},
-  {color: '#f39c12', glow: 'rgba(243, 156, 18, 0.3)'},
-  {color: '#9b59b6', glow: 'rgba(155, 89, 182, 0.3)'},
-  {color: '#1abc9c', glow: 'rgba(26, 188, 156, 0.3)'},
-  {color: '#e74c3c', glow: 'rgba(231, 76, 60, 0.3)'},
-  {color: '#00bcd4', glow: 'rgba(0, 188, 212, 0.3)'},
-  {color: '#ff9800', glow: 'rgba(255, 152, 0, 0.3)'},
-  {color: '#8bc34a', glow: 'rgba(139, 195, 74, 0.3)'},
 ];

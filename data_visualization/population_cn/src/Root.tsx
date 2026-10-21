@@ -1,7 +1,7 @@
 import React from 'react';
 import {Composition, continueRender, delayRender} from 'remotion';
 import {PopulationCn} from './PopulationCn';
-import {FPS, TOTAL_FRAMES} from './data';
+import {DURATION_IN_FRAMES, FPS} from './timing';
 import {notoSansSC} from './fonts';
 
 const fontHandle = delayRender('Loading Noto Sans SC');
@@ -16,7 +16,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="PopulationCn"
         component={PopulationCn}
-        durationInFrames={TOTAL_FRAMES}
+        durationInFrames={DURATION_IN_FRAMES}
         fps={FPS}
         width={1080}
         height={1920}

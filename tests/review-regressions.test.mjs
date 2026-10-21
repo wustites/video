@@ -71,22 +71,19 @@ test('video core builds deterministic sequential timelines and animation values'
   assert.throws(() => core.entranceAt(timeline.scenes[0], 0, 0, 0, 36, 0.88), /Entrance duration must be positive/);
 });
 
-test('population frames retain a sorted top 15 and reach the final year', async () => {
+test('population data matches the figures the narration states', async () => {
   const d = await loadTs(readFileSync(path.join(root, 'data_visualization/population_cn/src/data.ts'), 'utf8'));
-  const component = readFileSync(path.join(root, 'data_visualization/population_cn/src/PopulationCn.tsx'), 'utf8');
-  const range = component.match(/interpolate\(frame, \[0, ([^\]]+)\], \[START_YEAR, END_YEAR\]/);
-  assert.ok(range);
-  const end = Function('TOTAL_FRAMES', `return ${range[1]}`)(d.TOTAL_FRAMES);
-  const original = JSON.stringify(d.populationData);
-  for (let frame = 0; frame < d.TOTAL_FRAMES; frame++) {
-    const year = d.START_YEAR + frame / end * (d.END_YEAR - d.START_YEAR);
-    const rows = d.interpolateData(year);
-    assert.equal(rows.length, 15);
-    assert.ok(rows.every((r, i) => i === 0 || rows[i - 1].b >= r.b));
-    if (frame === 0) assert.equal(rows[0].p, '河南');
-    if (frame === d.TOTAL_FRAMES - 1) assert.equal(Math.floor(year), d.END_YEAR);
-  }
-  assert.equal(JSON.stringify(d.populationData), original);
+  const narration = readFileSync(path.join(root, 'data_visualization/population_cn/public/voiceover/narration.zh.txt'), 'utf8');
+  const years = d.NATIONAL.map((r) => r.year);
+  assert.deepEqual(years, [...years].sort((a, b) => a - b));
+  const at = (y) => d.NATIONAL.find((r) => r.year === y).births;
+  // Every national and provincial number on screen is also spoken.
+  for (const y of [2016, 2023, 2024]) assert.ok(narration.includes(`${at(y)}万`), `${y} births not narrated`);
+  assert.ok(narration.includes(`增加${at(2024) - at(2023)}万`));
+  assert.ok(at(2023) * 2 < at(2016), 'narration says 2023 is under half of 2016');
+  const sorted = [...d.PROVINCES_2024].sort((a, b) => b.births - a.births);
+  assert.deepEqual(d.PROVINCES_2024, sorted);
+  for (const p of d.PROVINCES_2024.slice(0, 3)) assert.ok(narration.includes(`${p.births}万`), `${p.name} not narrated`);
 });
 
 for (const project of ['ai_model_rankings', 'openrouter_rankings']) {

@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Composition, continueRender, delayRender} from 'remotion';
 import {notoSansSC, notoSerifSC} from './fonts';
-import {DURATION_SECONDS, FPS, HEIGHT, Kakeya, WIDTH} from './Kakeya';
+import {FPS, HEIGHT, Kakeya, WIDTH} from './Kakeya';
+import {DURATION_IN_FRAMES} from './timing';
 
 const KakeyaWithFontGate: React.FC = () => {
   const [handle] = useState(() => delayRender('loading Noto Sans SC + Noto Serif SC'));
@@ -25,7 +26,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="Kakeya"
         component={KakeyaWithFontGate}
-        durationInFrames={Math.round(DURATION_SECONDS * FPS)}
+        durationInFrames={DURATION_IN_FRAMES}
         fps={FPS}
         width={WIDTH}
         height={HEIGHT}

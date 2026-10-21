@@ -1,36 +1,30 @@
 # population-cn
 
-Remotion 视频：中国各省出生人口变化 (2000-2023)
+Remotion 竖屏视频（1080x1920，30fps，约 67 秒，中文旁白）：中国出生人口——从 2016 年的 1883 万到 2024 年的 954 万，以及哪些省份生得最多。
 
 ## 使用
 
 ```bash
-# TypeScript 类型检查
+npm run voiceover   # 生成旁白（edge-tts zh-CN-XiaoxiaoNeural，需要 ffmpeg）
 npm run check
-
-# 启动预览
 npm run dev
-
-# 渲染视频
 npm run render
 ```
 
-## GitHub Actions
+## 内容
 
-推送 `population_cn-<semver>` Tag 自动构建并发布：
+1. 2024 年全国出生 954 万，比上年 +52 万，8 年来首次回升
+2. 全国趋势：2016 年 1883 万 → 2023 年 902 万（不到一半）→ 2024 年 954 万
+3. 2024 年出生人口最多的省份：广东 113 万（连续 7 年第一，占全国 11.8%）、河南、山东、四川、河北、江苏
+4. 出生超过 30 万的 14 个省份合计 696.8 万，占全国 73%
+5. 回升来自生育大省：广东 +10 万、河南 +6.7 万、山东 +3.9 万
 
-```bash
-git tag population_cn-1.0.0
-git push origin population_cn-1.0.0
-```
+场景时长由旁白各段实测时长决定，元素在旁白念到时出现（`src/timing.ts` 的 `cue()`）。修改 `public/voiceover/narration.zh.txt` 后运行 `npm run voiceover`。
 
-## Remotion 移植
+## 数据
 
-由早期 HyperFrames 版移植的 Remotion 实现（`src/` + `remotion.config.ts`），竖屏 1080x1920@30fps，40 秒（1200 帧）。
+- 全国 2020–2024 年：国家统计局历年国民经济和社会发展统计公报（2024 年 954 万，比 2023 年增加 52 万）
+- 全国 2016 年 1883 万：国家统计局在第七次人口普查后修订的数据（[腾讯新闻](https://news.qq.com/rain/a/20210517A03XLO00)）。2017–2019 年未找到公开的修订后数字，因此图中未列出，避免混用修订前后的口径
+- 2024 年各省：各省统计公报与《中国统计年鉴 2025》，经第一财经整理（[第一财经](https://www.yicai.com/news/102880432.html)、[腾讯新闻](https://news.qq.com/rain/a/20251217A05YXR00)）
 
-- `src/data.ts`：静态人口数据（2000/2005/2010/2015/2020/2023，31 省）+ `regionColors` + `TOP_N=15`，
-  `interpolateData()` 与原版逐行一致的纯函数：按帧年份线性插值、round、重排取前 15。
-- `src/PopulationCn.tsx`：`frame → 年份 = interpolate(0, 1200f, 2000, 2023)`，
-  31 行全量池绝对定位（`top = rank*76`，宽 `=(b/max)*550px`），非前 15 行隐藏；年份显示取 floor。
-- 无音频：原版 GSAP 时间线同样未接线，`public/README-AUDIO.txt` 仅为 bgm 占位；
-  背景音乐可作为未来可选 `Audio` 接入，目前保持静音。
+旧版（1.0.0）是 2000–2023 年 31 省条形图赛跑，但其数据没有出处，且与官方数字不符（例如 2023 年河南 62 万、山东 55 万，而按官方 2024 年数字和同比增量倒推，分别约为 69.5 万和 61 万；早年各省合计也比全国总数低 10–20%），因此在 2.0.0 中改为只使用可核实的数据。

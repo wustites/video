@@ -1,6 +1,7 @@
 import React from 'react';
 import {Composition, continueRender, delayRender} from 'remotion';
-import {QsUniversities, DURATION_IN_FRAMES, FPS} from './QsUniversities';
+import {QsUniversities} from './QsUniversities';
+import {DURATION_IN_FRAMES, FPS} from './timing';
 import {notoSansSC} from './fonts';
 
 const fontHandle = delayRender('Loading Google Noto Sans SC');
