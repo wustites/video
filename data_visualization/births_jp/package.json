@@ -1,0 +1,31 @@
+{
+  "name": "births-jp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "remotion studio",
+    "check": "tsc --noEmit",
+    "render": "remotion render BirthsJpZh out/video.mp4",
+    "render:zh": "remotion render BirthsJpZh out/births-jp-zh.mp4",
+    "render:ja": "remotion render BirthsJpJa out/births-jp-ja.mp4",
+    "render:draft": "remotion render BirthsJpZh out/preview.mp4 --log=error",
+    "data:update": "node scripts/import-data.mjs",
+    "voiceover": "npm run voiceover:zh && npm run voiceover:ja",
+    "voiceover:zh": "python3 ../../packages/voiceover/edge_narration.py --voice zh-CN-XiaoxiaoNeural --lang zh --expected 7 --word-marks --per-language-outputs --rate +10%",
+    "voiceover:ja": "python3 ../../packages/voiceover/edge_narration.py --voice ja-JP-NanamiNeural --lang ja --expected 7 --word-marks --per-language-outputs --rate +10%"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.504",
+    "@remotion/google-fonts": "4.0.504",
+    "@video/core": "0.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "remotion": "4.0.504"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "typescript": "^5.8.3"
+  }
+}

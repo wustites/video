@@ -242,3 +242,22 @@ test('shandong map camera focuses each city inside the map band without jumping'
   }
   assert.deepEqual(weights(keys[0].startFrame), weights(keys[0].startFrame).map(() => 0));
 });
+
+test('births_jp narration states the figures derived from the e-Stat data', async () => {
+  const dir = path.join(root, 'data_visualization/births_jp');
+  const src = readFileSync(path.join(dir, 'src/data.ts'), 'utf8').replace("import data from './data.json';", `const data = ${readFileSync(path.join(dir, 'src/data.json'), 'utf8')};`);
+  const {FACTS} = await loadTs(src);
+  const zh = readFileSync(path.join(dir, 'public/voiceover/narration.zh.txt'), 'utf8');
+  const ja = readFileSync(path.join(dir, 'public/voiceover/narration.ja.txt'), 'utf8');
+  assert.ok(zh.includes(`${(FACTS.last / 1e4).toFixed(1)}万`) && zh.includes(`${(FACTS.first / 1e4).toFixed(1)}万`));
+  assert.ok(ja.includes(`${Math.floor(FACTS.last / 1e4)}万${FACTS.last % 1e4}人`));
+  for (const text of [zh, ja]) {
+    assert.ok(text.includes(`${FACTS.drop}%`) && text.includes(`${FACTS.topShare}%`));
+    assert.ok(text.includes(`${FACTS.belowMillion}年`) && text.includes(`${FACTS.fallingStreak}年`));
+    assert.ok(text.includes(String(FACTS.smallest.last)) && text.includes(String(FACTS.risers[0].last - FACTS.risers[0].prev)));
+    assert.ok(text.includes(`${Math.round(FACTS.steepest.ratio * 100)}%`) && text.includes(`${Math.round(FACTS.mildest.ratio * 100)}%`));
+  }
+  assert.ok(FACTS.allDown);
+  assert.ok(zh.includes(`${FACTS.underHalf}个`) && zh.includes(`${FACTS.under5000}个`) && zh.includes(`${FACTS.risers.length}个`));
+  assert.ok(ja.includes(`${FACTS.underHalf}の`) && ja.includes(`${FACTS.under5000}に`) && ja.includes(`わずか${FACTS.risers.length}`));
+});

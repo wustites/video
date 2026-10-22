@@ -12,6 +12,7 @@
 | Top 500 | [`data_visualization/top500/`](./data_visualization/top500/) | 2025 年《财富》世界 500 强 |
 | Japan Economy | [`data_visualization/japan_economy/`](./data_visualization/japan_economy/) | 日本 1985—2026 年经济指标与日经指数 |
 | Population CN | [`data_visualization/population_cn/`](./data_visualization/population_cn/) | 中国各省出生人口变化 |
+| Births JP | [`data_visualization/births_jp/`](./data_visualization/births_jp/) | 日本各都道府县出生人数变化（2000–2025） |
 
 ## 教育
 
