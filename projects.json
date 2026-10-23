@@ -5,6 +5,7 @@
     "apple": {"path": "creative_brand/apple", "name": "Apple", "framework": "hyperframes", "languages": ["zh"], "variants": []},
     "brexit_referendum": {"path": "history_society/brexit_referendum", "name": "Brexit Referendum", "languages": ["en"], "variants": []},
     "claude_mhs": {"path": "science_nature/claude_mhs", "name": "Claude MHS", "framework": "hyperframes", "languages": ["zh"], "variants": []},
+    "kimi_k3_1_pro": {"path": "science_nature/kimi_k3_1_pro", "name": "Kimi K3.1 Pro", "framework": "hyperframes", "languages": ["zh"], "variants": []},
     "cloudflare_history": {"path": "history_society/cloudflare_history", "name": "Cloudflare History", "framework": "hyperframes", "languages": ["zh"], "variants": []},
     "imperial_house_law_jp": {"path": "history_society/imperial_house_law_jp", "name": "Imperial House Law JP", "languages": ["ja"], "variants": []},
     "japan_economy": {"path": "data_visualization/japan_economy", "name": "Japan Economy", "languages": ["ja"], "variants": []},

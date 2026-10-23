@@ -43,6 +43,7 @@
 | 项目名 | 项目路径 | 内容简介 |
 | --- | --- | --- |
 | Claude MHS | [`science_nature/claude_mhs/`](./science_nature/claude_mhs/) | Anthropic Model Hardware Standard 介绍（HyperFrames） |
+| Kimi K3.1 Pro | [`science_nature/kimi_k3_1_pro/`](./science_nature/kimi_k3_1_pro/) | 月之暗面 Kimi K3.1 Pro 发布介绍（HyperFrames） |
 | Kakeya Conjecture | [`science_nature/kakeya_conjecture/`](./science_nature/kakeya_conjecture/) | 挂谷猜想科普动画 |
 | Solar System | [`science_nature/solar/`](./science_nature/solar/) | 太阳系科普动画 |
 
