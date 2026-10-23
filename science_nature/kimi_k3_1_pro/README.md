@@ -1,6 +1,6 @@
 # Kimi K3.1 Pro 介绍视频 (kimi_k3_1_pro)
 
-HyperFrames（HTML + GSAP）制作的中文竖屏 (1080×1920) 科技解说短视频，介绍月之暗面于 2026-10-23 发布的 Kimi K3.1 Pro。8 段 Edge TTS 旁白（zh-CN-YunxiNeural）驱动场景时间轴：`npm run voiceover` 生成旁白后，`packages/voiceover/sync_hyperframes_timing.mjs` 把各段时长写进 `index.html`。
+HyperFrames（HTML + GSAP）制作的中文竖屏 (1080×1920) 科技解说短视频，介绍月之暗面于 2026-10-24（北京时间）发布的 Kimi K3.1 Pro。8 段 Edge TTS 旁白（zh-CN-YunxiNeural）驱动场景时间轴：`npm run voiceover` 生成旁白后，`packages/voiceover/sync_hyperframes_timing.mjs` 把各段时长写进 `index.html`。
 
 来源：https://x.com/Kimi_Moonshot/status/2113680701770068067 · https://www.kimi.ai/blog/kimi-k3-1-pro
 
