@@ -56,6 +56,7 @@
 | --- | --- | --- |
 | Apple | [`creative_brand/apple/`](./creative_brand/apple/) | 水果苹果创意介绍 |
 | Shenzhen APEC | [`creative_brand/shenzhen_apec/`](./creative_brand/shenzhen_apec/) | 深圳 APEC 2026 宣传片（英文旁白，中英字幕） |
+| LA28 Olympics | [`creative_brand/la28_olympics/`](./creative_brand/la28_olympics/) | 洛杉矶 2028 奥运会宣传片，中文竖屏真实照片（HyperFrames / edge-tts） |
 
 ## 发布标签
 

@@ -1,0 +1,86 @@
+<template>
+<style>@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-400.woff2') format('woff2');font-weight:100 500;font-display:block}@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-700.woff2') format('woff2');font-weight:600 900;font-display:block}
+#root{position:absolute;inset:0;overflow:hidden;background:#0c0e14;font-family:'Noto Sans SC', sans-serif;color:#fff8ef}
+.cam{position:absolute;left:-108px;top:-192px;width:1296px;height:2304px;transform-origin:50% 50%}
+.photo{position:absolute;inset:0;width:100%;height:100%}
+.scrim{position:absolute;left:0;top:0;width:1080px;
+  background:linear-gradient(180deg,rgba(12,14,20,.9) 0%,rgba(12,14,20,.74) 55%,rgba(12,14,20,0) 100%)}
+.floor{position:absolute;left:0;top:1120px;width:1080px;height:800px;
+  background:linear-gradient(180deg,rgba(12,14,20,0) 0%,rgba(12,14,20,.5) 40%,rgba(12,14,20,.72) 100%)}
+.head{position:absolute;left:72px;top:176px;right:72px}
+.big{font-weight:900;font-size:176px;line-height:1;letter-spacing:-5px;font-variant-numeric:tabular-nums}
+.title{font-weight:700;font-size:60px;line-height:1.25;margin-top:20px}
+.title::before{content:"";display:inline-block;width:14px;height:52px;background:#ff6b35;margin-right:20px;vertical-align:-6px}
+.years{position:absolute;left:66px;top:176px}
+.years div{display:flex;align-items:baseline;gap:30px;font-weight:900;font-size:170px;line-height:1.02;letter-spacing:-5px}
+.years div.now{color:#ff6b35}
+.years span{font-weight:700;font-size:44px;letter-spacing:0;color:#e4ddd3}
+.cover-title{position:absolute;left:72px;top:760px;font-weight:900;font-size:96px;line-height:1.2}
+.half{position:absolute;left:0;width:1080px;overflow:hidden}
+.half .cam{left:-54px;top:-8px;width:1188px;height:1056px}
+.half.top .cam{top:-88px}
+.half .shade{position:absolute;left:0;top:0;width:1080px;height:520px;
+  background:linear-gradient(180deg,rgba(12,14,20,.86) 0%,rgba(12,14,20,.6) 50%,rgba(12,14,20,0) 100%)}
+.half .lab{position:absolute;left:72px}
+.half .lab span{display:block;font-weight:700;font-size:48px;line-height:1.3;margin-top:10px}
+.pin{position:absolute;width:0;height:0}
+.pin i{position:absolute;left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:#ff6b35;box-shadow:0 0 0 6px rgba(255,248,239,.92)}
+.pin span{position:absolute;left:34px;top:-40px;white-space:nowrap;font-weight:900;font-size:54px;line-height:80px;padding:0 20px;
+  background:rgba(12,14,20,.8);color:#fff8ef}
+.cities{position:absolute;left:72px;right:72px;top:600px}
+.city{display:flex;align-items:baseline;gap:30px;padding:16px 0 16px 26px;border-left:8px solid rgba(255,248,239,.5);margin-bottom:22px;
+  background:linear-gradient(90deg,rgba(12,14,20,.88),rgba(12,14,20,.35))}
+.city b{font-weight:900;font-size:64px;line-height:1.2;min-width:210px}
+.city span{font-weight:700;font-size:52px;line-height:1.2;font-variant-numeric:tabular-nums}
+.city.la{border-left-color:#ff6b35}
+.city.la span em{font-style:normal;color:#ff6b35}
+.steps{position:absolute;left:72px;top:620px;display:flex;align-items:center;gap:30px}
+.step{padding:18px 30px;background:rgba(12,14,20,.82)}
+.step b{display:block;font-weight:900;font-size:76px;line-height:1.1}
+.step span{display:block;font-weight:500;font-size:36px;line-height:1.4;margin-top:4px;color:#e4ddd3}
+.step.to b{color:#ff6b35}
+.arrow{width:110px;height:6px;background:#ff6b35;position:relative}
+.arrow::after{content:"";position:absolute;right:-6px;top:-11px;border:14px solid transparent;border-left:18px solid #ff6b35}
+.sports{position:absolute;left:72px;right:72px;top:520px}
+.sport{display:flex;align-items:center;justify-content:space-between;padding:14px 26px;margin-bottom:18px;
+  background:rgba(12,14,20,.84);border-left:10px solid #ff6b35}
+.sport b{font-weight:900;font-size:68px;line-height:1.2}
+.sport span{font-weight:700;font-size:38px;line-height:1.2;padding:6px 16px;color:#0c0e14;background:#fff8ef}
+.sport.debut span{background:#ff6b35;color:#0c0e14}
+.hero{position:absolute;left:66px;right:60px;top:420px}
+.hero b{display:block;font-weight:900;font-size:260px;line-height:1;letter-spacing:-10px;color:#ff6b35;font-variant-numeric:tabular-nums}
+.hero small{display:block;font-weight:700;font-size:50px;line-height:1.4;margin:16px 0 0 8px}
+.hero .plus{display:inline-block;margin:18px 0 0 8px;padding:6px 18px;font-weight:900;font-size:44px;background:#fff8ef;color:#0c0e14}
+.quota{position:absolute;left:72px;right:72px;top:800px}
+.quota h3{margin:0 0 20px;font-weight:700;font-size:44px;color:#fff8ef}
+.quota h3 em{font-style:normal;font-weight:900;font-size:64px}
+.bar{display:flex;align-items:center;gap:22px;margin-bottom:16px}
+.bar label{width:110px;font-weight:700;font-size:44px}
+.bar i{display:block;height:58px;background:#fff8ef}
+.bar.w i{background:#ff6b35}
+.bar span{font-weight:900;font-size:50px;font-variant-numeric:tabular-nums}
+.firsttime{display:inline-block;margin-top:14px;padding:8px 22px;font-weight:900;font-size:48px;background:#ff6b35;color:#0c0e14}
+.end{position:absolute;left:72px;right:72px;top:176px}
+.end .city-name{font-weight:900;font-size:150px;line-height:1.05}
+.end .yr{font-weight:900;font-size:300px;line-height:.95;letter-spacing:-12px;color:#ff6b35;font-variant-numeric:tabular-nums}
+.end .dates{font-weight:900;font-size:92px;line-height:1.2;margin-top:18px;font-variant-numeric:tabular-nums}
+.end .ord{font-weight:700;font-size:46px;line-height:1.4;margin-top:6px;color:#e4ddd3}
+.end .see{display:inline-block;margin-top:34px;padding:10px 30px;font-weight:900;font-size:84px;background:#ff6b35;color:#0c0e14}
+.credit{position:absolute;left:72px;right:72px;top:1384px;font-size:24px;line-height:1.4;color:#e4ddd3;text-shadow:0 1px 2px #000}
+</style>
+<div id="root" data-composition-id="scene-4" data-width="1080" data-height="1920" data-start="0" data-duration="9.216">
+<div id="scene-4-venice-cam" class="cam" data-layout-allow-overflow><img id="scene-4-venice" class="photo" src="assets/photos/venice.jpg" alt="威尼斯海滩"></div><div class="scrim" style="height:1150px"></div><div class="floor"></div><div class="head"><div class="big" id="scene-4-big">5</div><div class="title" id="scene-4-title">个新增项目</div></div><div class="sports"><div class="sport debut" id="scene-4-p0"><b>腰旗橄榄球</b><span>首次</span></div><div class="sport debut" id="scene-4-p1"><b>壁球</b><span>首次</span></div><div class="sport" id="scene-4-p2"><b>板球</b><span>1900 年后回归</span></div><div class="sport" id="scene-4-p3"><b>长曲棍球</b><span>1908 年后回归</span></div><div class="sport" id="scene-4-p4"><b>棒垒球</b><span>回归</span></div></div><div class="credit" data-layout-ignore>威尼斯海滩 · 照片 Blake Everett · CC0 · Wikimedia Commons</div>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+tl.fromTo('#scene-4-venice-cam',{scale:1.06,x:0,y:0},{scale:1.0,x:30,y:0,duration:9.216,ease:'none'},0);
+tl.fromTo('#scene-4-big',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.050);
+tl.fromTo('#scene-4-title',{opacity:0,x:-24,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.250);
+tl.fromTo('#scene-4-p0',{opacity:0,x:-50,y:0},{opacity:1,x:0,y:0,duration:0.35,ease:'power3.out'},1.355);
+tl.fromTo('#scene-4-p1',{opacity:0,x:-50,y:0},{opacity:1,x:0,y:0,duration:0.35,ease:'power3.out'},2.390);
+tl.fromTo('#scene-4-p2',{opacity:0,x:-50,y:0},{opacity:1,x:0,y:0,duration:0.35,ease:'power3.out'},4.498);
+tl.fromTo('#scene-4-p3',{opacity:0,x:-50,y:0},{opacity:1,x:0,y:0,duration:0.35,ease:'power3.out'},5.331);
+tl.fromTo('#scene-4-p4',{opacity:0,x:-50,y:0},{opacity:1,x:0,y:0,duration:0.35,ease:'power3.out'},6.569);
+window.__timelines["scene-4"]=tl;
+</script>
+</template>

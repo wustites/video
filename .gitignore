@@ -165,3 +165,6 @@ creative_brand/shenzhen_apec/index.zh.html
 
 # szu_history 的校园照片由 scripts/prepare_photos.py 从 Wikimedia Commons 裁切，随仓库提交以便离线渲染
 !education/szu_history/assets/photos/*.jpg
+
+# la28_olympics 的照片由 scripts/prepare_photos.py 从 Wikimedia Commons 裁切，随仓库提交以便离线渲染
+!creative_brand/la28_olympics/assets/photos/*.jpg
