@@ -70,15 +70,15 @@ SCENES = [
          labels=[("airport", "宝安机场", at(4, "机场"), "below"), ("qianhai", "前海", at(4, "前海")),
                  ("dachan", "大铲湾", at(4, "大铲湾"))],
          stat=("2004—2013", M["newKm2"]["2013"], at(4, "最多"))),
-    dict(year="2026", fromYear="2013", img=["2013", "2026"], swapAt=at(5, "此后"), title="向海要地，按下暂停",
-         date="Landsat 8 · 2026-02-02", base=["1988", "1995", "2004", "2013"], fresh=["2026"], freshAt=at(5, "新"),
+    dict(year="2026", fromYear="2013", img=["2013", "2026"], swapAt=at(5, "此后"), title="放缓，但没有停下",
+         date="Landsat 8 · 2026-02-02", base=["1988", "1995", "2004", "2013"], fresh=["2026"], freshAt=at(5, "围"),
          cams=[(0.6, cam(560, 900, 1.12)), (at(5, "深圳湾") - 0.3, cam(800, 860, 1.7))],
          labels=[("bay", "深圳湾", at(5, "深圳湾"), "sea"), ("mangrove", "福田红树林", at(5, "红树林"))],
-         stat=("2013—2026", M["newKm2"]["2026"], at(5, "变少")),
+         stat=("2013—2026", M["newKm2"]["2026"], at(5, "放缓")),
          policy=("2018", "全面停止新增围填海审批", "国家重大战略项目除外", at(5, "二零一八"))),
     dict(year="2026", fromYear=None, img=["2026"], title="1979—2026", date="本画面 · Landsat 影像水体对比估算",
-         base=["1988", "1995", "2004", "2013", "2026"], fresh=[], promoteAt=at(6, "五十平方公里"),
-         cams=[(0.1, FULL)], labels=[], stat=None, total=at(6, "五十平方公里")),
+         base=["1988", "1995", "2004", "2013", "2026"], fresh=[], promoteAt=at(6, "八十"),
+         cams=[(0.1, FULL)], labels=[], stat=None, total=at(6, "八十")),
 ]
 
 FONT = "'Noto Sans SC', sans-serif"
@@ -213,7 +213,7 @@ def scene_html(i, s):
         head[0] = head[0].replace(f'id="{sid}-title"', f'id="{sid}-title" style="opacity:0"').replace(f'id="{sid}-date"', f'id="{sid}-date" style="opacity:0"')
     if s.get("stat"):
         period, km2, t = s["stat"]
-        head.append(f'<div class="stat" id="{sid}-stat"><b>+{km2:.1f} km²</b><small>{period} 新增陆地</small></div>')
+        head.append(f'<div class="stat" id="{sid}-stat"><b>+{km2:.1f} km²</b><small>{period} 西海岸围填海</small></div>')
         tl.append(f"tl.fromTo('#{sid}-stat',{{opacity:0,y:-14}},{{opacity:1,y:0,duration:.4,ease:'power3.out'}},{r(t)});")
     if s.get("policy"):
         yr, a, b, t = s["policy"]
@@ -223,7 +223,7 @@ def scene_html(i, s):
     if s.get("total") is not None:
         t = s["total"]
         head = [f'<div class="scrim" style="height:900px"></div><div class="total" id="{sid}-total"><b><span id="{sid}-num">0</span><em>km²</em></b>'
-                f'<small>1979—2026 · 这段海岸新增的陆地</small><p id="{sid}-reach">最远处向海推进约 {M["maxReachKm"]:.1f} 公里 · Landsat 影像估算</p></div>']
+                f'<small>1979—2026 · 深圳西海岸围填海</small><p id="{sid}-reach">海岸线最远向海推进约 {M["maxReachKm"]:.1f} 公里 · Landsat 影像估算</p></div>']
         tl.append(f"tl.fromTo('#{sid}-total',{{opacity:0}},{{opacity:1,duration:.4,ease:'none'}},{r(t - 1.4)});")
         tl.append(f"const n{i}={{v:0}};tl.to(n{i},{{v:{M['totalKm2']},duration:1.4,ease:'power2.out',onUpdate:()=>{{document.querySelector('#{sid}-num').textContent=Math.round(n{i}.v)}}}},{r(t - 1.4)});")
         tl.append(f"tl.fromTo('#{sid}-reach',{{opacity:0}},{{opacity:1,duration:.4,ease:'none'}},{r(t + .8)});")

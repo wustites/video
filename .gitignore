@@ -158,3 +158,7 @@ vite.config.ts.timestamp-*
 # shenzhen_apec 中文旁白来自 ~/tts 的 synthesis 预发布（Qwen3-TTS 克隆声音），发布流程不重新生成，音频随仓库提交；index.zh.html 由 build_zh.mjs 生成
 !creative_brand/shenzhen_apec/public/voiceover/narration.zh.mp3
 creative_brand/shenzhen_apec/index.zh.html
+
+# shenzhen_reclamation 的 Landsat 影像与围填海蒙版由 scripts/prepare_imagery.py 生成（需联网），随仓库提交以便离线渲染
+!geography_transport/shenzhen_reclamation/assets/map/*.png
+!geography_transport/shenzhen_reclamation/assets/map/*.jpg

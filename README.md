@@ -30,7 +30,7 @@
 | [Claude MHS](./science_nature/claude_mhs/) | Anthropic Model Hardware Standard 介绍 | 中 | 随旁白生成 | HyperFrames | `out/claude-mhs-zh.mp4` |
 | [Kimi K3.1 Pro](./science_nature/kimi_k3_1_pro/) | 月之暗面 Kimi K3.1 Pro 模型发布介绍 | 中 | 随旁白生成 | HyperFrames | `out/kimi-k3-1-pro-zh.mp4` |
 | [GPT-6.1 Terra](./science_nature/gpt_6_1_terra/) | OpenAI GPT-6.1 Terra 模型发布介绍 | 中 | 随旁白生成 | HyperFrames | `out/gpt-6-1-terra-zh.mp4` |
-| [Shenzhen Reclamation](./geography_transport/shenzhen_reclamation/) | 深圳填海造陆发展史卫星地图解说 | 中 | 约 63 秒 | HyperFrames | `out/shenzhen-reclamation-zh.mp4` |
+| [Shenzhen Reclamation](./geography_transport/shenzhen_reclamation/) | 深圳填海造陆发展史卫星地图解说 | 中 | 约 64 秒 | HyperFrames | `out/shenzhen-reclamation-zh.mp4` |
 | [Shenzhen APEC](./creative_brand/shenzhen_apec/) | 深圳 APEC 2026 宣传片 | 英 + 中英字幕 | 随旁白生成 | HyperFrames | `out/shenzhen-apec-en.mp4` |
 
 榜单和数据项目采用 `1080 × 1920` 竖屏画布；Kakeya Conjecture 使用 `1920 × 1080` 横屏画布。具体数据来源、内容结构和资源要求见各项目目录内的 README。
