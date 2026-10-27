@@ -1,6 +1,6 @@
 # 视频项目索引
 
-本文件记录仓库中各视频项目的名称和根目录路径。名称、路径、语言和发布 variant 的机器可读定义统一维护在 [`projects.json`](./projects.json)，本文件负责按主题展示。每个项目都是 npm workspace 中独立的 Remotion 工程；`cover/`、`skills/` 和根目录文档不属于视频项目。
+本文件记录仓库中各视频项目的名称和根目录路径。名称、路径、语言和发布 variant 的机器可读定义统一维护在 [`projects.json`](./projects.json)，本文件负责按主题展示。每个项目都是 npm workspace 中独立的 Remotion 或 HyperFrames 工程；`cover/`、`skills/` 和根目录文档不属于视频项目。
 
 ## 数据可视化与榜单
 
@@ -37,6 +37,7 @@
 | Metro de Lima | [`geography_transport/metro_lima/`](./geography_transport/metro_lima/) | 秘鲁利马地铁系统介绍 |
 | Saint Petersburg Metro | [`geography_transport/saint_petersburg_metro/`](./geography_transport/saint_petersburg_metro/) | 俄罗斯圣彼得堡地铁系统介绍，俄英双语字幕 |
 | Sapporo Subway | [`geography_transport/sapporo_subway/`](./geography_transport/sapporo_subway/) | 日本札幌市营地铁介绍 |
+| Shenzhen Reclamation | [`geography_transport/shenzhen_reclamation/`](./geography_transport/shenzhen_reclamation/) | 深圳填海造陆发展史，中文竖屏地图解说（HyperFrames / edge-tts） |
 
 ## 科学与自然
 

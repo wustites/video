@@ -1,0 +1,37 @@
+{
+  "provider": "edge-tts",
+  "voice": "zh-CN-YunxiNeural",
+  "rate": "+10%",
+  "duration": 73.224,
+  "total": 75.224,
+  "scenes": [
+    {
+      "start": 0,
+      "duration": 7.656
+    },
+    {
+      "start": 7.656,
+      "duration": 9.672
+    },
+    {
+      "start": 17.328,
+      "duration": 9.72
+    },
+    {
+      "start": 27.048000000000002,
+      "duration": 10.584
+    },
+    {
+      "start": 37.632000000000005,
+      "duration": 13.008
+    },
+    {
+      "start": 50.64,
+      "duration": 12.48
+    },
+    {
+      "start": 63.120000000000005,
+      "duration": 10.104
+    }
+  ]
+}
