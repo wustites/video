@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>GPT-6.1 Terra · 封面</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root { --bg: #070b09; --panel: rgba(255, 255, 255, 0.05); --text: #f4f7f5; --muted: #9aa8a0; --green: #34d399; --lime: #b5f26b; --line: rgba(52, 211, 153, 0.32); }
+      body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Noto Sans SC', sans-serif; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: radial-gradient(circle at 50% 108%, rgba(52,211,153,.32), transparent 48%), radial-gradient(circle at 90% 6%, rgba(181,242,107,.14), transparent 40%), var(--bg); }
+      .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px); background-size: 80px 80px; }
+      .globe { position: absolute; left: 50%; bottom: -720px; width: 1500px; height: 1500px; margin-left: -750px; border-radius: 50%; border: 1px solid rgba(52,211,153,.28); background: repeating-radial-gradient(circle, transparent 0 118px, rgba(52,211,153,.08) 118px 120px); }
+      .inner { position: absolute; inset: 0; box-sizing: border-box; padding: 140px 78px 150px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+      .logo { width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--lime), var(--green) 45%, #0b6b4b); box-shadow: 0 30px 110px rgba(52,211,153,.45); position: relative; margin-top: 90px; }
+      .logo::after { content: ''; position: absolute; inset: -32px; border-radius: 50%; border: 2px solid rgba(52,211,153,.45); }
+      .title { font-size: 150px; line-height: 1.02; letter-spacing: -4px; font-weight: 900; margin-top: 110px; }
+      .tag { font-size: 52px; font-weight: 800; color: var(--green); margin-top: 40px; }
+      .stats { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 90px; }
+      .card { background: var(--panel); border: 1px solid var(--line); border-radius: 28px; padding: 28px 32px; text-align: left; }
+      .num { font-size: 76px; font-weight: 900; color: var(--green); line-height: 1.1; }
+      .label { font-size: 27px; font-weight: 700; color: var(--muted); margin-top: 4px; }
+      .meta { position: absolute; text-align: center; top: 120px; left: 0; right: 0; font-size: 28px; font-weight: 700; color: var(--muted); letter-spacing: 2px; }
+      .footer { position: absolute; text-align: center; bottom: 120px; left: 0; right: 0; font-size: 34px; font-weight: 800; letter-spacing: 6px; color: var(--text); }
+    </style>
+  </head>
+  <body>
+    <!-- 发版封面：在项目目录 npm run render:still 截取第一帧输出 out/cover.png -->
+    <div id="root" data-composition-id="gpt-6-1-terra-poster" data-start="0" data-width="1080" data-height="1920" data-duration="1">
+      <div class="grid"></div><div class="globe" data-layout-allow-overflow></div>
+      <div class="meta">2026.10.27 · OPENAI</div>
+      <div class="inner">
+        <div class="logo"></div>
+        <div class="title"><div>GPT-6.1</div><div style="color:var(--green)">Terra</div></div>
+        <div class="tag">会用电脑 · 更快 · 更便宜</div>
+        <div class="stats">
+          <div class="card"><div class="num">$1 / $5</div><div class="label">每百万 token 输入 / 输出</div></div>
+          <div class="card"><div class="num">1/10</div><div class="label">GPT-6 Astra 每 token 价格的</div></div>
+          <div class="card"><div class="num">3×</div><div class="label">比 Astra / Sol 更快完成任务</div></div>
+          <div class="card"><div class="num">50.3%</div><div class="label">Terminal-Bench 4.0</div></div>
+        </div>
+      </div>
+      <div class="footer">OpenAI 新模型解读</div>
+    </div>
+    <script>
+      window.__timelines['gpt-6-1-terra-poster'] = gsap.timeline({paused: true});
+    </script>
+  </body>
+</html>

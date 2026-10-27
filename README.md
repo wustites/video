@@ -106,7 +106,7 @@ npm run render
 
 ## GitHub Actions 发布
 
-所有项目统一使用 `.github/workflows/render-release.yml` 发布。工作流由 `<project_key>-<semver>` tag 触发，自动解析项目、安装依赖、生成旁白、运行检查、渲染 MP4，并上传 artifact 和 GitHub Release。工作流不会联网刷新业务数据，发布内容来自 tag 中已提交的 snapshot。
+所有项目统一使用 `.github/workflows/render-release.yml` 发布。工作流由 `<project_key>-<semver>` tag 触发，自动解析项目、安装依赖、生成旁白、运行检查、渲染 MP4，并把 MP4 和封面（`<project_key>-<version>[-<variant>]-cover.png`）上传到 artifact 和 GitHub Release。项目定义 `render:still`（写出 `out/cover.png`）时使用专门设计的封面，否则从视频中自动截取一帧，见 [发布流程](./docs/RELEASING.md#封面)。工作流不会联网刷新业务数据，发布内容来自 tag 中已提交的 snapshot。
 
 | 项目 | Tag 格式 | 工作流 |
 | --- | --- | --- |

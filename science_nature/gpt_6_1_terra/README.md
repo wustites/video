@@ -11,6 +11,7 @@ npm run voiceover    # 生成旁白并同步场景时间
 npm run dev          # HyperFrames Studio 预览
 npm run check        # lint、布局、对比度检查
 npm run render       # 渲染 out/gpt-6-1-terra-zh.mp4
+npm run render:still # 渲染发版封面 out/cover.png（poster/index.html）
 ```
 
 ## 场景

@@ -165,7 +165,7 @@
 
 **特点**：单张图片，常用于视频平台、公众号封面。
 
-- **与视频共用设计**：用 `remotion still` 从视频的某一帧或专门的封面 composition 导出（参考 imperial_house_law_jp 的 `render:still`），保证字体和配色与视频一致。
+- **与视频共用设计**：用 `remotion still` 从视频的某一帧或专门的封面 composition 导出（参考 imperial_house_law_jp 的 `render:still`），保证字体和配色与视频一致；HyperFrames 项目用单帧的 `poster/index.html`（参考 gpt_6_1_terra）。项目的 `render:still` 写出 `out/cover.png`，发版时自动作为 Release 封面上传，见 [发布流程](./RELEASING.md#封面)。
 - **独立设计**：与视频无关的封面（如 `cover/` 下的节日封面）可以写成纯 HTML/CSS，用浏览器截图导出，不进入 `projects.json` 和发布流程。
 - **注意**：按平台规格确定尺寸和安全区（例如微信封面的裁切比例），文字要避开平台会叠加界面的区域。
 

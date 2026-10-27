@@ -204,6 +204,32 @@ jobs:
 
           echo "path=$RELEASE_DIR" >> "$GITHUB_OUTPUT"
 
+      - name: Prepare release cover
+        working-directory: ${{ steps.release.outputs.project_dir }}
+        env:
+          ASSET_PREFIX: ${{ steps.release.outputs.asset_prefix }}
+          RELEASE_DIR: ${{ steps.release.outputs.release_dir }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cover="$RELEASE_DIR/$ASSET_PREFIX-cover.png"
+          if node -e "const p=require('./package.json'); process.exit(p.scripts?.['render:still'] ? 0 : 1)"; then
+            rm -f out/cover.png
+            npm run render:still
+            if [[ ! -f out/cover.png ]]; then
+              echo "npm run render:still must write out/cover.png" >&2
+              exit 1
+            fi
+            cp out/cover.png "$cover"
+          else
+            # 没有专门封面时，从发布的第一个 MP4 前 20 秒里挑一张有代表性的帧
+            video="$(find "$RELEASE_DIR" -maxdepth 1 -type f -name '*.mp4' | sort | head -n 1)"
+            echo "No render:still script — extracting a cover frame from $(basename "$video")"
+            ffmpeg -v error -y -t 20 -i "$video" -vf thumbnail=300 -frames:v 1 "$cover"
+          fi
+          width_height="$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "$cover")"
+          echo "Cover: $(basename "$cover") ($width_height)"
+
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:
@@ -216,7 +242,9 @@ jobs:
         with:
           name: ${{ steps.release.outputs.release_name }}
           generate_release_notes: true
-          files: ${{ steps.assets.outputs.path }}/*.mp4
+          files: |
+            ${{ steps.assets.outputs.path }}/*.mp4
+            ${{ steps.assets.outputs.path }}/*-cover.png
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
