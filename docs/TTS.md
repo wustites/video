@@ -22,6 +22,7 @@ narration.<lang>.txt（空行分段）
 | 共享脚本 `packages/voiceover/edge_narration.py` | metro_lima、sapporo_subway、japan_economy、brexit_referendum、cloudflare_history、red_army_jp、southern_kurils_jp、imperial_house_law_jp、shandong_universities | 声音、语速、段落数通过命令行参数配置，见 [`packages/voiceover/README.md`](../packages/voiceover/README.md) |
 | 项目自带脚本 | solar（四语言 + cue）、saint_petersburg_metro（俄英字幕同步） | 有额外的 cue 或字幕需求 |
 | 直接调用 CLI | apple | `edge_tts --file … --write-subtitles` 一次生成 MP3 与 WebVTT |
+| ~/tts 预发布（Qwen3-TTS 克隆声音） | shenzhen_apec（zh variant） | 由 [ZeroMarker/tts](https://github.com/ZeroMarker/tts) 的 `speech-<speaker>-<hash>` 工作流合成，本地用停顿对齐字幕；音频随仓库提交，发布时不重新生成 |
 
 生成的 MP3 不提交到仓库（见 `.gitignore`），发布时由 `render-release.yml` 重新生成。
 

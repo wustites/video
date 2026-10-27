@@ -154,3 +154,7 @@ vite.config.ts.timestamp-*
 
 # HyperFrames 本地检查/渲染状态
 .hyperframes/
+
+# shenzhen_apec 中文旁白来自 ~/tts 的 synthesis 预发布（Qwen3-TTS 克隆声音），发布流程不重新生成，音频随仓库提交；index.zh.html 由 build_zh.mjs 生成
+!creative_brand/shenzhen_apec/public/voiceover/narration.zh.mp3
+creative_brand/shenzhen_apec/index.zh.html
