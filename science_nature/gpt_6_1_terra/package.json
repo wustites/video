@@ -1,0 +1,16 @@
+{
+  "name": "gpt-6-1-terra",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "hyperframes preview",
+    "check": "hyperframes check",
+    "voiceover": "python3 ../../packages/voiceover/edge_narration.py --voice zh-CN-YunxiNeural --lang zh --rate=+6% --expected 8 && node ../../packages/voiceover/sync_hyperframes_timing.mjs",
+    "render": "hyperframes render --output out/gpt-6-1-terra-zh.mp4",
+    "render:draft": "hyperframes render --quality draft --output out/preview.mp4"
+  },
+  "devDependencies": {
+    "hyperframes": "0.8.174"
+  }
+}

@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>GPT-6.1 Terra</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #070b09;
+        --panel: rgba(255, 255, 255, 0.05);
+        --text: #f4f7f5;
+        --muted: #9aa8a0;
+        --green: #34d399;
+        --lime: #b5f26b;
+        --amber: #f5b65b;
+        --gray: #56635c;
+        --line: rgba(52, 211, 153, 0.32);
+      }
+      body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Noto Sans SC', sans-serif; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--bg); }
+      .bg { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(circle at 50% 108%, rgba(52,211,153,.28), transparent 46%), radial-gradient(circle at 90% 6%, rgba(181,242,107,.12), transparent 40%), var(--bg); }
+      .grid { position: absolute; inset: -120px; background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px); background-size: 80px 80px; }
+      .globe { position: absolute; left: 50%; bottom: -720px; width: 1500px; height: 1500px; margin-left: -750px; border-radius: 50%; border: 1px solid rgba(52,211,153,.28); background: repeating-radial-gradient(circle, transparent 0 118px, rgba(52,211,153,.08) 118px 120px); }
+      .scene { position: absolute; inset: 0; }
+      .inner { position: absolute; inset: 0; box-sizing: border-box; padding: 150px 78px 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      .kicker { color: var(--green); font-size: 28px; letter-spacing: 8px; font-weight: 800; margin-bottom: 34px; }
+      .title { color: var(--text); font-size: 64px; line-height: 1.2; letter-spacing: -1px; font-weight: 900; }
+      .title div { display: block; }
+      .card { background: var(--panel); border: 1px solid var(--line); border-radius: 28px; padding: 30px 34px; text-align: left; box-sizing: border-box; }
+      .muted { color: var(--muted); }
+      .label { font-size: 27px; font-weight: 700; color: var(--muted); }
+      .pill { font-size: 30px; font-weight: 700; color: var(--green); border: 2px solid var(--line); border-radius: 999px; padding: 12px 30px; }
+      .big { font-size: 86px; font-weight: 900; color: var(--green); line-height: 1.15; }
+      .bars { width: 100%; display: flex; flex-direction: column; gap: 30px; text-align: left; }
+      .bar-head { display: flex; justify-content: space-between; font-size: 30px; font-weight: 700; margin-bottom: 10px; }
+      .bar-track { height: 38px; border-radius: 12px; background: rgba(255,255,255,.08); }
+      .bar { width: 0%; height: 100%; border-radius: 12px; background: var(--gray); }
+      .bar.hl { background: linear-gradient(90deg, var(--green), var(--lime)); }
+      .logo { width: 210px; height: 210px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--lime), var(--green) 45%, #0b6b4b); box-shadow: 0 30px 90px rgba(52,211,153,.4); position: relative; }
+      .logo::after { content: ''; position: absolute; inset: -26px; border-radius: 50%; border: 2px solid rgba(52,211,153,.45); }
+      .row { display: flex; justify-content: space-between; align-items: baseline; }
+      .footer { position: absolute; left: 50px; bottom: 48px; color: #87948d; font-size: 20px; font-weight: 600; letter-spacing: 1px; }
+      #fade-out { position: absolute; inset: 0; background: #000; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <!-- 场景的 data-start / data-duration 由 packages/voiceover/sync_hyperframes_timing.mjs 按 segment-durations.json 写入，不要手改 -->
+    <div id="root" data-composition-id="gpt-6-1-terra" data-start="0" data-width="1080" data-height="1920" data-duration="158.312">
+      <div class="bg"><div class="grid" id="grid"></div><div class="globe" id="globe" data-layout-allow-overflow></div></div>
+
+      <section id="intro" class="scene clip" data-scene="0" data-start="0" data-duration="14.492" data-track-index="1">
+        <div class="inner">
+          <div class="muted" style="position:absolute;top:120px;font-size:26px;font-weight:600" data-in="0.2">2026.10.27 · OPENAI</div>
+          <div class="logo" data-in="0.2"></div>
+          <div class="kicker" style="margin-top:80px" data-in="0.8">INTRODUCING</div>
+          <div class="title" style="font-size:112px;letter-spacing:-3px;line-height:1.05" data-in="1.2"><div>GPT-6.1</div><div style="color:var(--green)">Terra</div></div>
+          <div style="width:520px;height:4px;background:linear-gradient(90deg,transparent,var(--green),transparent);margin:50px 0" data-in="3.5"></div>
+          <div style="font-size:44px;font-weight:800;line-height:1.5" data-in="5"><div>GPT-6 家族中档模型</div><div style="color:var(--green)">会用电脑 · 更快 · 更便宜</div></div>
+        </div>
+      </section>
+
+      <section id="price" class="scene clip" data-scene="1" data-start="13.732" data-duration="24.256" data-track-index="2">
+        <div class="inner">
+          <div class="kicker">PRICING &amp; SPEED</div>
+          <div class="title">价格减半</div>
+          <div style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:64px">
+            <div class="card" data-in="2"><div class="label">输入 / 百万 token</div><div class="big">$<span id="cnt-in">0.00</span></div></div>
+            <div class="card" data-in="3.5"><div class="label">输出 / 百万 token</div><div class="big">$<span id="cnt-out">0.00</span></div></div>
+          </div>
+          <div class="pill" style="margin-top:34px" data-in="7.5">标准 API 价格比 GPT-5.6 Terra 低 50%</div>
+          <div class="card" style="width:100%;margin-top:34px" data-in="12"><div class="label">与 GPT-6 Astra 水平相当，每 token 价格</div><div class="big">1/10</div></div>
+          <div class="card" style="width:100%;margin-top:22px;border-color:var(--lime)" data-in="18"><div class="label">完成任务平均速度 · 对比 GPT-6 Astra / GPT-6.1 Sol</div><div class="big" style="color:var(--lime)">3× <span style="font-size:48px">以上</span></div></div>
+        </div>
+      </section>
+
+      <section id="ale" class="scene clip" data-scene="2" data-start="37.228" data-duration="21.112" data-track-index="1">
+        <div class="inner">
+          <div class="kicker">AGENTS' LAST EXAM</div>
+          <div class="title"><div>同样的分数</div><div style="color:var(--green)">约 1/16 的成本</div></div>
+          <div class="muted" style="font-size:30px;font-weight:700;margin:56px 0 34px" data-in="1.5">中等推理强度 · 得分 / 每任务成本</div>
+          <div class="bars" data-in="1.5">
+            <div><div class="bar-head"><span>GPT-6 Astra</span><span class="muted">57.6% · $4.82</span></div><div class="bar-track"><div class="bar" id="ale-astra"></div></div></div>
+            <div><div class="bar-head"><span style="color:var(--green)">GPT-6.1 Terra</span><span style="color:var(--green)">57.6% · $0.29</span></div><div class="bar-track"><div class="bar hl" id="ale-terra"></div></div></div>
+            <div><div class="bar-head"><span>GPT-5.6 Terra</span><span class="muted">42.6% · $0.84</span></div><div class="bar-track"><div class="bar" id="ale-old"></div></div></div>
+          </div>
+          <div class="card" style="width:100%;margin-top:56px;text-align:center" data-in="9.5">
+            <div class="label">相对 GPT-5.6 Terra</div>
+            <div style="font-size:72px;font-weight:900;color:var(--green)">+15 个百分点</div>
+          </div>
+          <div class="muted" style="font-size:22px;font-weight:600;margin-top:30px" data-in="15">数据：OpenAI 发布图表</div>
+        </div>
+      </section>
+
+      <section id="computer" class="scene clip" data-scene="3" data-start="57.58" data-duration="26.008" data-track-index="2">
+        <div class="inner">
+          <div class="kicker">COMPUTER USE &amp; VISION</div>
+          <div class="title"><div>看懂屏幕</div><div>跨应用操作</div></div>
+          <div style="display:flex;flex-wrap:wrap;gap:18px;justify-content:center;margin-top:56px;max-width:900px">
+            <div class="pill" data-in="7.8">填写表单</div><div class="pill" data-in="8.8">处理发票</div><div class="pill" data-in="10.2">解读工程图纸</div>
+          </div>
+          <div style="width:100%;display:flex;flex-direction:column;gap:24px;margin-top:56px">
+            <div class="card" data-in="12.5"><div class="label">OSWorld 2.1 · 桌面应用工作流</div><div style="font-size:38px;font-weight:900;margin-top:6px">中等推理强度</div><div style="font-size:38px;font-weight:900;color:var(--green)">追平 GPT-5.6 Terra 最好成绩</div></div>
+            <div class="card" data-in="19"><div class="label">MMMU-Pro · 视觉推理</div><div style="font-size:38px;font-weight:900;margin-top:6px">各推理强度均超上一代</div><div style="font-size:38px;font-weight:900;color:var(--green)">接近 GPT-6 Astra / 6.1 Sol</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="facts" class="scene clip" data-scene="4" data-start="82.828" data-duration="22.552" data-track-index="1">
+        <div class="inner">
+          <div class="kicker">FACTUALITY</div>
+          <div class="title">错误率大幅下降</div>
+          <div class="card" style="width:100%;margin-top:60px" data-in="2">
+            <div class="label">OpenAI 内部诱错测试 · 低推理强度</div>
+            <div style="font-size:80px;font-weight:900;margin-top:4px"><span class="muted">53.6%</span> <span style="color:var(--green)">→ <span id="cnt-err">53.6</span>%</span></div>
+          </div>
+          <div class="card" style="width:100%;margin-top:24px" data-in="12.5">
+            <div class="label">最高推理强度 · 错误率</div>
+            <div class="big">4.3%</div>
+          </div>
+          <div class="card" style="width:100%;margin-top:24px;border-color:var(--amber)" data-in="14.8">
+            <div class="label">Artificial Analysis · AA-Omniscience 幻觉率（第三方）</div>
+            <div style="font-size:80px;font-weight:900;margin-top:4px"><span class="muted">88%</span> <span style="color:var(--amber)">→ <span id="cnt-hallu">88</span>%</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="coding" class="scene clip" data-scene="5" data-start="104.62" data-duration="19.024" data-track-index="2">
+        <div class="inner">
+          <div class="kicker">CODING</div>
+          <div class="title">编程翻倍</div>
+          <div class="muted" style="font-size:32px;font-weight:700;margin:60px 0 34px" data-in="1">Terminal-Bench 4.0 · 最高推理强度</div>
+          <div class="bars" data-in="1">
+            <div><div class="bar-head"><span style="color:var(--green)">GPT-6.1 Terra</span><span style="color:var(--green)">50.3%</span></div><div class="bar-track"><div class="bar hl" id="tb-terra"></div></div></div>
+            <div><div class="bar-head"><span>GPT-5.6 Terra</span><span class="muted">21.5%</span></div><div class="bar-track"><div class="bar" id="tb-old"></div></div></div>
+          </div>
+          <div class="big" style="margin-top:50px" data-in="8.2">2.3×</div>
+          <div class="card" style="width:100%;margin-top:50px;border-left:8px solid var(--amber)" data-in="9.6">
+            <div style="font-size:34px;font-weight:900">最复杂的编程任务</div>
+            <div class="muted" style="font-size:30px;font-weight:700;margin-top:8px">OpenAI 仍推荐 GPT-6.1 Sol 或 GPT-6 Astra</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="safety" class="scene clip" data-scene="6" data-start="122.884" data-duration="16.24" data-track-index="1">
+        <div class="inner">
+          <div class="kicker">SAFETY</div>
+          <div class="title"><div>网络安全能力</div><div style="color:var(--amber)">达到"关键"级别</div></div>
+          <div class="card" style="width:100%;margin-top:60px;border-left:8px solid var(--amber)" data-in="2.8"><div class="label">OpenAI 准备度框架 Preparedness Framework</div><div style="font-size:52px;font-weight:900;color:var(--amber);margin-top:6px">Critical · 网络安全</div></div>
+          <div class="card" style="width:100%;margin-top:24px" data-in="7.6"><div style="font-size:36px;font-weight:900">沿用 GPT-6 Astra 的全部防护措施</div></div>
+          <div class="card" style="width:100%;margin-top:24px" data-in="12.8"><div style="font-size:36px;font-weight:900">更强的提示词注入抵抗力</div></div>
+        </div>
+      </section>
+
+      <section id="outro" class="scene clip" data-scene="7" data-start="138.364" data-duration="19.948" data-track-index="2">
+        <div class="inner">
+          <div class="logo" style="width:150px;height:150px" data-in="0.2"></div>
+          <div class="kicker" style="margin-top:56px" data-in="0.3">AVAILABLE NOW</div>
+          <div style="display:flex;flex-wrap:wrap;gap:18px;justify-content:center;max-width:900px">
+            <div class="pill" data-in="2.8">Plus</div><div class="pill" data-in="3.2">Pro</div><div class="pill" data-in="3.6">企业版</div><div class="pill" data-in="4.2">教育版</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:18px;justify-content:center;max-width:900px;margin-top:30px">
+            <div class="pill" style="color:var(--text)" data-in="6.6">ChatGPT Work</div><div class="pill" style="color:var(--text)" data-in="7.9">Codex</div><div class="pill" style="color:var(--text)" data-in="10.5">API · gpt-6.1-terra</div>
+          </div>
+          <div style="width:110px;height:6px;background:var(--green);margin:70px auto 50px" data-in="11.8"></div>
+          <div class="title" style="font-size:54px" data-in="11.8"><div>前沿能力，十分之一的价格</div><div style="color:var(--green)">走进每个人的日常工作</div></div>
+          <div class="muted" style="font-size:28px;font-weight:600;margin-top:50px" data-in="0.3">openai.com/index/introducing-gpt-6-1-terra</div>
+        </div>
+      </section>
+
+      <div class="footer">GPT-6.1 TERRA · OPENAI</div>
+      <div id="fade-out"></div>
+      <audio id="narration" src="public/voiceover/narration.zh.mp3" data-start="0" data-duration="155.712" data-track-index="0"></audio>
+    </div>
+
+    <script>
+      const FADE = 0.38;
+      const ENTRANCE = {y: 36, scale: 0.88};
+      const sceneStart = (id) => Number(document.getElementById(id).dataset.start) + (id === 'intro' ? 0 : FADE);
+      const audioEnd = Number(document.getElementById('narration').dataset.duration);
+
+      const tl = gsap.timeline({paused: true});
+      const total = Number(document.getElementById('root').dataset.duration);
+
+      // 背景缓慢漂移，“地球”轮廓缓慢旋转
+      tl.fromTo('#grid', {y: 0}, {y: total * 5, duration: total, ease: 'none'}, 0);
+      tl.fromTo('#globe', {rotation: 0}, {rotation: total * 0.5, duration: total, ease: 'none'}, 0);
+
+      // 场景交叉淡化：clip 窗口为 [start - FADE, end + FADE]
+      for (const scene of document.querySelectorAll('.scene')) {
+        const inner = scene.querySelector('.inner');
+        const start = Number(scene.dataset.start);
+        const end = start + Number(scene.dataset.duration);
+        if (scene.id !== 'intro') tl.fromTo(inner, {opacity: 0}, {opacity: 1, duration: FADE, ease: 'none'}, start);
+        if (scene.id !== 'outro') tl.to(inner, {opacity: 0, duration: FADE, ease: 'none'}, end - FADE);
+
+        const base = sceneStart(scene.id);
+        for (const el of scene.querySelectorAll('[data-in]')) {
+          tl.fromTo(el, {opacity: 0, y: ENTRANCE.y, scale: ENTRANCE.scale},
+            {opacity: 1, y: 0, scale: 1, duration: Number(el.dataset.dur || 0.8), ease: 'power2.out'}, base + Number(el.dataset.in));
+        }
+      }
+
+      const counter = (sel, t, dur, from, to, digits = 0) => {
+        const obj = {v: from};
+        tl.fromTo(obj, {v: from}, {v: to, duration: dur, ease: 'power1.out', onUpdate: () => {
+          document.querySelector(sel).textContent = obj.v.toFixed(digits);
+        }}, t);
+      };
+      const bar = (sel, t, pct) => tl.fromTo(sel, {width: '0%'}, {width: pct + '%', duration: 1.4, ease: 'power2.out'}, t);
+
+      counter('#cnt-in', sceneStart('price') + 2.1, 1.4, 0, 1, 2);
+      counter('#cnt-out', sceneStart('price') + 3.6, 1.4, 0, 5, 2);
+      bar('#ale-terra', sceneStart('ale') + 3, 57.6);
+      bar('#ale-old', sceneStart('ale') + 6, 42.6);
+      bar('#ale-astra', sceneStart('ale') + 11.5, 57.6);
+      counter('#cnt-err', sceneStart('facts') + 7.5, 2, 53.6, 16.7, 1);
+      counter('#cnt-hallu', sceneStart('facts') + 18.5, 2.5, 88, 38);
+      bar('#tb-old', sceneStart('coding') + 5.8, 21.5);
+      bar('#tb-terra', sceneStart('coding') + 7.3, 50.3);
+
+      // 旁白结束后淡出到黑
+      tl.fromTo('#fade-out', {opacity: 0}, {opacity: 1, duration: 1.9, ease: 'none'}, audioEnd + 0.5);
+
+      window.__timelines['gpt-6-1-terra'] = tl;
+    </script>
+  </body>
+</html>
