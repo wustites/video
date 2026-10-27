@@ -21,7 +21,6 @@
     "sapporo_subway": {"path": "geography_transport/sapporo_subway", "name": "Sapporo Subway", "languages": ["ja"], "variants": []},
     "shandong_universities": {"path": "education/shandong_universities", "name": "Shandong Universities", "languages": ["zh"], "variants": []},
     "solar": {"path": "science_nature/solar", "name": "Solar System", "languages": ["en", "zh", "ja", "ko"], "variants": ["en", "zh", "ja", "ko"]},
-    "shenzhen_reclamation": {"path": "geography_transport/shenzhen_reclamation", "name": "Shenzhen Reclamation", "framework": "hyperframes", "languages": ["zh"], "variants": []},
     "shenzhen_apec": {"path": "creative_brand/shenzhen_apec", "name": "Shenzhen APEC", "framework": "hyperframes", "languages": ["en", "zh"], "variants": ["en", "zh"]},
     "southern_kurils_jp": {"path": "history_society/southern_kurils_jp", "name": "Southern Kurils JP", "languages": ["ja"], "variants": []},
     "top500": {"path": "data_visualization/top500", "name": "Top 500", "languages": ["zh"], "variants": []}

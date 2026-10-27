@@ -1,5 +1,0 @@
-out/
-.hyperframes/
-public/voiceover/*.mp3
-public/voiceover/*durations*.json
-public/voiceover/word-marks*.json
