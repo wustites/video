@@ -280,11 +280,65 @@ def stamp(v):
     return f"{ms // 3600000:02d}:{ms // 60000 % 60:02d}:{ms // 1000 % 60:02d},{ms % 1000:03d}"
 
 
+def build_poster():
+    """Single-frame release cover (npm run render:still): today's coast, every reclaimed patch, the total."""
+    years = ["1988", "1995", "2004", "2013", "2026"]
+    lands = "".join(f'<div class="land new" style="-webkit-mask-image:url(../assets/map/new-{y}.png);mask-image:url(../assets/map/new-{y}.png)"></div>' for y in years)
+    css = CSS.replace("url('assets/", "url('../assets/")
+    (P / "poster").mkdir(exist_ok=True)
+    (P / "poster" / "index.html").write_text(f"""<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width={W},height={H}">
+<title>深圳填海造陆发展史 · 封面</title>
+<script src="../assets/gsap.min.js"></script>
+<style>html,body{{margin:0;width:{W}px;height:{H}px;overflow:hidden}}{css}
+.cover-cam{{transform:translate(-48px,-60px) scale(1.09);transform-origin:0 0}}
+.kicker{{position:absolute;left:72px;top:190px;font-weight:700;font-size:40px;letter-spacing:8px;color:#dfe9ea}}
+.big{{position:absolute;left:66px;top:250px;font-weight:900;font-size:132px;line-height:1.12;letter-spacing:-2px}}
+.num{{position:absolute;left:72px;top:582px;font-weight:900;font-size:180px;line-height:1;letter-spacing:-6px;color:{ORANGE}}}
+.num em{{font-style:normal;font-size:76px;letter-spacing:0;margin-left:12px}}
+.sub{{position:absolute;left:72px;top:782px;font-weight:700;font-size:42px;line-height:1.4}}
+.note{{position:absolute;left:72px;top:846px;font-weight:500;font-size:30px;line-height:1.5;color:#dfe9ea}}
+</style>
+</head>
+<body>
+<!-- 发版封面：npm run render:still 截取第一帧输出 out/cover.png；由 build.py 生成 -->
+<div id="root" data-composition-id="shenzhen-reclamation-poster" data-start="0" data-duration="1" data-width="{W}" data-height="{H}">
+<div class="cam cover-cam"><img class="sat" src="../assets/map/y2026.jpg" alt="Landsat 2026">{lands}
+<svg class="lines" viewBox="0 0 {W} {H}" data-layout-ignore><path class="coast" d="{M["coast1979"]}"/></svg></div>
+<div class="scrim" style="height:1060px"></div>
+<div class="kicker">深圳 · 1979—2026</div>
+<div class="big">向海要来<br>的地</div>
+<div class="num">{round(M["totalKm2"])}<em>km²</em></div>
+<div class="sub">六张卫星图，看西海岸怎样长进大海</div>
+<div class="note">Landsat 影像估算 · 白色虚线为 1979 年海岸线</div>
+<div class="credit" data-layout-ignore>影像 USGS/NASA Landsat · Microsoft Planetary Computer</div>
+</div>
+<script>
+window.__timelines=window.__timelines||{{}};
+window.__timelines["shenzhen-reclamation-poster"]=gsap.timeline({{paused:true}});
+</script>
+</body>
+</html>
+""", encoding="utf-8")
+
+
 def subset_fonts():
-    """Subset the system Noto Sans CJK SC (OFL) to every character in the built compositions."""
-    from fontTools import subset
-    from fontTools.ttLib import TTCollection
-    text = "".join(f.read_text(encoding="utf-8") for f in (P / "compositions").glob("*.html"))
+    """Subset the system Noto Sans CJK SC (OFL) to every character in the built compositions.
+
+    Without fontTools or the system font (e.g. on the release runner) the committed subsets are kept;
+    rerun locally after adding new characters to the copy.
+    """
+    try:
+        from fontTools import subset
+        from fontTools.ttLib import TTCollection
+    except ImportError:
+        print("fontTools not installed; keeping assets/fonts as committed"); return
+    if not all(Path(f"/usr/share/fonts/opentype/noto/NotoSansCJK-{s}.ttc").exists() for s in FONT_FILES.values()):
+        print("Noto Sans CJK not installed; keeping assets/fonts as committed"); return
+    text = "".join(f.read_text(encoding="utf-8") for f in [*(P / "compositions").glob("*.html"), P / "poster" / "index.html"])
     chars = set(re.sub(r"<[^>]+>", " ", text)) | set("0123456789+—·.km²年")
     out = P / "assets" / "fonts"; out.mkdir(parents=True, exist_ok=True)
     for weight, style in FONT_FILES.items():
@@ -347,6 +401,7 @@ window.__timelines["shenzhen-reclamation"]=gsap.timeline({{paused:true}});
 </body>
 </html>
 """, encoding="utf-8")
+    build_poster()
     subset_fonts()
     print(f"Built {len(SCENES)} scenes, {len(groups)} caption groups, {TOTAL:.3f}s")
 

@@ -2,7 +2,7 @@
 
 中文竖屏卫星地图解说，1080 × 1920、30 fps、约 64 秒。HyperFrames 0.8.174；配音为 edge-tts `zh-CN-YunxiNeural`（+5%），字幕与画面揭示时间都取自 edge-tts WordBoundary。
 
-同一片深圳西海岸，六张真实 Landsat 卫星影像（1979、1988、1995、2004、2013、2026）依次叠换。白色虚线是 1979 年海岸线，橙色是每个阶段新增的围填海，由影像水体变化计算得出，不是手绘。镜头依次推近蛇口、宝安沿海、后海、机场与前海、深圳湾红树林，最后拉回全景，给出深圳西海岸 1979–2026 年累计约 81 km² 的数字。这个数和遥感文献的 80–84 km²（全市）一致，比较见 SOURCES.md。
+同一片深圳西海岸，六张真实 Landsat 卫星影像（1979、1988、1995、2004、2013、2026）依次叠换。白色虚线是 1979 年海岸线，橙色是每个阶段新增的围填海，由影像水体变化计算得出，不是手绘。镜头依次推近蛇口、宝安沿海、后海、机场与前海、深圳湾红树林，最后拉回全景，给出深圳西海岸 1979–2026 年累计约 81 km² 的数字。这个数与遥感文献一致：洪宇等给出 1979–2014 年西海岸 62.75 km²（本片到 2013 年只算成陆地约 61.1 km²），全市 2020 年为 84–92 km²。比较见 SOURCES.md。
 
 ## 使用
 
@@ -14,6 +14,7 @@ npm run build      # 只按现有旁白时间重建 index.html、compositions/ �
 npm run check
 npm run dev
 npm run render     # out/shenzhen-reclamation-zh.mp4
+npm run render:still  # 发版封面 out/cover.png（poster/index.html，由 build.py 生成）
 ```
 
 旁白 MP3、时长和词边界是生成产物，不提交。`build.py` 生成 `index.html`、`compositions/scene-0…6.html`、`compositions/captions.html` 和 `public/voiceover/subtitles.zh.srt`，并把系统里的 Noto Sans CJK SC 子集化到 `assets/fonts/`（OFL）。改文案或镜头请改 `build.py` 的 `SCENES`，然后重新 build。音轨只有旁白，没有配乐。

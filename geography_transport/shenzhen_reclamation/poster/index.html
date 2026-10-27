@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080,height=1920">
+<title>深圳填海造陆发展史 · 封面</title>
+<script src="../assets/gsap.min.js"></script>
+<style>html,body{margin:0;width:1080px;height:1920px;overflow:hidden}@font-face{font-family:'Noto Sans SC';src:url('../assets/fonts/noto-sans-sc-400.woff2') format('woff2');font-weight:100 500;font-display:block}@font-face{font-family:'Noto Sans SC';src:url('../assets/fonts/noto-sans-sc-700.woff2') format('woff2');font-weight:600 900;font-display:block}
+#root{position:absolute;inset:0;overflow:hidden;background:#0b1416;font-family:'Noto Sans SC', sans-serif;color:#f4f1ea}
+.cam{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:0 0}
+.sat{position:absolute;left:0;top:0;width:1080px;height:1920px}
+.land{position:absolute;left:0;top:0;width:1080px;height:1920px;-webkit-mask-size:1080px 1920px;mask-size:1080px 1920px}
+.land.sand{background:#e9c27a;opacity:.42}
+.land.new{background:#ff6b2c;opacity:.66}
+.lines{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:visible}
+.coast{fill:none;stroke:#fff;stroke-width:3;stroke-dasharray:10 7;vector-effect:non-scaling-stroke;opacity:.92}
+.edge{fill:none;stroke:#ff6b2c;stroke-width:3;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.place{position:absolute;width:0;height:0}
+.place i{position:absolute;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:#f4f1ea;box-shadow:0 0 0 3px rgba(11,20,22,.7)}
+.place span{position:absolute;left:18px;top:-24px;white-space:nowrap;font-weight:700;font-size:36px;line-height:48px;
+  color:#f4f1ea;text-shadow:0 2px 3px rgba(0,0,0,.85),0 0 1px #000}
+.place.below span{left:-20px;top:48px}
+.place.sea i{display:none}
+.place.sea span{left:-60px;font-weight:500;letter-spacing:6px;color:#dfe9ea}
+.scrim{position:absolute;left:0;top:0;width:1080px;height:640px;
+  background:linear-gradient(180deg,rgba(9,16,18,.86) 0%,rgba(9,16,18,.62) 48%,rgba(9,16,18,0) 100%)}
+.head{position:absolute;left:72px;top:176px;right:72px}
+.year{font-weight:900;font-size:176px;line-height:1;letter-spacing:-5px;font-variant-numeric:tabular-nums}
+.title{font-weight:700;font-size:58px;line-height:1.25;margin-top:18px}
+.date{font-weight:500;font-size:28px;line-height:1.4;margin-top:14px;color:#c9d6d6;letter-spacing:1px}
+.stat{position:absolute;right:72px;top:206px;text-align:right}
+.stat b{display:block;font-weight:900;font-size:76px;line-height:1;color:#ff6b2c;font-variant-numeric:tabular-nums}
+.stat small{display:block;font-weight:500;font-size:30px;line-height:1.5;margin-top:10px;color:#dfe9ea}
+.policy{position:absolute;left:72px;right:72px;top:540px;padding:26px 30px;background:rgba(9,16,18,.8);border-left:6px solid #ff6b2c}
+.policy b{display:block;font-weight:700;font-size:42px;line-height:1.35}
+.policy small{display:block;font-weight:500;font-size:30px;line-height:1.5;color:#c9d6d6;margin-top:6px}
+.total{position:absolute;left:72px;right:72px;top:420px}
+.total b{display:block;font-weight:900;font-size:200px;line-height:1;letter-spacing:-6px;color:#ff6b2c;font-variant-numeric:tabular-nums}
+.total b em{font-style:normal;font-size:84px;letter-spacing:0;margin-left:14px}
+.total small{display:block;font-weight:700;font-size:44px;line-height:1.4;margin-top:16px}
+.total p{margin:12px 0 0;font-weight:500;font-size:30px;line-height:1.5;color:#dfe9ea}
+.legend{position:absolute;left:72px;top:1340px;display:flex;gap:30px;font-size:24px;line-height:1.3;color:#dfe9ea;
+  text-shadow:0 1px 2px #000}
+.legend span{display:flex;align-items:center;gap:10px}
+.legend i{display:inline-block;width:34px;height:0;border-top:3px dashed #fff}
+.legend i.o{height:18px;border:0;background:#ff6b2c;opacity:.85}
+.legend i.s{height:18px;border:0;background:#e9c27a;opacity:.8}
+.credit{position:absolute;left:72px;top:1384px;font-size:22px;line-height:1.3;color:#c9d6d6;text-shadow:0 1px 2px #000}
+
+.cover-cam{transform:translate(-48px,-60px) scale(1.09);transform-origin:0 0}
+.kicker{position:absolute;left:72px;top:190px;font-weight:700;font-size:40px;letter-spacing:8px;color:#dfe9ea}
+.big{position:absolute;left:66px;top:250px;font-weight:900;font-size:132px;line-height:1.12;letter-spacing:-2px}
+.num{position:absolute;left:72px;top:582px;font-weight:900;font-size:180px;line-height:1;letter-spacing:-6px;color:#ff6b2c}
+.num em{font-style:normal;font-size:76px;letter-spacing:0;margin-left:12px}
+.sub{position:absolute;left:72px;top:782px;font-weight:700;font-size:42px;line-height:1.4}
+.note{position:absolute;left:72px;top:846px;font-weight:500;font-size:30px;line-height:1.5;color:#dfe9ea}
+</style>
+</head>
+<body>
+<!-- 发版封面：npm run render:still 截取第一帧输出 out/cover.png；由 build.py 生成 -->
+<div id="root" data-composition-id="shenzhen-reclamation-poster" data-start="0" data-duration="1" data-width="1080" data-height="1920">
+<div class="cam cover-cam"><img class="sat" src="../assets/map/y2026.jpg" alt="Landsat 2026"><div class="land new" style="-webkit-mask-image:url(../assets/map/new-1988.png);mask-image:url(../assets/map/new-1988.png)"></div><div class="land new" style="-webkit-mask-image:url(../assets/map/new-1995.png);mask-image:url(../assets/map/new-1995.png)"></div><div class="land new" style="-webkit-mask-image:url(../assets/map/new-2004.png);mask-image:url(../assets/map/new-2004.png)"></div><div class="land new" style="-webkit-mask-image:url(../assets/map/new-2013.png);mask-image:url(../assets/map/new-2013.png)"></div><div class="land new" style="-webkit-mask-image:url(../assets/map/new-2026.png);mask-image:url(../assets/map/new-2026.png)"></div>
+<svg class="lines" viewBox="0 0 1080 1920" data-layout-ignore><path class="coast" d="M1079.0 891.4L1061.1 877.0L1047.0 869.0L1041.0 856.7L1025.0 838.9L1000.0 824.9L993.0 822.9L988.0 825.4L980.0 825.1L962.0 811.9L951.0 807.1L943.0 800.9L926.0 799.1L923.0 796.9L917.0 795.7L904.0 787.8L894.0 788.6L889.0 792.0L881.0 789.5L871.0 791.3L857.0 779.9L843.0 784.4L820.0 775.6L788.0 772.6L774.0 782.1L764.8 784.0L756.5 790.0L752.0 795.9L743.0 790.8L742.0 794.4L738.0 794.0L735.4 797.0L739.0 802.1L745.0 800.8L745.4 803.0L739.0 807.2L729.0 809.0L726.9 807.0L725.2 800.0L717.0 788.8L708.0 788.1L698.0 780.9L687.0 775.8L678.0 776.8L672.5 780.0L663.0 790.7L653.9 811.0L644.7 847.0L643.5 856.0L644.5 870.0L642.6 880.0L644.4 886.0L643.7 900.0L645.3 906.0L645.6 919.0L655.8 955.0L662.0 963.1L667.0 964.3L671.0 961.9L674.0 962.6L677.0 970.1L669.0 972.9L664.5 980.0L660.0 981.4L644.0 977.7L632.0 967.9L602.0 962.8L580.6 976.0L575.6 990.0L579.1 999.0L577.0 1001.1L572.0 1000.9L561.0 1004.9L559.2 1016.0L557.0 1019.2L549.0 1018.9L545.1 1024.0L539.8 1025.0L535.2 1032.0L529.0 1035.2L519.0 1035.0L514.0 1039.7L509.0 1041.3L504.0 1039.6L498.0 1039.9L495.9 1042.0L494.0 1048.4L487.0 1051.1L484.0 1050.0L479.6 1046.0L478.8 1043.0L481.2 1033.0L490.1 1028.0L489.1 1019.0L483.0 1010.8L468.4 1003.0L460.0 1000.6L455.0 1000.8L450.8 1003.0L447.0 1011.7L442.0 1011.4L439.0 1009.4L440.5 997.0L435.6 988.0L437.1 976.0L430.2 962.0L419.9 947.0L419.9 940.0L427.0 929.8L435.0 922.1L440.0 923.4L448.0 919.9L462.0 925.3L477.0 923.2L480.4 921.0L486.0 912.6L496.0 908.2L501.4 903.0L502.9 896.0L515.2 880.0L516.4 871.0L513.7 864.0L529.0 857.4L555.2 826.0L557.5 802.0L555.6 794.0L557.3 786.0L560.7 783.0L558.6 777.0L559.6 773.0L555.0 765.0L559.0 761.9L566.0 761.7L568.4 763.0L569.4 766.0L568.0 780.0L573.0 783.0L579.0 780.2L582.1 774.0L582.8 767.0L580.5 758.0L569.4 757.0L567.1 749.0L558.0 738.4L555.8 740.0L554.8 744.0L557.0 749.1L563.0 752.0L561.0 755.7L546.0 750.6L545.8 748.0L549.0 742.8L543.9 744.0L541.0 749.1L535.0 747.4L533.0 742.9L519.5 728.0L512.9 727.0L513.2 722.0L511.2 718.0L501.3 710.0L498.8 699.0L486.0 693.0L482.0 686.3L475.0 685.6L474.9 681.0L479.0 674.0L477.0 670.9L469.7 670.0L468.9 673.0L471.7 679.0L466.0 681.1L459.0 677.8L453.0 677.1L444.0 668.9L436.0 666.0L429.0 666.7L425.0 661.6L421.0 659.7L410.0 672.5L404.0 669.4L400.6 672.0L397.9 677.0L395.0 678.1L386.0 675.0L381.1 663.0L379.0 661.3L371.0 659.6L360.4 661.0L359.6 658.0L363.0 654.0L364.0 648.0L361.0 645.7L359.7 639.0L352.0 629.2L351.1 624.0L346.0 619.2L342.4 611.0L319.0 588.6L310.0 583.2L299.9 565.0L299.0 560.7L296.0 559.9L289.0 562.8L285.8 561.0L274.9 538.0L280.0 529.0L275.6 524.0L275.4 516.0L273.3 512.0L274.1 506.0L268.2 504.0L268.7 499.0L263.7 492.0L263.2 487.0L251.1 460.0L248.4 455.0L244.0 451.7L240.0 442.8L227.9 425.0L217.1 395.0L211.1 390.0L208.1 382.0L205.0 379.7L204.1 375.0L195.8 362.0L189.1 347.0L174.7 325.0L171.2 316.0L164.8 312.0L162.0 307.9L157.5 306.0L155.6 302.0L155.1 294.0L152.0 287.9L144.0 282.0L131.0 268.5L124.4 257.0L116.5 252.0L114.0 244.9L106.9 239.0L108.4 234.0L107.1 228.0L100.0 222.3L94.0 210.8L88.2 207.0L84.9 198.0L85.9 194.0L82.0 192.7L76.0 187.1L73.1 177.0L69.0 175.1L66.0 168.9L61.9 166.0L59.6 161.0L59.1 154.0L52.6 145.0L54.3 138.0L52.0 136.9L46.0 138.7L44.0 137.0L43.2 131.0L34.6 115.0L36.0 111.6L40.0 110.6L40.9 109.0L32.0 106.1L28.9 103.0L28.4 96.0L22.7 76.0L23.5 71.0L21.9 62.0L22.6 55.0L24.6 52.0L23.6 47.0L27.2 38.0L29.0 27.0L26.6 21.0L26.6 13.0L29.4 7.0L29.5 0.0"/></svg></div>
+<div class="scrim" style="height:1060px"></div>
+<div class="kicker">深圳 · 1979—2026</div>
+<div class="big">向海要来<br>的地</div>
+<div class="num">81<em>km²</em></div>
+<div class="sub">六张卫星图，看西海岸怎样长进大海</div>
+<div class="note">Landsat 影像估算 · 白色虚线为 1979 年海岸线</div>
+<div class="credit" data-layout-ignore>影像 USGS/NASA Landsat · Microsoft Planetary Computer</div>
+</div>
+<script>
+window.__timelines=window.__timelines||{};
+window.__timelines["shenzhen-reclamation-poster"]=gsap.timeline({paused:true});
+</script>
+</body>
+</html>

@@ -141,10 +141,10 @@ def main():
     args = ap.parse_args(); args.cache.mkdir(parents=True, exist_ok=True); OUT.mkdir(parents=True, exist_ok=True)
     shape = json.loads(BOUNDARY.read_text())["geometry"]
     region = features.rasterize([(shape, 1)], out_shape=(AH, AW), transform=from_bounds(*ABOX, AW, AH)).astype(bool)
-    years = [y for y, _, _ in SCENES]; imgs, sea = {}, {}
+    years = [y for y, _, _ in SCENES]; imgs, sea, wet = {}, {}, {}
     for year, coll, item in SCENES + BASELINE:
         img, water = colour_and_water(fetch(args.cache, coll, item))
-        sea[year] = open_sea(water)
+        sea[year] = open_sea(water); wet[year] = water
         if year in years:
             imgs[year] = img
     ref = imgs["2026"]
@@ -157,6 +157,10 @@ def main():
 
     baseline = sea["1979"] | sea["1979b"]
     out_of_sea = {y: ~sea[y] for y in years[1:]}
+    def dry(y):  # land only: enclosed water bodies of 0.05 km2 or more (ponds, basins) do not count
+        inland = wet[y] & ~sea[y]; lab, n = ndi.label(inland)
+        big = np.isin(lab, 1 + np.where(ndi.sum(inland, lab, range(1, n + 1)) * KM2 >= 0.05)[0]) if n else inland
+        return ~sea[y] & ~big
     total = clean(baseline & region & out_of_sea["2026"])
     stats, edges, dated = {}, {}, np.zeros_like(total)
     for k, year in enumerate(years[1:]):
@@ -178,6 +182,9 @@ def main():
             "scenes": {y: i for y, _, i in SCENES + BASELINE},
             "newKm2": stats, "totalKm2": round(float(total.sum() * KM2), 1),
             "totalInFrameKm2": round(float(display(total).sum() * KM2), 1),
+            # comparison with studies that count 填海 (land) only, e.g. 洪宇等 1979-2014 west coast 62.75 km2
+            "landOnlyKm2": {y: round(float(clean(baseline & region & np.logical_and.reduce([dry(z) for z in years[1 + k:]])).sum() * KM2), 1)
+                            for k, y in enumerate(years[1:])},
             "maxReachKm": round(float(reach[ashore].max()), 2), "places": places, "coast1979": coast, "newEdges": edges}
     (OUT / "map.json").write_text(json.dumps(data, ensure_ascii=False))
     print(json.dumps({k: v for k, v in data.items() if k not in ("coast1979", "newEdges", "places")}, ensure_ascii=False, indent=1))
