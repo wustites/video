@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080,height=1920">
+<title>深圳大学发展史 · 封面</title>
+<script src="../assets/gsap.min.js"></script>
+<style>html,body{margin:0;width:1080px;height:1920px;overflow:hidden}@font-face{font-family:'Noto Sans SC';src:url('../assets/fonts/noto-sans-sc-400.woff2') format('woff2');font-weight:100 500;font-display:block}@font-face{font-family:'Noto Sans SC';src:url('../assets/fonts/noto-sans-sc-700.woff2') format('woff2');font-weight:600 900;font-display:block}
+#root{position:absolute;inset:0;overflow:hidden;background:#141210;font-family:'Noto Sans SC', sans-serif;color:#f7f3ee}
+.cam{position:absolute;left:-108px;top:-192px;width:1296px;height:2304px;transform-origin:50% 50%}
+.photo{position:absolute;inset:0;width:1296px;height:2304px}
+.scrim{position:absolute;left:0;top:0;width:1080px;height:1240px;
+  background:linear-gradient(180deg,rgba(14,12,11,.9) 0%,rgba(14,12,11,.78) 55%,rgba(14,12,11,0) 100%)}
+.floor{position:absolute;left:0;top:1120px;width:1080px;height:800px;
+  background:linear-gradient(180deg,rgba(14,12,11,0) 0%,rgba(14,12,11,.55) 40%,rgba(14,12,11,.75) 100%)}
+.head{position:absolute;left:72px;top:176px;right:72px}
+.year{font-weight:900;font-size:176px;line-height:1;letter-spacing:-5px;font-variant-numeric:tabular-nums}
+.title{font-weight:700;font-size:60px;line-height:1.25;margin-top:20px}
+.title::before{content:"";display:inline-block;width:14px;height:52px;background:#f0414f;margin-right:20px;vertical-align:-6px}
+.hero{position:absolute;left:66px;right:60px;top:560px}
+.hero b{display:block;font-weight:900;font-size:300px;line-height:1;letter-spacing:-12px;color:#f0414f;font-variant-numeric:tabular-nums}
+.hero b em{font-style:normal;font-size:96px;letter-spacing:0;margin-left:18px;color:#f7f3ee}
+.hero small{display:block;font-weight:700;font-size:46px;line-height:1.4;margin:22px 0 0 8px}
+.hero p{margin:18px 0 0 8px;font-weight:700;font-size:40px;line-height:1.4;color:#f7f3ee;text-shadow:0 2px 4px rgba(0,0,0,.8)}
+.steps{position:absolute;left:72px;top:520px;display:flex;align-items:center;gap:26px}
+.step b{display:block;font-weight:900;font-size:76px;line-height:1}
+.step span{display:block;font-weight:500;font-size:34px;line-height:1.4;margin-top:8px;color:#d6d2cc}
+.arrow{width:120px;height:4px;background:#f0414f;position:relative;top:-20px}
+.arrow::after{content:"";position:absolute;right:-4px;top:-10px;border:12px solid transparent;border-left:16px solid #f0414f}
+.rows{position:absolute;left:72px;right:72px;top:720px}
+.rows h3{margin:0 0 18px;font-weight:500;font-size:34px;letter-spacing:6px;color:#d6d2cc}
+.row{display:flex;align-items:baseline;gap:28px;padding:18px 0 18px 26px;border-left:6px solid #f0414f;margin-bottom:22px;
+  background:linear-gradient(90deg,rgba(14,12,11,.86),rgba(14,12,11,.3))}
+.row b{font-weight:900;font-size:58px;line-height:1.2;min-width:390px}
+.row span{font-weight:500;font-size:44px;line-height:1.2;color:#f7f3ee}
+.note{position:absolute;left:72px;top:500px;font-weight:500;font-size:40px;color:#d6d2cc}
+.pin{position:absolute;width:0;height:0}
+.pin i{position:absolute;left:-12px;top:-12px;width:24px;height:24px;border-radius:50%;background:#f0414f;box-shadow:0 0 0 5px rgba(247,243,238,.9)}
+.pin span{position:absolute;left:30px;top:-38px;white-space:nowrap;font-weight:900;font-size:56px;line-height:76px;padding:0 18px;
+  background:rgba(14,12,11,.78);color:#f7f3ee}
+.firsts{position:absolute;left:72px;right:72px;top:520px}
+.first{font-weight:900;font-size:88px;line-height:1.18;margin-bottom:26px;white-space:nowrap}
+.first::before{content:"";display:inline-block;width:10px;height:70px;background:#f0414f;margin-right:26px;vertical-align:-6px}
+.names{position:absolute;left:72px;top:500px}
+.names b{display:block;font-weight:900;font-size:120px;line-height:1.15;letter-spacing:4px}
+.founders{position:absolute;left:72px;right:72px;top:840px}
+.dots{display:flex;gap:30px}
+.dot{width:112px;height:112px;border-radius:50%;border:8px solid #f7f3ee;box-sizing:border-box}
+.dot.on{background:#f0414f;border-color:#f0414f}
+.founders small{display:block;margin-top:30px;font-weight:700;font-size:52px;line-height:1.35}
+.founders small em{font-style:normal;color:#f0414f}
+.card{position:absolute;left:72px;right:72px;top:560px;padding:30px 34px;background:rgba(14,12,11,.8);border-left:10px solid #f0414f}
+.card b{display:block;font-weight:900;font-size:66px;line-height:1.3}
+.card small{display:block;font-weight:500;font-size:42px;line-height:1.5;color:#d6d2cc;margin-top:8px}
+.credit{position:absolute;left:72px;right:72px;top:1384px;font-size:24px;line-height:1.4;color:#d6d2cc;text-shadow:0 1px 2px #000}
+
+.cover-cam{transform:scale(1.04)}
+.kicker{position:absolute;left:72px;top:190px;font-weight:700;font-size:40px;letter-spacing:8px;color:#d6d2cc}
+.big{position:absolute;left:66px;top:250px;font-weight:900;font-size:150px;line-height:1.1;letter-spacing:-2px}
+.from{position:absolute;left:72px;top:640px;font-weight:700;font-size:46px;color:#d6d2cc}
+.from b{font-weight:900;font-size:120px;color:#f7f3ee;margin-right:10px}
+.to{position:absolute;left:66px;top:800px;font-weight:900;font-size:220px;line-height:1;letter-spacing:-9px;color:#f0414f}
+.to em{font-style:normal;font-size:60px;letter-spacing:0;color:#f7f3ee;margin-left:16px}
+.sub{position:absolute;left:72px;top:1050px;font-weight:700;font-size:44px;line-height:1.4}
+</style>
+</head>
+<body>
+<!-- 发版封面：npm run render:still 截取第一帧输出 out/cover.png；由 build.py 生成 -->
+<div id="root" data-composition-id="szu-history-poster" data-start="0" data-duration="1" data-width="1080" data-height="1920">
+<div class="cam cover-cam"><img class="photo" src="../assets/photos/gate.jpg" alt="深圳大学粤海校区南门"></div>
+<div class="scrim" style="height:1300px"></div>
+<div class="kicker">1983—2026</div>
+<div class="big">深圳大学<br>发展史</div>
+<div class="from"><b>216</b>人 · 1983 首届新生</div>
+<div class="to">50648<em>人</em></div>
+<div class="sub">今天的在校生 · 和深圳一起长大</div>
+<div class="credit" data-layout-ignore>照片 Perimeter Chou / Wikimedia Commons · CC0</div>
+</div>
+<script>
+window.__timelines=window.__timelines||{};
+window.__timelines["szu-history-poster"]=gsap.timeline({paused:true});
+</script>
+</body>
+</html>

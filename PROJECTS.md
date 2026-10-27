@@ -19,6 +19,7 @@
 | 项目名 | 项目路径 | 内容简介 |
 | --- | --- | --- |
 | Shandong Universities | [`education/shandong_universities/`](./education/shandong_universities/) | 山东本科院校地图速览 |
+| SZU History | [`education/szu_history/`](./education/szu_history/) | 深圳大学发展史，中文竖屏校园照片解说（HyperFrames / edge-tts） |
 
 ## 历史、社会与时事
 

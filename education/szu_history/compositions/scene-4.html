@@ -1,0 +1,73 @@
+<template>
+<style>@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-400.woff2') format('woff2');font-weight:100 500;font-display:block}@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-700.woff2') format('woff2');font-weight:600 900;font-display:block}
+#root{position:absolute;inset:0;overflow:hidden;background:#141210;font-family:'Noto Sans SC', sans-serif;color:#f7f3ee}
+.cam{position:absolute;left:-108px;top:-192px;width:1296px;height:2304px;transform-origin:50% 50%}
+.photo{position:absolute;inset:0;width:1296px;height:2304px}
+.scrim{position:absolute;left:0;top:0;width:1080px;height:1240px;
+  background:linear-gradient(180deg,rgba(14,12,11,.9) 0%,rgba(14,12,11,.78) 55%,rgba(14,12,11,0) 100%)}
+.floor{position:absolute;left:0;top:1120px;width:1080px;height:800px;
+  background:linear-gradient(180deg,rgba(14,12,11,0) 0%,rgba(14,12,11,.55) 40%,rgba(14,12,11,.75) 100%)}
+.head{position:absolute;left:72px;top:176px;right:72px}
+.year{font-weight:900;font-size:176px;line-height:1;letter-spacing:-5px;font-variant-numeric:tabular-nums}
+.title{font-weight:700;font-size:60px;line-height:1.25;margin-top:20px}
+.title::before{content:"";display:inline-block;width:14px;height:52px;background:#f0414f;margin-right:20px;vertical-align:-6px}
+.hero{position:absolute;left:66px;right:60px;top:560px}
+.hero b{display:block;font-weight:900;font-size:300px;line-height:1;letter-spacing:-12px;color:#f0414f;font-variant-numeric:tabular-nums}
+.hero b em{font-style:normal;font-size:96px;letter-spacing:0;margin-left:18px;color:#f7f3ee}
+.hero small{display:block;font-weight:700;font-size:46px;line-height:1.4;margin:22px 0 0 8px}
+.hero p{margin:18px 0 0 8px;font-weight:700;font-size:40px;line-height:1.4;color:#f7f3ee;text-shadow:0 2px 4px rgba(0,0,0,.8)}
+.steps{position:absolute;left:72px;top:520px;display:flex;align-items:center;gap:26px}
+.step b{display:block;font-weight:900;font-size:76px;line-height:1}
+.step span{display:block;font-weight:500;font-size:34px;line-height:1.4;margin-top:8px;color:#d6d2cc}
+.arrow{width:120px;height:4px;background:#f0414f;position:relative;top:-20px}
+.arrow::after{content:"";position:absolute;right:-4px;top:-10px;border:12px solid transparent;border-left:16px solid #f0414f}
+.rows{position:absolute;left:72px;right:72px;top:720px}
+.rows h3{margin:0 0 18px;font-weight:500;font-size:34px;letter-spacing:6px;color:#d6d2cc}
+.row{display:flex;align-items:baseline;gap:28px;padding:18px 0 18px 26px;border-left:6px solid #f0414f;margin-bottom:22px;
+  background:linear-gradient(90deg,rgba(14,12,11,.86),rgba(14,12,11,.3))}
+.row b{font-weight:900;font-size:58px;line-height:1.2;min-width:390px}
+.row span{font-weight:500;font-size:44px;line-height:1.2;color:#f7f3ee}
+.note{position:absolute;left:72px;top:500px;font-weight:500;font-size:40px;color:#d6d2cc}
+.pin{position:absolute;width:0;height:0}
+.pin i{position:absolute;left:-12px;top:-12px;width:24px;height:24px;border-radius:50%;background:#f0414f;box-shadow:0 0 0 5px rgba(247,243,238,.9)}
+.pin span{position:absolute;left:30px;top:-38px;white-space:nowrap;font-weight:900;font-size:56px;line-height:76px;padding:0 18px;
+  background:rgba(14,12,11,.78);color:#f7f3ee}
+.firsts{position:absolute;left:72px;right:72px;top:520px}
+.first{font-weight:900;font-size:88px;line-height:1.18;margin-bottom:26px;white-space:nowrap}
+.first::before{content:"";display:inline-block;width:10px;height:70px;background:#f0414f;margin-right:26px;vertical-align:-6px}
+.names{position:absolute;left:72px;top:500px}
+.names b{display:block;font-weight:900;font-size:120px;line-height:1.15;letter-spacing:4px}
+.founders{position:absolute;left:72px;right:72px;top:840px}
+.dots{display:flex;gap:30px}
+.dot{width:112px;height:112px;border-radius:50%;border:8px solid #f7f3ee;box-sizing:border-box}
+.dot.on{background:#f0414f;border-color:#f0414f}
+.founders small{display:block;margin-top:30px;font-weight:700;font-size:52px;line-height:1.35}
+.founders small em{font-style:normal;color:#f0414f}
+.card{position:absolute;left:72px;right:72px;top:560px;padding:30px 34px;background:rgba(14,12,11,.8);border-left:10px solid #f0414f}
+.card b{display:block;font-weight:900;font-size:66px;line-height:1.3}
+.card small{display:block;font-weight:500;font-size:42px;line-height:1.5;color:#d6d2cc;margin-top:8px}
+.credit{position:absolute;left:72px;right:72px;top:1384px;font-size:24px;line-height:1.4;color:#d6d2cc;text-shadow:0 1px 2px #000}
+</style>
+<div id="root" data-composition-id="scene-4" data-width="1080" data-height="1920" data-start="0" data-duration="8.712">
+<div id="scene-4-cam" class="cam" data-layout-allow-overflow><img id="scene-4-photo" class="photo" src="assets/photos/techbuilding.jpg" alt="粤海校区 · 科技楼"></div><div class="scrim"></div><div class="floor"></div><div class="head" id="scene-4-head"><div class="year" id="scene-4-year">1990s</div><div class="title" id="scene-4-title">计算机系</div></div><div class="names"><b id="scene-4-n0">马化腾</b><b id="scene-4-n1">张志东</b></div><div class="founders"><div class="dots"><div class="dot" id="scene-4-d0"></div><div class="dot" id="scene-4-d1"></div><div class="dot" id="scene-4-d2"></div><div class="dot" id="scene-4-d3"></div><div class="dot" id="scene-4-d4"></div></div><small id="scene-4-fs">腾讯 5 位创始人中，<em>4 位</em>是深大校友</small></div><div class="credit" data-layout-ignore>粤海校区 · 科技楼 · 照片 Jauhnn / Wikimedia Commons · 公有领域</div>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+tl.fromTo('#scene-4-cam',{scale:1.0,x:0,y:0},{scale:1.08,x:0,y:-30,duration:8.712,ease:'none'},0);
+tl.fromTo('#scene-4-year',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.050);
+tl.fromTo('#scene-4-title',{opacity:0,x:-24,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.250);
+tl.fromTo('#scene-4-n0',{opacity:0,x:0,y:20},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},2.440);
+tl.fromTo('#scene-4-n1',{opacity:0,x:0,y:20},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},3.417);
+tl.fromTo('#scene-4-d0',{opacity:0,x:0,y:0},{opacity:1,x:0,y:0,duration:0.25,ease:'power3.out'},4.936);
+tl.fromTo('#scene-4-d1',{opacity:0,x:0,y:0},{opacity:1,x:0,y:0,duration:0.25,ease:'power3.out'},5.006);
+tl.fromTo('#scene-4-d2',{opacity:0,x:0,y:0},{opacity:1,x:0,y:0,duration:0.25,ease:'power3.out'},5.076);
+tl.fromTo('#scene-4-d3',{opacity:0,x:0,y:0},{opacity:1,x:0,y:0,duration:0.25,ease:'power3.out'},5.146);
+tl.fromTo('#scene-4-d4',{opacity:0,x:0,y:0},{opacity:1,x:0,y:0,duration:0.25,ease:'power3.out'},5.216);
+tl.to('#scene-4-d0',{backgroundColor:'#f0414f',borderColor:'#f0414f',duration:.2,ease:'none'},6.488);
+tl.to('#scene-4-d1',{backgroundColor:'#f0414f',borderColor:'#f0414f',duration:.2,ease:'none'},6.588);
+tl.to('#scene-4-d2',{backgroundColor:'#f0414f',borderColor:'#f0414f',duration:.2,ease:'none'},6.688);
+tl.to('#scene-4-d3',{backgroundColor:'#f0414f',borderColor:'#f0414f',duration:.2,ease:'none'},6.788);
+tl.fromTo('#scene-4-fs',{opacity:0,x:0,y:14},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},6.788);
+window.__timelines["scene-4"]=tl;
+</script>
+</template>

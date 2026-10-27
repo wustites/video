@@ -30,6 +30,7 @@
 | [Claude MHS](./science_nature/claude_mhs/) | Anthropic Model Hardware Standard 介绍 | 中 | 随旁白生成 | HyperFrames | `out/claude-mhs-zh.mp4` |
 | [Kimi K3.1 Pro](./science_nature/kimi_k3_1_pro/) | 月之暗面 Kimi K3.1 Pro 模型发布介绍 | 中 | 随旁白生成 | HyperFrames | `out/kimi-k3-1-pro-zh.mp4` |
 | [GPT-6.1 Terra](./science_nature/gpt_6_1_terra/) | OpenAI GPT-6.1 Terra 模型发布介绍 | 中 | 随旁白生成 | HyperFrames | `out/gpt-6-1-terra-zh.mp4` |
+| [SZU History](./education/szu_history/) | 深圳大学发展史（1983—2026） | 中 | 约 62 秒 | HyperFrames | `out/szu-history-zh.mp4` |
 | [Shenzhen Reclamation](./geography_transport/shenzhen_reclamation/) | 深圳填海造陆发展史卫星地图解说 | 中 | 约 64 秒 | HyperFrames | `out/shenzhen-reclamation-zh.mp4` |
 | [Shenzhen APEC](./creative_brand/shenzhen_apec/) | 深圳 APEC 2026 宣传片 | 英 + 中英字幕 | 随旁白生成 | HyperFrames | `out/shenzhen-apec-en.mp4` |
 
