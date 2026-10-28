@@ -1,92 +1,83 @@
 <template>
 <style>@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-400.woff2') format('woff2');font-weight:100 500;font-display:block}@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-700.woff2') format('woff2');font-weight:600 900;font-display:block}
 #root{position:absolute;inset:0;overflow:hidden;background:#0c0e14;font-family:'Noto Sans SC', sans-serif;color:#fff8ef}
+.stage{position:absolute;inset:0;overflow:hidden}
 .cam{position:absolute;left:-108px;top:-192px;width:1296px;height:2304px;transform-origin:50% 50%}
 .photo{position:absolute;inset:0;width:100%;height:100%}
 .scrim{position:absolute;left:0;top:0;width:1080px;
   background:linear-gradient(180deg,rgba(12,14,20,.9) 0%,rgba(12,14,20,.74) 55%,rgba(12,14,20,0) 100%)}
-.floor{position:absolute;left:0;top:1120px;width:1080px;height:800px;
-  background:linear-gradient(180deg,rgba(12,14,20,0) 0%,rgba(12,14,20,.5) 40%,rgba(12,14,20,.72) 100%)}
-.head{position:absolute;left:72px;top:176px;right:72px}
-.big{font-weight:900;font-size:176px;line-height:1;letter-spacing:-5px;font-variant-numeric:tabular-nums}
-.title{font-weight:700;font-size:60px;line-height:1.25;margin-top:20px}
-.title::before{content:"";display:inline-block;width:14px;height:52px;background:#ff6b35;margin-right:20px;vertical-align:-6px}
+.mask{overflow:hidden;padding-bottom:.06em}
+.mask>div{will-change:transform}
+.head{position:absolute;left:72px;right:72px;top:176px}
+.big{font-weight:900;font-size:200px;line-height:1;letter-spacing:-6px;font-variant-numeric:tabular-nums}
+.sub{font-weight:700;font-size:64px;line-height:1.3;margin-top:14px}
+.sub::before{content:"";display:inline-block;width:14px;height:56px;background:#ff6b35;margin-right:22px;vertical-align:-7px}
+.sun{color:#ff6b35}
 .years{position:absolute;left:66px;top:176px}
-.years div{display:flex;align-items:baseline;gap:30px;font-weight:900;font-size:170px;line-height:1.02;letter-spacing:-5px}
-.years div.now{color:#ff6b35}
-.years span{font-weight:700;font-size:44px;letter-spacing:0;color:#e4ddd3}
-.cover-title{position:absolute;left:72px;top:760px;font-weight:900;font-size:96px;line-height:1.2}
+.years .big{font-size:190px;line-height:1.02}
+.cover-title{position:absolute;left:72px;top:800px;font-weight:900;font-size:104px;line-height:1.2}
 .half{position:absolute;left:0;width:1080px;overflow:hidden}
 .half .cam{left:-54px;top:-8px;width:1188px;height:1056px}
 .half.top .cam{top:-88px}
-.half .shade{position:absolute;left:0;top:0;width:1080px;height:520px;
-  background:linear-gradient(180deg,rgba(12,14,20,.86) 0%,rgba(12,14,20,.6) 50%,rgba(12,14,20,0) 100%)}
+.half .shade{position:absolute;left:0;top:0;width:1080px;height:480px;
+  background:linear-gradient(180deg,rgba(12,14,20,.82) 0%,rgba(12,14,20,.5) 55%,rgba(12,14,20,0) 100%)}
 .half .lab{position:absolute;left:72px}
-.half .lab span{display:block;font-weight:700;font-size:48px;line-height:1.3;margin-top:10px}
+.half .lab .tag{font-weight:700;font-size:52px;line-height:1.3;margin-top:6px}
 .pin{position:absolute;width:0;height:0}
-.pin i{position:absolute;left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:#ff6b35;box-shadow:0 0 0 6px rgba(255,248,239,.92)}
-.pin span{position:absolute;left:34px;top:-40px;white-space:nowrap;font-weight:900;font-size:54px;line-height:80px;padding:0 20px;
-  background:rgba(12,14,20,.8);color:#fff8ef}
-.cities{position:absolute;left:72px;right:72px;top:600px}
-.city{display:flex;align-items:baseline;gap:30px;padding:16px 0 16px 26px;border-left:8px solid rgba(255,248,239,.5);margin-bottom:22px;
-  background:linear-gradient(90deg,rgba(12,14,20,.88),rgba(12,14,20,.35))}
-.city b{font-weight:900;font-size:64px;line-height:1.2;min-width:210px}
-.city span{font-weight:700;font-size:52px;line-height:1.2;font-variant-numeric:tabular-nums}
+.pin i{position:absolute;left:-16px;top:-16px;width:32px;height:32px;border-radius:50%;background:#ff6b35;box-shadow:0 0 0 7px rgba(255,248,239,.92)}
+.pin span{position:absolute;left:38px;top:-42px;white-space:nowrap;font-weight:900;font-size:58px;line-height:84px;padding:0 22px;
+  background:rgba(12,14,20,.82);color:#fff8ef}
+.cities{position:absolute;left:72px;right:72px;top:640px}
+.city{display:flex;align-items:baseline;gap:30px;padding:18px 0 18px 28px;border-left:10px solid rgba(255,248,239,.5);margin-bottom:22px;
+  background:linear-gradient(90deg,rgba(12,14,20,.9),rgba(12,14,20,.35))}
+.city b{font-weight:900;font-size:76px;line-height:1.15;min-width:250px}
+.city span{font-weight:700;font-size:54px;line-height:1.15;font-variant-numeric:tabular-nums}
 .city.la{border-left-color:#ff6b35}
-.city.la span em{font-style:normal;color:#ff6b35}
-.steps{position:absolute;left:72px;top:620px;display:flex;align-items:center;gap:30px}
-.step{padding:18px 30px;background:rgba(12,14,20,.82)}
-.step b{display:block;font-weight:900;font-size:76px;line-height:1.1}
-.step span{display:block;font-weight:500;font-size:36px;line-height:1.4;margin-top:4px;color:#e4ddd3}
+.city.la b,.city.la em{color:#ff6b35;font-style:normal}
+.steps{position:absolute;left:72px;top:640px;display:flex;align-items:center;gap:34px}
+.step{padding:20px 34px;background:rgba(12,14,20,.84)}
+.step b{display:block;font-weight:900;font-size:84px;line-height:1.1}
 .step.to b{color:#ff6b35}
-.arrow{width:110px;height:6px;background:#ff6b35;position:relative}
-.arrow::after{content:"";position:absolute;right:-6px;top:-11px;border:14px solid transparent;border-left:18px solid #ff6b35}
-.sports{position:absolute;left:72px;right:72px;top:520px}
-.sport{display:flex;align-items:center;justify-content:space-between;padding:14px 26px;margin-bottom:18px;
-  background:rgba(12,14,20,.84);border-left:10px solid #ff6b35}
-.sport b{font-weight:900;font-size:68px;line-height:1.2}
-.sport span{font-weight:700;font-size:38px;line-height:1.2;padding:6px 16px;color:#0c0e14;background:#fff8ef}
-.sport.debut span{background:#ff6b35;color:#0c0e14}
-.hero{position:absolute;left:66px;right:60px;top:420px}
-.hero b{display:block;font-weight:900;font-size:260px;line-height:1;letter-spacing:-10px;color:#ff6b35;font-variant-numeric:tabular-nums}
-.hero small{display:block;font-weight:700;font-size:50px;line-height:1.4;margin:16px 0 0 8px}
-.hero .plus{display:inline-block;margin:18px 0 0 8px;padding:6px 18px;font-weight:900;font-size:44px;background:#fff8ef;color:#0c0e14}
-.quota{position:absolute;left:72px;right:72px;top:800px}
-.quota h3{margin:0 0 20px;font-weight:700;font-size:44px;color:#fff8ef}
-.quota h3 em{font-style:normal;font-weight:900;font-size:64px}
-.bar{display:flex;align-items:center;gap:22px;margin-bottom:16px}
-.bar label{width:110px;font-weight:700;font-size:44px}
-.bar i{display:block;height:58px;background:#fff8ef}
+.arrow{width:110px;height:8px;background:#ff6b35;position:relative}
+.arrow::after{content:"";position:absolute;right:-6px;top:-12px;border:16px solid transparent;border-left:20px solid #ff6b35}
+.sports{position:absolute;left:72px;right:72px;top:560px}
+.sport{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;margin-bottom:20px;
+  background:rgba(12,14,20,.86);border-left:12px solid #ff6b35}
+.sport b{font-weight:900;font-size:76px;line-height:1.15}
+.sport span{font-weight:900;font-size:40px;line-height:1.2;padding:6px 18px;color:#0c0e14;background:#fff8ef}
+.sport.debut span{background:#ff6b35}
+.hero{position:absolute;left:62px;right:60px;top:176px}
+.hero b{display:block;font-weight:900;font-size:330px;line-height:.95;letter-spacing:-14px;color:#ff6b35;font-variant-numeric:tabular-nums}
+.quota{position:absolute;left:72px;right:72px;top:760px}
+.bar{display:flex;align-items:center;gap:24px;margin-bottom:22px}
+.bar label{width:120px;font-weight:900;font-size:56px}
+.bar i{display:block;height:76px;background:#fff8ef}
 .bar.w i{background:#ff6b35}
-.bar span{font-weight:900;font-size:50px;font-variant-numeric:tabular-nums}
-.firsttime{display:inline-block;margin-top:14px;padding:8px 22px;font-weight:900;font-size:48px;background:#ff6b35;color:#0c0e14}
+.bar span{font-weight:900;font-size:58px;font-variant-numeric:tabular-nums}
+.flag{display:inline-block;margin-top:22px;padding:10px 26px;font-weight:900;font-size:60px;background:#ff6b35;color:#0c0e14}
 .end{position:absolute;left:72px;right:72px;top:176px}
-.end .city-name{font-weight:900;font-size:150px;line-height:1.05}
-.end .yr{font-weight:900;font-size:300px;line-height:.95;letter-spacing:-12px;color:#ff6b35;font-variant-numeric:tabular-nums}
-.end .dates{font-weight:900;font-size:92px;line-height:1.2;margin-top:18px;font-variant-numeric:tabular-nums}
-.end .ord{font-weight:700;font-size:46px;line-height:1.4;margin-top:6px;color:#e4ddd3}
-.end .see{display:inline-block;margin-top:34px;padding:10px 30px;font-weight:900;font-size:84px;background:#ff6b35;color:#0c0e14}
+.end .city-name{font-weight:900;font-size:160px;line-height:1.05}
+.end .yr{font-weight:900;font-size:330px;line-height:.95;letter-spacing:-14px;color:#ff6b35;font-variant-numeric:tabular-nums}
+.end .dates{font-weight:900;font-size:100px;line-height:1.2;margin-top:20px;font-variant-numeric:tabular-nums}
+.end .ord{font-weight:700;font-size:50px;line-height:1.4;margin-top:6px;color:#e4ddd3}
+.end .see{display:inline-block;margin-top:36px;padding:12px 34px;font-weight:900;font-size:92px;background:#ff6b35;color:#0c0e14}
 .credit{position:absolute;left:72px;right:72px;top:1384px;font-size:24px;line-height:1.4;color:#e4ddd3;text-shadow:0 1px 2px #000}
 </style>
-<div id="root" data-composition-id="scene-5" data-width="1080" data-height="1920" data-start="0" data-duration="10.752">
-<div id="scene-5-downtown-cam" class="cam" data-layout-allow-overflow><img id="scene-5-downtown" class="photo" src="assets/photos/downtown.jpg" alt="洛杉矶市中心夜景"></div><div class="scrim" style="height:1240px"></div><div class="floor"></div><div class="head"><div class="big" id="scene-5-big">36</div><div class="title" id="scene-5-title">个大项</div></div><div class="hero"><b id="scene-5-num">0</b><small id="scene-5-sub">个小项 · 历届最多</small><span class="plus" id="scene-5-plus">比巴黎 2024 多 22 个</span></div><div class="quota"><h3 id="scene-5-q"><em id="scene-5-qn">11,198</em> 个参赛名额</h3><div class="bar w" id="scene-5-w"><label>女子</label><i id="scene-5-wb" style="width:593px"></i><span>5,655</span></div><div class="bar" id="scene-5-m"><label>男子</label><i id="scene-5-mb" style="width:581px"></i><span>5,543</span></div><div class="firsttime" id="scene-5-ft">奥运史上首次 女 &gt; 男</div></div><div class="credit" data-layout-ignore>洛杉矶市中心 · 照片 Camiloarenivar · CC BY-SA 4.0 · Wikimedia Commons</div>
+<div id="root" data-composition-id="scene-5" data-width="1080" data-height="1920" data-start="0" data-duration="3.739">
+<div id="scene-5-downtown-cam" class="cam" data-layout-allow-overflow><img id="scene-5-downtown" class="photo" src="assets/photos/downtown.jpg" alt="洛杉矶市中心夜景"></div><div class="scrim" style="height:1300px"></div><div class="hero"><b id="scene-5-num">0</b><div class="mask"><div id="scene-5-sub" class="sub">个小项 · 历届最多</div></div></div><div class="quota"><div class="bar w" id="scene-5-w"><label>女子</label><i id="scene-5-wb" style="width:600px"></i><span>5,655</span></div><div class="bar" id="scene-5-m"><label>男子</label><i id="scene-5-mb" style="width:588px"></i><span>5,543</span></div><div class="flag" id="scene-5-ft">参赛名额 女子首次更多</div></div><div class="credit" data-layout-ignore>洛杉矶市中心 · 照片 Camiloarenivar · CC BY-SA 4.0 · Wikimedia Commons</div>
 </div>
 <script>
 const tl=gsap.timeline({paused:true});
-tl.fromTo('#scene-5-downtown-cam',{scale:1.0,x:0,y:0},{scale:1.08,x:0,y:-30,duration:10.752,ease:'none'},0);
-tl.fromTo('#scene-5-big',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.050);
-tl.fromTo('#scene-5-title',{opacity:0,x:-24,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.250);
-tl.fromTo('#scene-5-num',{opacity:0},{opacity:1,duration:.2,ease:'none'},0.976);
-{const c={v:0};tl.to(c,{v:351,duration:1.1,ease:'power2.out',onUpdate:()=>{document.querySelector('#scene-5-num').textContent=Math.round(c.v)}},0.976);}
-tl.fromTo('#scene-5-sub',{opacity:0,x:0,y:14},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},1.676);
-tl.fromTo('#scene-5-plus',{opacity:0,x:-20,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},3.169);
-tl.to('#scene-5-plus',{opacity:0,duration:.3,ease:'none'},4.017);
-tl.fromTo('#scene-5-q',{opacity:0,x:0,y:14},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},4.317);
-tl.fromTo('#scene-5-w',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},6.971);
-tl.fromTo('#scene-5-wb',{scaleX:0,transformOrigin:'0 50%'},{scaleX:1,duration:.7,ease:'power2.out'},7.071);
-tl.fromTo('#scene-5-m',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},7.121);
-tl.fromTo('#scene-5-mb',{scaleX:0,transformOrigin:'0 50%'},{scaleX:1,duration:.7,ease:'power2.out'},7.221);
-tl.fromTo('#scene-5-ft',{opacity:0,x:-20,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},8.781);
+tl.fromTo('#scene-5-downtown-cam',{scale:1.2},{scale:1.05,duration:0.600,ease:'expo.out'},0);
+tl.to('#scene-5-downtown-cam',{scale:1.0,duration:3.139,ease:'none'},0.600);
+tl.fromTo('#scene-5-num',{opacity:0},{opacity:1,duration:.12,ease:'none'},0);
+{const c={v:0};tl.to(c,{v:351,duration:0.929,ease:'power3.out',onUpdate:()=>{document.querySelector('#scene-5-num').textContent=Math.round(c.v)}},0);}
+tl.fromTo('#scene-5-sub',{yPercent:110},{yPercent:0,duration:0.42,ease:'power4.out'},0.929);
+tl.fromTo('#scene-5-w',{opacity:0,x:-40},{opacity:1,x:0,duration:0.25,ease:'power3.out'},1.881);
+tl.fromTo('#scene-5-wb',{scaleX:0,transformOrigin:'0 50%'},{scaleX:1,duration:0.6,ease:'power3.out'},1.881);
+tl.fromTo('#scene-5-m',{opacity:0,x:-40},{opacity:1,x:0,duration:0.25,ease:'power3.out'},2.345);
+tl.fromTo('#scene-5-mb',{scaleX:0,transformOrigin:'0 50%'},{scaleX:1,duration:0.6,ease:'power3.out'},2.345);
+tl.fromTo('#scene-5-ft',{opacity:0,scale:1.35,transformOrigin:'0% 100%'},{opacity:1,scale:1,duration:.28,ease:'expo.out'},2.810);
 window.__timelines["scene-5"]=tl;
 </script>
 </template>

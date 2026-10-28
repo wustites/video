@@ -25,4 +25,10 @@
 | `downtown.jpg` | [Downtown Los Angeles and 110 freeway.jpg](https://commons.wikimedia.org/wiki/File:Downtown_Los_Angeles_and_110_freeway.jpg) | Camiloarenivar | CC BY-SA 4.0 |
 | `peristyle.jpg` | [Los Angeles Memorial Coliseum (29297859221).jpg](https://commons.wikimedia.org/wiki/File:Los_Angeles_Memorial_Coliseum_(29297859221).jpg) | Anthony Kernich | CC BY 2.0 |
 
+## 配乐
+
+| 文件 | 来源 | 许可 |
+| --- | --- | --- |
+| `assets/music/karma.mp3` | Mixkit “Karma”（[原始文件](https://assets.mixkit.co/music/1183/1183.mp3)），从 0.488 s 起截取 68 拍，末尾 2.4 s 淡出，归一化到 -14 LUFS | [Mixkit Stock Music Free License](https://mixkit.co/license/)（Mixkit 标注可商用、无需署名；下载页未标为 Restricted） |
+
 字体：Noto Sans CJK SC（SIL OFL 1.1），由 `build.py` 子集化。
