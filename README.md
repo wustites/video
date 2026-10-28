@@ -168,6 +168,7 @@ Solar 的 variant 为 `en`、`zh`、`ja`、`ko`，可带 variant 单独发版，
 - [按内容类型的技术选型](./docs/TECH_SELECTION.md)：榜单、时序数据、地图、叙事、3D、数学科普、品牌、多语言等类型的画面技术、数据流水线与参考项目。
 - [TTS 旁白方案](./docs/TTS.md)：旁白生成、文件约定、Remotion 接入与验证流程。
 - [音画同步方案](./docs/AUDIO_VIDEO_SYNC.md)：音频主时钟、时间数据、字幕与场景对齐、同步验证和漂移排查。
+- [配乐与音效来源](./docs/MUSIC.md)：可用曲库与音效库的许可和署名要求、配乐裁切与拍点表流程。
 - [发布流程](./docs/RELEASING.md)：tag 格式与 Release 工作流。
 - [Remotion vs HyperFrames](./docs/REMOTION_VS_HYPERFRAMES.md)：两种框架的编程模型、渲染部署与选型标准。
 - [使用 Blender Python 生成视频](./docs/BLENDER_PYTHON_VIDEO.md)：脚本化建模与动画、后台渲染、帧序列与 FFmpeg 编码。

@@ -34,6 +34,7 @@
 
 - 不论选哪个框架，项目都登记到 `projects.json`，提供 `check`、`dev`、`render`、`render:draft` 脚本，渲染结果写入 `out/`，就能使用统一的发布流程。
 - 旁白统一使用 Edge TTS（[`packages/voiceover`](../packages/voiceover/README.md)）。HyperFrames 项目在 `voiceover` 脚本后运行自己的时间同步脚本，把段落时长写进 HTML。
+- 配乐用曲库里的现成曲目，不用本地模型生成；裁切后的文件随项目提交，来源与许可登记在项目 `SOURCES.md`，见 [配乐与音效来源](./MUSIC.md)。
 - 已有项目可以迁移框架，迁移时同步更新 `projects.json` 和项目 README，并完整渲染一次。
 - 各框架版本精确锁定；升级时逐个项目回归。
 
