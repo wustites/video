@@ -1,0 +1,58 @@
+<template>
+<style>@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-400.woff2') format('woff2');font-weight:100 500;font-display:block}@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-700.woff2') format('woff2');font-weight:600 900;font-display:block}
+#root{position:absolute;inset:0;overflow:hidden;background:#101312;font-family:'Noto Sans SC', sans-serif;color:#f7f3ee}
+.cam{position:absolute;left:-108px;top:-192px;width:1296px;height:2304px;transform-origin:50% 50%}
+.photo{position:absolute;inset:0;width:1296px;height:2304px}
+.scrim{position:absolute;left:0;top:0;width:1080px;height:1240px;
+  background:linear-gradient(180deg,rgba(10,13,12,.9) 0%,rgba(10,13,12,.78) 55%,rgba(10,13,12,0) 100%)}
+.floor{position:absolute;left:0;top:1120px;width:1080px;height:800px;
+  background:linear-gradient(180deg,rgba(10,13,12,0) 0%,rgba(10,13,12,.55) 40%,rgba(10,13,12,.75) 100%)}
+.head{position:absolute;left:72px;top:176px;right:72px}
+.year{font-weight:900;font-size:176px;line-height:1;letter-spacing:-5px;font-variant-numeric:tabular-nums}
+.title{font-weight:700;font-size:60px;line-height:1.25;margin-top:20px}
+.title::before{content:"";display:inline-block;width:14px;height:52px;background:#2fd06e;margin-right:20px;vertical-align:-6px}
+.hero{position:absolute;left:66px;right:60px;top:560px}
+.hero b{display:block;font-weight:900;font-size:260px;line-height:1;letter-spacing:-10px;color:#2fd06e;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hero b em{font-style:normal;font-size:80px;letter-spacing:0;margin-left:18px;color:#f7f3ee}
+.hero small{display:block;font-weight:700;font-size:46px;line-height:1.4;margin:22px 0 0 8px}
+.hero p{margin:18px 0 0 8px;font-weight:700;font-size:40px;line-height:1.4;color:#d6d2cc;text-shadow:0 2px 4px rgba(0,0,0,.8)}
+.chip{display:inline-flex;align-items:center;justify-content:center;min-width:96px;height:96px;padding:0 14px;box-sizing:border-box;
+  border-radius:48px;font-weight:900;font-size:52px;color:#fff;margin-right:18px;box-shadow:0 0 0 4px rgba(247,243,238,.9)}
+.chips{position:absolute;left:76px;right:60px;top:530px}
+.chips small{display:block;margin-top:28px;font-weight:700;font-size:46px;line-height:1.35}
+.rows{position:absolute;left:72px;right:72px;top:560px}
+.row{display:flex;align-items:center;gap:30px;padding:22px 0 22px 22px;margin-bottom:26px;
+  background:linear-gradient(90deg,rgba(10,13,12,.86),rgba(10,13,12,.3))}
+.row .chip{margin-right:0}
+.row span{font-weight:900;font-size:62px;line-height:1.2}
+.pin{position:absolute;width:0;height:0}
+.pin i{position:absolute;left:-12px;top:-12px;width:24px;height:24px;border-radius:50%;background:#2fd06e;box-shadow:0 0 0 5px rgba(247,243,238,.9)}
+.pin span{position:absolute;left:30px;top:-38px;white-space:nowrap;font-weight:900;font-size:56px;line-height:76px;padding:0 18px;
+  background:rgba(10,13,12,.78);color:#f7f3ee}
+.speed{position:absolute;left:66px;top:540px}
+.speed b{font-weight:900;font-size:260px;line-height:1;letter-spacing:-10px;color:#2fd06e}
+.speed em{font-style:normal;font-weight:700;font-size:72px;margin-left:16px}
+.speed small{display:block;font-weight:700;font-size:44px;margin:10px 0 0 8px;color:#d6d2cc}
+.steps{position:absolute;left:72px;top:930px;display:flex;align-items:center;gap:26px;padding:20px 30px;background:rgba(10,13,12,.8)}
+.step b{display:block;font-weight:900;font-size:76px;line-height:1}
+.arrow{width:150px;height:6px;background:#2fd06e;position:relative}
+.arrow::after{content:"";position:absolute;right:-4px;top:-10px;border:13px solid transparent;border-left:18px solid #2fd06e}
+.stepnote{font-weight:700;font-size:48px;color:#2fd06e;margin-left:12px}
+.card{position:absolute;left:72px;right:72px;top:960px;padding:28px 34px;background:rgba(10,13,12,.82);border-left:10px solid #2fd06e}
+.card b{display:block;font-weight:900;font-size:76px;line-height:1.2}
+.card small{display:block;font-weight:500;font-size:40px;line-height:1.5;color:#d6d2cc;margin-top:8px}
+.credit{position:absolute;left:72px;right:72px;top:1384px;font-size:24px;line-height:1.4;color:#d6d2cc;text-shadow:0 1px 2px #000}
+</style>
+<div id="root" data-composition-id="scene-1" data-width="1080" data-height="1920" data-start="0" data-duration="8.352">
+<div id="scene-1-cam" class="cam" data-layout-allow-overflow><img id="scene-1-photo" class="photo" src="assets/photos/line1.jpg" alt="1 号线列车车厢"></div><div class="scrim"></div><div class="floor"></div><div class="head" id="scene-1-head"><div class="year" id="scene-1-year">2004</div><div class="title" id="scene-1-title">最初的两条线</div></div><div class="rows"><div class="row" id="scene-1-r0"><span class="chip" style="background:#00b140;color:#101312">1</span><span>罗湖 — 世界之窗</span></div><div class="row" id="scene-1-r1"><span class="chip" style="background:#dc241f;color:#fff">4</span><span>少年宫 — 福民</span></div></div><div class="credit" data-layout-ignore>1 号线列车车厢 · 照片 颐园新居 / Wikimedia Commons · CC BY-SA 3.0</div>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+tl.fromTo('#scene-1-cam',{scale:1.04,x:0,y:0},{scale:1.12,x:0,y:30,duration:8.352,ease:'none'},0);
+tl.fromTo('#scene-1-year',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.050);
+tl.fromTo('#scene-1-title',{opacity:0,x:-24,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.250);
+tl.fromTo('#scene-1-r0',{opacity:0,x:-40,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},0.050);
+tl.fromTo('#scene-1-r1',{opacity:0,x:-40,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},4.081);
+window.__timelines["scene-1"]=tl;
+</script>
+</template>

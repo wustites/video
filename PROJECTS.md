@@ -39,6 +39,7 @@
 | Saint Petersburg Metro | [`geography_transport/saint_petersburg_metro/`](./geography_transport/saint_petersburg_metro/) | 俄罗斯圣彼得堡地铁系统介绍，俄英双语字幕 |
 | Sapporo Subway | [`geography_transport/sapporo_subway/`](./geography_transport/sapporo_subway/) | 日本札幌市营地铁介绍 |
 | Shenzhen Reclamation | [`geography_transport/shenzhen_reclamation/`](./geography_transport/shenzhen_reclamation/) | 深圳填海造陆发展史，中文竖屏 Landsat 卫星影像对比解说（HyperFrames / edge-tts） |
+| Shenzhen Metro | [`geography_transport/shenzhen_metro/`](./geography_transport/shenzhen_metro/) | 深圳地铁介绍，中文竖屏真实照片解说（HyperFrames / edge-tts） |
 
 ## 科学与自然
 

@@ -170,3 +170,6 @@ creative_brand/shenzhen_apec/index.zh.html
 !creative_brand/la28_olympics/assets/photos/*.jpg
 # la28_olympics 的配乐（Mixkit "Karma"）由 scripts/prepare_music.py 裁切并归一化，随仓库提交
 !creative_brand/la28_olympics/assets/music/karma.mp3
+
+# shenzhen_metro 的照片由 scripts/prepare_photos.py 从 Wikimedia Commons 裁切，随仓库提交以便离线渲染
+!geography_transport/shenzhen_metro/assets/photos/*.jpg
