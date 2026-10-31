@@ -18,6 +18,7 @@
     "openrouter_rankings": {"path": "data_visualization/openrouter_rankings", "name": "OpenRouter Rankings", "languages": ["en", "zh"], "variants": ["en", "zh"]},
     "population_cn": {"path": "data_visualization/population_cn", "name": "Population CN", "languages": ["zh"], "variants": []},
     "births_jp": {"path": "data_visualization/births_jp", "name": "Births JP", "languages": ["zh", "ja"], "variants": ["zh", "ja"]},
+    "births_us": {"path": "data_visualization/births_us", "name": "Births US", "framework": "hyperframes", "languages": ["zh"], "variants": []},
     "qs_universities": {"path": "data_visualization/qs_universities", "name": "QS Universities", "languages": ["zh"], "variants": []},
     "red_army_jp": {"path": "history_society/red_army_jp", "name": "Red Army JP", "languages": ["ja"], "variants": []},
     "saint_petersburg_metro": {"path": "geography_transport/saint_petersburg_metro", "name": "Saint Petersburg Metro", "languages": ["ru", "en"], "variants": []},

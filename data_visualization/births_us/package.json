@@ -1,0 +1,19 @@
+{
+  "name": "births-us",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "data:update": "python3 scripts/import_data.py",
+    "dev": "hyperframes preview",
+    "check": "hyperframes check",
+    "voiceover": "python3 ../../packages/voiceover/edge_narration.py --voice zh-CN-XiaoxiaoNeural --lang zh --rate=+8% --word-marks --expected 6 && python3 build.py",
+    "build": "python3 build.py",
+    "render": "hyperframes render --quality delivery --output out/births-us-zh.mp4",
+    "render:draft": "hyperframes render --quality draft --output out/preview.mp4",
+    "render:still": "rm -rf out/poster && hyperframes render poster --format png-sequence --fps 1 --output out/poster && mv out/poster/frame_000001.png out/cover.png && rm -rf out/poster"
+  },
+  "devDependencies": {
+    "hyperframes": "0.8.174"
+  }
+}

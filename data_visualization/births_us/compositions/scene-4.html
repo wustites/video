@@ -1,0 +1,55 @@
+<template>
+<style>@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-400.woff2') format('woff2');font-weight:100 500;font-display:block}@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-700.woff2') format('woff2');font-weight:600 900;font-display:block}
+#root{position:absolute;inset:0;overflow:hidden;background:#1a1a19;font-family:'Noto Sans SC', sans-serif;color:#f2f0ea}
+.stage{position:absolute;inset:0;transform-origin:50% 40%}
+.head{position:absolute;left:72px;top:176px;right:72px}
+.year{font-weight:900;font-size:140px;line-height:1;letter-spacing:-4px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.title{font-weight:700;font-size:54px;line-height:1.25;margin-top:18px;white-space:nowrap}
+.title::before{content:"";display:inline-block;width:12px;height:46px;background:#f0b43c;margin-right:18px;vertical-align:-5px}
+.chart{position:absolute;left:72px;top:500px;width:936px;height:600px}
+.chart svg{position:absolute;left:0;top:0;overflow:visible}
+.ax{position:absolute;font-size:28px;line-height:1;color:#a3a29c;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lab{position:absolute;font-weight:700;font-size:36px;line-height:1.15;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lab small{display:block;font-weight:500;font-size:28px;color:#a3a29c}
+.call{position:absolute;font-weight:900;font-size:96px;line-height:1;letter-spacing:-2px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.call small{display:block;font-weight:700;font-size:34px;letter-spacing:0;color:#a3a29c;margin-top:10px}
+.note{position:absolute;left:72px;right:72px;top:1112px;padding:14px 24px;background:#262624;border-left:8px solid #f0b43c;
+  font-weight:700;font-size:34px;line-height:1.35;white-space:nowrap}
+.tile{position:absolute;width:72px;height:72px;border-radius:4px;background:#383835;font-weight:700;font-size:28px;
+  line-height:72px;text-align:center;color:#f2f0ea}
+.legend{position:absolute;left:72px;top:440px;display:flex;gap:22px;font-size:28px;color:#a3a29c;white-space:nowrap}
+.legend i{display:inline-block;width:28px;height:28px;border-radius:4px;margin-right:8px;vertical-align:-5px}
+.bars{position:absolute;left:72px;right:72px;top:520px}
+.bar{position:relative;height:96px;margin-bottom:22px}
+.bar b{position:absolute;left:0;top:0;font-weight:700;font-size:36px;line-height:1;white-space:nowrap}
+.bar span{position:absolute;left:0;top:50px;height:36px;border-radius:0 4px 4px 0;transform-origin:0 50%}
+.bar em{position:absolute;top:46px;font-style:normal;font-weight:900;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.src{position:absolute;left:72px;right:72px;top:1384px;font-size:24px;line-height:1.45;color:#a3a29c}
+</style>
+<div id="root" data-composition-id="scene-4" data-width="1080" data-height="1920" data-start="0" data-duration="10.752">
+<div id="scene-4-stage" class="stage" data-layout-allow-overflow>
+<div class="head"><div class="year" id="scene-4-year">降幅</div><div class="title" id="scene-4-title">前五名 · 2016→2025</div></div>
+<div class="bars"><div class="bar" id="scene-4-b0"><b style="color:#f2f0ea">华盛顿特区</b><span id="scene-4-s0" style="width:759px;background:#6da7ec"></span><em style="left:775px;color:#f2f0ea">-24.3%</em></div><div class="bar" id="scene-4-b1"><b style="color:#f2f0ea">阿拉斯加</b><span id="scene-4-s1" style="width:668px;background:#6da7ec"></span><em style="left:684px;color:#f2f0ea">-21.4%</em></div><div class="bar" id="scene-4-b2"><b style="color:#f2f0ea">怀俄明</b><span id="scene-4-s2" style="width:662px;background:#6da7ec"></span><em style="left:678px;color:#f2f0ea">-21.2%</em></div><div class="bar" id="scene-4-b3"><b style="color:#f2f0ea">夏威夷</b><span id="scene-4-s3" style="width:640px;background:#6da7ec"></span><em style="left:656px;color:#f2f0ea">-20.5%</em></div><div class="bar" id="scene-4-b4"><b style="color:#f2f0ea">伊利诺伊</b><span id="scene-4-s4" style="width:629px;background:#6da7ec"></span><em style="left:645px;color:#f2f0ea">-20.2%</em></div><div class="bar" id="scene-4-b5"><b style="color:#a3a29c">全国</b><span id="scene-4-s5" style="width:275px;background:#383835"></span><em style="left:291px;color:#a3a29c">-8.8%</em></div></div>
+</div>
+<div class="src" data-layout-ignore>数据：美国人口普查局人口估计（PEP，Vintage 2020 / 2025），50 州 + 华盛顿特区<br>年份 = 上一年 7 月 1 日至当年 6 月 30 日</div>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+tl.fromTo('#scene-4-stage',{scale:1},{scale:1.025,duration:10.752,ease:'none'},0);
+tl.fromTo('#scene-4-year',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.050);
+tl.fromTo('#scene-4-title',{opacity:0,x:-24,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.250);
+tl.fromTo('#scene-4-b0',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},1.675);
+tl.fromTo('#scene-4-s0',{scaleX:0},{scaleX:1,duration:.6,ease:'power3.out'},1.675);
+tl.fromTo('#scene-4-b1',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},4.819);
+tl.fromTo('#scene-4-s1',{scaleX:0},{scaleX:1,duration:.6,ease:'power3.out'},4.819);
+tl.fromTo('#scene-4-b2',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},5.756);
+tl.fromTo('#scene-4-s2',{scaleX:0},{scaleX:1,duration:.6,ease:'power3.out'},5.756);
+tl.fromTo('#scene-4-b3',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},6.625);
+tl.fromTo('#scene-4-s3',{scaleX:0},{scaleX:1,duration:.6,ease:'power3.out'},6.625);
+tl.fromTo('#scene-4-b4',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},7.574);
+tl.fromTo('#scene-4-s4',{scaleX:0},{scaleX:1,duration:.6,ease:'power3.out'},7.574);
+tl.fromTo('#scene-4-b5',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},0.600);
+tl.fromTo('#scene-4-s5',{scaleX:0},{scaleX:1,duration:.6,ease:'power3.out'},0.600);
+window.__timelines["scene-4"]=tl;
+</script>
+</template>

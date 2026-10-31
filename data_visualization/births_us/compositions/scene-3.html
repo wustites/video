@@ -1,0 +1,98 @@
+<template>
+<style>@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-400.woff2') format('woff2');font-weight:100 500;font-display:block}@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-700.woff2') format('woff2');font-weight:600 900;font-display:block}
+#root{position:absolute;inset:0;overflow:hidden;background:#1a1a19;font-family:'Noto Sans SC', sans-serif;color:#f2f0ea}
+.stage{position:absolute;inset:0;transform-origin:50% 40%}
+.head{position:absolute;left:72px;top:176px;right:72px}
+.year{font-weight:900;font-size:140px;line-height:1;letter-spacing:-4px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.title{font-weight:700;font-size:54px;line-height:1.25;margin-top:18px;white-space:nowrap}
+.title::before{content:"";display:inline-block;width:12px;height:46px;background:#f0b43c;margin-right:18px;vertical-align:-5px}
+.chart{position:absolute;left:72px;top:500px;width:936px;height:600px}
+.chart svg{position:absolute;left:0;top:0;overflow:visible}
+.ax{position:absolute;font-size:28px;line-height:1;color:#a3a29c;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lab{position:absolute;font-weight:700;font-size:36px;line-height:1.15;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lab small{display:block;font-weight:500;font-size:28px;color:#a3a29c}
+.call{position:absolute;font-weight:900;font-size:96px;line-height:1;letter-spacing:-2px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.call small{display:block;font-weight:700;font-size:34px;letter-spacing:0;color:#a3a29c;margin-top:10px}
+.note{position:absolute;left:72px;right:72px;top:1112px;padding:14px 24px;background:#262624;border-left:8px solid #f0b43c;
+  font-weight:700;font-size:34px;line-height:1.35;white-space:nowrap}
+.tile{position:absolute;width:72px;height:72px;border-radius:4px;background:#383835;font-weight:700;font-size:28px;
+  line-height:72px;text-align:center;color:#f2f0ea}
+.legend{position:absolute;left:72px;top:440px;display:flex;gap:22px;font-size:28px;color:#a3a29c;white-space:nowrap}
+.legend i{display:inline-block;width:28px;height:28px;border-radius:4px;margin-right:8px;vertical-align:-5px}
+.bars{position:absolute;left:72px;right:72px;top:520px}
+.bar{position:relative;height:96px;margin-bottom:22px}
+.bar b{position:absolute;left:0;top:0;font-weight:700;font-size:36px;line-height:1;white-space:nowrap}
+.bar span{position:absolute;left:0;top:50px;height:36px;border-radius:0 4px 4px 0;transform-origin:0 50%}
+.bar em{position:absolute;top:46px;font-style:normal;font-weight:900;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.src{position:absolute;left:72px;right:72px;top:1384px;font-size:24px;line-height:1.45;color:#a3a29c}
+</style>
+<div id="root" data-composition-id="scene-3" data-width="1080" data-height="1920" data-start="0" data-duration="18.072">
+<div id="scene-3-stage" class="stage" data-layout-allow-overflow>
+<div class="head"><div class="year" id="scene-3-year">51</div><div class="title" id="scene-3-title">个州和地区 · 2016→2025 变化</div></div>
+<div class="legend"><span><i style="background:#e66767"></i>增加</span><span><i style="background:#184f95"></i>0~5%</span><span><i style="background:#256abf"></i>5~10%</span><span><i style="background:#3987e5"></i>10~15%</span><span><i style="background:#6da7ec"></i>15% 以上</span><span>（减少）</span></div><div id="scene-3-AK" class="tile scene-3-t scene-3-o15" style="left:122px;top:490px">AK</div><div id="scene-3-ME" class="tile scene-3-t" style="left:882px;top:490px">ME</div><div id="scene-3-WI" class="tile scene-3-t" style="left:502px;top:566px">WI</div><div id="scene-3-VT" class="tile scene-3-t" style="left:806px;top:566px">VT</div><div id="scene-3-NH" class="tile scene-3-t" style="left:882px;top:566px">NH</div><div id="scene-3-WA" class="tile scene-3-t" style="left:122px;top:642px">WA</div><div id="scene-3-ID" class="tile scene-3-t scene-3-up" style="left:198px;top:642px">ID</div><div id="scene-3-MT" class="tile scene-3-t" style="left:274px;top:642px">MT</div><div id="scene-3-ND" class="tile scene-3-t" style="left:350px;top:642px">ND</div><div id="scene-3-MN" class="tile scene-3-t" style="left:426px;top:642px">MN</div><div id="scene-3-IL" class="tile scene-3-t scene-3-o15" style="left:502px;top:642px">IL</div><div id="scene-3-MI" class="tile scene-3-t" style="left:578px;top:642px">MI</div><div id="scene-3-NY" class="tile scene-3-t" style="left:730px;top:642px">NY</div><div id="scene-3-MA" class="tile scene-3-t" style="left:806px;top:642px">MA</div><div id="scene-3-OR" class="tile scene-3-t scene-3-o15" style="left:122px;top:718px">OR</div><div id="scene-3-NV" class="tile scene-3-t" style="left:198px;top:718px">NV</div><div id="scene-3-WY" class="tile scene-3-t scene-3-o15" style="left:274px;top:718px">WY</div><div id="scene-3-SD" class="tile scene-3-t" style="left:350px;top:718px">SD</div><div id="scene-3-IA" class="tile scene-3-t" style="left:426px;top:718px">IA</div><div id="scene-3-IN" class="tile scene-3-t" style="left:502px;top:718px">IN</div><div id="scene-3-OH" class="tile scene-3-t" style="left:578px;top:718px">OH</div><div id="scene-3-PA" class="tile scene-3-t" style="left:654px;top:718px">PA</div><div id="scene-3-NJ" class="tile scene-3-t" style="left:730px;top:718px">NJ</div><div id="scene-3-CT" class="tile scene-3-t" style="left:806px;top:718px">CT</div><div id="scene-3-RI" class="tile scene-3-t" style="left:882px;top:718px">RI</div><div id="scene-3-CA" class="tile scene-3-t scene-3-o15" style="left:122px;top:794px">CA</div><div id="scene-3-UT" class="tile scene-3-t" style="left:198px;top:794px">UT</div><div id="scene-3-CO" class="tile scene-3-t" style="left:274px;top:794px">CO</div><div id="scene-3-NE" class="tile scene-3-t" style="left:350px;top:794px">NE</div><div id="scene-3-MO" class="tile scene-3-t" style="left:426px;top:794px">MO</div><div id="scene-3-KY" class="tile scene-3-t" style="left:502px;top:794px">KY</div><div id="scene-3-WV" class="tile scene-3-t" style="left:578px;top:794px">WV</div><div id="scene-3-VA" class="tile scene-3-t" style="left:654px;top:794px">VA</div><div id="scene-3-MD" class="tile scene-3-t" style="left:730px;top:794px">MD</div><div id="scene-3-DE" class="tile scene-3-t" style="left:806px;top:794px">DE</div><div id="scene-3-AZ" class="tile scene-3-t" style="left:198px;top:870px">AZ</div><div id="scene-3-NM" class="tile scene-3-t scene-3-o15" style="left:274px;top:870px">NM</div><div id="scene-3-KS" class="tile scene-3-t" style="left:350px;top:870px">KS</div><div id="scene-3-AR" class="tile scene-3-t" style="left:426px;top:870px">AR</div><div id="scene-3-TN" class="tile scene-3-t scene-3-up" style="left:502px;top:870px">TN</div><div id="scene-3-NC" class="tile scene-3-t scene-3-up" style="left:578px;top:870px">NC</div><div id="scene-3-SC" class="tile scene-3-t scene-3-up" style="left:654px;top:870px">SC</div><div id="scene-3-DC" class="tile scene-3-t scene-3-o15" style="left:730px;top:870px">DC</div><div id="scene-3-OK" class="tile scene-3-t" style="left:350px;top:946px">OK</div><div id="scene-3-LA" class="tile scene-3-t scene-3-o15" style="left:426px;top:946px">LA</div><div id="scene-3-MS" class="tile scene-3-t" style="left:502px;top:946px">MS</div><div id="scene-3-AL" class="tile scene-3-t" style="left:578px;top:946px">AL</div><div id="scene-3-GA" class="tile scene-3-t" style="left:654px;top:946px">GA</div><div id="scene-3-HI" class="tile scene-3-t scene-3-o15" style="left:122px;top:1022px">HI</div><div id="scene-3-TX" class="tile scene-3-t" style="left:350px;top:1022px">TX</div><div id="scene-3-FL" class="tile scene-3-t" style="left:730px;top:1022px">FL</div><div class="note" id="scene-3-n" style="top:1116px">只有 4 个州增加：北卡、南卡、田纳西、爱达荷</div>
+</div>
+<div class="src" data-layout-ignore>数据：美国人口普查局人口估计（PEP，Vintage 2020 / 2025），50 州 + 华盛顿特区<br>年份 = 上一年 7 月 1 日至当年 6 月 30 日</div>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+tl.fromTo('#scene-3-stage',{scale:1},{scale:1.025,duration:18.072,ease:'none'},0);
+tl.fromTo('#scene-3-year',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.050);
+tl.fromTo('#scene-3-title',{opacity:0,x:-24,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.250);
+tl.fromTo('.scene-3-t',{opacity:0,scale:.6},{opacity:1,scale:1,duration:.3,ease:'back.out(2)',stagger:.02},0.170);
+tl.to('#scene-3-AK',{backgroundColor:'#6da7ec',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-ME',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-WI',{backgroundColor:'#3987e5',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-VT',{backgroundColor:'#3987e5',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-NH',{backgroundColor:'#184f95',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-WA',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-ID',{backgroundColor:'#e66767',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-MT',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-ND',{backgroundColor:'#3987e5',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-MN',{backgroundColor:'#3987e5',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-IL',{backgroundColor:'#6da7ec',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-MI',{backgroundColor:'#3987e5',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-NY',{backgroundColor:'#3987e5',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-MA',{backgroundColor:'#184f95',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-OR',{backgroundColor:'#6da7ec',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-NV',{backgroundColor:'#3987e5',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-WY',{backgroundColor:'#6da7ec',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-SD',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-IA',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-IN',{backgroundColor:'#184f95',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-OH',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-PA',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-NJ',{backgroundColor:'#184f95',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-CT',{backgroundColor:'#184f95',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-RI',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-CA',{backgroundColor:'#6da7ec',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-UT',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-CO',{backgroundColor:'#184f95',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-NE',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-MO',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-KY',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-WV',{backgroundColor:'#3987e5',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-VA',{backgroundColor:'#3987e5',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-MD',{backgroundColor:'#3987e5',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-DE',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-AZ',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-NM',{backgroundColor:'#6da7ec',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-KS',{backgroundColor:'#3987e5',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-AR',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-TN',{backgroundColor:'#e66767',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-NC',{backgroundColor:'#e66767',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-SC',{backgroundColor:'#e66767',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-DC',{backgroundColor:'#6da7ec',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-OK',{backgroundColor:'#256abf',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-LA',{backgroundColor:'#6da7ec',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-MS',{backgroundColor:'#3987e5',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-AL',{backgroundColor:'#184f95',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-GA',{backgroundColor:'#184f95',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-HI',{backgroundColor:'#6da7ec',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-TX',{backgroundColor:'#184f95',duration:.3,ease:'none'},2.504);
+tl.to('#scene-3-FL',{backgroundColor:'#184f95',duration:.3,ease:'none'},2.504);
+tl.fromTo('.scene-3-up',{scale:1},{scale:1.18,duration:.25,ease:'power2.out',yoyo:true,repeat:1},5.482);
+tl.fromTo('.scene-3-o15',{boxShadow:'0 0 0 0px #f2f0ea'},{boxShadow:'0 0 0 4px #f2f0ea',duration:.3,ease:'none'},15.224);
+tl.fromTo('#scene-3-n',{opacity:0,x:0,y:14},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},5.205);
+window.__timelines["scene-3"]=tl;
+</script>
+</template>

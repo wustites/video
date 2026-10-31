@@ -1,0 +1,52 @@
+<template>
+<style>@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-400.woff2') format('woff2');font-weight:100 500;font-display:block}@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-700.woff2') format('woff2');font-weight:600 900;font-display:block}
+#root{position:absolute;inset:0;overflow:hidden;background:#1a1a19;font-family:'Noto Sans SC', sans-serif;color:#f2f0ea}
+.stage{position:absolute;inset:0;transform-origin:50% 40%}
+.head{position:absolute;left:72px;top:176px;right:72px}
+.year{font-weight:900;font-size:140px;line-height:1;letter-spacing:-4px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.title{font-weight:700;font-size:54px;line-height:1.25;margin-top:18px;white-space:nowrap}
+.title::before{content:"";display:inline-block;width:12px;height:46px;background:#f0b43c;margin-right:18px;vertical-align:-5px}
+.chart{position:absolute;left:72px;top:500px;width:936px;height:600px}
+.chart svg{position:absolute;left:0;top:0;overflow:visible}
+.ax{position:absolute;font-size:28px;line-height:1;color:#a3a29c;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lab{position:absolute;font-weight:700;font-size:36px;line-height:1.15;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lab small{display:block;font-weight:500;font-size:28px;color:#a3a29c}
+.call{position:absolute;font-weight:900;font-size:96px;line-height:1;letter-spacing:-2px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.call small{display:block;font-weight:700;font-size:34px;letter-spacing:0;color:#a3a29c;margin-top:10px}
+.note{position:absolute;left:72px;right:72px;top:1112px;padding:14px 24px;background:#262624;border-left:8px solid #f0b43c;
+  font-weight:700;font-size:34px;line-height:1.35;white-space:nowrap}
+.tile{position:absolute;width:72px;height:72px;border-radius:4px;background:#383835;font-weight:700;font-size:28px;
+  line-height:72px;text-align:center;color:#f2f0ea}
+.legend{position:absolute;left:72px;top:440px;display:flex;gap:22px;font-size:28px;color:#a3a29c;white-space:nowrap}
+.legend i{display:inline-block;width:28px;height:28px;border-radius:4px;margin-right:8px;vertical-align:-5px}
+.bars{position:absolute;left:72px;right:72px;top:520px}
+.bar{position:relative;height:96px;margin-bottom:22px}
+.bar b{position:absolute;left:0;top:0;font-weight:700;font-size:36px;line-height:1;white-space:nowrap}
+.bar span{position:absolute;left:0;top:50px;height:36px;border-radius:0 4px 4px 0;transform-origin:0 50%}
+.bar em{position:absolute;top:46px;font-style:normal;font-weight:900;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.src{position:absolute;left:72px;right:72px;top:1384px;font-size:24px;line-height:1.45;color:#a3a29c}
+</style>
+<div id="root" data-composition-id="scene-2" data-width="1080" data-height="1920" data-start="0" data-duration="12.600">
+<div id="scene-2-stage" class="stage" data-layout-allow-overflow>
+<div class="head"><div class="year" id="scene-2-year">加州 · 德州</div><div class="title" id="scene-2-title">每年出生人数</div></div>
+<div class="chart"><svg width="936" height="600" viewBox="0 0 936 600"><line x1="110" x2="888" y1="560.0" y2="560.0" stroke="#383835" stroke-width="2"/><line x1="110" x2="888" y1="373.3" y2="373.3" stroke="#383835" stroke-width="2"/><line x1="110" x2="888" y1="186.7" y2="186.7" stroke="#383835" stroke-width="2"/><line x1="110" x2="888" y1="0.0" y2="0.0" stroke="#383835" stroke-width="2"/><path id="scene-2-ca" d="M110.0,40.5 L196.4,64.6 L282.9,141.8 L369.3,177.6 L455.8,193.5 L542.2,326.6 L628.7,283.3 L715.1,334.5 L801.6,370.1 L888.0,378.4" pathLength="1" fill="none" stroke="#3987e5" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" style="stroke-dasharray:1;stroke-dashoffset:1"/><path id="scene-2-tx" d="M110.0,363.8 L196.4,413.1 L282.9,442.7 L369.3,458.2 L455.8,454.3 L542.2,506.4 L628.7,433.8 L715.1,409.5 L801.6,419.5 L888.0,409.9" pathLength="1" fill="none" stroke="#d95926" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" style="stroke-dasharray:1;stroke-dashoffset:1"/></svg><div class="ax" style="left:0;top:546px">35万</div><div class="ax" style="left:0;top:359px">40万</div><div class="ax" style="left:0;top:173px">45万</div><div class="ax" style="left:0;top:-14px">50万</div><div class="ax" style="left:78px;top:570px">2016</div><div class="ax" style="left:337px;top:570px">2019</div><div class="ax" style="left:597px;top:570px">2022</div><div class="ax" style="left:856px;top:570px">2025</div><div id="scene-2-cad" style="position:absolute;left:877px;top:367px;width:22px;height:22px;border-radius:50%;background:#3987e5;box-shadow:0 0 0 4px #1a1a19"></div><div id="scene-2-txd" style="position:absolute;left:877px;top:399px;width:22px;height:22px;border-radius:50%;background:#d95926;box-shadow:0 0 0 4px #1a1a19"></div><div class="lab" id="scene-2-cl" style="left:658px;top:228px">加州 39.9万<small>-18.5%</small></div><div class="lab" id="scene-2-tl" style="left:658px;top:440px">德州 39.0万<small>-3.1%</small></div><div class="lab" id="scene-2-g0" style="left:130px;top:-29px;color:#a3a29c">2016 年 加州 48.9万</div><div class="lab" id="scene-2-g1" style="left:130px;top:298px;color:#a3a29c">德州 40.3万</div></div><div class="note" id="scene-2-n">2025 年两州只差 8,429 人（2016 年差 86,582 人）</div>
+</div>
+<div class="src" data-layout-ignore>数据：美国人口普查局人口估计（PEP，Vintage 2020 / 2025），50 州 + 华盛顿特区<br>年份 = 上一年 7 月 1 日至当年 6 月 30 日</div>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+tl.fromTo('#scene-2-stage',{scale:1},{scale:1.025,duration:12.600,ease:'none'},0);
+tl.fromTo('#scene-2-year',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.050);
+tl.fromTo('#scene-2-title',{opacity:0,x:-24,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.250);
+tl.fromTo('#scene-2-ca',{strokeDashoffset:1},{strokeDashoffset:0,duration:3.000,ease:'none'},1.281);
+tl.fromTo('#scene-2-tx',{strokeDashoffset:1},{strokeDashoffset:0,duration:2.000,ease:'none'},5.919);
+tl.fromTo('#scene-2-g0',{opacity:0,x:0,y:14},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},1.281);
+tl.fromTo('#scene-2-cad',{opacity:0,scale:.3},{opacity:1,scale:1,duration:.3,ease:'back.out(2)'},4.140);
+tl.fromTo('#scene-2-txd',{opacity:0,scale:.3},{opacity:1,scale:1,duration:.3,ease:'back.out(2)'},7.979);
+tl.fromTo('#scene-2-cl',{opacity:0,x:0,y:14},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},4.140);
+tl.fromTo('#scene-2-g1',{opacity:0,x:0,y:14},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},5.919);
+tl.fromTo('#scene-2-tl',{opacity:0,x:0,y:14},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},7.979);
+tl.fromTo('#scene-2-n',{opacity:0,x:0,y:14},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},11.216);
+window.__timelines["scene-2"]=tl;
+</script>
+</template>

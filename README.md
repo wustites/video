@@ -18,6 +18,7 @@
 | [OpenRouter Rankings](./data_visualization/openrouter_rankings/) | OpenRouter 每周模型使用排名 | 英、中 | 45 秒 | Remotion | `out/video.mp4` |
 | [Population CN](./data_visualization/population_cn/) | 中国各省出生人口变化 | 中 | 40 秒 | Remotion | `out/video.mp4` |
 | [Births JP](./data_visualization/births_jp/) | 日本各都道府县出生人数（2000–2025） | 中、日 | 随旁白生成 | Remotion | `out/births-jp-zh.mp4` |
+| [Births US](./data_visualization/births_us/) | 美国各州出生人数（2016–2025） | 中 | 约 90 秒 | HyperFrames | `out/births-us-zh.mp4` |
 | [QS Universities](./data_visualization/qs_universities/) | QS 世界大学排名 | 中 | 52 秒 | Remotion | `out/video.mp4` |
 | [Solar System](./science_nature/solar/) | 太阳系科普动画 | 英、中、日、韩 | 随旁白生成 | Remotion | `out/video.mp4` |
 | [Top 500](./data_visualization/top500/) | 2025 年《财富》世界 500 强 | 中 | 29 秒 | Remotion | `out/video.mp4` |
