@@ -31,6 +31,7 @@
 | Southern Kurils JP | [`history_society/southern_kurils_jp/`](./history_society/southern_kurils_jp/) | 南千岛群岛介绍 |
 | Imperial House Law JP | [`history_society/imperial_house_law_jp/`](./history_society/imperial_house_law_jp/) | 皇室典范改正议题 |
 | Iraq Parliament | [`history_society/iraq_parliament/`](./history_society/iraq_parliament/) | 伊拉克第六届国民议会介绍，中文竖屏解说（HyperFrames / edge-tts） |
+| Poland Tribunal | [`history_society/poland_tribunal/`](./history_society/poland_tribunal/) | 2026 年 10 月波兰宪法法院“政变”之争，中文竖屏解说（HyperFrames / edge-tts） |
 
 ## 地理与交通
 

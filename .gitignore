@@ -176,3 +176,6 @@ creative_brand/shenzhen_apec/index.zh.html
 
 # iraq_parliament 的照片由 scripts/prepare_photos.py 从 Wikimedia Commons 裁切，随仓库提交以便离线渲染
 !history_society/iraq_parliament/assets/photos/*.jpg
+
+# poland_tribunal 的照片由 scripts/prepare_photos.py 从 Wikimedia Commons 裁切，随仓库提交以便离线渲染
+!history_society/poland_tribunal/assets/photos/*.jpg

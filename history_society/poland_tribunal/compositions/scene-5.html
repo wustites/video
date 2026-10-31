@@ -1,0 +1,58 @@
+<template>
+<style>@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-400.woff2') format('woff2');font-weight:100 500;font-display:block}@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/noto-sans-sc-700.woff2') format('woff2');font-weight:600 900;font-display:block}
+#root{position:absolute;inset:0;overflow:hidden;background:#111314;font-family:'Noto Sans SC', sans-serif;color:#f5f2ec}
+.cam{position:absolute;left:-108px;top:-192px;width:1296px;height:2304px;transform-origin:50% 50%}
+.photo{position:absolute;inset:0;width:1296px;height:2304px}
+.scrim{position:absolute;left:0;top:0;width:1080px;height:1240px;
+  background:linear-gradient(180deg,rgba(12,13,14,.9) 0%,rgba(12,13,14,.78) 55%,rgba(12,13,14,0) 100%)}
+.dim{position:absolute;inset:0;background:rgba(12,13,14,.5)}
+.floor{position:absolute;left:0;top:1120px;width:1080px;height:800px;
+  background:linear-gradient(180deg,rgba(12,13,14,0) 0%,rgba(12,13,14,.55) 40%,rgba(12,13,14,.75) 100%)}
+.head{position:absolute;left:72px;top:176px;right:72px}
+.year{font-weight:900;font-size:176px;line-height:1;letter-spacing:-5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.title{font-weight:700;font-size:60px;line-height:1.25;margin-top:20px}
+.title::before{content:"";display:inline-block;width:14px;height:52px;background:#f0b43c;margin-right:20px;vertical-align:-6px}
+.hero{position:absolute;left:66px;right:60px;top:600px}
+.hero b{display:block;font-weight:900;font-size:240px;line-height:1;letter-spacing:-6px;color:#f0b43c;white-space:nowrap}
+.hero small{display:block;font-weight:700;font-size:46px;line-height:1.4;margin:28px 0 0 8px}
+.card{position:absolute;left:72px;right:72px;padding:22px 34px;background:rgba(12,13,14,.82);border-left:10px solid #f0b43c}
+.card i{display:block;font-style:normal;font-weight:700;font-size:36px;line-height:1.4;color:#f0b43c}
+.card b{display:block;font-weight:900;font-size:68px;line-height:1.2}
+.card small{display:block;font-weight:500;font-size:38px;line-height:1.5;color:#d3cfc8;margin-top:4px}
+.card.q{padding:16px 30px}
+.card.q i{font-size:32px}
+.card.q b{font-size:56px}
+.dots{position:absolute;left:72px;right:60px}
+.dots span{display:inline-block;box-sizing:border-box;border:5px solid #f5f2ec;background:rgba(12,13,14,.6);margin-right:12px}
+.dots small{display:block;margin-top:18px;font-weight:700;font-size:44px;text-shadow:0 2px 6px #000}
+.rows{position:absolute;left:72px;right:72px;top:540px}
+.rows div{display:flex;gap:26px;align-items:baseline;padding:14px 0 14px 26px;margin-bottom:16px;border-left:6px solid #f0b43c;background:rgba(12,13,14,.74)}
+.rows div.alarm{border-left-color:#dc4c4c}
+.rows b{font-weight:900;font-size:46px;white-space:nowrap}
+.rows span{font-weight:700;font-size:42px;color:#d3cfc8;white-space:nowrap}
+.rivals{position:absolute;left:72px;right:72px;top:730px;display:flex;gap:28px}
+.rivals > div{flex:1;padding:22px 26px 26px;background:rgba(12,13,14,.84);border-top:10px solid #f0b43c}
+.rivals > div + div{border-top-color:#dc4c4c}
+.rivals i{display:block;font-style:normal;font-weight:700;font-size:34px;color:#d3cfc8}
+.rivals b{display:block;font-weight:900;font-size:46px;line-height:1.3;margin:10px 0 14px}
+.rivals small{display:block;font-weight:700;font-size:30px;line-height:1.4;color:#d3cfc8}
+.vs{position:absolute;left:504px;top:840px;width:72px;text-align:center;font-weight:900;font-size:40px;line-height:72px;background:#f5f2ec;color:#111314;border-radius:50%}
+.final{position:absolute;left:72px;right:72px;top:1072px;font-weight:900;font-size:44px;line-height:1.3;color:#f0b43c;text-shadow:0 2px 6px #000}
+.credit{position:absolute;left:72px;right:72px;top:1384px;font-size:24px;line-height:1.4;color:#d3cfc8;text-shadow:0 1px 2px #000}
+</style>
+<div id="root" data-composition-id="scene-5" data-width="1080" data-height="1920" data-start="0" data-duration="20.040">
+<div id="scene-5-cam" class="cam" data-layout-allow-overflow><img id="scene-5-photo" class="photo" src="assets/photos/palace.jpg" alt="华沙 · 总统府"></div><div class="scrim"></div><div class="floor"></div><div class="head" id="scene-5-head"><div class="year" id="scene-5-year">10.31</div><div class="title" id="scene-5-title">总统深夜进入法院</div></div><div class="rows"><div id="scene-5-r0"><b>专机</b><span>中途折返</span></div><div id="scene-5-r1"><b>凌晨</b><span>进入宪法法院，与新法官推挤</span></div><div id="scene-5-r2" class=alarm><b>总统府</b><span>“宪法秩序遭到破坏”</span></div><div id="scene-5-r3"><b>总统府</b><span>召集各党紧急磋商</span></div><div id="scene-5-r4"><b>司法部长</b><span>指责总统“强行闯入”</span></div></div><div class="credit" data-layout-ignore>华沙 · 总统府 · 照片 Omenaga / Wikimedia Commons · CC BY-SA 4.0</div>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+tl.fromTo('#scene-5-cam',{scale:1.0,x:0,y:0},{scale:1.08,x:30,y:0,duration:20.040,ease:'none'},0);
+tl.fromTo('#scene-5-year',{opacity:0,x:-30,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.050);
+tl.fromTo('#scene-5-title',{opacity:0,x:-24,y:0},{opacity:1,x:0,y:0,duration:0.45,ease:'power3.out'},0.250);
+tl.fromTo('#scene-5-r0',{opacity:0,x:-40,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},0.386);
+tl.fromTo('#scene-5-r1',{opacity:0,x:-40,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},2.764);
+tl.fromTo('#scene-5-r2',{opacity:0,x:-40,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},9.883);
+tl.fromTo('#scene-5-r3',{opacity:0,x:-40,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},12.967);
+tl.fromTo('#scene-5-r4',{opacity:0,x:-40,y:0},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},15.121);
+window.__timelines["scene-5"]=tl;
+</script>
+</template>

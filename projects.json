@@ -10,6 +10,7 @@
     "gpt_6_1_terra": {"path": "science_nature/gpt_6_1_terra", "name": "GPT-6.1 Terra", "framework": "hyperframes", "languages": ["zh"], "variants": []},
     "cloudflare_history": {"path": "history_society/cloudflare_history", "name": "Cloudflare History", "framework": "hyperframes", "languages": ["zh"], "variants": []},
     "iraq_parliament": {"path": "history_society/iraq_parliament", "name": "Iraq Parliament", "framework": "hyperframes", "languages": ["zh"], "variants": []},
+    "poland_tribunal": {"path": "history_society/poland_tribunal", "name": "Poland Tribunal", "framework": "hyperframes", "languages": ["zh"], "variants": []},
     "imperial_house_law_jp": {"path": "history_society/imperial_house_law_jp", "name": "Imperial House Law JP", "languages": ["ja"], "variants": []},
     "japan_economy": {"path": "data_visualization/japan_economy", "name": "Japan Economy", "languages": ["ja"], "variants": []},
     "kakeya_conjecture": {"path": "science_nature/kakeya_conjecture", "name": "Kakeya Conjecture", "languages": ["zh"], "variants": []},
